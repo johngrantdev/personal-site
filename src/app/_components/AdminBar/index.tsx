@@ -7,16 +7,16 @@ import { PayloadAdminBar, PayloadAdminBarProps } from 'payload-admin-bar'
 import { useAuth } from '../../_providers/Auth'
 import { Gutter } from '../Gutter'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 const collectionLabels = {
   pages: {
     singular: 'Page',
     plural: 'Pages',
   },
-  posts: {
-    singular: 'Post',
-    plural: 'Posts',
+  artifacts: {
+    singular: 'Artifact',
+    plural: 'Artifacts',
   },
   projects: {
     singular: 'Project',
@@ -47,8 +47,14 @@ export const AdminBar: React.FC<{
   if (!isAdmin) return null
 
   return (
-    <div className={[classes.adminBar, show && classes.show].filter(Boolean).join(' ')}>
-      <Gutter className={classes.blockContainer}>
+    // add adminBar, show styling
+    <div
+      className={`z-10 w-full px-0 py-5 block transition-opacity ${
+        show ? 'visible opacity-100' : 'invisible opacity-0'
+      }`}
+    >
+      <Gutter className="relative">
+        {/* add payloadAdminBar, user, logo and control styling */}
         <PayloadAdminBar
           {...adminBarProps}
           collection={collection}
@@ -58,18 +64,18 @@ export const AdminBar: React.FC<{
           }}
           key={user?.id} // use key to get the admin bar to re-run its `me` request
           cmsURL={process.env.NEXT_PUBLIC_SERVER_URL}
-          className={classes.payloadAdminBar}
-          classNames={{
-            user: classes.user,
-            logo: classes.logo,
-            controls: classes.controls,
-          }}
           logo={<Title />}
-          style={{
-            position: 'relative',
-            zIndex: 'unset',
-            padding: 0,
-            backgroundColor: 'transparent',
+          // style={{
+          //   position: 'relative',
+          //   zIndex: 'unset',
+          //   padding: 0,
+          //   backgroundColor: 'transparent',
+          // }}
+          className="relative z-auto p-0 bg-transparent text-red-600 mr-3"
+          classNames={{
+            user: 'mr-2',
+            logo: 'mr-2',
+            controls: 'mr-2 last:mr-0',
           }}
         />
       </Gutter>
