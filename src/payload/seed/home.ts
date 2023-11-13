@@ -63,9 +63,9 @@ export const home: Partial<Page> = {
           appearance: 'primary',
           reference: {
             relationTo: 'pages',
-            value: '{{POSTS_PAGE_ID}}',
+            value: '{{ARTIFACTS_PAGE_ID}}',
           },
-          label: 'All notes',
+          label: 'All artifacts',
           url: '',
         },
       },
@@ -123,7 +123,7 @@ export const home: Partial<Page> = {
             {
               children: [
                 {
-                  text: "Manage this site's pages, notes, projects and more from the ",
+                  text: "Manage this site's pages, artifacts, projects and more from the ",
                 },
                 {
                   type: 'link',
@@ -241,7 +241,7 @@ export const home: Partial<Page> = {
             {
               children: [
                 {
-                  text: 'Users can comment on notes and editors can moderate comments directly from the ',
+                  text: 'Users can comment on artifacts and editors can moderate comments directly from the ',
                 },
                 {
                   type: 'link',
@@ -345,7 +345,7 @@ export const home: Partial<Page> = {
             {
               children: [
                 {
-                  text: 'Custom page builder allows you to create unique page, note, and project layouts for any type of content.',
+                  text: 'Custom page builder allows you to create unique page, artifact, and project layouts for any type of content.',
                 },
               ],
             },
@@ -438,7 +438,7 @@ export const home: Partial<Page> = {
           type: 'h4',
           children: [
             {
-              text: 'Recent notes',
+              text: 'Recent artifacts',
             },
           ],
         },
@@ -446,13 +446,13 @@ export const home: Partial<Page> = {
           type: 'p',
           children: [
             {
-              text: 'The notes below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or notes can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
+              text: 'The artifacts below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or artifacts can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
             },
           ],
         },
       ],
       populateBy: 'collection',
-      relationTo: 'notes',
+      relationTo: 'artifacts',
       categories: [],
     },
     {
@@ -518,10 +518,10 @@ export const home: Partial<Page> = {
           link: {
             type: 'reference',
             url: '',
-            label: 'All notes',
+            label: 'All artifacts',
             appearance: 'primary',
             reference: {
-              value: '{{POSTS_PAGE_ID}}',
+              value: '{{ARTIFACTS_PAGE_ID}}',
               relationTo: 'pages',
             },
           },

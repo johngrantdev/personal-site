@@ -13,10 +13,10 @@ export const Settings: GlobalConfig = {
   },
   fields: [
     {
-      name: 'postsPage',
+      name: 'artifactsPage',
       type: 'relationship',
       relationTo: 'pages',
-      label: 'Posts page',
+      label: 'Artifacts page',
     },
     {
       name: 'projectsPage',

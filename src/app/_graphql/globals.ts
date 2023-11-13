@@ -30,7 +30,7 @@ query Footer {
 
 export const SETTINGS = `
   Settings {
-    postsPage {
+    artifactsPage {
       slug
     }
     projectsPage {

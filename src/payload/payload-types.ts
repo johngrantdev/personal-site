@@ -10,7 +10,7 @@
 export interface Config {
   collections: {
     pages: Page
-    notes: Note
+    artifacts: Artifact
     projects: Project
     media: Media
     categories: Category
@@ -114,13 +114,13 @@ export interface Page {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
+        relationTo?: 'artifacts' | 'projects'
         categories?: string[] | Category[]
         limit?: number
         selectedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -130,8 +130,8 @@ export interface Page {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -141,7 +141,7 @@ export interface Page {
         populatedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -151,8 +151,8 @@ export interface Page {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -206,7 +206,7 @@ export interface Category {
   createdAt: string
 }
 
-export interface Note {
+export interface Artifact {
   id: string
   title: string
   categories?: string[] | Category[]
@@ -299,13 +299,13 @@ export interface Note {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
+        relationTo?: 'artifacts' | 'projects'
         categories?: string[] | Category[]
         limit?: number
         selectedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -315,8 +315,8 @@ export interface Note {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -326,7 +326,7 @@ export interface Note {
         populatedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -336,8 +336,8 @@ export interface Note {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -413,13 +413,13 @@ export interface Note {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
+        relationTo?: 'artifacts' | 'projects'
         categories?: string[] | Category[]
         limit?: number
         selectedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -429,8 +429,8 @@ export interface Note {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -440,7 +440,7 @@ export interface Note {
         populatedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -450,8 +450,8 @@ export interface Note {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -464,7 +464,7 @@ export interface Note {
         blockType: 'archive'
       }
   )[]
-  relatedNotes?: string[] | Note[]
+  relatedArtifacts?: string[] | Artifact[]
   slug?: string
   meta?: {
     title?: string
@@ -580,13 +580,13 @@ export interface Project {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
+        relationTo?: 'artifacts' | 'projects'
         categories?: string[] | Category[]
         limit?: number
         selectedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -596,8 +596,8 @@ export interface Project {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -607,7 +607,7 @@ export interface Project {
         populatedDocs?:
           | (
               | {
-                  relationTo: 'notes'
+                  relationTo: 'artifacts'
                   value: string
                 }
               | {
@@ -617,8 +617,8 @@ export interface Project {
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
               | {
                   relationTo: 'projects'
@@ -650,7 +650,7 @@ export interface Comment {
     id?: string
     name?: string
   }
-  doc?: string | Note
+  doc?: string | Artifact
   comment?: string
   updatedAt: string
   createdAt: string
@@ -668,8 +668,8 @@ export interface Redirect {
           value: string | Page
         }
       | {
-          relationTo: 'notes'
-          value: string | Note
+          relationTo: 'artifacts'
+          value: string | Artifact
         }
     url: string
   }
@@ -707,7 +707,7 @@ export interface PayloadMigration {
 
 export interface Settings {
   id: string
-  notesPage?: string | Page
+  artifactsPage?: string | Page
   projectsPage?: string | Page
   updatedAt?: string
   createdAt?: string
@@ -755,7 +755,7 @@ declare module 'payload' {
   export interface GeneratedTypes {
     collections: {
       pages: Page
-      notes: Note
+      artifacts: Artifact
       projects: Project
       media: Media
       categories: Category

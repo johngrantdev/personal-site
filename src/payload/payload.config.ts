@@ -10,10 +10,10 @@ import dotenv from 'dotenv'
 import path from 'path'
 import { buildConfig } from 'payload/config'
 
+import { Artifacts } from './collections/Artifacts'
 import Categories from './collections/Categories'
 import Comments from './collections/Comments'
 import { Media } from './collections/Media'
-import { Notes } from './collections/Notes'
 import { Pages } from './collections/Pages'
 import { Projects } from './collections/Projects'
 import Users from './collections/Users'
@@ -66,7 +66,7 @@ export default buildConfig({
     },
   }),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
-  collections: [Pages, Notes, Projects, Media, Categories, Users, Comments],
+  collections: [Pages, Artifacts, Projects, Media, Categories, Users, Comments],
   globals: [Settings, Header, Footer],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
@@ -88,13 +88,13 @@ export default buildConfig({
   plugins: [
     // formBuilder({}),
     redirects({
-      collections: ['pages', 'notes'],
+      collections: ['pages', 'artifacts'],
     }),
     nestedDocs({
       collections: ['categories'],
     }),
     seo({
-      collections: ['pages', 'notes', 'projects'],
+      collections: ['pages', 'artifacts', 'projects'],
       generateTitle,
       uploadsCollection: 'media',
     }),
