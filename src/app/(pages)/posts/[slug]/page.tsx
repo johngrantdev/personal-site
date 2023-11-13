@@ -3,27 +3,27 @@ import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import { Comment, Post } from '../../../../payload/payload-types'
-import { fetchComments } from '../../../_api/fetchComments'
+import { fetchComments } from '../../../../../_trash/fetchComments'
+import { Artifact } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
 import { Blocks } from '../../../_components/Blocks'
 import { PremiumContent } from '../../../_components/PremiumContent'
-import { PostHero } from '../../../_heros/PostHero'
+import { ArtifactHero } from '../../../_heros/ArtifactHero'
 import { generateMeta } from '../../../_utilities/generateMeta'
 
 // Force this page to be dynamic so that Next.js does not cache it
-// See the note in '../../../[slug]/page.tsx' about this
+// See the artifact in '../../../[slug]/page.tsx' about this
 export const dynamic = 'force-dynamic'
 
-export default async function Post({ params: { slug } }) {
+export default async function Artifact({ params: { slug } }) {
   const { isEnabled: isDraftMode } = draftMode()
 
-  let post: Post | null = null
+  let artifact: Artifact | null = null
 
   try {
-    post = await fetchDoc<Post>({
-      collection: 'posts',
+    artifact = await fetchDoc<Artifact>({
+      collection: 'artifacts',
       slug,
       draft: isDraftMode,
     })
@@ -31,34 +31,34 @@ export default async function Post({ params: { slug } }) {
     console.error(error) // eslint-disable-line no-console
   }
 
-  if (!post) {
+  if (!artifact) {
     notFound()
   }
 
   const comments = await fetchComments({
-    doc: post?.id,
+    doc: artifact?.id,
   })
 
-  const { layout, relatedPosts, enablePremiumContent, premiumContent } = post
+  const { layout, relatedArtifacts, enablePremiumContent, premiumContent } = artifact
 
   return (
     <React.Fragment>
-      <PostHero post={post} />
+      <ArtifactHero artifact={artifact} />
       <Blocks blocks={layout} />
-      {enablePremiumContent && <PremiumContent postSlug={slug as string} disableTopPadding />}
+      {enablePremiumContent && <PremiumContent artifactSlug={slug as string} disableTopPadding />}
       <Blocks
         disableTopPadding
         blocks={[
           {
-            blockType: 'comments',
-            blockName: 'Comments',
-            relationTo: 'posts',
+            blockType: 'relatedArtifacts',
+            blockName: 'Related Artifacts',
+            relationTo: 'artifacts',
             introContent: [
               {
                 type: 'h4',
                 children: [
                   {
-                    text: 'Comments',
+                    text: 'Related artifacts',
                   },
                 ],
               },
@@ -66,11 +66,11 @@ export default async function Post({ params: { slug } }) {
                 type: 'p',
                 children: [
                   {
-                    text: 'Authenticated users can leave comments on this post. All new comments are given the status "draft" until they are approved by an admin. Draft comments are not accessible to the public and will not show up on this page until it is marked as "published". To manage all comments, ',
+                    text: 'The artifacts displayed here are individually selected for this page. Admins can select any number of related artifacts to display here and the layout will adjust accordingly. Alternatively, you could swap this out for the "Archive" block to automatically populate artifacts by category complete with pagination. To manage related artifacts, ',
                   },
                   {
                     type: 'link',
-                    url: '/admin/collections/comments',
+                    url: `/admin/collections/artifacts/${artifact.id}`,
                     children: [
                       {
                         text: 'navigate to the admin dashboard',
@@ -83,44 +83,7 @@ export default async function Post({ params: { slug } }) {
                 ],
               },
             ],
-            doc: post,
-            comments,
-          },
-          {
-            blockType: 'relatedPosts',
-            blockName: 'Related Posts',
-            relationTo: 'posts',
-            introContent: [
-              {
-                type: 'h4',
-                children: [
-                  {
-                    text: 'Related posts',
-                  },
-                ],
-              },
-              {
-                type: 'p',
-                children: [
-                  {
-                    text: 'The posts displayed here are individually selected for this page. Admins can select any number of related posts to display here and the layout will adjust accordingly. Alternatively, you could swap this out for the "Archive" block to automatically populate posts by category complete with pagination. To manage related posts, ',
-                  },
-                  {
-                    type: 'link',
-                    url: `/admin/collections/posts/${post.id}`,
-                    children: [
-                      {
-                        text: 'navigate to the admin dashboard',
-                      },
-                    ],
-                  },
-                  {
-                    text: '.',
-                  },
-                ],
-              },
-            ],
-            docs: relatedPosts,
+            docs: relatedArtifacts,
           },
         ]}
       />
@@ -130,8 +93,8 @@ export default async function Post({ params: { slug } }) {
 
 export async function generateStaticParams() {
   try {
-    const posts = await fetchDocs<Post>('posts')
-    return posts?.map(({ slug }) => slug)
+    const artifacts = await fetchDocs<Artifact>('artifacts')
+    return artifacts?.map(({ slug }) => slug)
   } catch (error) {
     return []
   }
@@ -140,15 +103,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params: { slug } }): Promise<Metadata> {
   const { isEnabled: isDraftMode } = draftMode()
 
-  let post: Post | null = null
+  let artifact: Artifact | null = null
 
   try {
-    post = await fetchDoc<Post>({
-      collection: 'posts',
+    artifact = await fetchDoc<Artifact>({
+      collection: 'artifacts',
       slug,
       draft: isDraftMode,
     })
   } catch (error) {}
 
-  return generateMeta({ doc: post })
+  return generateMeta({ doc: artifact })
 }
