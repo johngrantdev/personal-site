@@ -6,7 +6,7 @@ import { Gutter } from '../../_components/Gutter'
 import { Media } from '../../_components/Media'
 import RichText from '../../_components/RichText'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 type Props = Extract<Page['layout'][0], { blockType: 'mediaBlock' }> & {
   staticImage?: StaticImageData
@@ -20,9 +20,10 @@ export const MediaBlock: React.FC<Props> = props => {
   if (media && typeof media === 'object') caption = media.caption
 
   return (
-    <div className={classes.mediaBlock}>
+    <div className="relative">
       {position === 'fullscreen' && (
-        <div className={classes.fullscreen}>
+        // add fullscreen styling
+        <div className="">
           <Media resource={media} src={staticImage} />
         </div>
       )}
@@ -32,7 +33,8 @@ export const MediaBlock: React.FC<Props> = props => {
         </Gutter>
       )}
       {caption && (
-        <Gutter className={classes.caption}>
+        // add caption styling
+        <Gutter className="text-zinc-200 mt-6">
           <RichText content={caption} />
         </Gutter>
       )}

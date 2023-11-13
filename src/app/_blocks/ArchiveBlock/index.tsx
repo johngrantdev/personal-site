@@ -5,7 +5,7 @@ import { Gutter } from '../../_components/Gutter'
 import RichText from '../../_components/RichText'
 import { ArchiveBlockProps } from './types'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -24,9 +24,10 @@ export const ArchiveBlock: React.FC<
   } = props
 
   return (
-    <div id={`block-${id}`} className={classes.archiveBlock}>
+    <div id={`block-${id}`} className="relative">
       {introContent && (
-        <Gutter className={classes.introContent}>
+        // no midbreak, bottom margin could be adjusted
+        <Gutter className="mb-24">
           <RichText content={introContent} />
         </Gutter>
       )}

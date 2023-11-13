@@ -1,7 +1,5 @@
 import React from 'react'
 
-import classes from './index.module.scss'
-
 export const LoadingShimmer: React.FC<{
   number?: number
   height?: number // in `base` units
@@ -9,9 +7,11 @@ export const LoadingShimmer: React.FC<{
   const arrayFromNumber = Array.from(Array(props.number || 1).keys())
 
   return (
-    <div className={classes.loading}>
+    // add loading styles
+    <div className="mb-6 last:mb-0">
       {arrayFromNumber.map((_, index) => (
-        <div key={index} className={classes.shimmer} />
+        // add shimmer styles
+        <div className="w-full h-14 rounded-sm" key={index} />
       ))}
     </div>
   )

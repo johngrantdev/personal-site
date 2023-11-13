@@ -1,7 +1,5 @@
 import React from 'react'
 
-import classes from './index.module.scss'
-
 export type VerticalPaddingOptions = 'large' | 'medium' | 'none'
 
 type Props = {
@@ -12,18 +10,13 @@ type Props = {
 }
 
 export const VerticalPadding: React.FC<Props> = ({
-  top = 'medium',
-  bottom = 'medium',
+  top = 'px-14',
+  bottom = 'pb-14',
   className,
   children,
 }) => {
   return (
-    <div
-      className={[className, classes[`top-${top}`], classes[`bottom-${bottom}`]]
-        .filter(Boolean)
-        .join(' ')}
-    >
-      {children}
-    </div>
+    // add classes[`top-${top}`], classes[`bottom-${bottom} styles
+    <div className={[className, top, bottom].filter(Boolean).join(' ')}>{children}</div>
   )
 }

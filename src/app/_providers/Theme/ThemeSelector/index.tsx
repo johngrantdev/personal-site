@@ -7,8 +7,6 @@ import { useTheme } from '..'
 import { getImplicitPreference } from '../shared'
 import { Theme, themeLocalStorageKey } from './types'
 
-import classes from './index.module.scss'
-
 export const ThemeSelector: React.FC = () => {
   const selectRef = React.useRef<HTMLSelectElement>(null)
   const { setTheme } = useTheme()
@@ -32,22 +30,30 @@ export const ThemeSelector: React.FC = () => {
   }, [])
 
   return (
-    <div className={[classes.selectContainer, !show && classes.hidden].filter(Boolean).join(' ')}>
+    <div
+      className={`relative transition-opacity ${
+        show ? 'opacity-100 visible' : 'opacity-0 invisible'
+      }`}
+    >
       <label htmlFor="theme">
+        {/* style to add all: unset */}
         <select
           id="theme"
           onChange={e => onThemeChange(e.target.value as Theme & 'auto')}
           ref={selectRef}
-          className={classes.select}
+          className="pr-4 bg-transparent border-transparent "
         >
           <option value="auto">Auto</option>
           <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>
-        <div className={classes.selectIcon}>
-          <Chevron className={classes.iconUp} />
-          <Chevron className={classes.iconDown} />
-        </div>
+        {/* add selectIcon styles 
+        <div className="absolute right-0 top-0 h-full pointer-events-none w-2">
+          add selectIcon styles
+          <Chevron className="absolute left-1/2" />
+          add iconDown styles
+          <Chevron className="absolute left-1/2" />
+        </div> */}
       </label>
     </div>
   )
