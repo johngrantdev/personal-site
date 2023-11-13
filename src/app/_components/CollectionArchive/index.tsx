@@ -3,18 +3,18 @@
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import qs from 'qs'
 
-import { Post, Project } from '../../../payload/payload-types'
+import { Artifact, Project } from '../../../payload/payload-types'
 import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/types'
 import { Card } from '../Card'
 import { Gutter } from '../Gutter'
 import { PageRange } from '../PageRange'
 import { Pagination } from '../Pagination'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 type Result = {
   totalDocs: number
-  docs: (Project | Post)[]
+  docs: (Project | Artifact)[]
   page: number
   totalPages: number
   hasPrevPage: boolean
@@ -25,7 +25,7 @@ type Result = {
 
 export type Props = {
   className?: string
-  relationTo?: 'posts' | 'projects'
+  relationTo?: 'artifacts' | 'projects'
   populateBy?: 'collection' | 'selection'
   showPageRange?: boolean
   onResultChange?: (result: Result) => void // eslint-disable-line no-unused-vars
@@ -128,7 +128,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           clearTimeout(timer)
           hasHydrated.current = true
 
-          const { docs } = json as { docs: (Project | Post)[] }
+          const { docs } = json as { docs: (Project | artifact)[] }
 
           if (docs && Array.isArray(docs)) {
             setResults(json)
@@ -153,13 +153,16 @@ export const CollectionArchive: React.FC<Props> = props => {
   }, [page, catsFromProps, relationTo, onResultChange, sort, limit, populateBy])
 
   return (
-    <div className={[classes.collectionArchive, className].filter(Boolean).join(' ')}>
-      <div ref={scrollRef} className={classes.scrollRef} />
+    // add CollectionArchive with className props
+    <div className={[className].filter(Boolean).join(' ')}>
+      {/* add scrollRef styles */}
+      <div className="absolute left-0 top-0" ref={scrollRef} />
       {!isLoading && error && <Gutter>{error}</Gutter>}
       <Fragment>
         {showPageRange !== false && (
           <Gutter>
-            <div className={classes.pageRange}>
+            {/* add pageRange styles */}
+            <div className="mb-6">
               <PageRange
                 totalDocs={results.totalDocs}
                 currentPage={results.page}
@@ -170,18 +173,22 @@ export const CollectionArchive: React.FC<Props> = props => {
           </Gutter>
         )}
         <Gutter>
-          <div className={classes.grid}>
+          {/* add grid styles */}
+          <div className=" grid grid-cols-3 w-full gap-10">
             {results.docs?.map((result, index) => {
               return (
-                <div key={index} className={classes.column}>
+                // add column props
+                // className="col-end-4"
+                <div key={index}>
                   <Card relationTo={relationTo} doc={result} showCategories />
                 </div>
               )
             })}
           </div>
           {results.totalPages > 1 && (
+            // add pagnation styles
             <Pagination
-              className={classes.pagination}
+              className="mt-12"
               page={results.page}
               totalPages={results.totalPages}
               onClick={setPage}
