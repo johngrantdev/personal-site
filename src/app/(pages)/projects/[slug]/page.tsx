@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { Project } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
-import { RelatedPosts } from '../../../_blocks/RelatedPosts'
+import { RelatedArtifacts } from '../../../_blocks/RelatedArtifacts'
 import { Blocks } from '../../../_components/Blocks'
 import { ProjectHero } from '../../../_heros/ProjectHero'
 import { generateMeta } from '../../../_utilities/generateMeta'
@@ -43,7 +43,7 @@ export default async function Project({ params: { slug } }) {
         blocks={[
           ...layout,
           {
-            blockType: 'relatedPosts',
+            blockType: 'relatedArtifacts',
             blockName: 'Related Projects',
             relationTo: 'projects',
             introContent: [
