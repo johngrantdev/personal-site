@@ -7,7 +7,7 @@ import { ThemeSelector } from '../../_providers/Theme/ThemeSelector'
 import { Gutter } from '../Gutter'
 import { CMSLink } from '../Link'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 export async function Footer() {
   let footer: Footer | null = null
@@ -23,35 +23,47 @@ export async function Footer() {
 
   const navItems = footer?.navItems || []
 
+  const currentYear = new Date().getFullYear()
+
   return (
-    <footer className={classes.footer}>
-      <Gutter className={classes.wrap}>
-        <Link href="/">
+    <footer className="px-24 py-0 bg-zinc-950">
+      <Gutter className="flex justify-between flex-wrap h-16 gap-x-3 gap-y-6">
+        {/* <Link href="/">
           <picture>
             <img
-              className={classes.logo}
               alt="Payload Logo"
               src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/payload/src/admin/assets/images/payload-logo-light.svg"
+              className="w-36 dark:invert"
             />
           </picture>
-        </Link>
-        <nav className={classes.nav}>
-          <ThemeSelector />
+        </Link> */}
+        {/* this nav is for cms defined links */}
+        <nav>
           {navItems.map(({ link }, i) => {
             return <CMSLink key={i} {...link} />
           })}
-          <Link href="/admin">Admin</Link>
+        </nav>
+        <div className="flex gap-x-10 gap-y-6 items-center flex-wrap opacity-100 transition-opacity visible">
+          John Grant &copy; {currentYear}
+          <div>
+            Built with&nbsp;
+            <Link href="https://nextjs.org" target="_blank" rel="noopener noreferrer">
+              NextJS
+            </Link>
+            &nbsp;and&nbsp;
+            <Link href="https://payloadcms.com" target="_blank" rel="noopener noreferrer">
+              Payload
+            </Link>
+          </div>
           <Link
-            href="https://github.com/payloadcms/payload/tree/main/templates/website"
+            href="https://github.com/jayelg/johngrant-dev"
             target="_blank"
             rel="noopener noreferrer"
           >
             Source Code
           </Link>
-          <Link href="https://payloadcms.com" target="_blank" rel="noopener noreferrer">
-            Payload
-          </Link>
-        </nav>
+          <ThemeSelector />
+        </div>
       </Gutter>
     </footer>
   )

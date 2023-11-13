@@ -1,7 +1,5 @@
 import React from 'react'
 
-import classes from './index.module.scss'
-
 export const Message: React.FC<{
   message?: React.ReactNode
   error?: React.ReactNode
@@ -15,12 +13,12 @@ export const Message: React.FC<{
     return (
       <div
         className={[
-          classes.message,
+          'p-4 leading-5 w-full',
           className,
-          error && classes.error,
-          success && classes.success,
-          warning && classes.warning,
-          !error && !success && !warning && classes.default,
+          error && 'bg-red-600',
+          success && 'bg-green-600',
+          warning && 'bg-amber-500',
+          !error && !success && !warning && 'bg-zinc-600',
         ]
           .filter(Boolean)
           .join(' ')}
