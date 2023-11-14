@@ -18,10 +18,6 @@ const collectionLabels = {
     singular: 'Artifact',
     plural: 'Artifacts',
   },
-  projects: {
-    singular: 'Project',
-    plural: 'Projects',
-  },
 }
 
 const Title: React.FC = () => <span>Dashboard</span>

@@ -7,12 +7,8 @@ const defaultLabels = {
 
 const defaultCollectionLabels = {
   artifacts: {
-    singular: 'Artifact',
-    plural: 'Artifacts',
-  },
-  projects: {
-    singular: 'Project',
-    plural: 'Projects',
+    singular: 'Item',
+    plural: 'Items',
   },
 }
 

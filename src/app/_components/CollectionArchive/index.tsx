@@ -3,7 +3,7 @@
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import qs from 'qs'
 
-import { Artifact, Project } from '../../../payload/payload-types'
+import { Artifact } from '../../../payload/payload-types'
 import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/types'
 import { Card } from '../Card'
 import { Gutter } from '../Gutter'
@@ -14,7 +14,7 @@ import { Pagination } from '../Pagination'
 
 type Result = {
   totalDocs: number
-  docs: (Project | Artifact)[]
+  docs: Artifact[]
   page: number
   totalPages: number
   hasPrevPage: boolean
@@ -25,7 +25,7 @@ type Result = {
 
 export type Props = {
   className?: string
-  relationTo?: 'artifacts' | 'projects'
+  relationTo?: 'artifacts'
   populateBy?: 'collection' | 'selection'
   showPageRange?: boolean
   onResultChange?: (result: Result) => void // eslint-disable-line no-unused-vars
@@ -86,7 +86,6 @@ export const CollectionArchive: React.FC<Props> = props => {
 
   useEffect(() => {
     let timer: NodeJS.Timeout = null
-
     if (populateBy === 'collection') {
       // hydrate the block with fresh content after first render
       // don't show loader unless the request takes longer than x ms
@@ -128,7 +127,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           clearTimeout(timer)
           hasHydrated.current = true
 
-          const { docs } = json as { docs: (Project | artifact)[] }
+          const { docs } = json as { docs: Artifact[] }
 
           if (docs && Array.isArray(docs)) {
             setResults(json)
@@ -159,22 +158,9 @@ export const CollectionArchive: React.FC<Props> = props => {
       <div className="absolute left-0 top-0" ref={scrollRef} />
       {!isLoading && error && <Gutter>{error}</Gutter>}
       <Fragment>
-        {showPageRange !== false && (
-          <Gutter>
-            {/* add pageRange styles */}
-            <div className="mb-6">
-              <PageRange
-                totalDocs={results.totalDocs}
-                currentPage={results.page}
-                collection={relationTo}
-                limit={limit}
-              />
-            </div>
-          </Gutter>
-        )}
         <Gutter>
           {/* add grid styles */}
-          <div className=" grid grid-cols-3 w-full gap-10">
+          <div className=" grid grid-cols-3 w-full gap-3">
             {results.docs?.map((result, index) => {
               return (
                 // add column props
@@ -195,6 +181,19 @@ export const CollectionArchive: React.FC<Props> = props => {
             />
           )}
         </Gutter>
+        {showPageRange !== false && (
+          <Gutter>
+            {/* add pageRange styles */}
+            <div className="py-6">
+              <PageRange
+                totalDocs={results.totalDocs}
+                currentPage={results.page}
+                collection={relationTo}
+                limit={limit}
+              />
+            </div>
+          </Gutter>
+        )}
       </Fragment>
     </div>
   )

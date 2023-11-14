@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Link from 'next/link'
 
-import { Artifact, Project } from '../../../payload/payload-types'
+import { Artifact } from '../../../payload/payload-types'
 import { Media } from '../Media'
 
 // import classes from './index.module.scss'
@@ -12,8 +12,8 @@ export const Card: React.FC<{
   showCategories?: boolean
   hideImagesOnMobile?: boolean
   title?: string
-  relationTo?: 'projects' | 'artifacts'
-  doc?: Project | Artifact
+  relationTo?: 'artifacts'
+  doc?: Artifact
   orientation?: 'horizontal' | 'vertical'
 }> = props => {
   const {
@@ -51,7 +51,7 @@ export const Card: React.FC<{
   return (
     <div
       className={[
-        'border-2 rounded-sm h-full flex flex-col',
+        'rounded-xl overflow-hidden drop-shadow-md bg-zinc-300 h-full flex flex-col',
         className,
         orientation && appearanceStyle,
       ]

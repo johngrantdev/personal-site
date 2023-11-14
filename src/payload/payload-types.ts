@@ -11,7 +11,6 @@ export interface Config {
   collections: {
     pages: Page
     artifacts: Artifact
-    projects: Project
     media: Media
     categories: Category
     users: User
@@ -21,7 +20,6 @@ export interface Config {
     'payload-migrations': PayloadMigration
   }
   globals: {
-    settings: Settings
     header: Header
     footer: Footer
   }
@@ -114,17 +112,14 @@ export interface Page {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts' | 'projects'
+        relationTo?: 'artifacts'
         categories?: string[] | Category[]
         limit?: number
+        showPageRange?: boolean
         selectedDocs?:
           | (
               | {
                   relationTo: 'artifacts'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
                   value: string
                 }
             )[]
@@ -132,10 +127,6 @@ export interface Page {
               | {
                   relationTo: 'artifacts'
                   value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
                 }
             )[]
         populatedDocs?:
@@ -144,19 +135,11 @@ export interface Page {
                   relationTo: 'artifacts'
                   value: string
                 }
-              | {
-                  relationTo: 'projects'
-                  value: string
-                }
             )[]
           | (
               | {
                   relationTo: 'artifacts'
                   value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
                 }
             )[]
         populatedDocsTotal?: number
@@ -299,17 +282,14 @@ export interface Artifact {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts' | 'projects'
+        relationTo?: 'artifacts'
         categories?: string[] | Category[]
         limit?: number
+        showPageRange?: boolean
         selectedDocs?:
           | (
               | {
                   relationTo: 'artifacts'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
                   value: string
                 }
             )[]
@@ -317,10 +297,6 @@ export interface Artifact {
               | {
                   relationTo: 'artifacts'
                   value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
                 }
             )[]
         populatedDocs?:
@@ -329,19 +305,11 @@ export interface Artifact {
                   relationTo: 'artifacts'
                   value: string
                 }
-              | {
-                  relationTo: 'projects'
-                  value: string
-                }
             )[]
           | (
               | {
                   relationTo: 'artifacts'
                   value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
                 }
             )[]
         populatedDocsTotal?: number
@@ -413,17 +381,14 @@ export interface Artifact {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts' | 'projects'
+        relationTo?: 'artifacts'
         categories?: string[] | Category[]
         limit?: number
+        showPageRange?: boolean
         selectedDocs?:
           | (
               | {
                   relationTo: 'artifacts'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
                   value: string
                 }
             )[]
@@ -431,10 +396,6 @@ export interface Artifact {
               | {
                   relationTo: 'artifacts'
                   value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
                 }
             )[]
         populatedDocs?:
@@ -443,19 +404,11 @@ export interface Artifact {
                   relationTo: 'artifacts'
                   value: string
                 }
-              | {
-                  relationTo: 'projects'
-                  value: string
-                }
             )[]
           | (
               | {
                   relationTo: 'artifacts'
                   value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
                 }
             )[]
         populatedDocsTotal?: number
@@ -490,171 +443,6 @@ export interface User {
   loginAttempts?: number
   lockUntil?: string
   password?: string
-}
-
-export interface Project {
-  id: string
-  title: string
-  categories?: string[] | Category[]
-  publishedDate?: string
-  hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact'
-    richText: {
-      [k: string]: unknown
-    }[]
-    links?: {
-      link: {
-        type?: 'reference' | 'custom'
-        newTab?: boolean
-        reference: {
-          relationTo: 'pages'
-          value: string | Page
-        }
-        url: string
-        label: string
-        appearance?: 'default' | 'primary' | 'secondary'
-      }
-      id?: string
-    }[]
-    media: string | Media
-  }
-  layout: (
-    | {
-        invertBackground?: boolean
-        richText: {
-          [k: string]: unknown
-        }[]
-        links?: {
-          link: {
-            type?: 'reference' | 'custom'
-            newTab?: boolean
-            reference: {
-              relationTo: 'pages'
-              value: string | Page
-            }
-            url: string
-            label: string
-            appearance?: 'primary' | 'secondary'
-          }
-          id?: string
-        }[]
-        id?: string
-        blockName?: string
-        blockType: 'cta'
-      }
-    | {
-        invertBackground?: boolean
-        columns?: {
-          size?: 'oneThird' | 'half' | 'twoThirds' | 'full'
-          richText: {
-            [k: string]: unknown
-          }[]
-          enableLink?: boolean
-          link?: {
-            type?: 'reference' | 'custom'
-            newTab?: boolean
-            reference: {
-              relationTo: 'pages'
-              value: string | Page
-            }
-            url: string
-            label: string
-            appearance?: 'default' | 'primary' | 'secondary'
-          }
-          id?: string
-        }[]
-        id?: string
-        blockName?: string
-        blockType: 'content'
-      }
-    | {
-        invertBackground?: boolean
-        position?: 'default' | 'fullscreen'
-        media: string | Media
-        id?: string
-        blockName?: string
-        blockType: 'mediaBlock'
-      }
-    | {
-        introContent: {
-          [k: string]: unknown
-        }[]
-        populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts' | 'projects'
-        categories?: string[] | Category[]
-        limit?: number
-        selectedDocs?:
-          | (
-              | {
-                  relationTo: 'artifacts'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
-                  value: string
-                }
-            )[]
-          | (
-              | {
-                  relationTo: 'artifacts'
-                  value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
-                }
-            )[]
-        populatedDocs?:
-          | (
-              | {
-                  relationTo: 'artifacts'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
-                  value: string
-                }
-            )[]
-          | (
-              | {
-                  relationTo: 'artifacts'
-                  value: Artifact
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
-                }
-            )[]
-        populatedDocsTotal?: number
-        id?: string
-        blockName?: string
-        blockType: 'archive'
-      }
-  )[]
-  relatedProjects?: string[] | Project[]
-  slug?: string
-  meta?: {
-    title?: string
-    description?: string
-    image?: string | Media
-  }
-  updatedAt: string
-  createdAt: string
-  _status?: 'draft' | 'published'
-}
-
-export interface Comment {
-  id: string
-  user?: string | User
-  populatedUser?: {
-    id?: string
-    name?: string
-  }
-  doc?: string | Artifact
-  comment?: string
-  updatedAt: string
-  createdAt: string
-  _status?: 'draft' | 'published'
 }
 
 export interface Redirect {
@@ -705,14 +493,6 @@ export interface PayloadMigration {
   createdAt: string
 }
 
-export interface Settings {
-  id: string
-  artifactsPage?: string | Page
-  projectsPage?: string | Page
-  updatedAt?: string
-  createdAt?: string
-}
-
 export interface Header {
   id: string
   navItems?: {
@@ -756,7 +536,6 @@ declare module 'payload' {
     collections: {
       pages: Page
       artifacts: Artifact
-      projects: Project
       media: Media
       categories: Category
       users: User
@@ -766,7 +545,6 @@ declare module 'payload' {
       'payload-migrations': PayloadMigration
     }
     globals: {
-      settings: Settings
       header: Header
       footer: Footer
     }
