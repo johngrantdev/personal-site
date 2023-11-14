@@ -27,20 +27,3 @@ query Footer {
   ${FOOTER}
 }
 `
-
-export const SETTINGS = `
-  Settings {
-    artifactsPage {
-      slug
-    }
-    projectsPage {
-      slug
-    }
-  }
-`
-
-export const SETTINGS_QUERY = `
-query Settings {
-  ${SETTINGS}
-}
-`
