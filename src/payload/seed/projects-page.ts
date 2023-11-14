@@ -24,7 +24,7 @@ export const projectsPage: Partial<Page> = {
         type: 'p',
         children: [
           {
-            text: 'This page displays all or some of the projects of your portfolio. Each project is complete with a dynamic page layout builder for a completely custom user experience that is under your full control.',
+            text: 'This page displays all or some of the projects of your blog. Each project is complete with a dynamic page layout builder for a completely custom user experience that is under your full control.',
           },
         ],
       },
@@ -48,14 +48,15 @@ export const projectsPage: Partial<Page> = {
           type: 'p',
           children: [
             {
-              text: 'The projects below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or projects can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
+              text: 'The projects below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or artifacts can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
             },
           ],
         },
       ],
       populateBy: 'collection',
-      relationTo: 'projects',
-      limit: 10,
+      relationTo: 'artifacts',
+      limit: 12,
+      showPageRange: false,
       categories: [],
     },
   ],

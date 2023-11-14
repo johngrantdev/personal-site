@@ -1,12 +1,12 @@
 import type { Artifact } from '../payload-types'
 
-export const artifact3: Partial<Artifact> = {
-  title: 'Artifact 3',
-  slug: 'artifact-3',
+export const note2: Partial<Artifact> = {
+  title: 'Note 2',
+  slug: 'note-2',
   _status: 'published',
   meta: {
-    title: 'Artifact 3',
-    description: 'This is the third artifact.',
+    title: 'Note 2',
+    description: 'This is the second note.',
     image: '{{IMAGE}}',
   },
   authors: ['{{AUTHOR}}'],
@@ -17,7 +17,7 @@ export const artifact3: Partial<Artifact> = {
       {
         children: [
           {
-            text: 'Artifact 3',
+            text: 'Note 2',
           },
         ],
         type: 'h1',

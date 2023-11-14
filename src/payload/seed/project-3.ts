@@ -1,14 +1,15 @@
-import type { Project } from '../payload-types'
+import type { Artifact } from '../payload-types'
 
-export const project3: Partial<Project> = {
+export const project3: Partial<Artifact> = {
   title: 'Project 3',
-  slug: 'project-3',
+  slug: 'Project-3',
   _status: 'published',
   meta: {
-    title: 'Project 1',
+    title: 'Project 3',
     description: 'This is the third project.',
     image: '{{IMAGE}}',
   },
+  authors: ['{{AUTHOR}}'],
   hero: {
     type: 'lowImpact',
     links: null,
@@ -48,5 +49,34 @@ export const project3: Partial<Project> = {
       ],
     },
   ],
-  relatedProjects: [], // this is populated by the seed script
+  enablePremiumContent: true,
+  premiumContent: [
+    {
+      blockType: 'content',
+      columns: [
+        {
+          size: 'twoThirds',
+          richText: [
+            {
+              children: [
+                {
+                  text: 'This is premium content.',
+                  bold: true,
+                },
+                {
+                  text: ' It is only available to authenticated users. This content can be anything from additional video, text, and content, to download links and more. These are simply layout building blocks configured in the CMS.',
+                },
+              ],
+            },
+          ],
+          link: {
+            reference: null,
+            url: '',
+            label: '',
+          },
+        },
+      ],
+    },
+  ],
+  relatedArtifacts: [], // this is populated by the seed script
 }
