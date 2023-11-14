@@ -18,6 +18,7 @@ export const ArchiveBlock: React.FC<
     relationTo,
     populateBy,
     limit,
+    showPageRange,
     populatedDocs,
     populatedDocsTotal,
     categories,
@@ -27,7 +28,7 @@ export const ArchiveBlock: React.FC<
     <div id={`block-${id}`} className="relative">
       {introContent && (
         // no midbreak, bottom margin could be adjusted
-        <Gutter className="mb-24">
+        <Gutter className="my-12">
           <RichText content={introContent} />
         </Gutter>
       )}
@@ -38,6 +39,7 @@ export const ArchiveBlock: React.FC<
         populatedDocsTotal={populatedDocsTotal}
         categories={categories}
         limit={limit}
+        showPageRange={showPageRange}
         sort="-publishedAt"
       />
     </div>
