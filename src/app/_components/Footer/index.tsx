@@ -26,8 +26,8 @@ export async function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="px-24 py-0 bg-zinc-950">
-      <Gutter className="flex justify-between flex-wrap h-16 gap-x-3 gap-y-6">
+    <footer className="w-full">
+      <Gutter className="flex items-center justify-center flex-wrap h-16 gap-x-3 gap-y-6">
         {/* <Link href="/">
           <picture>
             <img
@@ -43,7 +43,7 @@ export async function Footer() {
             return <CMSLink key={i} {...link} />
           })}
         </nav>
-        <div className="flex gap-x-10 gap-y-6 items-center flex-wrap opacity-100 transition-opacity visible">
+        <div className="flex gap-6 items-center flex-wrap opacity-100 transition-opacity visible">
           John Grant &copy; {currentYear}
           <div>
             Built with&nbsp;
