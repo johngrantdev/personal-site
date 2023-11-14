@@ -1,6 +1,5 @@
 import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { payloadCloud } from '@payloadcms/plugin-cloud'
 import nestedDocs from '@payloadcms/plugin-nested-docs'
 import redirects from '@payloadcms/plugin-redirects'
 import seo from '@payloadcms/plugin-seo'
@@ -12,17 +11,14 @@ import { buildConfig } from 'payload/config'
 
 import { Artifacts } from './collections/Artifacts'
 import Categories from './collections/Categories'
-import Comments from './collections/Comments'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { Projects } from './collections/Projects'
 import Users from './collections/Users'
 import BeforeDashboard from './components/BeforeDashboard'
 import BeforeLogin from './components/BeforeLogin'
 import { seed } from './endpoints/seed'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
-import { Settings } from './globals/Settings'
 
 const generateTitle: GenerateTitle = () => {
   return 'My Website'
@@ -66,8 +62,8 @@ export default buildConfig({
     },
   }),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
-  collections: [Pages, Artifacts, Projects, Media, Categories, Users, Comments],
-  globals: [Settings, Header, Footer],
+  collections: [Pages, Artifacts, Media, Categories, Users],
+  globals: [Header, Footer],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
@@ -94,10 +90,9 @@ export default buildConfig({
       collections: ['categories'],
     }),
     seo({
-      collections: ['pages', 'artifacts', 'projects'],
+      collections: ['pages', 'artifacts'],
       generateTitle,
       uploadsCollection: 'media',
     }),
-    payloadCloud(),
   ],
 })
