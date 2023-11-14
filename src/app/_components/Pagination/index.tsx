@@ -14,7 +14,7 @@ export const Pagination: React.FC<{
 
   return (
     // add Pagination stlyes
-    <div className={['flex items-center gap-3', className].filter(Boolean).join(' ')}>
+    <div className={['flex gap-3 justify-center', className].filter(Boolean).join(' ')}>
       {/* add button styles, todo: add disabled */}
       <button
         className=" cursor-pointer relative flex p-3 text-zinc-400 border-solid border-zinc-400"
@@ -25,10 +25,10 @@ export const Pagination: React.FC<{
         }}
       >
         {/* add icon styles */}
-        <Chevron className="w-3 h-3" rotate={90} />
+        <Chevron className="w-3 h-3 " rotate={90} />
       </button>
       {/* add pageRange styles */}
-      <div>
+      <div className="flex items-center">
         {/* add pageRangeLabel styles */}
         <span>
           Page {page} of {totalPages}
