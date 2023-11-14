@@ -44,15 +44,11 @@ export const ARCHIVE_BLOCK = `
   relationTo
   ${CATEGORIES}
   limit
+  showPageRange
   selectedDocs {
     relationTo
     value {
       ...on Artifact {
-        id
-        slug
-        title
-      }
-      ...on Project {
         id
         slug
         title
@@ -63,13 +59,6 @@ export const ARCHIVE_BLOCK = `
     relationTo
     value {
       ...on Artifact {
-        id
-        slug
-        title
-        ${CATEGORIES}
-        ${META}
-      }
-      ...on Project {
         id
         slug
         title
