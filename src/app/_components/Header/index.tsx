@@ -26,7 +26,7 @@ export async function Header() {
     <>
       <header className="py-6 px-0">
         {/* add wrap styles */}
-        <Gutter className="flex justify-between flex-wrap gap-x-3 gap-y-6 ">
+        <Gutter className="flex justify-between flex-wrap gap-x-3 gap-y-6">
           <Link href="/">
             {/* Cannot use the `<picture>` element here with `srcSet`
               This is because the theme is able to be overridden by the user
