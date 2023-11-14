@@ -20,7 +20,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <div className="font-sans text-zinc-900 bg-zinc-400 dark:bg-zinc-900 dark:text-zinc-400">
+          <div className="font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300">
             <AdminBar />
             {/* @ts-expect-error */}
             <Header />
