@@ -3,7 +3,7 @@ import { LINK_FIELDS } from './link'
 import { MEDIA } from './media'
 import { META } from './meta'
 
-export const ARTIFACT = `
+export const ARTIFACTS = `
   query Artifacts {
     Artifacts(limit: 300) {
       docs {
@@ -13,7 +13,7 @@ export const ARTIFACT = `
   }
 `
 
-export const ARTIFACTS = `
+export const ARTIFACT = `
   query Artifacts($slug: String, $draft: Boolean) {
     Artifacts(where: { slug: { equals: $slug }}, limit: 1, draft: $draft) {
       docs {
