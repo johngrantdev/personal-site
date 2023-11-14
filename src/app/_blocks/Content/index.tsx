@@ -28,10 +28,10 @@ export const ContentBlock: React.FC<
 
             return (
               // add column and column--${size} styling
-              <div key={index}>
+              <div className="" key={index}>
                 <RichText content={richText} />
                 {/* add link styling */}
-                {enableLink && <CMSLink {...link} />}
+                {enableLink && <CMSLink className="mt-6" {...link} />}
               </div>
             )
           })}

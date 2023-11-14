@@ -34,7 +34,7 @@ export const MediaBlock: React.FC<Props> = props => {
       )}
       {caption && (
         // add caption styling
-        <Gutter className="text-zinc-200 mt-6">
+        <Gutter className="mt-6">
           <RichText content={caption} />
         </Gutter>
       )}

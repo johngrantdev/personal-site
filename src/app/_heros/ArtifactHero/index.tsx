@@ -21,13 +21,9 @@ export const ArtifactHero: React.FC<{
 
   return (
     <Fragment>
-      {/* add artifactHero styles */}
-      <Gutter>
-        {/* add content styles */}
-        <div>
-          {/* add leader styles */}
-          <div>
-            {/* add categories styles */}
+      <Gutter className="flex gap-12 ">
+        <div className=" w-1/2 flex flex-col content-center items-start gap-6">
+          <div className="flex gap-3">
             <div>
               {categories?.map((category, index) => {
                 const { title: categoryTitle } = category
@@ -45,10 +41,8 @@ export const ArtifactHero: React.FC<{
               })}
             </div>
           </div>
-          {/* add title styles */}
-          <h1>{title}</h1>
-          {/* add meta styles */}
-          <p>
+          <h1 className="m-0">{title}</h1>
+          <p className="m-0">
             {populatedAuthors && (
               <Fragment>
                 {'By '}
@@ -77,8 +71,7 @@ export const ArtifactHero: React.FC<{
             )}
           </p>
           <div>
-            {/* add description styles */}
-            <p>
+            <p className="m-0">
               {`${description ? `${description} ` : ''}To edit this artifact, `}
               <Link
                 href={`${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/artifacts/${id}`}
@@ -89,19 +82,16 @@ export const ArtifactHero: React.FC<{
             </p>
           </div>
         </div>
-        {/* add media styles */}
-        <div>
-          {/* add mediaWrapper styles */}
-          <div>
-            {/* add placeholder styles */}
-            {!metaImage && <div>No image</div>}
+        <div className="w-1/2">
+          <div className=" no-underline	block relative aspect-square mb-3">
+            {!metaImage && (
+              <div className="w-full h-full flex items-center content-center">No image</div>
+            )}
             {metaImage && typeof metaImage !== 'string' && (
-              // add image styles to imgClassName
               <Media imgClassName="object-cover" resource={metaImage} fill />
             )}
           </div>
           {metaImage && typeof metaImage !== 'string' && metaImage?.caption && (
-            // add caption styles
             <RichText content={metaImage.caption} />
           )}
         </div>

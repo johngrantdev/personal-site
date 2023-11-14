@@ -1,7 +1,6 @@
 import React from 'react'
 
 export type VerticalPaddingOptions = 'large' | 'medium' | 'none'
-
 type Props = {
   top?: VerticalPaddingOptions
   bottom?: VerticalPaddingOptions
@@ -10,13 +9,39 @@ type Props = {
 }
 
 export const VerticalPadding: React.FC<Props> = ({
-  top = 'px-14',
+  top = 'pt-14',
   bottom = 'pb-14',
   className,
   children,
 }) => {
+  let topStyle: string
+  let bottomStyle: string
+
+  switch (top) {
+    case 'large':
+      topStyle = 'pt-24'
+      break
+    case 'medium':
+      topStyle = 'pt-14'
+      break
+    case 'none':
+      topStyle = 'pt-0'
+      break
+  }
+
+  switch (bottom) {
+    case 'large':
+      bottomStyle = 'pb-24'
+      break
+    case 'medium':
+      bottomStyle = 'pb-14'
+      break
+    case 'none':
+      bottomStyle = 'pb-0'
+      break
+  }
+
   return (
-    // add classes[`top-${top}`], classes[`bottom-${bottom} styles
-    <div className={[className, top, bottom].filter(Boolean).join(' ')}>{children}</div>
+    <div className={[className, topStyle, bottomStyle].filter(Boolean).join(' ')}>{children}</div>
   )
 }
