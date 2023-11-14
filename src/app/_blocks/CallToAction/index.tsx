@@ -18,20 +18,18 @@ export const CallToActionBlock: React.FC<
   return (
     <Gutter>
       {/* need to add dark theme */}
-      <VerticalPadding className="px-14 relative bg-zinc-300 text-zinc-800">
-        <div className="flex gap-14 items-center">
-          <div className="flex-grow">
-            {/* add richText Styling */}
-            <RichText content={richText} />
-          </div>
-          {/* todo implement the sass logic for margin-bottom */}
-          <div className="flex flex-col justify-center h-full flex-shrink-0 ">
-            {(links || []).map(({ link }, i) => {
-              return <CMSLink key={i} {...link} invert={invertBackground} />
-            })}
-          </div>
+      <div className="px-6 py-12 flex gap-14 items-center dark:bg-zinc-900 bg-zinc-300 drop-shadow-xl">
+        <div className="flex-grow">
+          {/* add richText Styling */}
+          <RichText content={richText} />
         </div>
-      </VerticalPadding>
+        {/* todo implement the sass logic for margin-bottom */}
+        <div className="flex flex-col justify-center h-full flex-shrink-0 ">
+          {(links || []).map(({ link }, i) => {
+            return <CMSLink key={i} {...link} invert={invertBackground} />
+          })}
+        </div>
+      </div>
     </Gutter>
   )
 }
