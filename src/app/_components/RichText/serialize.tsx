@@ -63,17 +63,41 @@ const serialize = (children?: Children): React.ReactNode[] =>
 
     switch (node.type) {
       case 'h1':
-        return <h1 key={i}>{serialize(node?.children)}</h1>
+        return (
+          <h1 className="text-5xl" key={i}>
+            {serialize(node?.children)}
+          </h1>
+        )
       case 'h2':
-        return <h2 key={i}>{serialize(node?.children)}</h2>
+        return (
+          <h2 className="text-4xl" key={i}>
+            {serialize(node?.children)}
+          </h2>
+        )
       case 'h3':
-        return <h3 key={i}>{serialize(node?.children)}</h3>
+        return (
+          <h3 className="text-3xl" key={i}>
+            {serialize(node?.children)}
+          </h3>
+        )
       case 'h4':
-        return <h4 key={i}>{serialize(node?.children)}</h4>
+        return (
+          <h4 className="text-2xl" key={i}>
+            {serialize(node?.children)}
+          </h4>
+        )
       case 'h5':
-        return <h5 key={i}>{serialize(node?.children)}</h5>
+        return (
+          <h5 className="text-xl" key={i}>
+            {serialize(node?.children)}
+          </h5>
+        )
       case 'h6':
-        return <h6 key={i}>{serialize(node?.children)}</h6>
+        return (
+          <h6 className="text-lg" key={i}>
+            {serialize(node?.children)}
+          </h6>
+        )
       case 'quote':
         return <blockquote key={i}>{serialize(node?.children)}</blockquote>
       case 'ul':

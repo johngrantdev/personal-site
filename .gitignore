@@ -6,3 +6,6 @@ node_modules
 .env
 .next
 .vercel
+
+yarn.lock
+/_trash

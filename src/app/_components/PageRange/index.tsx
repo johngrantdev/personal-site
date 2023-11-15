@@ -1,20 +1,14 @@
 import React from 'react'
 
-import classes from './index.module.scss'
-
 const defaultLabels = {
   singular: 'Doc',
   plural: 'Docs',
 }
 
 const defaultCollectionLabels = {
-  posts: {
-    singular: 'Post',
-    plural: 'Posts',
-  },
-  projects: {
-    singular: 'Project',
-    plural: 'Projects',
+  artifacts: {
+    singular: 'Item',
+    plural: 'Items',
   },
 }
 
@@ -46,7 +40,8 @@ export const PageRange: React.FC<{
     collectionLabelsFromProps || defaultCollectionLabels[collection || ''] || defaultLabels || {}
 
   return (
-    <div className={[className, classes.pageRange].filter(Boolean).join(' ')}>
+    // add pageRange styles
+    <div className={[className, 'flex items-center font-bold'].filter(Boolean).join(' ')}>
       {(typeof totalDocs === 'undefined' || totalDocs === 0) && 'Search produced no results.'}
       {typeof totalDocs !== 'undefined' &&
         totalDocs > 0 &&

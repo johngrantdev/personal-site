@@ -3,7 +3,7 @@
 import React, { ElementType } from 'react'
 import Link from 'next/link'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 export type Props = {
   label?: string
@@ -34,18 +34,34 @@ export const Button: React.FC<Props> = ({
 
   const newTabProps = newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {}
 
+  let appearanceStyle
+
+  // need to add inverse appearances types to tailwind
+  switch (appearance) {
+    case 'primary':
+      appearanceStyle = 'bg-zinc-300 hover:bg-zinc-400 text-zinc-950 border-zinc-950'
+      break
+    case 'secondary':
+      appearanceStyle = 'bg-green-400 border-zinc-950'
+      break
+    case 'none':
+      appearanceStyle = 'bg-transparent'
+      break
+    default:
+      appearanceStyle = 'bg-transparent'
+  }
+
   const className = [
-    classes.button,
+    'border rounded-md cursor-pointer inline-flex justify-center bg-transparent no-underline mr-4 px-3 py-2 transition-colors',
     classNameFromProps,
-    classes[`appearance--${appearance}`],
-    invert && classes[`${appearance}--invert`],
+    appearanceStyle,
   ]
     .filter(Boolean)
     .join(' ')
 
   const content = (
-    <div className={classes.content}>
-      <span className={classes.label}>{label}</span>
+    <div className=" flex items-center justify-around">
+      <span className="text-center flex items-center">{label}</span>
     </div>
   )
 

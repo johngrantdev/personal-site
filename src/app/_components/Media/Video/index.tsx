@@ -4,8 +4,6 @@ import React, { useEffect, useRef } from 'react'
 
 import { Props as MediaProps } from '../types'
 
-import classes from './index.module.scss'
-
 export const Video: React.FC<MediaProps> = props => {
   const { videoClassName, resource, onClick } = props
 
@@ -26,13 +24,14 @@ export const Video: React.FC<MediaProps> = props => {
     const { filename } = resource
 
     return (
+      // add video styles
       <video
         playsInline
         autoPlay
         muted
         loop
         controls={false}
-        className={[classes.video, videoClassName].filter(Boolean).join(' ')}
+        className={['max-w-full w-full bg-zinc-600', videoClassName].filter(Boolean).join(' ')}
         onClick={onClick}
         ref={videoRef}
       >

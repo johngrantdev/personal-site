@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 import Link from 'next/link'
 
-import { Post, Project } from '../../../payload/payload-types'
+import { Artifact } from '../../../payload/payload-types'
 import { Media } from '../Media'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -12,8 +12,8 @@ export const Card: React.FC<{
   showCategories?: boolean
   hideImagesOnMobile?: boolean
   title?: string
-  relationTo?: 'projects' | 'posts'
-  doc?: Project | Post
+  relationTo?: 'artifacts'
+  doc?: Artifact
   orientation?: 'horizontal' | 'vertical'
 }> = props => {
   const {
@@ -33,21 +33,42 @@ export const Card: React.FC<{
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`
 
+  let appearanceStyle
+  const orientationStyle = (orientation: string) => {
+    switch (orientation) {
+      case 'vertical':
+        appearanceStyle = 'flex-col'
+        break
+      case 'horizontal':
+        appearanceStyle = 'flex-row'
+        break
+      default:
+        appearanceStyle = 'flex-col'
+    }
+  }
+  orientationStyle(orientation)
+
   return (
     <div
-      className={[classes.card, className, orientation && classes[orientation]]
+      className={[
+        'rounded-xl overflow-hidden drop-shadow-md bg-zinc-300 h-full flex flex-col',
+        className,
+        orientation && appearanceStyle,
+      ]
         .filter(Boolean)
         .join(' ')}
     >
-      <Link href={href} className={classes.mediaWrapper}>
-        {!metaImage && <div className={classes.placeholder}>No image</div>}
+      <Link href={href} className="no-underline	block relative aspect-video">
+        {!metaImage && (
+          <div className="w-full h-full flex items-center justify-center">No image</div>
+        )}
         {metaImage && typeof metaImage !== 'string' && (
-          <Media imgClassName={classes.image} resource={metaImage} fill />
+          <Media imgClassName="object-cover" resource={metaImage} fill />
         )}
       </Link>
-      <div className={classes.content}>
+      <div className="p-6 flex-grow flex flex-col gap-3">
         {showCategories && hasCategories && (
-          <div className={classes.leader}>
+          <div className="flex gap-6">
             {showCategories && hasCategories && (
               <div>
                 {categories?.map((category, index) => {
@@ -69,15 +90,15 @@ export const Card: React.FC<{
           </div>
         )}
         {titleToUse && (
-          <h4 className={classes.title}>
-            <Link href={href} className={classes.titleLink}>
+          <h4 className="m-0">
+            <Link className="no-underline" href={href}>
               {titleToUse}
             </Link>
           </h4>
         )}
         {description && (
-          <div className={classes.body}>
-            {description && <p className={classes.description}>{sanitizedDescription}</p>}
+          <div className="flex-grow">
+            {description && <p className="m-0">{sanitizedDescription}</p>}
           </div>
         )}
       </div>
