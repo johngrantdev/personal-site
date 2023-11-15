@@ -1,6 +1,6 @@
 import React from 'react'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 type Props = {
   invert?: boolean
@@ -13,7 +13,8 @@ export const BackgroundColor: React.FC<Props> = props => {
   const { id, className, children, invert } = props
 
   return (
-    <div id={id} className={[invert && classes.invert, className].filter(Boolean).join(' ')}>
+    // add invert and colour styling
+    <div id={id} className="bg-zinc-800">
       {children}
     </div>
   )

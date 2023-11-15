@@ -8,7 +8,7 @@ import { Providers } from './_providers'
 import { InitTheme } from './_providers/Theme/InitTheme'
 import { mergeOpenGraph } from './_utilities/mergeOpenGraph'
 
-import './_css/app.scss'
+import './globals.css'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,12 +20,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <AdminBar />
-          {/* @ts-expect-error */}
-          <Header />
-          {children}
-          {/* @ts-expect-error */}
-          <Footer />
+          <div className="font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300">
+            <AdminBar />
+            {/* @ts-expect-error */}
+            <Header />
+            {children}
+            {/* @ts-expect-error */}
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

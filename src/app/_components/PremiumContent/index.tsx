@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import Link from 'next/link'
 
 import { Page } from '../../../payload/payload-types'
-import { POST_PREMIUM_CONTENT } from '../../_graphql/posts'
+import { ARTIFACT_PREMIUM_CONTENT } from '../../_graphql/artifacts'
 import { useAuth } from '../../_providers/Auth'
 import { Blocks } from '../Blocks'
 import { Gutter } from '../Gutter'
@@ -13,10 +13,10 @@ import { Message } from '../Message'
 import { VerticalPadding } from '../VerticalPadding'
 
 export const PremiumContent: React.FC<{
-  postSlug: string
+  artifactSlug: string
   disableTopPadding?: boolean
 }> = props => {
-  const { postSlug, disableTopPadding } = props
+  const { artifactSlug, disableTopPadding } = props
   const { user } = useAuth()
 
   const [isLoading, setIsLoading] = React.useState(false)
@@ -42,14 +42,14 @@ export const PremiumContent: React.FC<{
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            query: POST_PREMIUM_CONTENT,
+            query: ARTIFACT_PREMIUM_CONTENT,
             variables: {
-              slug: postSlug,
+              slug: artifactSlug,
             },
           }),
         })
           ?.then(res => res.json())
-          ?.then(res => res?.data?.Posts.docs[0]?.premiumContent)
+          ?.then(res => res?.data?.artifacts.docs[0]?.premiumContent)
 
         if (premiumContent) {
           setBlocks(premiumContent)
@@ -72,7 +72,7 @@ export const PremiumContent: React.FC<{
     getPaywallContent()
 
     isRequesting.current = false
-  }, [user, postSlug])
+  }, [user, artifactSlug])
 
   if (user === undefined) {
     return null

@@ -1,7 +1,5 @@
 import React, { forwardRef, Ref } from 'react'
 
-import classes from './index.module.scss'
-
 type Props = {
   left?: boolean
   right?: boolean
@@ -14,12 +12,16 @@ export const Gutter: React.FC<Props> = forwardRef<HTMLDivElement, Props>((props,
   const { left = true, right = true, className, children } = props
 
   return (
+    // add gutter styles with className props
+    // eg.
+    // left (boolean) && gutterLeft styles,
+    // right && gutterRight,
     <div
       ref={ref}
       className={[
-        classes.gutter,
-        left && classes.gutterLeft,
-        right && classes.gutterRight,
+        'max-w-full mx-auto',
+        left ? 'pl-36' : 'pl-0',
+        right ? 'pr-36' : 'pr-0',
         className,
       ]
         .filter(Boolean)

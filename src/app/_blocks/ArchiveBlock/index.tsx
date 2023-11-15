@@ -5,7 +5,7 @@ import { Gutter } from '../../_components/Gutter'
 import RichText from '../../_components/RichText'
 import { ArchiveBlockProps } from './types'
 
-import classes from './index.module.scss'
+// import classes from './index.module.scss'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -18,15 +18,17 @@ export const ArchiveBlock: React.FC<
     relationTo,
     populateBy,
     limit,
+    showPageRange,
     populatedDocs,
     populatedDocsTotal,
     categories,
   } = props
 
   return (
-    <div id={`block-${id}`} className={classes.archiveBlock}>
+    <div id={`block-${id}`} className="relative">
       {introContent && (
-        <Gutter className={classes.introContent}>
+        // no midbreak, bottom margin could be adjusted
+        <Gutter className="my-12">
           <RichText content={introContent} />
         </Gutter>
       )}
@@ -37,6 +39,7 @@ export const ArchiveBlock: React.FC<
         populatedDocsTotal={populatedDocsTotal}
         categories={categories}
         limit={limit}
+        showPageRange={showPageRange}
         sort="-publishedAt"
       />
     </div>

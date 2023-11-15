@@ -32,18 +32,14 @@ export const Archive: Block = {
       type: 'select',
       name: 'relationTo',
       label: 'Collections To Show',
-      defaultValue: 'notes',
+      defaultValue: 'artifacts',
       admin: {
         condition: (_, siblingData) => siblingData.populateBy === 'collection',
       },
       options: [
         {
-          label: 'Notes',
-          value: 'notes',
-        },
-        {
-          label: 'Projects',
-          value: 'projects',
+          label: 'Artifacts',
+          value: 'artifacts',
         },
       ],
     },
@@ -68,10 +64,19 @@ export const Archive: Block = {
       },
     },
     {
+      type: 'checkbox',
+      name: 'showPageRange',
+      label: 'Show Page Range',
+      defaultValue: false,
+      admin: {
+        condition: (_, siblingData) => siblingData.populateBy === 'collection',
+      },
+    },
+    {
       type: 'relationship',
       name: 'selectedDocs',
       label: 'Selection',
-      relationTo: ['notes', 'projects'],
+      relationTo: ['artifacts'],
       hasMany: true,
       admin: {
         condition: (_, siblingData) => siblingData.populateBy === 'selection',
@@ -81,7 +86,7 @@ export const Archive: Block = {
       type: 'relationship',
       name: 'populatedDocs',
       label: 'Populated Docs',
-      relationTo: ['notes', 'projects'],
+      relationTo: ['artifacts'],
       hasMany: true,
       admin: {
         disabled: true,

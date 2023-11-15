@@ -10,81 +10,39 @@ export const home: Partial<Page> = {
     image: '{{IMAGE_1}}',
   },
   hero: {
-    type: 'highImpact',
+    type: 'lowImpact',
     richText: [
       {
         children: [
           {
-            text: 'Payload Website Template',
+            text: 'Digital and Physical Product Development.',
           },
         ],
         type: 'h1',
-      },
-      {
-        children: [
-          {
-            text: 'Welcome to your website! ',
-          },
-          {
-            type: 'link',
-            linkType: 'custom',
-            url: '/admin',
-            children: [
-              {
-                text: 'Visit the admin dashboard',
-              },
-            ],
-          },
-          {
-            text: " to begin managing this site's content. The code for this template is completely open-source and can be found ",
-          },
-          {
-            type: 'link',
-            linkType: 'custom',
-            url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-            newTab: true,
-            children: [
-              {
-                text: 'here',
-              },
-            ],
-          },
-          {
-            text: '.',
-          },
-        ],
-        type: 'large-body',
-      },
-    ],
-    links: [
-      {
-        link: {
-          type: 'reference',
-          appearance: 'primary',
-          reference: {
-            relationTo: 'pages',
-            value: '{{POSTS_PAGE_ID}}',
-          },
-          label: 'All notes',
-          url: '',
-        },
-      },
-      {
-        link: {
-          type: 'reference',
-          appearance: 'secondary',
-          reference: {
-            relationTo: 'pages',
-            value: '{{PROJECTS_PAGE_ID}}',
-          },
-          label: 'All projects',
-          url: '',
-        },
       },
     ],
     media: '{{IMAGE_1}}',
   },
   layout: [
+    {
+      blockName: 'Archive Block',
+      blockType: 'archive',
+      introContent: [
+        {
+          type: 'h4',
+          children: [
+            {
+              text: '',
+            },
+          ],
+        },
+      ],
+      populateBy: 'collection',
+      relationTo: 'artifacts',
+      limit: 12,
+      showPageRange: false,
+      categories: [],
+    },
     {
       blockName: 'Content Block',
       blockType: 'content',
@@ -123,7 +81,7 @@ export const home: Partial<Page> = {
             {
               children: [
                 {
-                  text: "Manage this site's pages, notes, projects and more from the ",
+                  text: "Manage this site's pages, artifacts and more from the ",
                 },
                 {
                   type: 'link',
@@ -241,7 +199,7 @@ export const home: Partial<Page> = {
             {
               children: [
                 {
-                  text: 'Users can comment on notes and editors can moderate comments directly from the ',
+                  text: 'Users can comment on artifacts and editors can moderate comments directly from the ',
                 },
                 {
                   type: 'link',
@@ -345,7 +303,7 @@ export const home: Partial<Page> = {
             {
               children: [
                 {
-                  text: 'Custom page builder allows you to create unique page, note, and project layouts for any type of content.',
+                  text: 'Custom page builder allows you to create unique page and artifact layouts for any type of content.',
                 },
               ],
             },
@@ -431,56 +389,6 @@ export const home: Partial<Page> = {
       media: '{{IMAGE_2}}',
     },
     {
-      blockName: 'Archive Block',
-      blockType: 'archive',
-      introContent: [
-        {
-          type: 'h4',
-          children: [
-            {
-              text: 'Recent notes',
-            },
-          ],
-        },
-        {
-          type: 'p',
-          children: [
-            {
-              text: 'The notes below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or notes can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
-            },
-          ],
-        },
-      ],
-      populateBy: 'collection',
-      relationTo: 'notes',
-      categories: [],
-    },
-    {
-      blockName: 'Archive Block',
-      blockType: 'archive',
-      introContent: [
-        {
-          type: 'h4',
-          children: [
-            {
-              text: 'Recent projects',
-            },
-          ],
-        },
-        {
-          type: 'p',
-          children: [
-            {
-              text: 'The projects below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or projects can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
-            },
-          ],
-        },
-      ],
-      populateBy: 'collection',
-      relationTo: 'projects',
-      categories: [],
-    },
-    {
       blockType: 'cta',
       blockName: 'CTA',
       richText: [
@@ -518,22 +426,10 @@ export const home: Partial<Page> = {
           link: {
             type: 'reference',
             url: '',
-            label: 'All notes',
+            label: 'All artifacts',
             appearance: 'primary',
             reference: {
-              value: '{{POSTS_PAGE_ID}}',
-              relationTo: 'pages',
-            },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            url: '',
-            label: 'All projects',
-            appearance: 'secondary',
-            reference: {
-              value: '{{PROJECTS_PAGE_ID}}',
+              value: '{{ARTIFACTS_PAGE_ID}}',
               relationTo: 'pages',
             },
           },

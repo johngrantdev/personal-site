@@ -5,8 +5,6 @@ import { useSearchParams } from 'next/navigation'
 
 import { Message } from '../Message'
 
-import classes from './index.module.scss'
-
 export type Props = {
   params?: string[]
   message?: string
@@ -35,8 +33,10 @@ export const RenderParamsComponent: React.FC<Props> = ({
           if (!paramValue) return null
 
           return (
+            // add renderParams styles
+            // just need to include midbreak
             <Message
-              className={classes.renderParams}
+              className="mb-12"
               key={paramValue}
               {...{
                 [params[index]]: paramValue,

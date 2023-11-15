@@ -10,8 +10,7 @@
 export interface Config {
   collections: {
     pages: Page
-    notes: Note
-    projects: Project
+    artifacts: Artifact
     media: Media
     categories: Category
     users: User
@@ -21,7 +20,6 @@ export interface Config {
     'payload-migrations': PayloadMigration
   }
   globals: {
-    settings: Settings
     header: Header
     footer: Footer
   }
@@ -114,49 +112,34 @@ export interface Page {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
+        relationTo?: 'artifacts'
         categories?: string[] | Category[]
         limit?: number
+        showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
+                  relationTo: 'artifacts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
+                  relationTo: 'artifacts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
             )[]
         populatedDocsTotal?: number
@@ -206,7 +189,7 @@ export interface Category {
   createdAt: string
 }
 
-export interface Note {
+export interface Artifact {
   id: string
   title: string
   categories?: string[] | Category[]
@@ -299,49 +282,34 @@ export interface Note {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
+        relationTo?: 'artifacts'
         categories?: string[] | Category[]
         limit?: number
+        showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
+                  relationTo: 'artifacts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
+                  relationTo: 'artifacts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
             )[]
         populatedDocsTotal?: number
@@ -413,49 +381,34 @@ export interface Note {
           [k: string]: unknown
         }[]
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
+        relationTo?: 'artifacts'
         categories?: string[] | Category[]
         limit?: number
+        showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
+                  relationTo: 'artifacts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
+                  relationTo: 'artifacts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
+                  relationTo: 'artifacts'
+                  value: Artifact
                 }
             )[]
         populatedDocsTotal?: number
@@ -464,7 +417,7 @@ export interface Note {
         blockType: 'archive'
       }
   )[]
-  relatedNotes?: string[] | Note[]
+  relatedArtifacts?: string[] | Artifact[]
   slug?: string
   meta?: {
     title?: string
@@ -492,171 +445,6 @@ export interface User {
   password?: string
 }
 
-export interface Project {
-  id: string
-  title: string
-  categories?: string[] | Category[]
-  publishedDate?: string
-  hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact'
-    richText: {
-      [k: string]: unknown
-    }[]
-    links?: {
-      link: {
-        type?: 'reference' | 'custom'
-        newTab?: boolean
-        reference: {
-          relationTo: 'pages'
-          value: string | Page
-        }
-        url: string
-        label: string
-        appearance?: 'default' | 'primary' | 'secondary'
-      }
-      id?: string
-    }[]
-    media: string | Media
-  }
-  layout: (
-    | {
-        invertBackground?: boolean
-        richText: {
-          [k: string]: unknown
-        }[]
-        links?: {
-          link: {
-            type?: 'reference' | 'custom'
-            newTab?: boolean
-            reference: {
-              relationTo: 'pages'
-              value: string | Page
-            }
-            url: string
-            label: string
-            appearance?: 'primary' | 'secondary'
-          }
-          id?: string
-        }[]
-        id?: string
-        blockName?: string
-        blockType: 'cta'
-      }
-    | {
-        invertBackground?: boolean
-        columns?: {
-          size?: 'oneThird' | 'half' | 'twoThirds' | 'full'
-          richText: {
-            [k: string]: unknown
-          }[]
-          enableLink?: boolean
-          link?: {
-            type?: 'reference' | 'custom'
-            newTab?: boolean
-            reference: {
-              relationTo: 'pages'
-              value: string | Page
-            }
-            url: string
-            label: string
-            appearance?: 'default' | 'primary' | 'secondary'
-          }
-          id?: string
-        }[]
-        id?: string
-        blockName?: string
-        blockType: 'content'
-      }
-    | {
-        invertBackground?: boolean
-        position?: 'default' | 'fullscreen'
-        media: string | Media
-        id?: string
-        blockName?: string
-        blockType: 'mediaBlock'
-      }
-    | {
-        introContent: {
-          [k: string]: unknown
-        }[]
-        populateBy?: 'collection' | 'selection'
-        relationTo?: 'notes' | 'projects'
-        categories?: string[] | Category[]
-        limit?: number
-        selectedDocs?:
-          | (
-              | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
-                  value: string
-                }
-            )[]
-          | (
-              | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
-                }
-            )[]
-        populatedDocs?:
-          | (
-              | {
-                  relationTo: 'notes'
-                  value: string
-                }
-              | {
-                  relationTo: 'projects'
-                  value: string
-                }
-            )[]
-          | (
-              | {
-                  relationTo: 'notes'
-                  value: Note
-                }
-              | {
-                  relationTo: 'projects'
-                  value: Project
-                }
-            )[]
-        populatedDocsTotal?: number
-        id?: string
-        blockName?: string
-        blockType: 'archive'
-      }
-  )[]
-  relatedProjects?: string[] | Project[]
-  slug?: string
-  meta?: {
-    title?: string
-    description?: string
-    image?: string | Media
-  }
-  updatedAt: string
-  createdAt: string
-  _status?: 'draft' | 'published'
-}
-
-export interface Comment {
-  id: string
-  user?: string | User
-  populatedUser?: {
-    id?: string
-    name?: string
-  }
-  doc?: string | Note
-  comment?: string
-  updatedAt: string
-  createdAt: string
-  _status?: 'draft' | 'published'
-}
-
 export interface Redirect {
   id: string
   from: string
@@ -668,8 +456,8 @@ export interface Redirect {
           value: string | Page
         }
       | {
-          relationTo: 'notes'
-          value: string | Note
+          relationTo: 'artifacts'
+          value: string | Artifact
         }
     url: string
   }
@@ -703,14 +491,6 @@ export interface PayloadMigration {
   batch?: number
   updatedAt: string
   createdAt: string
-}
-
-export interface Settings {
-  id: string
-  notesPage?: string | Page
-  projectsPage?: string | Page
-  updatedAt?: string
-  createdAt?: string
 }
 
 export interface Header {
@@ -755,8 +535,7 @@ declare module 'payload' {
   export interface GeneratedTypes {
     collections: {
       pages: Page
-      notes: Note
-      projects: Project
+      artifacts: Artifact
       media: Media
       categories: Category
       users: User
@@ -766,7 +545,6 @@ declare module 'payload' {
       'payload-migrations': PayloadMigration
     }
     globals: {
-      settings: Settings
       header: Header
       footer: Footer
     }

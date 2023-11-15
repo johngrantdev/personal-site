@@ -48,14 +48,15 @@ export const notesPage: Partial<Page> = {
           type: 'p',
           children: [
             {
-              text: 'The notes below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or notes can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
+              text: 'The notes below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or artifacts can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
             },
           ],
         },
       ],
       populateBy: 'collection',
-      relationTo: 'notes',
-      limit: 10,
+      relationTo: 'artifacts',
+      limit: 12,
+      showPageRange: false,
       categories: [],
     },
   ],
