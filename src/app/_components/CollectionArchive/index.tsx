@@ -3,7 +3,7 @@
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import qs from 'qs'
 
-import { Artifact } from '../../../payload/payload-types'
+import { Post } from '../../../payload/payload-types'
 import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/types'
 import { Card } from '../Card'
 import { Gutter } from '../Gutter'
@@ -14,7 +14,7 @@ import { Pagination } from '../Pagination'
 
 type Result = {
   totalDocs: number
-  docs: Artifact[]
+  docs: Post[]
   page: number
   totalPages: number
   hasPrevPage: boolean
@@ -25,7 +25,7 @@ type Result = {
 
 export type Props = {
   className?: string
-  relationTo?: 'artifacts'
+  relationTo?: 'posts'
   populateBy?: 'collection' | 'selection'
   showPageRange?: boolean
   onResultChange?: (result: Result) => void // eslint-disable-line no-unused-vars
@@ -127,7 +127,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           clearTimeout(timer)
           hasHydrated.current = true
 
-          const { docs } = json as { docs: Artifact[] }
+          const { docs } = json as { docs: Post[] }
 
           if (docs && Array.isArray(docs)) {
             setResults(json)

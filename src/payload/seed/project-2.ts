@@ -1,5 +1,5 @@
-import type { Artifact } from '../payload-types'
-export const project2: Partial<Artifact> = {
+import type { Post } from '../payload-types'
+export const project2: Partial<Post> = {
   title: 'Project 2',
   slug: 'project-2',
   _status: 'published',
@@ -142,5 +142,5 @@ export const project2: Partial<Artifact> = {
       ],
     },
   ],
-  relatedArtifacts: [], // this is populated by the seed script
+  relatedPosts: [], // this is populated by the seed script
 }

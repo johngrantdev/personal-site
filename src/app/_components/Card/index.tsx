@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Link from 'next/link'
 
-import { Artifact } from '../../../payload/payload-types'
+import { Post } from '../../../payload/payload-types'
 import { Media } from '../Media'
 
 // import classes from './index.module.scss'
@@ -12,8 +12,8 @@ export const Card: React.FC<{
   showCategories?: boolean
   hideImagesOnMobile?: boolean
   title?: string
-  relationTo?: 'artifacts'
-  doc?: Artifact
+  relationTo?: 'posts'
+  doc?: Post
   orientation?: 'horizontal' | 'vertical'
 }> = props => {
   const {

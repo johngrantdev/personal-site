@@ -96,7 +96,7 @@ export const projectsPage: Partial<Page> = {
         },
       },
       populateBy: 'collection',
-      relationTo: 'artifacts',
+      relationTo: 'posts',
       limit: 12,
       showPageRange: false,
       categories: [],

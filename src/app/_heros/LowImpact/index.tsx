@@ -6,6 +6,8 @@ import RichText from '../../_components/RichText'
 import { VerticalPadding } from '../../_components/VerticalPadding'
 
 export const LowImpactHero: React.FC<Page['hero']> = ({ richText }) => {
+  if (richText.root.children[])
+
   return (
     // add lowImpactHero styles
     <Gutter>

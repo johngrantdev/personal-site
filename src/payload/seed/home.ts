@@ -96,7 +96,7 @@ export const home: Partial<Page> = {
         },
       },
       populateBy: 'collection',
-      relationTo: 'artifacts',
+      relationTo: 'posts',
       limit: 12,
       showPageRange: false,
       categories: [],
@@ -138,10 +138,10 @@ export const home: Partial<Page> = {
           link: {
             type: 'reference',
             url: '',
-            label: 'All artifacts',
+            label: 'All posts',
             appearance: 'primary',
             reference: {
-              value: '{{ARTIFACTS_PAGE_ID}}',
+              value: '{{POSTS_PAGE_ID}}',
               relationTo: 'pages',
             },
           },

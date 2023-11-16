@@ -3,26 +3,26 @@ import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import { Artifact } from '../../../../payload/payload-types'
+import { Post } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
 import { Blocks } from '../../../_components/Blocks'
 import { PremiumContent } from '../../../_components/PremiumContent'
-import { ArtifactHero } from '../../../_heros/ArtifactHero'
+import { PostHero } from '../../../_heros/PostHero'
 import { generateMeta } from '../../../_utilities/generateMeta'
 
 // Force this page to be dynamic so that Next.js does not cache it
-// See the artifact in '../../../[slug]/page.tsx' about this
+// See the post in '../../../[slug]/page.tsx' about this
 export const dynamic = 'force-dynamic'
 
-export default async function Artifact({ params: { slug } }) {
+export default async function Post({ params: { slug } }) {
   const { isEnabled: isDraftMode } = draftMode()
 
-  let artifact: Artifact | null = null
+  let post: Post | null = null
 
   try {
-    artifact = await fetchDoc<Artifact>({
-      collection: 'artifacts',
+    post = await fetchDoc<Post>({
+      collection: 'posts',
       slug,
       draft: isDraftMode,
     })
@@ -30,24 +30,24 @@ export default async function Artifact({ params: { slug } }) {
     console.error(error) // eslint-disable-line no-console
   }
 
-  if (!artifact) {
+  if (!post) {
     notFound()
   }
 
-  const { layout, relatedArtifacts, enablePremiumContent, premiumContent } = artifact
+  const { layout, relatedPosts, enablePremiumContent, premiumContent } = post
 
   return (
     <React.Fragment>
-      <ArtifactHero artifact={artifact} />
+      <PostHero post={post} />
       <Blocks blocks={layout} />
-      {enablePremiumContent && <PremiumContent artifactSlug={slug as string} disableTopPadding />}
+      {enablePremiumContent && <PremiumContent postSlug={slug as string} disableTopPadding />}
       <Blocks
         disableTopPadding
         blocks={[
           {
-            blockType: 'relatedArtifacts',
-            blockName: 'Related Artifacts',
-            relationTo: 'artifacts',
+            blockType: 'relatedPosts',
+            blockName: 'Related Posts',
+            relationTo: 'posts',
             introContent: [
               {
                 type: 'h4',
@@ -58,7 +58,7 @@ export default async function Artifact({ params: { slug } }) {
                 ],
               },
             ],
-            docs: relatedArtifacts,
+            docs: relatedPosts,
           },
         ]}
       />
@@ -68,8 +68,8 @@ export default async function Artifact({ params: { slug } }) {
 
 export async function generateStaticParams() {
   try {
-    const artifacts = await fetchDocs<Artifact>('artifacts')
-    return artifacts?.map(({ slug }) => slug)
+    const posts = await fetchDocs<Post>('posts')
+    return posts?.map(({ slug }) => slug)
   } catch (error) {
     return []
   }
@@ -78,15 +78,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params: { slug } }): Promise<Metadata> {
   const { isEnabled: isDraftMode } = draftMode()
 
-  let artifact: Artifact | null = null
+  let post: Post | null = null
 
   try {
-    artifact = await fetchDoc<Artifact>({
-      collection: 'artifacts',
+    post = await fetchDoc<Post>({
+      collection: 'posts',
       slug,
       draft: isDraftMode,
     })
   } catch (error) {}
 
-  return generateMeta({ doc: artifact })
+  return generateMeta({ doc: post })
 }

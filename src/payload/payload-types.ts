@@ -10,7 +10,7 @@
 export interface Config {
   collections: {
     pages: Page
-    artifacts: Artifact
+    posts: Post
     media: Media
     categories: Category
     users: User
@@ -112,34 +112,34 @@ export interface Page {
           root: RichTextNode
         }
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts'
+        relationTo?: 'posts'
         categories?: string[] | Category[]
         limit?: number
         showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocsTotal?: number
@@ -240,7 +240,7 @@ export interface RichTextNode {
     detail?: number
 }
 
-export interface Artifact {
+export interface Post {
   id: string
   title: string
   categories?: string[] | Category[]
@@ -333,34 +333,34 @@ export interface Artifact {
           root: RichTextNode
         }
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts'
+        relationTo?: 'posts'
         categories?: string[] | Category[]
         limit?: number
         showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocsTotal?: number
@@ -432,34 +432,34 @@ export interface Artifact {
           root: RichTextNode
         }
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts'
+        relationTo?: 'posts'
         categories?: string[] | Category[]
         limit?: number
         showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocsTotal?: number
@@ -468,7 +468,7 @@ export interface Artifact {
         blockType: 'archive'
       }
   )[]
-  relatedArtifacts?: string[] | Artifact[]
+  relatedPosts?: string[] | Post[]
   slug?: string
   meta?: {
     title?: string
@@ -507,8 +507,8 @@ export interface Redirect {
           value: string | Page
         }
       | {
-          relationTo: 'artifacts'
-          value: string | Artifact
+          relationTo: 'posts'
+          value: string | Post
         }
     url: string
   }
@@ -586,7 +586,7 @@ declare module 'payload' {
   export interface GeneratedTypes {
     collections: {
       pages: Page
-      artifacts: Artifact
+      posts: Post
       media: Media
       categories: Category
       users: User

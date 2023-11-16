@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react'
 import Link from 'next/link'
 
-import { Artifact } from '../../../payload/payload-types'
+import { Post } from '../../../payload/payload-types'
 import { Gutter } from '../../_components/Gutter'
 import { Media } from '../../_components/Media'
 import RichText from '../../_components/RichText'
 import { formatDateTime } from '../../_utilities/formatDateTime'
 
-export const ArtifactHero: React.FC<{
-  artifact: Artifact
-}> = ({ artifact }) => {
+export const PostHero: React.FC<{
+  post: Post
+}> = ({ post }) => {
   const {
     id,
     title,
@@ -17,7 +17,7 @@ export const ArtifactHero: React.FC<{
     meta: { image: metaImage, description } = {},
     publishedAt,
     populatedAuthors,
-  } = artifact
+  } = post
 
   return (
     <Fragment>
@@ -72,10 +72,8 @@ export const ArtifactHero: React.FC<{
           </p>
           <div>
             <p className="m-0">
-              {`${description ? `${description} ` : ''}To edit this artifact, `}
-              <Link
-                href={`${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/artifacts/${id}`}
-              >
+              {`${description ? `${description} ` : ''}To edit this post, `}
+              <Link href={`${process.env.NEXT_PUBLIC_SERVER_URL}/admin/collections/posts/${id}`}>
                 navigate to the admin dashboard
               </Link>
               {'.'}

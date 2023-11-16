@@ -32,7 +32,7 @@ export const staticHome: Page = {
             bold: true,
           },
           {
-            text: ' To seed your database with a few pages and artifacts, ',
+            text: ' To seed your database with a few pages and posts, ',
           },
           {
             type: 'link',

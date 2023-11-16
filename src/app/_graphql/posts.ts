@@ -3,9 +3,9 @@ import { LINK_FIELDS } from './link'
 import { MEDIA } from './media'
 import { META } from './meta'
 
-export const ARTIFACTS = `
-  query Artifacts {
-    Artifacts(limit: 300) {
+export const POSTS = `
+  query Posts {
+    Posts(limit: 300) {
       docs {
         slug
       }
@@ -13,9 +13,9 @@ export const ARTIFACTS = `
   }
 `
 
-export const ARTIFACT = `
-  query Artifacts($slug: String, $draft: Boolean) {
-    Artifacts(where: { slug: { equals: $slug }}, limit: 1, draft: $draft) {
+export const POST = `
+  query Posts($slug: String, $draft: Boolean) {
+    Posts(where: { slug: { equals: $slug }}, limit: 1, draft: $draft) {
       docs {
         id
         title
@@ -44,7 +44,7 @@ export const ARTIFACT = `
           ${ARCHIVE_BLOCK}
         }
         enablePremiumContent
-        relatedArtifacts {
+        relatedPosts {
           id
           slug
           title
@@ -56,9 +56,9 @@ export const ARTIFACT = `
   }
 `
 
-export const ARTIFACT_PREMIUM_CONTENT = `
-  query Artifacts($slug: String, $draft: Boolean) {
-    Artifacts(where: { slug: { equals: $slug }}, limit: 1, draft: $draft) {
+export const POST_PREMIUM_CONTENT = `
+  query Posts($slug: String, $draft: Boolean) {
+    Posts(where: { slug: { equals: $slug }}, limit: 1, draft: $draft) {
       docs {
         premiumContent {
           ${CALL_TO_ACTION}
