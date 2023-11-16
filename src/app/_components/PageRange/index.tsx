@@ -6,7 +6,7 @@ const defaultLabels = {
 }
 
 const defaultCollectionLabels = {
-  artifacts: {
+  posts: {
     singular: 'Item',
     plural: 'Items',
   },

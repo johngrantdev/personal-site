@@ -48,7 +48,7 @@ export const ARCHIVE_BLOCK = `
   selectedDocs {
     relationTo
     value {
-      ...on Artifact {
+      ...on Post {
         id
         slug
         title
@@ -58,7 +58,7 @@ export const ARCHIVE_BLOCK = `
   populatedDocs {
     relationTo
     value {
-      ...on Artifact {
+      ...on Post {
         id
         slug
         title

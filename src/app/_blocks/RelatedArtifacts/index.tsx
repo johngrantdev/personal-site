@@ -1,25 +1,25 @@
 import React from 'react'
 
-import { Artifact } from '../../../payload/payload-types'
+import { Post } from '../../../payload/payload-types'
 import { Card } from '../../_components/Card'
 import { Gutter } from '../../_components/Gutter'
 import RichText from '../../_components/RichText'
 
 // import classes from './index.module.scss'
 
-export type RelatedArtifactsProps = {
-  blockType: 'relatedArtifacts'
+export type RelatedPostsProps = {
+  blockType: 'relatedPosts'
   blockName: string
   introContent?: any
-  docs?: (string | Artifact)[]
-  relationTo: 'artifacts'
+  docs?: (string | Post)[]
+  relationTo: 'posts'
 }
 
-export const RelatedArtifacts: React.FC<RelatedArtifactsProps> = props => {
+export const RelatedPosts: React.FC<RelatedPostsProps> = props => {
   const { introContent, docs, relationTo } = props
 
   return (
-    // add relatedArtifacts styling
+    // add relatedPosts styling
     <div>
       {introContent && (
         <Gutter className="relative mb-12">

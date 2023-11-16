@@ -11,10 +11,10 @@ import { slugField } from '../../fields/slug'
 import { populateArchiveBlock } from '../../hooks/populateArchiveBlock'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { populateAuthors } from './hooks/populateAuthors'
-import { revalidateArtifact } from './hooks/revalidateArtifact'
+import { revalidatePost } from './hooks/revalidatePost'
 
-export const Artifacts: CollectionConfig = {
-  slug: 'artifacts',
+export const Posts: CollectionConfig = {
+  slug: 'posts',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
@@ -26,7 +26,7 @@ export const Artifacts: CollectionConfig = {
   },
   hooks: {
     beforeChange: [populatePublishedAt],
-    afterChange: [revalidateArtifact],
+    afterChange: [revalidatePost],
     afterRead: [populateArchiveBlock, populateAuthors],
   },
   versions: {
@@ -140,9 +140,9 @@ export const Artifacts: CollectionConfig = {
       ],
     },
     {
-      name: 'relatedArtifacts',
+      name: 'relatedPosts',
       type: 'relationship',
-      relationTo: 'artifacts',
+      relationTo: 'posts',
       hasMany: true,
       filterOptions: ({ id }) => {
         return {
