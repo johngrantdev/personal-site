@@ -4,7 +4,7 @@ import nestedDocs from '@payloadcms/plugin-nested-docs'
 import redirects from '@payloadcms/plugin-redirects'
 import seo from '@payloadcms/plugin-seo'
 import type { GenerateTitle } from '@payloadcms/plugin-seo/types'
-import { slateEditor } from '@payloadcms/richtext-slate'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import dotenv from 'dotenv'
 import path from 'path'
 import { buildConfig } from 'payload/config'
@@ -55,7 +55,7 @@ export default buildConfig({
       },
     }),
   },
-  editor: slateEditor({}),
+  editor: lexicalEditor({}),
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI,

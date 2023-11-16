@@ -11,48 +11,90 @@ export const notesPage: Partial<Page> = {
   },
   hero: {
     type: 'lowImpact',
-    richText: [
-      {
-        type: 'h1',
+    richText: {
+      root: {
+        type: 'root',
+        format: '',
+        indent: 0,
+        version: 1,
+        direction: 'ltr',
         children: [
           {
-            text: 'All notes',
+            type: 'heading',
+            tag: 'h1',
+            format: '',
+            indent: 0,
+            version: 1,
+            direction: 'ltr',
+            children: [
+              {
+                mode: 'normal',
+                type: 'text',
+                style: '',
+                detail: 0,
+                version: 1,
+                format: 1,
+                text: 'Notes',
+              },
+            ],
+          },
+          {
+            type: 'paragraph',
+            format: '',
+            indent: 0,
+            version: 1,
+            direction: 'ltr',
+            children: [
+              {
+                mode: 'normal',
+                type: 'text',
+                style: '',
+                detail: 0,
+                version: 1,
+                format: 1,
+                text: 'Documenting interesting things.',
+              },
+            ],
           },
         ],
       },
-      {
-        type: 'p',
-        children: [
-          {
-            text: 'This page displays all or some of the notes of your blog. Each note is complete with a dynamic page layout builder for a completely custom user experience that is under your full control.',
-          },
-        ],
-      },
-    ],
+    },
     media: undefined,
   },
   layout: [
     {
       blockName: 'Archive Block',
       blockType: 'archive',
-      introContent: [
-        {
-          type: 'h4',
+      introContent: {
+        root: {
+          type: 'root',
+          format: '',
+          indent: 0,
+          version: 1,
+          direction: 'ltr',
           children: [
             {
-              text: 'All notes',
+              type: 'heading',
+              tag: 'h4',
+              format: '',
+              indent: 0,
+              version: 1,
+              direction: 'ltr',
+              children: [
+                {
+                  mode: 'normal',
+                  type: 'text',
+                  style: '',
+                  detail: 0,
+                  version: 1,
+                  format: 1,
+                  text: '',
+                },
+              ],
             },
           ],
         },
-        {
-          type: 'p',
-          children: [
-            {
-              text: 'The notes below are displayed in an "Archive" layout building block which is an extremely powerful way to display documents on a page. It can be auto-populated by collection or by category, or artifacts can be individually selected. Pagination controls will automatically appear if the number of results exceeds the number of items per page.',
-            },
-          ],
-        },
-      ],
+      },
       populateBy: 'collection',
       relationTo: 'artifacts',
       limit: 12,
