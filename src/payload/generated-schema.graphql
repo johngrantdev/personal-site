@@ -1312,6 +1312,7 @@ input Page_hero__richText_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
 }
 
 input Page_hero__links__link__type_operator {
@@ -2708,6 +2709,7 @@ input versionsPage_version__hero__richText_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
 }
 
 input versionsPage_version__hero__links__link__type_operator {
@@ -3083,6 +3085,7 @@ input Artifact_hero__richText_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
 }
 
 input Artifact_hero__links__link__type_operator {
@@ -4756,6 +4759,7 @@ input versionsArtifact_version__hero__richText_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
 }
 
 input versionsArtifact_version__hero__links__link__type_operator {
@@ -10627,7 +10631,7 @@ input mutationPageInput {
 
 input mutationPage_HeroInput {
   type: Page_Hero_type_MutationInput!
-  richText: JSON!
+  richText: JSON
   links: [mutationPage_Hero_LinksInput]
   media: String
 }
@@ -10693,7 +10697,7 @@ input mutationPageUpdateInput {
 
 input mutationPageUpdate_HeroInput {
   type: PageUpdate_Hero_type_MutationInput!
-  richText: JSON!
+  richText: JSON
   links: [mutationPageUpdate_Hero_LinksInput]
   media: String
 }
@@ -10770,7 +10774,7 @@ input mutationArtifact_PopulatedAuthorsInput {
 
 input mutationArtifact_HeroInput {
   type: Artifact_Hero_type_MutationInput!
-  richText: JSON!
+  richText: JSON
   links: [mutationArtifact_Hero_LinksInput]
   media: String
 }
@@ -10847,7 +10851,7 @@ input mutationArtifactUpdate_PopulatedAuthorsInput {
 
 input mutationArtifactUpdate_HeroInput {
   type: ArtifactUpdate_Hero_type_MutationInput!
-  richText: JSON!
+  richText: JSON
   links: [mutationArtifactUpdate_Hero_LinksInput]
   media: String
 }
