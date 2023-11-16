@@ -1,6 +1,5 @@
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import type { Block } from 'payload/types'
-
-import richText from '../../fields/richText'
 
 export const Archive: Block = {
   slug: 'archive',
@@ -9,10 +8,11 @@ export const Archive: Block = {
     plural: 'Archives',
   },
   fields: [
-    richText({
+    {
       name: 'introContent',
       label: 'Intro Content',
-    }),
+      type: 'richText',
+    },
     {
       name: 'populateBy',
       type: 'select',
