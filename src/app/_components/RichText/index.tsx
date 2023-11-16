@@ -9,7 +9,7 @@ const RichText: React.FC<{ className?: string; content: any }> = ({ className, c
 
   return (
     <div className={['first:mt-0 last:mb-0', className].filter(Boolean).join(' ')}>
-      {serialize(content)}
+      {content.root ? serialize(content.root.children) : null}
     </div>
   )
 }
