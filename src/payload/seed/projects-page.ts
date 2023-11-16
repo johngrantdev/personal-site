@@ -21,7 +21,7 @@ export const projectsPage: Partial<Page> = {
         children: [
           {
             type: 'heading',
-            tag: 'h1',
+            tag: 'h3',
             format: '',
             indent: 0,
             version: 1,
