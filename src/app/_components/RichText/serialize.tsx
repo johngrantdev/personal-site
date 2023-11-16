@@ -1,134 +1,185 @@
 import React, { Fragment } from 'react'
 import escapeHTML from 'escape-html'
-import Link from 'next/link'
-import { Text } from 'slate'
 
-import { Label } from '../Label'
-import { LargeBody } from '../LargeBody'
+import { RichTextNode } from '../../../payload/payload-types'
 import { CMSLink } from '../Link'
 
-// eslint-disable-next-line no-use-before-define
-type Children = Leaf[]
+/*
+the text formats are stored as a bitwise value eg.
+Bold           0000001 -> 1
+Italic         0000010 -> 2
+Strikethrough  0000100 -> 4
+Underline      0001000 -> 8
+Code           0010000 -> 16
+Subscript      0100000 -> 32
+Superscript    1000000 -> 64
+*/
 
-type Leaf = {
-  type: string
-  value?: {
-    url: string
-    alt: string
-  }
-  children?: Children
-  url?: string
-  [key: string]: unknown
+const BOLD_MASK = 1
+const ITALIC_MASK = 2
+const STRIKETHROUGH_MASK = 4
+const UNDERLINE_MASK = 8
+const CODE_MASK = 16
+const SUBSCRIPT_MASK = 32
+const SUPERSCRIPT_MASK = 64
+
+function getTextFormats(formatNumber) {
+  const bold = (formatNumber & BOLD_MASK) !== 0
+  const italic = (formatNumber & ITALIC_MASK) !== 0
+  const strikethrough = (formatNumber & STRIKETHROUGH_MASK) !== 0
+  const underline = (formatNumber & UNDERLINE_MASK) !== 0
+  const code = (formatNumber & CODE_MASK) !== 0
+  const subscript = (formatNumber & SUBSCRIPT_MASK) !== 0
+  const superscript = (formatNumber & SUPERSCRIPT_MASK) !== 0
+
+  return { bold, italic, strikethrough, underline, code, subscript, superscript }
 }
 
-const serialize = (children?: Children): React.ReactNode[] =>
-  children?.map((node, i) => {
-    if (Text.isText(node)) {
-      let text = <span dangerouslySetInnerHTML={{ __html: escapeHTML(node.text) }} />
-
-      if (node.bold) {
-        text = <strong key={i}>{text}</strong>
-      }
-
-      if (node.code) {
-        text = <code key={i}>{text}</code>
-      }
-
-      if (node.italic) {
-        text = <em key={i}>{text}</em>
-      }
-
-      if (node.underline) {
-        text = (
-          <span style={{ textDecoration: 'underline' }} key={i}>
-            {text}
-          </span>
-        )
-      }
-
-      if (node.strikethrough) {
-        text = (
-          <span style={{ textDecoration: 'line-through' }} key={i}>
-            {text}
-          </span>
-        )
-      }
-
-      return <Fragment key={i}>{text}</Fragment>
-    }
-
+const serialize = (nodes?: RichTextNode[], i?: number): React.ReactNode => {
+  return nodes.map((node, i) => {
     if (!node) {
       return null
     }
+    // set alignment styles
+    let textAlignment = ''
+    if (typeof node.format === 'string') {
+      switch (node.format) {
+        case 'center':
+          textAlignment = ' text-center'
+          break
+        case 'right':
+          textAlignment = ' text-right'
+          break
+      }
+    }
+
+    // keep the below comment for tailwind parser
+    // indent-6 indent-12 indent-18 indent-24 indent-30 indent-36 indent-42 indent-48
+    let textIndent = ''
+    if (node.indent) {
+      textIndent = ` indent-${node.indent * 6}`
+    }
 
     switch (node.type) {
-      case 'h1':
-        return (
-          <h1 className="text-5xl" key={i}>
-            {serialize(node?.children)}
-          </h1>
-        )
-      case 'h2':
-        return (
-          <h2 className="text-4xl" key={i}>
-            {serialize(node?.children)}
-          </h2>
-        )
-      case 'h3':
-        return (
-          <h3 className="text-3xl" key={i}>
-            {serialize(node?.children)}
-          </h3>
-        )
-      case 'h4':
-        return (
-          <h4 className="text-2xl" key={i}>
-            {serialize(node?.children)}
-          </h4>
-        )
-      case 'h5':
-        return (
-          <h5 className="text-xl" key={i}>
-            {serialize(node?.children)}
-          </h5>
-        )
-      case 'h6':
-        return (
-          <h6 className="text-lg" key={i}>
-            {serialize(node?.children)}
-          </h6>
-        )
-      case 'quote':
-        return <blockquote key={i}>{serialize(node?.children)}</blockquote>
-      case 'ul':
-        return <ul key={i}>{serialize(node?.children)}</ul>
-      case 'ol':
-        return <ol key={i}>{serialize(node.children)}</ol>
-      case 'li':
-        return <li key={i}>{serialize(node.children)}</li>
+      case 'root':
+        return <Fragment>{serialize(node.children)}</Fragment>
       case 'link':
         return (
           <CMSLink
             key={i}
-            type={node.linkType === 'internal' ? 'reference' : 'custom'}
-            url={node.url}
-            reference={node.doc as any}
-            newTab={Boolean(node?.newTab)}
+            type={node.fields.linkType === 'internal' ? 'reference' : 'custom'}
+            url={node.fields.url}
+            reference={node.fields.doc as any}
+            newTab={Boolean(node.fields.newTab)}
           >
-            {serialize(node?.children)}
+            {serialize(node.children)}
           </CMSLink>
         )
-
-      case 'label':
-        return <Label key={i}>{serialize(node?.children)}</Label>
-
-      case 'large-body': {
-        return <LargeBody key={i}>{serialize(node?.children)}</LargeBody>
-      }
-
-      default:
-        return <p key={i}>{serialize(node?.children)}</p>
+      case 'text':
+        let text = <span dangerouslySetInnerHTML={{ __html: escapeHTML(node.text) }} />
+        if (typeof node.format === 'number') {
+          const textFormat = getTextFormats(node.format)
+          if (textFormat.bold) {
+            text = <strong key={i}>{text}</strong>
+          }
+          if (textFormat.italic) {
+            text = <em key={i}>{text}</em>
+          }
+          if (textFormat.underline) {
+            text = (
+              <u style={{ textDecoration: 'underline' }} key={i}>
+                {text}
+              </u>
+            )
+          }
+          if (textFormat.code) {
+            text = <code key={i}>{text}</code>
+          }
+          if (textFormat.strikethrough) {
+            text = (
+              <span style={{ textDecoration: 'line-through' }} key={i}>
+                {text}
+              </span>
+            )
+          }
+        }
+        return <Fragment key={i}>{text}</Fragment>
+      case 'heading':
+        switch (node.tag) {
+          case 'h1':
+            return (
+              <h1 className={`text-5xl${textAlignment}${textIndent}`} key={i}>
+                {serialize(node.children)}
+              </h1>
+            )
+          case 'h2':
+            return (
+              <h2 className={`text-4xl${textAlignment}${textIndent}`} key={i}>
+                {serialize(node.children)}
+              </h2>
+            )
+          case 'h3':
+            return (
+              <h3 className={`text-3xl${textAlignment}${textIndent}`} key={i}>
+                {serialize(node.children)}
+              </h3>
+            )
+          case 'h4':
+            return (
+              <h4 className={`text-2xl${textAlignment}${textIndent}`} key={i}>
+                {serialize(node.children)}
+              </h4>
+            )
+          case 'h5':
+            return (
+              <h5 className={`text-xl${textAlignment}${textIndent}`} key={i}>
+                {serialize(node.children)}
+              </h5>
+            )
+          case 'h6':
+            return (
+              <h6 className={`text-lg${textAlignment}${textIndent}`} key={i}>
+                {serialize(node.children)}
+              </h6>
+            )
+        }
+      case 'list':
+        switch (node.tag) {
+          case 'ul':
+            return <ul key={i}>{serialize(node.children)}</ul>
+          case 'ol':
+            return <ol key={i}>{serialize(node.children)}</ol>
+          case 'li':
+            return <li key={i}>{serialize(node.children)}</li>
+        }
+      case 'quote':
+        return (
+          <blockquote
+            key={i}
+            className="text-xl italic font-semibold text-center text-gray-900 dark:text-white"
+          >
+            {serialize(node.children)}
+          </blockquote>
+        )
+      case 'paragraph':
+        return (
+          <p className={`${textAlignment}${textIndent}`} key={i}>
+            {serialize(node.children)}
+          </p>
+        )
     }
-  }) || []
+  })
+}
 
 export default serialize
+
+// stuff from slate that may need to be implemented in lexical
+// case 'label':
+//   return <Label key={i}>{serializeChildren(node.children)}</Label>
+
+// case 'large-body': {
+//   return <LargeBody key={i}>{serializeChildren(node.children)}</LargeBody>
+// }
+
+// default:
+//   return <p key={i}>{serializeChildren(node.children)}</p>

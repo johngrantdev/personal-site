@@ -1,5 +1,4 @@
 import type { Artifact } from '../payload-types'
-
 export const note2: Partial<Artifact> = {
   title: 'Note 2',
   slug: 'note-2',
@@ -13,16 +12,36 @@ export const note2: Partial<Artifact> = {
   hero: {
     type: 'lowImpact',
     links: null,
-    richText: [
-      {
+    richText: {
+      root: {
+        type: 'root',
+        format: '',
+        indent: 0,
+        version: 1,
+        direction: 'ltr',
         children: [
           {
-            text: 'Note 2',
+            type: 'heading',
+            tag: 'h1',
+            format: '',
+            indent: 0,
+            version: 1,
+            direction: 'ltr',
+            children: [
+              {
+                mode: 'normal',
+                type: 'text',
+                style: '',
+                detail: 0,
+                version: 1,
+                format: 1,
+                text: 'Note 2',
+              },
+            ],
           },
         ],
-        type: 'h1',
       },
-    ],
+    },
     media: null,
   },
   layout: [
@@ -31,15 +50,35 @@ export const note2: Partial<Artifact> = {
       columns: [
         {
           size: 'twoThirds',
-          richText: [
-            {
+          richText: {
+            root: {
+              type: 'root',
+              format: '',
+              indent: 0,
+              version: 1,
+              direction: 'ltr',
               children: [
                 {
-                  text: "This content is completely dynamic using custom layout building blocks configured in the CMS. This can be anything you'd like from rich text and images, to highly designed, complex components.",
+                  type: 'paragraph',
+                  format: '',
+                  indent: 0,
+                  version: 1,
+                  direction: 'ltr',
+                  children: [
+                    {
+                      mode: 'normal',
+                      type: 'text',
+                      style: '',
+                      detail: 0,
+                      version: 1,
+                      format: 1,
+                      text: "This content is completely dynamic using custom layout building blocks configured in the CMS. This can be anything you'd like from rich text and images, to highly designed, complex components.",
+                    },
+                  ],
                 },
               ],
             },
-          ],
+          },
           link: {
             reference: null,
             url: '',
@@ -56,19 +95,44 @@ export const note2: Partial<Artifact> = {
       columns: [
         {
           size: 'twoThirds',
-          richText: [
-            {
+          richText: {
+            root: {
+              type: 'root',
+              format: '',
+              indent: 0,
+              version: 1,
+              direction: 'ltr',
               children: [
                 {
-                  text: 'This is premium content.',
-                  bold: true,
-                },
-                {
-                  text: ' It is only available to authenticated users. This content can be anything from additional video, text, and content, to download links and more. These are simply layout building blocks configured in the CMS.',
+                  type: 'paragraph',
+                  format: '',
+                  indent: 0,
+                  version: 1,
+                  direction: 'ltr',
+                  children: [
+                    {
+                      mode: 'normal',
+                      type: 'text',
+                      style: '',
+                      detail: 0,
+                      version: 1,
+                      format: 1,
+                      text: 'This is premium content.',
+                    },
+                    {
+                      mode: 'normal',
+                      type: 'text',
+                      style: '',
+                      detail: 0,
+                      version: 1,
+                      format: 1,
+                      text: ' It is only available to authenticated users. This content can be anything from additional video, text, and content, to download links and more. These are simply layout building blocks configured in the CMS.',
+                    },
+                  ],
                 },
               ],
             },
-          ],
+          },
           link: {
             reference: null,
             url: '',

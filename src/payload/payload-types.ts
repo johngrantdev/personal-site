@@ -32,8 +32,8 @@ export interface Page {
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact'
     richText: {
-      [k: string]: unknown
-    }[]
+      root: RichTextNode
+    }
     links?: {
       link: {
         type?: 'reference' | 'custom'
@@ -54,8 +54,8 @@ export interface Page {
     | {
         invertBackground?: boolean
         richText: {
-          [k: string]: unknown
-        }[]
+          root: RichTextNode
+        }
         links?: {
           link: {
             type?: 'reference' | 'custom'
@@ -79,8 +79,8 @@ export interface Page {
         columns?: {
           size?: 'oneThird' | 'half' | 'twoThirds' | 'full'
           richText: {
-            [k: string]: unknown
-          }[]
+            root: RichTextNode
+          }
           enableLink?: boolean
           link?: {
             type?: 'reference' | 'custom'
@@ -109,8 +109,8 @@ export interface Page {
       }
     | {
         introContent: {
-          [k: string]: unknown
-        }[]
+          root: RichTextNode
+        }
         populateBy?: 'collection' | 'selection'
         relationTo?: 'artifacts'
         categories?: string[] | Category[]
@@ -189,6 +189,57 @@ export interface Category {
   createdAt: string
 }
 
+export interface RichTextNode {
+    // common
+    type?: string
+    format?: string | number // format is either aligment for paragraph/heading node or a number for a text node
+    indent?: number
+    version?: number
+    children?: RichTextNode[]
+    direction?: string
+    // heading and list
+    tag?: string
+    // list
+    start?: number
+    listType?: string
+    // upload and listItem
+    value?: {
+      id: number
+      alt: string
+      caption?: string
+      updatedAt: string
+      createdAt: string
+      url: string
+      filename: string
+      mineType: string
+      filesize: number
+      width: number
+      height: number
+    }
+    // link
+    fields?:
+      | {
+          url: string
+          newTab: string
+          linkType: string
+          doc?:
+            | {
+                // just for reference
+                value: any
+                relationTo?: string
+              }
+            | any
+        }
+      | undefined
+    // upload and relations
+    relationTo?: string
+    // text
+    mode?: string
+    text?: string
+    style?: string
+    detail?: number
+}
+
 export interface Artifact {
   id: string
   title: string
@@ -202,8 +253,8 @@ export interface Artifact {
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact'
     richText: {
-      [k: string]: unknown
-    }[]
+      root: RichTextNode
+    }
     links?: {
       link: {
         type?: 'reference' | 'custom'
@@ -224,8 +275,8 @@ export interface Artifact {
     | {
         invertBackground?: boolean
         richText: {
-          [k: string]: unknown
-        }[]
+          root: RichTextNode
+        }
         links?: {
           link: {
             type?: 'reference' | 'custom'
@@ -249,8 +300,8 @@ export interface Artifact {
         columns?: {
           size?: 'oneThird' | 'half' | 'twoThirds' | 'full'
           richText: {
-            [k: string]: unknown
-          }[]
+            root: RichTextNode
+          }
           enableLink?: boolean
           link?: {
             type?: 'reference' | 'custom'
@@ -279,8 +330,8 @@ export interface Artifact {
       }
     | {
         introContent: {
-          [k: string]: unknown
-        }[]
+          root: RichTextNode
+        }
         populateBy?: 'collection' | 'selection'
         relationTo?: 'artifacts'
         categories?: string[] | Category[]
@@ -323,8 +374,8 @@ export interface Artifact {
     | {
         invertBackground?: boolean
         richText: {
-          [k: string]: unknown
-        }[]
+          root: RichTextNode
+        }
         links?: {
           link: {
             type?: 'reference' | 'custom'
@@ -348,8 +399,8 @@ export interface Artifact {
         columns?: {
           size?: 'oneThird' | 'half' | 'twoThirds' | 'full'
           richText: {
-            [k: string]: unknown
-          }[]
+            root: RichTextNode
+          }
           enableLink?: boolean
           link?: {
             type?: 'reference' | 'custom'
@@ -378,8 +429,8 @@ export interface Artifact {
       }
     | {
         introContent: {
-          [k: string]: unknown
-        }[]
+          root: RichTextNode
+        }
         populateBy?: 'collection' | 'selection'
         relationTo?: 'artifacts'
         categories?: string[] | Category[]
