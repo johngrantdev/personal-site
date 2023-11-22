@@ -4,15 +4,14 @@ import React, { useEffect } from 'react'
 import Link from 'next/link'
 
 import { Page } from '../../../payload/payload-types'
-import { POST_PREMIUM_CONTENT } from '../../_graphql/posts'
+import { POST_RESTRICTED_CONTENT } from '../../_graphql/posts'
 import { useAuth } from '../../_providers/Auth'
 import { Blocks } from '../Blocks'
-import { Gutter } from '../Gutter'
 import { LoadingShimmer } from '../LoadingShimmer'
 import { Message } from '../Message'
-import { VerticalPadding } from '../VerticalPadding'
+import { Padding } from '../Padding'
 
-export const PremiumContent: React.FC<{
+export const RestrictedContent: React.FC<{
   postSlug: string
   disableTopPadding?: boolean
 }> = props => {
@@ -35,24 +34,24 @@ export const PremiumContent: React.FC<{
       setIsLoading(true)
 
       try {
-        const premiumContent = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/graphql`, {
+        const restrictedContent = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/graphql`, {
           method: 'POST',
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            query: POST_PREMIUM_CONTENT,
+            query: POST_RESTRICTED_CONTENT,
             variables: {
               slug: postSlug,
             },
           }),
         })
           ?.then(res => res.json())
-          ?.then(res => res?.data?.posts.docs[0]?.premiumContent)
+          ?.then(res => res?.data?.posts.docs[0]?.restrictedContent)
 
-        if (premiumContent) {
-          setBlocks(premiumContent)
+        if (restrictedContent) {
+          setBlocks(restrictedContent)
         }
 
         // wait before setting `isLoading` to `false` to give the illusion of loading
@@ -74,49 +73,43 @@ export const PremiumContent: React.FC<{
     isRequesting.current = false
   }, [user, postSlug])
 
-  if (user === undefined) {
+  if (user === undefined || user === null || !blocks || blocks.length === 0) {
     return null
   }
 
-  if (user === null) {
-    return (
-      <Gutter>
-        <VerticalPadding bottom="large" top="none">
-          <Message
-            message={
-              <>
-                {`This content is gated behind authentication. You must be `}
-                <Link href={`/login?redirect=${encodeURIComponent(window.location.pathname)}`}>
-                  logged in
-                </Link>
-                {` to view this content.`}
-              </>
-            }
-          />
-        </VerticalPadding>
-      </Gutter>
-    )
-  }
+  // if (user === null) {
+  //   return (
+  //     <Padding top={false}>
+  //       <Message
+  //         message={
+  //           <>
+  //             {`This content is gated behind authentication. You must be `}
+  //             <Link href={`/login?redirect=${encodeURIComponent(window.location.pathname)}`}>
+  //               logged in
+  //             </Link>
+  //             {` to view this content.`}
+  //           </>
+  //         }
+  //       />
+  //     </Padding>
+  //   )
+  // }
 
   if (isLoading) {
     return (
-      <Gutter>
-        <VerticalPadding bottom="large" top="none">
-          <LoadingShimmer />
-        </VerticalPadding>
-      </Gutter>
+      <Padding top={false}>
+        <LoadingShimmer />
+      </Padding>
     )
   }
 
-  if (!blocks || blocks.length === 0) {
-    return (
-      <Gutter>
-        <VerticalPadding bottom="large" top="none">
-          <Message message="Log in to unlock this premium content." />
-        </VerticalPadding>
-      </Gutter>
-    )
-  }
+  // if (!blocks || blocks.length === 0) {
+  //   return (
+  //     <Padding top={false}>
+  //       <Message message="Log in to unlock this restricted content." />
+  //     </Padding>
+  //   )
+  // }
 
   return <Blocks blocks={blocks} disableTopPadding={disableTopPadding} />
 }
