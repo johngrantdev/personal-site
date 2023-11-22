@@ -1,4 +1,3 @@
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import type { Block } from 'payload/types'
 
 export const FormBlock: Block = {
@@ -27,12 +26,5 @@ export const FormBlock: Block = {
       label: 'Intro Content',
       type: 'richText',
     },
-    // richText({
-    //   name: 'introContent',
-    //   label: 'Intro Content',
-    //   admin: {
-    //     condition: (_, { enableIntro }) => Boolean(enableIntro),
-    //   },
-    // }),
   ],
 }
