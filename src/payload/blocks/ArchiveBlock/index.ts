@@ -1,4 +1,3 @@
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import type { Block } from 'payload/types'
 
 export const Archive: Block = {
