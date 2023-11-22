@@ -4,6 +4,7 @@ import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock'
 import { CallToAction } from '../../blocks/CallToAction'
+import { Code } from '../../blocks/Code'
 import { Content } from '../../blocks/Content'
 import { MediaBlock } from '../../blocks/MediaBlock'
 import { hero } from '../../fields/hero'
@@ -48,6 +49,16 @@ export const Posts: CollectionConfig = {
       name: 'categories',
       type: 'relationship',
       relationTo: 'categories',
+      hasMany: false,
+      required: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'keywords',
+      type: 'relationship',
+      relationTo: 'keywords',
       hasMany: true,
       admin: {
         position: 'sidebar',
@@ -120,20 +131,20 @@ export const Posts: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               required: true,
-              blocks: [CallToAction, Content, MediaBlock, Archive],
+              blocks: [CallToAction, Content, MediaBlock, Archive, Code],
             },
             {
-              name: 'enablePremiumContent',
-              label: 'Enable Premium Content',
+              name: 'enableRestrictedContent',
+              label: 'Enable Restricted Content',
               type: 'checkbox',
             },
             {
-              name: 'premiumContent',
+              name: 'restrictedContent',
               type: 'blocks',
               access: {
                 read: ({ req }) => req.user,
               },
-              blocks: [CallToAction, Content, MediaBlock, Archive],
+              blocks: [CallToAction, Content, MediaBlock, Archive, Code],
             },
           ],
         },
