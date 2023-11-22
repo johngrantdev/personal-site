@@ -15,6 +15,9 @@ type Query {
   Category(id: Int!, draft: Boolean): Category
   Categories(draft: Boolean, where: Category_where, limit: Int, page: Int, sort: String): Categories
   docAccessCategory(id: Int!): categoriesDocAccess
+  Keyword(id: Int!, draft: Boolean): Keyword
+  Keywords(draft: Boolean, where: Keyword_where, limit: Int, page: Int, sort: String): Keywords
+  docAccessKeyword(id: Int!): keywordsDocAccess
   User(id: Int!, draft: Boolean): User
   Users(draft: Boolean, where: User_where, limit: Int, page: Int, sort: String): Users
   docAccessUser(id: Int!): usersDocAccess
@@ -110,6 +113,7 @@ type Media {
   id: Int
   alt: String!
   caption(depth: Int): JSON
+  blurhash: String
   updatedAt: DateTime
   createdAt: DateTime
   url: String
@@ -123,6 +127,7 @@ type Media {
 input Page_Hero_Media_where {
   alt: Page_Hero_Media_alt_operator
   caption: Page_Hero_Media_caption_operator
+  blurhash: Page_Hero_Media_blurhash_operator
   updatedAt: Page_Hero_Media_updatedAt_operator
   createdAt: Page_Hero_Media_createdAt_operator
   url: Page_Hero_Media_url_operator
@@ -151,6 +156,17 @@ input Page_Hero_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Page_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -253,6 +269,7 @@ input Page_Hero_Media_id_operator {
 input Page_Hero_Media_where_and {
   alt: Page_Hero_Media_alt_operator
   caption: Page_Hero_Media_caption_operator
+  blurhash: Page_Hero_Media_blurhash_operator
   updatedAt: Page_Hero_Media_updatedAt_operator
   createdAt: Page_Hero_Media_createdAt_operator
   url: Page_Hero_Media_url_operator
@@ -269,6 +286,7 @@ input Page_Hero_Media_where_and {
 input Page_Hero_Media_where_or {
   alt: Page_Hero_Media_alt_operator
   caption: Page_Hero_Media_caption_operator
+  blurhash: Page_Hero_Media_blurhash_operator
   updatedAt: Page_Hero_Media_updatedAt_operator
   createdAt: Page_Hero_Media_createdAt_operator
   url: Page_Hero_Media_url_operator
@@ -399,6 +417,7 @@ enum MediaBlock_position {
 input MediaBlock_Media_where {
   alt: MediaBlock_Media_alt_operator
   caption: MediaBlock_Media_caption_operator
+  blurhash: MediaBlock_Media_blurhash_operator
   updatedAt: MediaBlock_Media_updatedAt_operator
   createdAt: MediaBlock_Media_createdAt_operator
   url: MediaBlock_Media_url_operator
@@ -427,6 +446,17 @@ input MediaBlock_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input MediaBlock_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -529,6 +559,7 @@ input MediaBlock_Media_id_operator {
 input MediaBlock_Media_where_and {
   alt: MediaBlock_Media_alt_operator
   caption: MediaBlock_Media_caption_operator
+  blurhash: MediaBlock_Media_blurhash_operator
   updatedAt: MediaBlock_Media_updatedAt_operator
   createdAt: MediaBlock_Media_createdAt_operator
   url: MediaBlock_Media_url_operator
@@ -545,6 +576,7 @@ input MediaBlock_Media_where_and {
 input MediaBlock_Media_where_or {
   alt: MediaBlock_Media_alt_operator
   caption: MediaBlock_Media_caption_operator
+  blurhash: MediaBlock_Media_blurhash_operator
   updatedAt: MediaBlock_Media_updatedAt_operator
   createdAt: MediaBlock_Media_createdAt_operator
   url: MediaBlock_Media_url_operator
@@ -612,20 +644,37 @@ union Archive_SelectedDocs = Post
 type Post {
   id: Int
   title: String
-  categories: [Category!]
+  categories: Category
+  keywords: [Keyword!]
   publishedAt: DateTime
   authors: [User!]
   populatedAuthors: [Post_PopulatedAuthors!]
   hero: Post_Hero
   layout: [Post_Layout!]!
-  enablePremiumContent: Boolean
-  premiumContent: [Post_PremiumContent!]
+  enableRestrictedContent: Boolean
+  restrictedContent: [Post_RestrictedContent!]
   relatedPosts: [Post!]
   slug: String
   meta: Post_Meta
   updatedAt: DateTime
   createdAt: DateTime
   _status: Post__status
+}
+
+type Keyword {
+  id: Int
+  title: String
+  parent: Keyword
+  breadcrumbs: [Keyword_Breadcrumbs!]
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+type Keyword_Breadcrumbs {
+  doc: Keyword
+  url: String
+  label: String
+  id: String
 }
 
 type User {
@@ -712,6 +761,7 @@ enum Post_Hero_Links_Link_appearance {
 input Post_Hero_Media_where {
   alt: Post_Hero_Media_alt_operator
   caption: Post_Hero_Media_caption_operator
+  blurhash: Post_Hero_Media_blurhash_operator
   updatedAt: Post_Hero_Media_updatedAt_operator
   createdAt: Post_Hero_Media_createdAt_operator
   url: Post_Hero_Media_url_operator
@@ -740,6 +790,17 @@ input Post_Hero_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Post_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -842,6 +903,7 @@ input Post_Hero_Media_id_operator {
 input Post_Hero_Media_where_and {
   alt: Post_Hero_Media_alt_operator
   caption: Post_Hero_Media_caption_operator
+  blurhash: Post_Hero_Media_blurhash_operator
   updatedAt: Post_Hero_Media_updatedAt_operator
   createdAt: Post_Hero_Media_createdAt_operator
   url: Post_Hero_Media_url_operator
@@ -858,6 +920,7 @@ input Post_Hero_Media_where_and {
 input Post_Hero_Media_where_or {
   alt: Post_Hero_Media_alt_operator
   caption: Post_Hero_Media_caption_operator
+  blurhash: Post_Hero_Media_blurhash_operator
   updatedAt: Post_Hero_Media_updatedAt_operator
   createdAt: Post_Hero_Media_createdAt_operator
   url: Post_Hero_Media_url_operator
@@ -871,9 +934,23 @@ input Post_Hero_Media_where_or {
   OR: [Post_Hero_Media_where_or]
 }
 
-union Post_Layout = Cta | Content | MediaBlock | Archive
+union Post_Layout = Cta | Content | MediaBlock | Archive | Code
 
-union Post_PremiumContent = Cta | Content | MediaBlock | Archive
+type Code {
+  language: Code_language
+  code: String
+  id: String
+  blockName: String
+  blockType: String
+}
+
+enum Code_language {
+  go
+  javascript
+  typescript
+}
+
+union Post_RestrictedContent = Cta | Content | MediaBlock | Archive | Code
 
 type Post_Meta {
   title: String
@@ -884,6 +961,7 @@ type Post_Meta {
 input Post_Meta_Image_where {
   alt: Post_Meta_Image_alt_operator
   caption: Post_Meta_Image_caption_operator
+  blurhash: Post_Meta_Image_blurhash_operator
   updatedAt: Post_Meta_Image_updatedAt_operator
   createdAt: Post_Meta_Image_createdAt_operator
   url: Post_Meta_Image_url_operator
@@ -912,6 +990,17 @@ input Post_Meta_Image_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Post_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -1014,6 +1103,7 @@ input Post_Meta_Image_id_operator {
 input Post_Meta_Image_where_and {
   alt: Post_Meta_Image_alt_operator
   caption: Post_Meta_Image_caption_operator
+  blurhash: Post_Meta_Image_blurhash_operator
   updatedAt: Post_Meta_Image_updatedAt_operator
   createdAt: Post_Meta_Image_createdAt_operator
   url: Post_Meta_Image_url_operator
@@ -1030,6 +1120,7 @@ input Post_Meta_Image_where_and {
 input Post_Meta_Image_where_or {
   alt: Post_Meta_Image_alt_operator
   caption: Post_Meta_Image_caption_operator
+  blurhash: Post_Meta_Image_blurhash_operator
   updatedAt: Post_Meta_Image_updatedAt_operator
   createdAt: Post_Meta_Image_createdAt_operator
   url: Post_Meta_Image_url_operator
@@ -1068,6 +1159,7 @@ type Page_Meta {
 input Page_Meta_Image_where {
   alt: Page_Meta_Image_alt_operator
   caption: Page_Meta_Image_caption_operator
+  blurhash: Page_Meta_Image_blurhash_operator
   updatedAt: Page_Meta_Image_updatedAt_operator
   createdAt: Page_Meta_Image_createdAt_operator
   url: Page_Meta_Image_url_operator
@@ -1096,6 +1188,17 @@ input Page_Meta_Image_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Page_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -1198,6 +1301,7 @@ input Page_Meta_Image_id_operator {
 input Page_Meta_Image_where_and {
   alt: Page_Meta_Image_alt_operator
   caption: Page_Meta_Image_caption_operator
+  blurhash: Page_Meta_Image_blurhash_operator
   updatedAt: Page_Meta_Image_updatedAt_operator
   createdAt: Page_Meta_Image_createdAt_operator
   url: Page_Meta_Image_url_operator
@@ -1214,6 +1318,7 @@ input Page_Meta_Image_where_and {
 input Page_Meta_Image_where_or {
   alt: Page_Meta_Image_alt_operator
   caption: Page_Meta_Image_caption_operator
+  blurhash: Page_Meta_Image_blurhash_operator
   updatedAt: Page_Meta_Image_updatedAt_operator
   createdAt: Page_Meta_Image_createdAt_operator
   url: Page_Meta_Image_url_operator
@@ -2282,6 +2387,7 @@ enum PageVersion_Version_Hero_Links_Link_appearance {
 input PageVersion_Version_Hero_Media_where {
   alt: PageVersion_Version_Hero_Media_alt_operator
   caption: PageVersion_Version_Hero_Media_caption_operator
+  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PageVersion_Version_Hero_Media_createdAt_operator
   url: PageVersion_Version_Hero_Media_url_operator
@@ -2310,6 +2416,17 @@ input PageVersion_Version_Hero_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input PageVersion_Version_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -2412,6 +2529,7 @@ input PageVersion_Version_Hero_Media_id_operator {
 input PageVersion_Version_Hero_Media_where_and {
   alt: PageVersion_Version_Hero_Media_alt_operator
   caption: PageVersion_Version_Hero_Media_caption_operator
+  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PageVersion_Version_Hero_Media_createdAt_operator
   url: PageVersion_Version_Hero_Media_url_operator
@@ -2428,6 +2546,7 @@ input PageVersion_Version_Hero_Media_where_and {
 input PageVersion_Version_Hero_Media_where_or {
   alt: PageVersion_Version_Hero_Media_alt_operator
   caption: PageVersion_Version_Hero_Media_caption_operator
+  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PageVersion_Version_Hero_Media_createdAt_operator
   url: PageVersion_Version_Hero_Media_url_operator
@@ -2452,6 +2571,7 @@ type PageVersion_Version_Meta {
 input PageVersion_Version_Meta_Image_where {
   alt: PageVersion_Version_Meta_Image_alt_operator
   caption: PageVersion_Version_Meta_Image_caption_operator
+  blurhash: PageVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PageVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PageVersion_Version_Meta_Image_createdAt_operator
   url: PageVersion_Version_Meta_Image_url_operator
@@ -2480,6 +2600,17 @@ input PageVersion_Version_Meta_Image_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input PageVersion_Version_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -2582,6 +2713,7 @@ input PageVersion_Version_Meta_Image_id_operator {
 input PageVersion_Version_Meta_Image_where_and {
   alt: PageVersion_Version_Meta_Image_alt_operator
   caption: PageVersion_Version_Meta_Image_caption_operator
+  blurhash: PageVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PageVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PageVersion_Version_Meta_Image_createdAt_operator
   url: PageVersion_Version_Meta_Image_url_operator
@@ -2598,6 +2730,7 @@ input PageVersion_Version_Meta_Image_where_and {
 input PageVersion_Version_Meta_Image_where_or {
   alt: PageVersion_Version_Meta_Image_alt_operator
   caption: PageVersion_Version_Meta_Image_caption_operator
+  blurhash: PageVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PageVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PageVersion_Version_Meta_Image_createdAt_operator
   url: PageVersion_Version_Meta_Image_url_operator
@@ -2976,6 +3109,7 @@ type Posts {
 input Post_where {
   title: Post_title_operator
   categories: Post_categories_operator
+  keywords: Post_keywords_operator
   publishedAt: Post_publishedAt_operator
   authors: Post_authors_operator
   populatedAuthors__id: Post_populatedAuthors__id_operator
@@ -2990,7 +3124,7 @@ input Post_where {
   hero__links__link__appearance: Post_hero__links__link__appearance_operator
   hero__links__id: Post_hero__links__id_operator
   hero__media: Post_hero__media_operator
-  enablePremiumContent: Post_enablePremiumContent_operator
+  enableRestrictedContent: Post_enableRestrictedContent_operator
   relatedPosts: Post_relatedPosts_operator
   slug: Post_slug_operator
   meta__title: Post_meta__title_operator
@@ -3015,6 +3149,14 @@ input Post_title_operator {
 }
 
 input Post_categories_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+}
+
+input Post_keywords_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -3167,7 +3309,7 @@ input Post_hero__media_operator {
   not_equals: String
 }
 
-input Post_enablePremiumContent_operator {
+input Post_enableRestrictedContent_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
@@ -3267,6 +3409,7 @@ input Post_id_operator {
 input Post_where_and {
   title: Post_title_operator
   categories: Post_categories_operator
+  keywords: Post_keywords_operator
   publishedAt: Post_publishedAt_operator
   authors: Post_authors_operator
   populatedAuthors__id: Post_populatedAuthors__id_operator
@@ -3281,7 +3424,7 @@ input Post_where_and {
   hero__links__link__appearance: Post_hero__links__link__appearance_operator
   hero__links__id: Post_hero__links__id_operator
   hero__media: Post_hero__media_operator
-  enablePremiumContent: Post_enablePremiumContent_operator
+  enableRestrictedContent: Post_enableRestrictedContent_operator
   relatedPosts: Post_relatedPosts_operator
   slug: Post_slug_operator
   meta__title: Post_meta__title_operator
@@ -3298,6 +3441,7 @@ input Post_where_and {
 input Post_where_or {
   title: Post_title_operator
   categories: Post_categories_operator
+  keywords: Post_keywords_operator
   publishedAt: Post_publishedAt_operator
   authors: Post_authors_operator
   populatedAuthors__id: Post_populatedAuthors__id_operator
@@ -3312,7 +3456,7 @@ input Post_where_or {
   hero__links__link__appearance: Post_hero__links__link__appearance_operator
   hero__links__id: Post_hero__links__id_operator
   hero__media: Post_hero__media_operator
-  enablePremiumContent: Post_enablePremiumContent_operator
+  enableRestrictedContent: Post_enableRestrictedContent_operator
   relatedPosts: Post_relatedPosts_operator
   slug: Post_slug_operator
   meta__title: Post_meta__title_operator
@@ -3338,13 +3482,14 @@ type postsDocAccess {
 type PostsDocAccessFields {
   title: PostsDocAccessFields_title
   categories: PostsDocAccessFields_categories
+  keywords: PostsDocAccessFields_keywords
   publishedAt: PostsDocAccessFields_publishedAt
   authors: PostsDocAccessFields_authors
   populatedAuthors: PostsDocAccessFields_populatedAuthors
   hero: PostsDocAccessFields_hero
   layout: PostsDocAccessFields_layout
-  enablePremiumContent: PostsDocAccessFields_enablePremiumContent
-  premiumContent: PostsDocAccessFields_premiumContent
+  enableRestrictedContent: PostsDocAccessFields_enableRestrictedContent
+  restrictedContent: PostsDocAccessFields_restrictedContent
   relatedPosts: PostsDocAccessFields_relatedPosts
   slug: PostsDocAccessFields_slug
   meta: PostsDocAccessFields_meta
@@ -3396,6 +3541,29 @@ type PostsDocAccessFields_categories_Update {
 }
 
 type PostsDocAccessFields_categories_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_keywords {
+  create: PostsDocAccessFields_keywords_Create
+  read: PostsDocAccessFields_keywords_Read
+  update: PostsDocAccessFields_keywords_Update
+  delete: PostsDocAccessFields_keywords_Delete
+}
+
+type PostsDocAccessFields_keywords_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_keywords_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_keywords_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_keywords_Delete {
   permission: Boolean!
 }
 
@@ -3866,49 +4034,49 @@ type PostsDocAccessFields_layout_Delete {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_enablePremiumContent {
-  create: PostsDocAccessFields_enablePremiumContent_Create
-  read: PostsDocAccessFields_enablePremiumContent_Read
-  update: PostsDocAccessFields_enablePremiumContent_Update
-  delete: PostsDocAccessFields_enablePremiumContent_Delete
+type PostsDocAccessFields_enableRestrictedContent {
+  create: PostsDocAccessFields_enableRestrictedContent_Create
+  read: PostsDocAccessFields_enableRestrictedContent_Read
+  update: PostsDocAccessFields_enableRestrictedContent_Update
+  delete: PostsDocAccessFields_enableRestrictedContent_Delete
 }
 
-type PostsDocAccessFields_enablePremiumContent_Create {
+type PostsDocAccessFields_enableRestrictedContent_Create {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_enablePremiumContent_Read {
+type PostsDocAccessFields_enableRestrictedContent_Read {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_enablePremiumContent_Update {
+type PostsDocAccessFields_enableRestrictedContent_Update {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_enablePremiumContent_Delete {
+type PostsDocAccessFields_enableRestrictedContent_Delete {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_premiumContent {
-  create: PostsDocAccessFields_premiumContent_Create
-  read: PostsDocAccessFields_premiumContent_Read
-  update: PostsDocAccessFields_premiumContent_Update
-  delete: PostsDocAccessFields_premiumContent_Delete
+type PostsDocAccessFields_restrictedContent {
+  create: PostsDocAccessFields_restrictedContent_Create
+  read: PostsDocAccessFields_restrictedContent_Read
+  update: PostsDocAccessFields_restrictedContent_Update
+  delete: PostsDocAccessFields_restrictedContent_Delete
 }
 
-type PostsDocAccessFields_premiumContent_Create {
+type PostsDocAccessFields_restrictedContent_Create {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_premiumContent_Read {
+type PostsDocAccessFields_restrictedContent_Read {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_premiumContent_Update {
+type PostsDocAccessFields_restrictedContent_Update {
   permission: Boolean!
 }
 
-type PostsDocAccessFields_premiumContent_Delete {
+type PostsDocAccessFields_restrictedContent_Delete {
   permission: Boolean!
 }
 
@@ -4210,14 +4378,15 @@ type PostVersion {
 
 type PostVersion_Version {
   title: String
-  categories: [Category!]
+  categories: Category
+  keywords: [Keyword!]
   publishedAt: DateTime
   authors: [User!]
   populatedAuthors: [PostVersion_Version_PopulatedAuthors!]
   hero: PostVersion_Version_Hero
   layout: [PostVersion_Version_Layout!]!
-  enablePremiumContent: Boolean
-  premiumContent: [PostVersion_Version_PremiumContent!]
+  enableRestrictedContent: Boolean
+  restrictedContent: [PostVersion_Version_RestrictedContent!]
   relatedPosts: [Post!]
   slug: String
   meta: PostVersion_Version_Meta
@@ -4284,6 +4453,7 @@ enum PostVersion_Version_Hero_Links_Link_appearance {
 input PostVersion_Version_Hero_Media_where {
   alt: PostVersion_Version_Hero_Media_alt_operator
   caption: PostVersion_Version_Hero_Media_caption_operator
+  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PostVersion_Version_Hero_Media_createdAt_operator
   url: PostVersion_Version_Hero_Media_url_operator
@@ -4312,6 +4482,17 @@ input PostVersion_Version_Hero_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input PostVersion_Version_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -4414,6 +4595,7 @@ input PostVersion_Version_Hero_Media_id_operator {
 input PostVersion_Version_Hero_Media_where_and {
   alt: PostVersion_Version_Hero_Media_alt_operator
   caption: PostVersion_Version_Hero_Media_caption_operator
+  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PostVersion_Version_Hero_Media_createdAt_operator
   url: PostVersion_Version_Hero_Media_url_operator
@@ -4430,6 +4612,7 @@ input PostVersion_Version_Hero_Media_where_and {
 input PostVersion_Version_Hero_Media_where_or {
   alt: PostVersion_Version_Hero_Media_alt_operator
   caption: PostVersion_Version_Hero_Media_caption_operator
+  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PostVersion_Version_Hero_Media_createdAt_operator
   url: PostVersion_Version_Hero_Media_url_operator
@@ -4443,9 +4626,9 @@ input PostVersion_Version_Hero_Media_where_or {
   OR: [PostVersion_Version_Hero_Media_where_or]
 }
 
-union PostVersion_Version_Layout = Cta | Content | MediaBlock | Archive
+union PostVersion_Version_Layout = Cta | Content | MediaBlock | Archive | Code
 
-union PostVersion_Version_PremiumContent = Cta | Content | MediaBlock | Archive
+union PostVersion_Version_RestrictedContent = Cta | Content | MediaBlock | Archive | Code
 
 type PostVersion_Version_Meta {
   title: String
@@ -4456,6 +4639,7 @@ type PostVersion_Version_Meta {
 input PostVersion_Version_Meta_Image_where {
   alt: PostVersion_Version_Meta_Image_alt_operator
   caption: PostVersion_Version_Meta_Image_caption_operator
+  blurhash: PostVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PostVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PostVersion_Version_Meta_Image_createdAt_operator
   url: PostVersion_Version_Meta_Image_url_operator
@@ -4484,6 +4668,17 @@ input PostVersion_Version_Meta_Image_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input PostVersion_Version_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -4586,6 +4781,7 @@ input PostVersion_Version_Meta_Image_id_operator {
 input PostVersion_Version_Meta_Image_where_and {
   alt: PostVersion_Version_Meta_Image_alt_operator
   caption: PostVersion_Version_Meta_Image_caption_operator
+  blurhash: PostVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PostVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PostVersion_Version_Meta_Image_createdAt_operator
   url: PostVersion_Version_Meta_Image_url_operator
@@ -4602,6 +4798,7 @@ input PostVersion_Version_Meta_Image_where_and {
 input PostVersion_Version_Meta_Image_where_or {
   alt: PostVersion_Version_Meta_Image_alt_operator
   caption: PostVersion_Version_Meta_Image_caption_operator
+  blurhash: PostVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PostVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PostVersion_Version_Meta_Image_createdAt_operator
   url: PostVersion_Version_Meta_Image_url_operator
@@ -4638,6 +4835,7 @@ input versionsPost_where {
   parent: versionsPost_parent_operator
   version__title: versionsPost_version__title_operator
   version__categories: versionsPost_version__categories_operator
+  version__keywords: versionsPost_version__keywords_operator
   version__publishedAt: versionsPost_version__publishedAt_operator
   version__authors: versionsPost_version__authors_operator
   version__populatedAuthors__id: versionsPost_version__populatedAuthors__id_operator
@@ -4652,7 +4850,7 @@ input versionsPost_where {
   version__hero__links__link__appearance: versionsPost_version__hero__links__link__appearance_operator
   version__hero__links__id: versionsPost_version__hero__links__id_operator
   version__hero__media: versionsPost_version__hero__media_operator
-  version__enablePremiumContent: versionsPost_version__enablePremiumContent_operator
+  version__enableRestrictedContent: versionsPost_version__enableRestrictedContent_operator
   version__relatedPosts: versionsPost_version__relatedPosts_operator
   version__slug: versionsPost_version__slug_operator
   version__meta__title: versionsPost_version__meta__title_operator
@@ -4689,6 +4887,14 @@ input versionsPost_version__title_operator {
 }
 
 input versionsPost_version__categories_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+}
+
+input versionsPost_version__keywords_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -4841,7 +5047,7 @@ input versionsPost_version__hero__media_operator {
   not_equals: String
 }
 
-input versionsPost_version__enablePremiumContent_operator {
+input versionsPost_version__enableRestrictedContent_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
@@ -4970,6 +5176,7 @@ input versionsPost_where_and {
   parent: versionsPost_parent_operator
   version__title: versionsPost_version__title_operator
   version__categories: versionsPost_version__categories_operator
+  version__keywords: versionsPost_version__keywords_operator
   version__publishedAt: versionsPost_version__publishedAt_operator
   version__authors: versionsPost_version__authors_operator
   version__populatedAuthors__id: versionsPost_version__populatedAuthors__id_operator
@@ -4984,7 +5191,7 @@ input versionsPost_where_and {
   version__hero__links__link__appearance: versionsPost_version__hero__links__link__appearance_operator
   version__hero__links__id: versionsPost_version__hero__links__id_operator
   version__hero__media: versionsPost_version__hero__media_operator
-  version__enablePremiumContent: versionsPost_version__enablePremiumContent_operator
+  version__enableRestrictedContent: versionsPost_version__enableRestrictedContent_operator
   version__relatedPosts: versionsPost_version__relatedPosts_operator
   version__slug: versionsPost_version__slug_operator
   version__meta__title: versionsPost_version__meta__title_operator
@@ -5005,6 +5212,7 @@ input versionsPost_where_or {
   parent: versionsPost_parent_operator
   version__title: versionsPost_version__title_operator
   version__categories: versionsPost_version__categories_operator
+  version__keywords: versionsPost_version__keywords_operator
   version__publishedAt: versionsPost_version__publishedAt_operator
   version__authors: versionsPost_version__authors_operator
   version__populatedAuthors__id: versionsPost_version__populatedAuthors__id_operator
@@ -5019,7 +5227,7 @@ input versionsPost_where_or {
   version__hero__links__link__appearance: versionsPost_version__hero__links__link__appearance_operator
   version__hero__links__id: versionsPost_version__hero__links__id_operator
   version__hero__media: versionsPost_version__hero__media_operator
-  version__enablePremiumContent: versionsPost_version__enablePremiumContent_operator
+  version__enableRestrictedContent: versionsPost_version__enableRestrictedContent_operator
   version__relatedPosts: versionsPost_version__relatedPosts_operator
   version__slug: versionsPost_version__slug_operator
   version__meta__title: versionsPost_version__meta__title_operator
@@ -5053,6 +5261,7 @@ type allMedia {
 input Media_where {
   alt: Media_alt_operator
   caption: Media_caption_operator
+  blurhash: Media_blurhash_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   url: Media_url_operator
@@ -5081,6 +5290,17 @@ input Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -5182,6 +5402,7 @@ input Media_id_operator {
 input Media_where_and {
   alt: Media_alt_operator
   caption: Media_caption_operator
+  blurhash: Media_blurhash_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   url: Media_url_operator
@@ -5198,6 +5419,7 @@ input Media_where_and {
 input Media_where_or {
   alt: Media_alt_operator
   caption: Media_caption_operator
+  blurhash: Media_blurhash_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   url: Media_url_operator
@@ -5222,6 +5444,7 @@ type mediaDocAccess {
 type MediaDocAccessFields {
   alt: MediaDocAccessFields_alt
   caption: MediaDocAccessFields_caption
+  blurhash: MediaDocAccessFields_blurhash
   updatedAt: MediaDocAccessFields_updatedAt
   createdAt: MediaDocAccessFields_createdAt
   url: MediaDocAccessFields_url
@@ -5275,6 +5498,29 @@ type MediaDocAccessFields_caption_Update {
 }
 
 type MediaDocAccessFields_caption_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash {
+  create: MediaDocAccessFields_blurhash_Create
+  read: MediaDocAccessFields_blurhash_Read
+  update: MediaDocAccessFields_blurhash_Update
+  delete: MediaDocAccessFields_blurhash_Delete
+}
+
+type MediaDocAccessFields_blurhash_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash_Delete {
   permission: Boolean!
 }
 
@@ -5879,6 +6125,407 @@ type CategoriesUpdateDocAccess {
 }
 
 type CategoriesDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type Keywords {
+  docs: [Keyword]
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  offset: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+input Keyword_where {
+  title: Keyword_title_operator
+  parent: Keyword_parent_operator
+  breadcrumbs__doc: Keyword_breadcrumbs__doc_operator
+  breadcrumbs__url: Keyword_breadcrumbs__url_operator
+  breadcrumbs__label: Keyword_breadcrumbs__label_operator
+  breadcrumbs__id: Keyword_breadcrumbs__id_operator
+  updatedAt: Keyword_updatedAt_operator
+  createdAt: Keyword_createdAt_operator
+  id: Keyword_id_operator
+  AND: [Keyword_where_and]
+  OR: [Keyword_where_or]
+}
+
+input Keyword_title_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_parent_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__doc_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__label_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Keyword_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Keyword_id_operator {
+  equals: Int
+  not_equals: Int
+  greater_than_equal: Int
+  greater_than: Int
+  less_than_equal: Int
+  less_than: Int
+  exists: Boolean
+}
+
+input Keyword_where_and {
+  title: Keyword_title_operator
+  parent: Keyword_parent_operator
+  breadcrumbs__doc: Keyword_breadcrumbs__doc_operator
+  breadcrumbs__url: Keyword_breadcrumbs__url_operator
+  breadcrumbs__label: Keyword_breadcrumbs__label_operator
+  breadcrumbs__id: Keyword_breadcrumbs__id_operator
+  updatedAt: Keyword_updatedAt_operator
+  createdAt: Keyword_createdAt_operator
+  id: Keyword_id_operator
+  AND: [Keyword_where_and]
+  OR: [Keyword_where_or]
+}
+
+input Keyword_where_or {
+  title: Keyword_title_operator
+  parent: Keyword_parent_operator
+  breadcrumbs__doc: Keyword_breadcrumbs__doc_operator
+  breadcrumbs__url: Keyword_breadcrumbs__url_operator
+  breadcrumbs__label: Keyword_breadcrumbs__label_operator
+  breadcrumbs__id: Keyword_breadcrumbs__id_operator
+  updatedAt: Keyword_updatedAt_operator
+  createdAt: Keyword_createdAt_operator
+  id: Keyword_id_operator
+  AND: [Keyword_where_and]
+  OR: [Keyword_where_or]
+}
+
+type keywordsDocAccess {
+  fields: KeywordsDocAccessFields
+  create: KeywordsCreateDocAccess
+  read: KeywordsReadDocAccess
+  update: KeywordsUpdateDocAccess
+  delete: KeywordsDeleteDocAccess
+}
+
+type KeywordsDocAccessFields {
+  title: KeywordsDocAccessFields_title
+  parent: KeywordsDocAccessFields_parent
+  breadcrumbs: KeywordsDocAccessFields_breadcrumbs
+  updatedAt: KeywordsDocAccessFields_updatedAt
+  createdAt: KeywordsDocAccessFields_createdAt
+}
+
+type KeywordsDocAccessFields_title {
+  create: KeywordsDocAccessFields_title_Create
+  read: KeywordsDocAccessFields_title_Read
+  update: KeywordsDocAccessFields_title_Update
+  delete: KeywordsDocAccessFields_title_Delete
+}
+
+type KeywordsDocAccessFields_title_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_title_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_title_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_title_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent {
+  create: KeywordsDocAccessFields_parent_Create
+  read: KeywordsDocAccessFields_parent_Read
+  update: KeywordsDocAccessFields_parent_Update
+  delete: KeywordsDocAccessFields_parent_Delete
+}
+
+type KeywordsDocAccessFields_parent_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs {
+  create: KeywordsDocAccessFields_breadcrumbs_Create
+  read: KeywordsDocAccessFields_breadcrumbs_Read
+  update: KeywordsDocAccessFields_breadcrumbs_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_Delete
+  fields: KeywordsDocAccessFields_breadcrumbs_Fields
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Fields {
+  doc: KeywordsDocAccessFields_breadcrumbs_doc
+  url: KeywordsDocAccessFields_breadcrumbs_url
+  label: KeywordsDocAccessFields_breadcrumbs_label
+  id: KeywordsDocAccessFields_breadcrumbs_id
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc {
+  create: KeywordsDocAccessFields_breadcrumbs_doc_Create
+  read: KeywordsDocAccessFields_breadcrumbs_doc_Read
+  update: KeywordsDocAccessFields_breadcrumbs_doc_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_doc_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url {
+  create: KeywordsDocAccessFields_breadcrumbs_url_Create
+  read: KeywordsDocAccessFields_breadcrumbs_url_Read
+  update: KeywordsDocAccessFields_breadcrumbs_url_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_url_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label {
+  create: KeywordsDocAccessFields_breadcrumbs_label_Create
+  read: KeywordsDocAccessFields_breadcrumbs_label_Read
+  update: KeywordsDocAccessFields_breadcrumbs_label_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_label_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id {
+  create: KeywordsDocAccessFields_breadcrumbs_id_Create
+  read: KeywordsDocAccessFields_breadcrumbs_id_Read
+  update: KeywordsDocAccessFields_breadcrumbs_id_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_id_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt {
+  create: KeywordsDocAccessFields_updatedAt_Create
+  read: KeywordsDocAccessFields_updatedAt_Read
+  update: KeywordsDocAccessFields_updatedAt_Update
+  delete: KeywordsDocAccessFields_updatedAt_Delete
+}
+
+type KeywordsDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt {
+  create: KeywordsDocAccessFields_createdAt_Create
+  read: KeywordsDocAccessFields_createdAt_Read
+  update: KeywordsDocAccessFields_createdAt_Update
+  delete: KeywordsDocAccessFields_createdAt_Delete
+}
+
+type KeywordsDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsDeleteDocAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -7434,6 +8081,7 @@ type Access {
   posts: postsAccess
   media: mediaAccess
   categories: categoriesAccess
+  keywords: keywordsAccess
   users: usersAccess
   redirects: redirectsAccess
   payload_preferences: payload_preferencesAccess
@@ -8130,13 +8778,14 @@ type postsAccess {
 type PostsFields {
   title: PostsFields_title
   categories: PostsFields_categories
+  keywords: PostsFields_keywords
   publishedAt: PostsFields_publishedAt
   authors: PostsFields_authors
   populatedAuthors: PostsFields_populatedAuthors
   hero: PostsFields_hero
   layout: PostsFields_layout
-  enablePremiumContent: PostsFields_enablePremiumContent
-  premiumContent: PostsFields_premiumContent
+  enableRestrictedContent: PostsFields_enableRestrictedContent
+  restrictedContent: PostsFields_restrictedContent
   relatedPosts: PostsFields_relatedPosts
   slug: PostsFields_slug
   meta: PostsFields_meta
@@ -8188,6 +8837,29 @@ type PostsFields_categories_Update {
 }
 
 type PostsFields_categories_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_keywords {
+  create: PostsFields_keywords_Create
+  read: PostsFields_keywords_Read
+  update: PostsFields_keywords_Update
+  delete: PostsFields_keywords_Delete
+}
+
+type PostsFields_keywords_Create {
+  permission: Boolean!
+}
+
+type PostsFields_keywords_Read {
+  permission: Boolean!
+}
+
+type PostsFields_keywords_Update {
+  permission: Boolean!
+}
+
+type PostsFields_keywords_Delete {
   permission: Boolean!
 }
 
@@ -8658,49 +9330,49 @@ type PostsFields_layout_Delete {
   permission: Boolean!
 }
 
-type PostsFields_enablePremiumContent {
-  create: PostsFields_enablePremiumContent_Create
-  read: PostsFields_enablePremiumContent_Read
-  update: PostsFields_enablePremiumContent_Update
-  delete: PostsFields_enablePremiumContent_Delete
+type PostsFields_enableRestrictedContent {
+  create: PostsFields_enableRestrictedContent_Create
+  read: PostsFields_enableRestrictedContent_Read
+  update: PostsFields_enableRestrictedContent_Update
+  delete: PostsFields_enableRestrictedContent_Delete
 }
 
-type PostsFields_enablePremiumContent_Create {
+type PostsFields_enableRestrictedContent_Create {
   permission: Boolean!
 }
 
-type PostsFields_enablePremiumContent_Read {
+type PostsFields_enableRestrictedContent_Read {
   permission: Boolean!
 }
 
-type PostsFields_enablePremiumContent_Update {
+type PostsFields_enableRestrictedContent_Update {
   permission: Boolean!
 }
 
-type PostsFields_enablePremiumContent_Delete {
+type PostsFields_enableRestrictedContent_Delete {
   permission: Boolean!
 }
 
-type PostsFields_premiumContent {
-  create: PostsFields_premiumContent_Create
-  read: PostsFields_premiumContent_Read
-  update: PostsFields_premiumContent_Update
-  delete: PostsFields_premiumContent_Delete
+type PostsFields_restrictedContent {
+  create: PostsFields_restrictedContent_Create
+  read: PostsFields_restrictedContent_Read
+  update: PostsFields_restrictedContent_Update
+  delete: PostsFields_restrictedContent_Delete
 }
 
-type PostsFields_premiumContent_Create {
+type PostsFields_restrictedContent_Create {
   permission: Boolean!
 }
 
-type PostsFields_premiumContent_Read {
+type PostsFields_restrictedContent_Read {
   permission: Boolean!
 }
 
-type PostsFields_premiumContent_Update {
+type PostsFields_restrictedContent_Update {
   permission: Boolean!
 }
 
-type PostsFields_premiumContent_Delete {
+type PostsFields_restrictedContent_Delete {
   permission: Boolean!
 }
 
@@ -9002,6 +9674,7 @@ type mediaAccess {
 type MediaFields {
   alt: MediaFields_alt
   caption: MediaFields_caption
+  blurhash: MediaFields_blurhash
   updatedAt: MediaFields_updatedAt
   createdAt: MediaFields_createdAt
   url: MediaFields_url
@@ -9055,6 +9728,29 @@ type MediaFields_caption_Update {
 }
 
 type MediaFields_caption_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash {
+  create: MediaFields_blurhash_Create
+  read: MediaFields_blurhash_Read
+  update: MediaFields_blurhash_Update
+  delete: MediaFields_blurhash_Delete
+}
+
+type MediaFields_blurhash_Create {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash_Read {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash_Update {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash_Delete {
   permission: Boolean!
 }
 
@@ -9509,6 +10205,257 @@ type CategoriesUpdateAccess {
 }
 
 type CategoriesDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type keywordsAccess {
+  fields: KeywordsFields
+  create: KeywordsCreateAccess
+  read: KeywordsReadAccess
+  update: KeywordsUpdateAccess
+  delete: KeywordsDeleteAccess
+}
+
+type KeywordsFields {
+  title: KeywordsFields_title
+  parent: KeywordsFields_parent
+  breadcrumbs: KeywordsFields_breadcrumbs
+  updatedAt: KeywordsFields_updatedAt
+  createdAt: KeywordsFields_createdAt
+}
+
+type KeywordsFields_title {
+  create: KeywordsFields_title_Create
+  read: KeywordsFields_title_Read
+  update: KeywordsFields_title_Update
+  delete: KeywordsFields_title_Delete
+}
+
+type KeywordsFields_title_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_title_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_title_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_title_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent {
+  create: KeywordsFields_parent_Create
+  read: KeywordsFields_parent_Read
+  update: KeywordsFields_parent_Update
+  delete: KeywordsFields_parent_Delete
+}
+
+type KeywordsFields_parent_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs {
+  create: KeywordsFields_breadcrumbs_Create
+  read: KeywordsFields_breadcrumbs_Read
+  update: KeywordsFields_breadcrumbs_Update
+  delete: KeywordsFields_breadcrumbs_Delete
+  fields: KeywordsFields_breadcrumbs_Fields
+}
+
+type KeywordsFields_breadcrumbs_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Fields {
+  doc: KeywordsFields_breadcrumbs_doc
+  url: KeywordsFields_breadcrumbs_url
+  label: KeywordsFields_breadcrumbs_label
+  id: KeywordsFields_breadcrumbs_id
+}
+
+type KeywordsFields_breadcrumbs_doc {
+  create: KeywordsFields_breadcrumbs_doc_Create
+  read: KeywordsFields_breadcrumbs_doc_Read
+  update: KeywordsFields_breadcrumbs_doc_Update
+  delete: KeywordsFields_breadcrumbs_doc_Delete
+}
+
+type KeywordsFields_breadcrumbs_doc_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_doc_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_doc_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_doc_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url {
+  create: KeywordsFields_breadcrumbs_url_Create
+  read: KeywordsFields_breadcrumbs_url_Read
+  update: KeywordsFields_breadcrumbs_url_Update
+  delete: KeywordsFields_breadcrumbs_url_Delete
+}
+
+type KeywordsFields_breadcrumbs_url_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label {
+  create: KeywordsFields_breadcrumbs_label_Create
+  read: KeywordsFields_breadcrumbs_label_Read
+  update: KeywordsFields_breadcrumbs_label_Update
+  delete: KeywordsFields_breadcrumbs_label_Delete
+}
+
+type KeywordsFields_breadcrumbs_label_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id {
+  create: KeywordsFields_breadcrumbs_id_Create
+  read: KeywordsFields_breadcrumbs_id_Read
+  update: KeywordsFields_breadcrumbs_id_Update
+  delete: KeywordsFields_breadcrumbs_id_Delete
+}
+
+type KeywordsFields_breadcrumbs_id_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt {
+  create: KeywordsFields_updatedAt_Create
+  read: KeywordsFields_updatedAt_Read
+  update: KeywordsFields_updatedAt_Update
+  delete: KeywordsFields_updatedAt_Delete
+}
+
+type KeywordsFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt {
+  create: KeywordsFields_createdAt_Create
+  read: KeywordsFields_createdAt_Read
+  update: KeywordsFields_createdAt_Update
+  delete: KeywordsFields_createdAt_Delete
+}
+
+type KeywordsFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsDeleteAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -10597,6 +11544,9 @@ type Mutation {
   createCategory(data: mutationCategoryInput!, draft: Boolean): Category
   updateCategory(id: Int!, autosave: Boolean, data: mutationCategoryUpdateInput!, draft: Boolean): Category
   deleteCategory(id: Int!): Category
+  createKeyword(data: mutationKeywordInput!, draft: Boolean): Keyword
+  updateKeyword(id: Int!, autosave: Boolean, data: mutationKeywordUpdateInput!, draft: Boolean): Keyword
+  deleteKeyword(id: Int!): Keyword
   createUser(data: mutationUserInput!, draft: Boolean): User
   updateUser(id: Int!, autosave: Boolean, data: mutationUserUpdateInput!, draft: Boolean): User
   deleteUser(id: Int!): User
@@ -10751,14 +11701,15 @@ enum PageUpdate__status_MutationInput {
 
 input mutationPostInput {
   title: String!
-  categories: [Int]
+  categories: Int
+  keywords: [Int]
   publishedAt: String
   authors: [Int]
   populatedAuthors: [mutationPost_PopulatedAuthorsInput]
   hero: mutationPost_HeroInput!
   layout: JSON
-  enablePremiumContent: Boolean
-  premiumContent: JSON
+  enableRestrictedContent: Boolean
+  restrictedContent: JSON
   relatedPosts: [Int]
   slug: String
   meta: mutationPost_MetaInput
@@ -10828,14 +11779,15 @@ enum Post__status_MutationInput {
 
 input mutationPostUpdateInput {
   title: String
-  categories: [Int]
+  categories: Int
+  keywords: [Int]
   publishedAt: String
   authors: [Int]
   populatedAuthors: [mutationPostUpdate_PopulatedAuthorsInput]
   hero: mutationPostUpdate_HeroInput!
   layout: JSON
-  enablePremiumContent: Boolean
-  premiumContent: JSON
+  enableRestrictedContent: Boolean
+  restrictedContent: JSON
   relatedPosts: [Int]
   slug: String
   meta: mutationPostUpdate_MetaInput
@@ -10906,6 +11858,7 @@ enum PostUpdate__status_MutationInput {
 input mutationMediaInput {
   alt: String!
   caption: JSON
+  blurhash: String
   updatedAt: String
   createdAt: String
   url: String
@@ -10919,6 +11872,7 @@ input mutationMediaInput {
 input mutationMediaUpdateInput {
   alt: String
   caption: JSON
+  blurhash: String
   updatedAt: String
   createdAt: String
   url: String
@@ -10953,6 +11907,36 @@ input mutationCategoryUpdateInput {
 }
 
 input mutationCategoryUpdate_BreadcrumbsInput {
+  doc: Int
+  url: String
+  label: String
+  id: String
+}
+
+input mutationKeywordInput {
+  title: String
+  parent: Int
+  breadcrumbs: [mutationKeyword_BreadcrumbsInput]
+  updatedAt: String
+  createdAt: String
+}
+
+input mutationKeyword_BreadcrumbsInput {
+  doc: Int
+  url: String
+  label: String
+  id: String
+}
+
+input mutationKeywordUpdateInput {
+  title: String
+  parent: Int
+  breadcrumbs: [mutationKeywordUpdate_BreadcrumbsInput]
+  updatedAt: String
+  createdAt: String
+}
+
+input mutationKeywordUpdate_BreadcrumbsInput {
   doc: Int
   url: String
   label: String
