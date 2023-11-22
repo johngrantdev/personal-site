@@ -88,8 +88,8 @@ export const project2: Partial<Post> = {
       ],
     },
   ],
-  enablePremiumContent: true,
-  premiumContent: [
+  enableRestrictedContent: true,
+  restrictedContent: [
     {
       blockType: 'content',
       columns: [
@@ -117,7 +117,7 @@ export const project2: Partial<Post> = {
                       detail: 0,
                       version: 1,
                       format: 1,
-                      text: 'This is premium content.',
+                      text: 'This is restricted content.',
                     },
                     {
                       mode: 'normal',
