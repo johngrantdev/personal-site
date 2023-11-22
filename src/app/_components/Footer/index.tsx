@@ -2,10 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 
 import { Footer } from '../../../payload/payload-types'
-import { fetchFooter, fetchGlobals } from '../../_api/fetchGlobals'
-import { ThemeSelector } from '../../_providers/Theme/ThemeSelector'
-import { Gutter } from '../Gutter'
+import { fetchFooter } from '../../_api/fetchGlobals'
 import { CMSLink } from '../Link'
+import { Padding } from '../Padding'
+import { ThemeSelector } from '../ThemeSelector'
 
 // import classes from './index.module.scss'
 
@@ -27,7 +27,7 @@ export async function Footer() {
 
   return (
     <footer className="w-full">
-      <Gutter className="flex items-center justify-center flex-wrap h-16 gap-x-3 gap-y-6">
+      <Padding className="flex items-center justify-center flex-wrap h-16 gap-x-3 gap-y-6">
         {/* <Link href="/">
           <picture>
             <img
@@ -43,19 +43,39 @@ export async function Footer() {
             return <CMSLink key={i} {...link} />
           })}
         </nav>
-        <div className="flex gap-6 items-center flex-wrap opacity-100 transition-opacity visible">
+        <div className="flex gap-10 items-center flex-wrap opacity-100 transition-opacity visible">
           John Grant &copy; {currentYear}
           <div>
             Built with&nbsp;
-            <Link href="https://nextjs.org" target="_blank" rel="noopener noreferrer">
+            <Link
+              className="hover:underline hover:underline-offset-4"
+              href="https://nextjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               NextJS
             </Link>
+            ,&nbsp;
+            <Link
+              className="hover:underline hover:underline-offset-4"
+              href="https://tailwindcss.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              TailwindCSS
+            </Link>
             &nbsp;and&nbsp;
-            <Link href="https://payloadcms.com" target="_blank" rel="noopener noreferrer">
+            <Link
+              className="hover:underline hover:underline-offset-4"
+              href="https://payloadcms.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Payload
             </Link>
           </div>
           <Link
+            className="hover:underline hover:underline-offset-4"
             href="https://github.com/jayelg/johngrant-dev"
             target="_blank"
             rel="noopener noreferrer"
@@ -64,7 +84,7 @@ export async function Footer() {
           </Link>
           <ThemeSelector />
         </div>
-      </Gutter>
+      </Padding>
     </footer>
   )
 }
