@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 import Link from 'next/link'
 
 import { Post } from '../../../payload/payload-types'
-import { Gutter } from '../../_components/Gutter'
 import { Media } from '../../_components/Media'
+import { Padding } from '../../_components/Padding'
 import RichText from '../../_components/RichText'
 import { formatDateTime } from '../../_utilities/formatDateTime'
 
@@ -21,11 +21,12 @@ export const PostHero: React.FC<{
 
   return (
     <Fragment>
-      <Gutter className="flex gap-12 ">
+      <Padding className="flex gap-12 ">
         <div className=" w-1/2 flex flex-col content-center items-start gap-6">
           <div className="flex gap-3">
             <div>
-              {categories?.map((category, index) => {
+              {categories.title}
+              {/* {categories?.map((category, index) => {
                 const { title: categoryTitle } = category
 
                 const titleToUse = categoryTitle || 'Untitled category'
@@ -38,7 +39,7 @@ export const PostHero: React.FC<{
                     {!isLast && <Fragment>, &nbsp;</Fragment>}
                   </Fragment>
                 )
-              })}
+              })} */}
             </div>
           </div>
           <h1 className="m-0">{title}</h1>
@@ -81,7 +82,7 @@ export const PostHero: React.FC<{
           </div>
         </div>
         <div className="w-1/2">
-          <div className=" no-underline	block relative aspect-square mb-3">
+          <div className=" no-underline hover:underline	block relative aspect-square mb-3">
             {!metaImage && (
               <div className="w-full h-full flex items-center content-center">No image</div>
             )}
@@ -93,7 +94,7 @@ export const PostHero: React.FC<{
             <RichText content={metaImage.caption} />
           )}
         </div>
-      </Gutter>
+      </Padding>
     </Fragment>
   )
 }
