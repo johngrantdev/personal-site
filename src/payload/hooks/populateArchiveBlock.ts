@@ -1,6 +1,6 @@
 import type { AfterReadHook } from 'payload/dist/collections/config/types'
 
-import type { Post, Page } from '../payload-types'
+import type { Page, Post } from '../payload-types'
 
 export const populateArchiveBlock: AfterReadHook = async ({ doc, req: { payload } }) => {
   // pre-populate the archive block if `populateBy` is `collection`
