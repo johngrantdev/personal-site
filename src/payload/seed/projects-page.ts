@@ -5,8 +5,8 @@ export const projectsPage: Partial<Page> = {
   slug: 'projects',
   _status: 'published',
   meta: {
-    title: 'Payload Website Template',
-    description: 'An open-source website built with Payload and Next.js.',
+    title: 'Projects',
+    description: process.env.SITE_DESCRIPTION,
     image: '{{IMAGE}}',
   },
   hero: {
