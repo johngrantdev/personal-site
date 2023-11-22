@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { CollectionArchive } from '../../_components/CollectionArchive'
-import { Gutter } from '../../_components/Gutter'
 import RichText from '../../_components/RichText'
 import { ArchiveBlockProps } from './types'
 
@@ -26,11 +25,8 @@ export const ArchiveBlock: React.FC<
 
   return (
     <div id={`block-${id}`} className="relative">
-      {introContent && (
-        // no midbreak, bottom margin could be adjusted
-        <Gutter className="my-12">
-          <RichText content={introContent} />
-        </Gutter>
+      {introContent && introContent.root.children[0].children[0].text !== '' && (
+        <RichText content={introContent} />
       )}
       <CollectionArchive
         populateBy={populateBy}

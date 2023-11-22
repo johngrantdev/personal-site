@@ -2,7 +2,6 @@ import React from 'react'
 import { StaticImageData } from 'next/image'
 
 import { Page } from '../../../payload/payload-types'
-import { Gutter } from '../../_components/Gutter'
 import { Media } from '../../_components/Media'
 import RichText from '../../_components/RichText'
 
@@ -27,16 +26,10 @@ export const MediaBlock: React.FC<Props> = props => {
           <Media resource={media} src={staticImage} />
         </div>
       )}
-      {position === 'default' && (
-        <Gutter>
-          <Media resource={media} src={staticImage} />
-        </Gutter>
-      )}
+      {position === 'default' && <Media resource={media} src={staticImage} />}
       {caption && (
         // add caption styling
-        <Gutter className="mt-6">
-          <RichText content={caption} />
-        </Gutter>
+        <RichText content={caption} />
       )}
     </div>
   )
