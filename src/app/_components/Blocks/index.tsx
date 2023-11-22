@@ -1,3 +1,4 @@
+'use client'
 import React, { Fragment } from 'react'
 
 import { Page } from '../../../payload/payload-types.js'
@@ -7,8 +8,7 @@ import { ContentBlock } from '../../_blocks/Content'
 import { MediaBlock } from '../../_blocks/MediaBlock'
 import { RelatedPosts, type RelatedPostsProps } from '../../_blocks/RelatedPosts'
 import { toKebabCase } from '../../_utilities/toKebabCase'
-import { BackgroundColor } from '../BackgroundColor'
-import { VerticalPadding, VerticalPaddingOptions } from '../VerticalPadding'
+import { Padding } from '../Padding'
 
 const blockComponents = {
   cta: CallToActionBlock,
@@ -20,9 +20,10 @@ const blockComponents = {
 
 export const Blocks: React.FC<{
   blocks: (Page['layout'][0] | RelatedPostsProps)[]
-  disableTopPadding?: boolean
+  topPadding?: boolean
+  bottomPadding?: boolean
 }> = props => {
-  const { disableTopPadding, blocks } = props
+  const { topPadding = false, bottomPadding = false, blocks } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -35,39 +36,21 @@ export const Blocks: React.FC<{
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
 
-            // the cta block is containerized, so we don't consider it to be inverted at the block-level
-            const blockIsInverted =
-              'invertBackground' in block && blockType !== 'cta' ? block.invertBackground : false
-            const prevBlock = blocks[index - 1]
-
-            const prevBlockInverted =
-              prevBlock && 'invertBackground' in prevBlock && prevBlock?.invertBackground
-
-            const isPrevSame = Boolean(blockIsInverted) === Boolean(prevBlockInverted)
-
-            let paddingTop: VerticalPaddingOptions = 'large'
-            let paddingBottom: VerticalPaddingOptions = 'large'
-
-            if (prevBlock && isPrevSame) {
-              paddingTop = 'none'
+            let defaultTopPadding = true
+            let defaultBottomPadding = true
+            if (index === 0 && !topPadding) {
+              defaultTopPadding = false
             }
-
-            if (index === blocks.length - 1) {
-              paddingBottom = 'large'
-            }
-
-            if (disableTopPadding && index === 0) {
-              paddingTop = 'none'
+            if (index === blocks.length - 1 && !bottomPadding) {
+              defaultBottomPadding = false
             }
 
             if (Block) {
               return (
-                // <BackgroundColor  invert={blockIsInverted}>
-                <VerticalPadding key={index} top={paddingTop} bottom={paddingBottom}>
+                <Padding key={index} top={topPadding} bottom={bottomPadding}>
                   {/* @ts-expect-error */}
                   <Block id={toKebabCase(blockName)} {...block} />
-                </VerticalPadding>
-                // </BackgroundColor>
+                </Padding>
               )
             }
           }
