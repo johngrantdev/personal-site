@@ -14,7 +14,7 @@ import { project2 } from './project-2'
 import { project3 } from './project-3'
 import { projectsPage } from './projects-page'
 
-const collections = ['categories', 'media', 'pages', 'posts']
+const collections = ['categories', 'keywords', 'media', 'pages', 'posts']
 const globals = ['header', 'footer']
 
 // Next.js revalidation errors are normal when seeding the database without a server running
@@ -253,7 +253,7 @@ export const seed = async (payload: Payload): Promise<void> => {
 
   const projectsPageDoc = await payload.create({
     collection: 'pages',
-    data: JSON.parse(JSON.stringify(projectsPage).replace(/"\{\{IMAGE\}\}"/g, image1ID)),
+    data: JSON.parse(JSON.stringify(projectsPage).replace(/"\{\{IMAGE\}\}"/g, image2ID)),
   })
 
   let projectPageID = projectsPageDoc.id
