@@ -7,13 +7,11 @@ import { Post } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
 import { Blocks } from '../../../_components/Blocks'
-import { PremiumContent } from '../../../_components/PremiumContent'
+import { RestrictedContent } from '../../../_components/RestrictedContent'
 import { PostHero } from '../../../_heros/PostHero'
+import { useAuth } from '../../../_providers/Auth'
+import { TitleState } from '../../../_providers/Context/Title/titleContext'
 import { generateMeta } from '../../../_utilities/generateMeta'
-
-// Force this page to be dynamic so that Next.js does not cache it
-// See the post in '../../../[slug]/page.tsx' about this
-export const dynamic = 'force-dynamic'
 
 export default async function Post({ params: { slug } }) {
   const { isEnabled: isDraftMode } = draftMode()
@@ -34,30 +32,38 @@ export default async function Post({ params: { slug } }) {
     notFound()
   }
 
-  const { layout, relatedPosts, enablePremiumContent, premiumContent } = post
+  const { layout, relatedPosts, enableRestrictedContent, restrictedContent, title } = post
 
   return (
     <React.Fragment>
+      <TitleState title={title} />
       <PostHero post={post} />
       <Blocks blocks={layout} />
-      {enablePremiumContent && <PremiumContent postSlug={slug as string} disableTopPadding />}
+      {enableRestrictedContent && <RestrictedContent postSlug={slug as string} disableTopPadding />}
       <Blocks
-        disableTopPadding
+        topPadding
+        bottomPadding
         blocks={[
           {
             blockType: 'relatedPosts',
             blockName: 'Related Posts',
             relationTo: 'posts',
-            introContent: [
-              {
-                type: 'h4',
+            introContent: {
+              root: {
                 children: [
                   {
-                    text: 'More:',
+                    type: 'heading',
+                    tag: 'h4',
+                    children: [
+                      {
+                        type: 'text',
+                        text: 'More:',
+                      },
+                    ],
                   },
                 ],
               },
-            ],
+            },
             docs: relatedPosts,
           },
         ]}
