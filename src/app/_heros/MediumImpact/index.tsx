@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { Page } from '../../../payload/payload-types'
-import { Gutter } from '../../_components/Gutter'
 import { CMSLink } from '../../_components/Link'
 import { Media } from '../../_components/Media'
+import { Padding } from '../../_components/Padding'
 import RichText from '../../_components/RichText'
 
 export const MediumImpactHero: React.FC<Page['hero']> = props => {
@@ -11,7 +11,7 @@ export const MediumImpactHero: React.FC<Page['hero']> = props => {
 
   return (
     // add hero styles
-    <Gutter>
+    <Padding>
       {/* add background styles */}
       <div>
         {/* add richText styles */}
@@ -37,6 +37,6 @@ export const MediumImpactHero: React.FC<Page['hero']> = props => {
           <Media resource={media} />
         )}
       </div>
-    </Gutter>
+    </Padding>
   )
 }
