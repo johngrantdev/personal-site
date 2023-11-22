@@ -4,17 +4,20 @@ type Query {
   docAccessPage(id: Int!): pagesDocAccess
   versionPage(id: Int): PageVersion
   versionsPages(where: versionsPage_where, limit: Int, page: Int, sort: String): versionsPages
-  Artifact(id: Int!, draft: Boolean): Artifact
-  Artifacts(draft: Boolean, where: Artifact_where, limit: Int, page: Int, sort: String): Artifacts
-  docAccessArtifact(id: Int!): artifactsDocAccess
-  versionArtifact(id: Int): ArtifactVersion
-  versionsArtifacts(where: versionsArtifact_where, limit: Int, page: Int, sort: String): versionsArtifacts
+  Post(id: Int!, draft: Boolean): Post
+  Posts(draft: Boolean, where: Post_where, limit: Int, page: Int, sort: String): Posts
+  docAccessPost(id: Int!): postsDocAccess
+  versionPost(id: Int): PostVersion
+  versionsPosts(where: versionsPost_where, limit: Int, page: Int, sort: String): versionsPosts
   Media(id: Int!, draft: Boolean): Media
   allMedia(draft: Boolean, where: Media_where, limit: Int, page: Int, sort: String): allMedia
   docAccessMedia(id: Int!): mediaDocAccess
   Category(id: Int!, draft: Boolean): Category
   Categories(draft: Boolean, where: Category_where, limit: Int, page: Int, sort: String): Categories
   docAccessCategory(id: Int!): categoriesDocAccess
+  Keyword(id: Int!, draft: Boolean): Keyword
+  Keywords(draft: Boolean, where: Keyword_where, limit: Int, page: Int, sort: String): Keywords
+  docAccessKeyword(id: Int!): keywordsDocAccess
   User(id: Int!, draft: Boolean): User
   Users(draft: Boolean, where: User_where, limit: Int, page: Int, sort: String): Users
   docAccessUser(id: Int!): usersDocAccess
@@ -110,6 +113,7 @@ type Media {
   id: Int
   alt: String!
   caption(depth: Int): JSON
+  blurhash: String
   updatedAt: DateTime
   createdAt: DateTime
   url: String
@@ -123,6 +127,7 @@ type Media {
 input Page_Hero_Media_where {
   alt: Page_Hero_Media_alt_operator
   caption: Page_Hero_Media_caption_operator
+  blurhash: Page_Hero_Media_blurhash_operator
   updatedAt: Page_Hero_Media_updatedAt_operator
   createdAt: Page_Hero_Media_createdAt_operator
   url: Page_Hero_Media_url_operator
@@ -151,6 +156,17 @@ input Page_Hero_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Page_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -253,6 +269,7 @@ input Page_Hero_Media_id_operator {
 input Page_Hero_Media_where_and {
   alt: Page_Hero_Media_alt_operator
   caption: Page_Hero_Media_caption_operator
+  blurhash: Page_Hero_Media_blurhash_operator
   updatedAt: Page_Hero_Media_updatedAt_operator
   createdAt: Page_Hero_Media_createdAt_operator
   url: Page_Hero_Media_url_operator
@@ -269,6 +286,7 @@ input Page_Hero_Media_where_and {
 input Page_Hero_Media_where_or {
   alt: Page_Hero_Media_alt_operator
   caption: Page_Hero_Media_caption_operator
+  blurhash: Page_Hero_Media_blurhash_operator
   updatedAt: Page_Hero_Media_updatedAt_operator
   createdAt: Page_Hero_Media_createdAt_operator
   url: Page_Hero_Media_url_operator
@@ -399,6 +417,7 @@ enum MediaBlock_position {
 input MediaBlock_Media_where {
   alt: MediaBlock_Media_alt_operator
   caption: MediaBlock_Media_caption_operator
+  blurhash: MediaBlock_Media_blurhash_operator
   updatedAt: MediaBlock_Media_updatedAt_operator
   createdAt: MediaBlock_Media_createdAt_operator
   url: MediaBlock_Media_url_operator
@@ -427,6 +446,17 @@ input MediaBlock_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input MediaBlock_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -529,6 +559,7 @@ input MediaBlock_Media_id_operator {
 input MediaBlock_Media_where_and {
   alt: MediaBlock_Media_alt_operator
   caption: MediaBlock_Media_caption_operator
+  blurhash: MediaBlock_Media_blurhash_operator
   updatedAt: MediaBlock_Media_updatedAt_operator
   createdAt: MediaBlock_Media_createdAt_operator
   url: MediaBlock_Media_url_operator
@@ -545,6 +576,7 @@ input MediaBlock_Media_where_and {
 input MediaBlock_Media_where_or {
   alt: MediaBlock_Media_alt_operator
   caption: MediaBlock_Media_caption_operator
+  blurhash: MediaBlock_Media_blurhash_operator
   updatedAt: MediaBlock_Media_updatedAt_operator
   createdAt: MediaBlock_Media_createdAt_operator
   url: MediaBlock_Media_url_operator
@@ -579,7 +611,7 @@ enum Archive_populateBy {
 }
 
 enum Archive_relationTo {
-  artifacts
+  posts
 }
 
 type Category {
@@ -604,28 +636,45 @@ type Archive_SelectedDocs_Relationship {
 }
 
 enum Archive_SelectedDocs_RelationTo {
-  artifacts
+  posts
 }
 
-union Archive_SelectedDocs = Artifact
+union Archive_SelectedDocs = Post
 
-type Artifact {
+type Post {
   id: Int
   title: String
-  categories: [Category!]
+  categories: Category
+  keywords: [Keyword!]
   publishedAt: DateTime
   authors: [User!]
-  populatedAuthors: [Artifact_PopulatedAuthors!]
-  hero: Artifact_Hero
-  layout: [Artifact_Layout!]!
-  enablePremiumContent: Boolean
-  premiumContent: [Artifact_PremiumContent!]
-  relatedArtifacts: [Artifact!]
+  populatedAuthors: [Post_PopulatedAuthors!]
+  hero: Post_Hero
+  layout: [Post_Layout!]!
+  enableRestrictedContent: Boolean
+  restrictedContent: [Post_RestrictedContent!]
+  relatedPosts: [Post!]
   slug: String
-  meta: Artifact_Meta
+  meta: Post_Meta
   updatedAt: DateTime
   createdAt: DateTime
-  _status: Artifact__status
+  _status: Post__status
+}
+
+type Keyword {
+  id: Int
+  title: String
+  parent: Keyword
+  breadcrumbs: [Keyword_Breadcrumbs!]
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+type Keyword_Breadcrumbs {
+  doc: Keyword
+  url: String
+  label: String
+  id: String
 }
 
 type User {
@@ -654,78 +703,79 @@ A field whose value conforms to the standard internet email address format as sp
 """
 scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
 
-type Artifact_PopulatedAuthors {
+type Post_PopulatedAuthors {
   id: String
   name: String
 }
 
-type Artifact_Hero {
-  type: Artifact_Hero_type
+type Post_Hero {
+  type: Post_Hero_type
   richText(depth: Int): JSON
-  links: [Artifact_Hero_Links!]
-  media(where: Artifact_Hero_Media_where): Media
+  links: [Post_Hero_Links!]
+  media(where: Post_Hero_Media_where): Media
 }
 
-enum Artifact_Hero_type {
+enum Post_Hero_type {
   none
   highImpact
   mediumImpact
   lowImpact
 }
 
-type Artifact_Hero_Links {
-  link: Artifact_Hero_Links_Link
+type Post_Hero_Links {
+  link: Post_Hero_Links_Link
   id: String
 }
 
-type Artifact_Hero_Links_Link {
-  type: Artifact_Hero_Links_Link_type
+type Post_Hero_Links_Link {
+  type: Post_Hero_Links_Link_type
   newTab: Boolean
-  reference: Artifact_Hero_Links_Link_Reference_Relationship
+  reference: Post_Hero_Links_Link_Reference_Relationship
   url: String
   label: String
-  appearance: Artifact_Hero_Links_Link_appearance
+  appearance: Post_Hero_Links_Link_appearance
 }
 
-enum Artifact_Hero_Links_Link_type {
+enum Post_Hero_Links_Link_type {
   reference
   custom
 }
 
-type Artifact_Hero_Links_Link_Reference_Relationship {
-  relationTo: Artifact_Hero_Links_Link_Reference_RelationTo
-  value: Artifact_Hero_Links_Link_Reference
+type Post_Hero_Links_Link_Reference_Relationship {
+  relationTo: Post_Hero_Links_Link_Reference_RelationTo
+  value: Post_Hero_Links_Link_Reference
 }
 
-enum Artifact_Hero_Links_Link_Reference_RelationTo {
+enum Post_Hero_Links_Link_Reference_RelationTo {
   pages
 }
 
-union Artifact_Hero_Links_Link_Reference = Page
+union Post_Hero_Links_Link_Reference = Page
 
-enum Artifact_Hero_Links_Link_appearance {
+enum Post_Hero_Links_Link_appearance {
   default
   primary
   secondary
 }
 
-input Artifact_Hero_Media_where {
-  alt: Artifact_Hero_Media_alt_operator
-  caption: Artifact_Hero_Media_caption_operator
-  updatedAt: Artifact_Hero_Media_updatedAt_operator
-  createdAt: Artifact_Hero_Media_createdAt_operator
-  url: Artifact_Hero_Media_url_operator
-  filename: Artifact_Hero_Media_filename_operator
-  mimeType: Artifact_Hero_Media_mimeType_operator
-  filesize: Artifact_Hero_Media_filesize_operator
-  width: Artifact_Hero_Media_width_operator
-  height: Artifact_Hero_Media_height_operator
-  id: Artifact_Hero_Media_id_operator
-  AND: [Artifact_Hero_Media_where_and]
-  OR: [Artifact_Hero_Media_where_or]
+input Post_Hero_Media_where {
+  alt: Post_Hero_Media_alt_operator
+  caption: Post_Hero_Media_caption_operator
+  blurhash: Post_Hero_Media_blurhash_operator
+  updatedAt: Post_Hero_Media_updatedAt_operator
+  createdAt: Post_Hero_Media_createdAt_operator
+  url: Post_Hero_Media_url_operator
+  filename: Post_Hero_Media_filename_operator
+  mimeType: Post_Hero_Media_mimeType_operator
+  filesize: Post_Hero_Media_filesize_operator
+  width: Post_Hero_Media_width_operator
+  height: Post_Hero_Media_height_operator
+  id: Post_Hero_Media_id_operator
+  AND: [Post_Hero_Media_where_and]
+  OR: [Post_Hero_Media_where_or]
 }
 
-input Artifact_Hero_Media_alt_operator {
+input Post_Hero_Media_alt_operator {
   equals: String
   not_equals: String
   like: String
@@ -735,7 +785,7 @@ input Artifact_Hero_Media_alt_operator {
   all: [String]
 }
 
-input Artifact_Hero_Media_caption_operator {
+input Post_Hero_Media_caption_operator {
   equals: JSON
   not_equals: JSON
   like: JSON
@@ -743,7 +793,18 @@ input Artifact_Hero_Media_caption_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_updatedAt_operator {
+input Post_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Hero_Media_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -754,7 +815,7 @@ input Artifact_Hero_Media_updatedAt_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_createdAt_operator {
+input Post_Hero_Media_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -765,7 +826,7 @@ input Artifact_Hero_Media_createdAt_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_url_operator {
+input Post_Hero_Media_url_operator {
   equals: String
   not_equals: String
   like: String
@@ -776,7 +837,7 @@ input Artifact_Hero_Media_url_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_filename_operator {
+input Post_Hero_Media_filename_operator {
   equals: String
   not_equals: String
   like: String
@@ -787,7 +848,7 @@ input Artifact_Hero_Media_filename_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_mimeType_operator {
+input Post_Hero_Media_mimeType_operator {
   equals: String
   not_equals: String
   like: String
@@ -798,7 +859,7 @@ input Artifact_Hero_Media_mimeType_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_filesize_operator {
+input Post_Hero_Media_filesize_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -808,7 +869,7 @@ input Artifact_Hero_Media_filesize_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_width_operator {
+input Post_Hero_Media_width_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -818,7 +879,7 @@ input Artifact_Hero_Media_width_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_height_operator {
+input Post_Hero_Media_height_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -828,7 +889,7 @@ input Artifact_Hero_Media_height_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_id_operator {
+input Post_Hero_Media_id_operator {
   equals: String
   not_equals: String
   like: String
@@ -839,65 +900,82 @@ input Artifact_Hero_Media_id_operator {
   exists: Boolean
 }
 
-input Artifact_Hero_Media_where_and {
-  alt: Artifact_Hero_Media_alt_operator
-  caption: Artifact_Hero_Media_caption_operator
-  updatedAt: Artifact_Hero_Media_updatedAt_operator
-  createdAt: Artifact_Hero_Media_createdAt_operator
-  url: Artifact_Hero_Media_url_operator
-  filename: Artifact_Hero_Media_filename_operator
-  mimeType: Artifact_Hero_Media_mimeType_operator
-  filesize: Artifact_Hero_Media_filesize_operator
-  width: Artifact_Hero_Media_width_operator
-  height: Artifact_Hero_Media_height_operator
-  id: Artifact_Hero_Media_id_operator
-  AND: [Artifact_Hero_Media_where_and]
-  OR: [Artifact_Hero_Media_where_or]
+input Post_Hero_Media_where_and {
+  alt: Post_Hero_Media_alt_operator
+  caption: Post_Hero_Media_caption_operator
+  blurhash: Post_Hero_Media_blurhash_operator
+  updatedAt: Post_Hero_Media_updatedAt_operator
+  createdAt: Post_Hero_Media_createdAt_operator
+  url: Post_Hero_Media_url_operator
+  filename: Post_Hero_Media_filename_operator
+  mimeType: Post_Hero_Media_mimeType_operator
+  filesize: Post_Hero_Media_filesize_operator
+  width: Post_Hero_Media_width_operator
+  height: Post_Hero_Media_height_operator
+  id: Post_Hero_Media_id_operator
+  AND: [Post_Hero_Media_where_and]
+  OR: [Post_Hero_Media_where_or]
 }
 
-input Artifact_Hero_Media_where_or {
-  alt: Artifact_Hero_Media_alt_operator
-  caption: Artifact_Hero_Media_caption_operator
-  updatedAt: Artifact_Hero_Media_updatedAt_operator
-  createdAt: Artifact_Hero_Media_createdAt_operator
-  url: Artifact_Hero_Media_url_operator
-  filename: Artifact_Hero_Media_filename_operator
-  mimeType: Artifact_Hero_Media_mimeType_operator
-  filesize: Artifact_Hero_Media_filesize_operator
-  width: Artifact_Hero_Media_width_operator
-  height: Artifact_Hero_Media_height_operator
-  id: Artifact_Hero_Media_id_operator
-  AND: [Artifact_Hero_Media_where_and]
-  OR: [Artifact_Hero_Media_where_or]
+input Post_Hero_Media_where_or {
+  alt: Post_Hero_Media_alt_operator
+  caption: Post_Hero_Media_caption_operator
+  blurhash: Post_Hero_Media_blurhash_operator
+  updatedAt: Post_Hero_Media_updatedAt_operator
+  createdAt: Post_Hero_Media_createdAt_operator
+  url: Post_Hero_Media_url_operator
+  filename: Post_Hero_Media_filename_operator
+  mimeType: Post_Hero_Media_mimeType_operator
+  filesize: Post_Hero_Media_filesize_operator
+  width: Post_Hero_Media_width_operator
+  height: Post_Hero_Media_height_operator
+  id: Post_Hero_Media_id_operator
+  AND: [Post_Hero_Media_where_and]
+  OR: [Post_Hero_Media_where_or]
 }
 
-union Artifact_Layout = Cta | Content | MediaBlock | Archive
+union Post_Layout = Cta | Content | MediaBlock | Archive | Code
 
-union Artifact_PremiumContent = Cta | Content | MediaBlock | Archive
+type Code {
+  language: Code_language
+  code: String
+  id: String
+  blockName: String
+  blockType: String
+}
 
-type Artifact_Meta {
+enum Code_language {
+  go
+  javascript
+  typescript
+}
+
+union Post_RestrictedContent = Cta | Content | MediaBlock | Archive | Code
+
+type Post_Meta {
   title: String
   description: String
-  image(where: Artifact_Meta_Image_where): Media
+  image(where: Post_Meta_Image_where): Media
 }
 
-input Artifact_Meta_Image_where {
-  alt: Artifact_Meta_Image_alt_operator
-  caption: Artifact_Meta_Image_caption_operator
-  updatedAt: Artifact_Meta_Image_updatedAt_operator
-  createdAt: Artifact_Meta_Image_createdAt_operator
-  url: Artifact_Meta_Image_url_operator
-  filename: Artifact_Meta_Image_filename_operator
-  mimeType: Artifact_Meta_Image_mimeType_operator
-  filesize: Artifact_Meta_Image_filesize_operator
-  width: Artifact_Meta_Image_width_operator
-  height: Artifact_Meta_Image_height_operator
-  id: Artifact_Meta_Image_id_operator
-  AND: [Artifact_Meta_Image_where_and]
-  OR: [Artifact_Meta_Image_where_or]
+input Post_Meta_Image_where {
+  alt: Post_Meta_Image_alt_operator
+  caption: Post_Meta_Image_caption_operator
+  blurhash: Post_Meta_Image_blurhash_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
+  url: Post_Meta_Image_url_operator
+  filename: Post_Meta_Image_filename_operator
+  mimeType: Post_Meta_Image_mimeType_operator
+  filesize: Post_Meta_Image_filesize_operator
+  width: Post_Meta_Image_width_operator
+  height: Post_Meta_Image_height_operator
+  id: Post_Meta_Image_id_operator
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
 }
 
-input Artifact_Meta_Image_alt_operator {
+input Post_Meta_Image_alt_operator {
   equals: String
   not_equals: String
   like: String
@@ -907,7 +985,7 @@ input Artifact_Meta_Image_alt_operator {
   all: [String]
 }
 
-input Artifact_Meta_Image_caption_operator {
+input Post_Meta_Image_caption_operator {
   equals: JSON
   not_equals: JSON
   like: JSON
@@ -915,7 +993,18 @@ input Artifact_Meta_Image_caption_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_updatedAt_operator {
+input Post_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -926,7 +1015,7 @@ input Artifact_Meta_Image_updatedAt_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_createdAt_operator {
+input Post_Meta_Image_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -937,7 +1026,7 @@ input Artifact_Meta_Image_createdAt_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_url_operator {
+input Post_Meta_Image_url_operator {
   equals: String
   not_equals: String
   like: String
@@ -948,7 +1037,7 @@ input Artifact_Meta_Image_url_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_filename_operator {
+input Post_Meta_Image_filename_operator {
   equals: String
   not_equals: String
   like: String
@@ -959,7 +1048,7 @@ input Artifact_Meta_Image_filename_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_mimeType_operator {
+input Post_Meta_Image_mimeType_operator {
   equals: String
   not_equals: String
   like: String
@@ -970,7 +1059,7 @@ input Artifact_Meta_Image_mimeType_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_filesize_operator {
+input Post_Meta_Image_filesize_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -980,7 +1069,7 @@ input Artifact_Meta_Image_filesize_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_width_operator {
+input Post_Meta_Image_width_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -990,7 +1079,7 @@ input Artifact_Meta_Image_width_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_height_operator {
+input Post_Meta_Image_height_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -1000,7 +1089,7 @@ input Artifact_Meta_Image_height_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_id_operator {
+input Post_Meta_Image_id_operator {
   equals: String
   not_equals: String
   like: String
@@ -1011,39 +1100,41 @@ input Artifact_Meta_Image_id_operator {
   exists: Boolean
 }
 
-input Artifact_Meta_Image_where_and {
-  alt: Artifact_Meta_Image_alt_operator
-  caption: Artifact_Meta_Image_caption_operator
-  updatedAt: Artifact_Meta_Image_updatedAt_operator
-  createdAt: Artifact_Meta_Image_createdAt_operator
-  url: Artifact_Meta_Image_url_operator
-  filename: Artifact_Meta_Image_filename_operator
-  mimeType: Artifact_Meta_Image_mimeType_operator
-  filesize: Artifact_Meta_Image_filesize_operator
-  width: Artifact_Meta_Image_width_operator
-  height: Artifact_Meta_Image_height_operator
-  id: Artifact_Meta_Image_id_operator
-  AND: [Artifact_Meta_Image_where_and]
-  OR: [Artifact_Meta_Image_where_or]
+input Post_Meta_Image_where_and {
+  alt: Post_Meta_Image_alt_operator
+  caption: Post_Meta_Image_caption_operator
+  blurhash: Post_Meta_Image_blurhash_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
+  url: Post_Meta_Image_url_operator
+  filename: Post_Meta_Image_filename_operator
+  mimeType: Post_Meta_Image_mimeType_operator
+  filesize: Post_Meta_Image_filesize_operator
+  width: Post_Meta_Image_width_operator
+  height: Post_Meta_Image_height_operator
+  id: Post_Meta_Image_id_operator
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
 }
 
-input Artifact_Meta_Image_where_or {
-  alt: Artifact_Meta_Image_alt_operator
-  caption: Artifact_Meta_Image_caption_operator
-  updatedAt: Artifact_Meta_Image_updatedAt_operator
-  createdAt: Artifact_Meta_Image_createdAt_operator
-  url: Artifact_Meta_Image_url_operator
-  filename: Artifact_Meta_Image_filename_operator
-  mimeType: Artifact_Meta_Image_mimeType_operator
-  filesize: Artifact_Meta_Image_filesize_operator
-  width: Artifact_Meta_Image_width_operator
-  height: Artifact_Meta_Image_height_operator
-  id: Artifact_Meta_Image_id_operator
-  AND: [Artifact_Meta_Image_where_and]
-  OR: [Artifact_Meta_Image_where_or]
+input Post_Meta_Image_where_or {
+  alt: Post_Meta_Image_alt_operator
+  caption: Post_Meta_Image_caption_operator
+  blurhash: Post_Meta_Image_blurhash_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
+  url: Post_Meta_Image_url_operator
+  filename: Post_Meta_Image_filename_operator
+  mimeType: Post_Meta_Image_mimeType_operator
+  filesize: Post_Meta_Image_filesize_operator
+  width: Post_Meta_Image_width_operator
+  height: Post_Meta_Image_height_operator
+  id: Post_Meta_Image_id_operator
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
 }
 
-enum Artifact__status {
+enum Post__status {
   draft
   published
 }
@@ -1054,10 +1145,10 @@ type Archive_PopulatedDocs_Relationship {
 }
 
 enum Archive_PopulatedDocs_RelationTo {
-  artifacts
+  posts
 }
 
-union Archive_PopulatedDocs = Artifact
+union Archive_PopulatedDocs = Post
 
 type Page_Meta {
   title: String
@@ -1068,6 +1159,7 @@ type Page_Meta {
 input Page_Meta_Image_where {
   alt: Page_Meta_Image_alt_operator
   caption: Page_Meta_Image_caption_operator
+  blurhash: Page_Meta_Image_blurhash_operator
   updatedAt: Page_Meta_Image_updatedAt_operator
   createdAt: Page_Meta_Image_createdAt_operator
   url: Page_Meta_Image_url_operator
@@ -1096,6 +1188,17 @@ input Page_Meta_Image_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Page_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -1198,6 +1301,7 @@ input Page_Meta_Image_id_operator {
 input Page_Meta_Image_where_and {
   alt: Page_Meta_Image_alt_operator
   caption: Page_Meta_Image_caption_operator
+  blurhash: Page_Meta_Image_blurhash_operator
   updatedAt: Page_Meta_Image_updatedAt_operator
   createdAt: Page_Meta_Image_createdAt_operator
   url: Page_Meta_Image_url_operator
@@ -1214,6 +1318,7 @@ input Page_Meta_Image_where_and {
 input Page_Meta_Image_where_or {
   alt: Page_Meta_Image_alt_operator
   caption: Page_Meta_Image_caption_operator
+  blurhash: Page_Meta_Image_blurhash_operator
   updatedAt: Page_Meta_Image_updatedAt_operator
   createdAt: Page_Meta_Image_createdAt_operator
   url: Page_Meta_Image_url_operator
@@ -2282,6 +2387,7 @@ enum PageVersion_Version_Hero_Links_Link_appearance {
 input PageVersion_Version_Hero_Media_where {
   alt: PageVersion_Version_Hero_Media_alt_operator
   caption: PageVersion_Version_Hero_Media_caption_operator
+  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PageVersion_Version_Hero_Media_createdAt_operator
   url: PageVersion_Version_Hero_Media_url_operator
@@ -2310,6 +2416,17 @@ input PageVersion_Version_Hero_Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input PageVersion_Version_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -2412,6 +2529,7 @@ input PageVersion_Version_Hero_Media_id_operator {
 input PageVersion_Version_Hero_Media_where_and {
   alt: PageVersion_Version_Hero_Media_alt_operator
   caption: PageVersion_Version_Hero_Media_caption_operator
+  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PageVersion_Version_Hero_Media_createdAt_operator
   url: PageVersion_Version_Hero_Media_url_operator
@@ -2428,6 +2546,7 @@ input PageVersion_Version_Hero_Media_where_and {
 input PageVersion_Version_Hero_Media_where_or {
   alt: PageVersion_Version_Hero_Media_alt_operator
   caption: PageVersion_Version_Hero_Media_caption_operator
+  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
   updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
   createdAt: PageVersion_Version_Hero_Media_createdAt_operator
   url: PageVersion_Version_Hero_Media_url_operator
@@ -2452,6 +2571,7 @@ type PageVersion_Version_Meta {
 input PageVersion_Version_Meta_Image_where {
   alt: PageVersion_Version_Meta_Image_alt_operator
   caption: PageVersion_Version_Meta_Image_caption_operator
+  blurhash: PageVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PageVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PageVersion_Version_Meta_Image_createdAt_operator
   url: PageVersion_Version_Meta_Image_url_operator
@@ -2480,6 +2600,17 @@ input PageVersion_Version_Meta_Image_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input PageVersion_Version_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -2582,6 +2713,7 @@ input PageVersion_Version_Meta_Image_id_operator {
 input PageVersion_Version_Meta_Image_where_and {
   alt: PageVersion_Version_Meta_Image_alt_operator
   caption: PageVersion_Version_Meta_Image_caption_operator
+  blurhash: PageVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PageVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PageVersion_Version_Meta_Image_createdAt_operator
   url: PageVersion_Version_Meta_Image_url_operator
@@ -2598,6 +2730,7 @@ input PageVersion_Version_Meta_Image_where_and {
 input PageVersion_Version_Meta_Image_where_or {
   alt: PageVersion_Version_Meta_Image_alt_operator
   caption: PageVersion_Version_Meta_Image_caption_operator
+  blurhash: PageVersion_Version_Meta_Image_blurhash_operator
   updatedAt: PageVersion_Version_Meta_Image_updatedAt_operator
   createdAt: PageVersion_Version_Meta_Image_createdAt_operator
   url: PageVersion_Version_Meta_Image_url_operator
@@ -2959,8 +3092,8 @@ input versionsPage_where_or {
   OR: [versionsPage_where_or]
 }
 
-type Artifacts {
-  docs: [Artifact]
+type Posts {
+  docs: [Post]
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -2973,38 +3106,39 @@ type Artifacts {
   totalPages: Int
 }
 
-input Artifact_where {
-  title: Artifact_title_operator
-  categories: Artifact_categories_operator
-  publishedAt: Artifact_publishedAt_operator
-  authors: Artifact_authors_operator
-  populatedAuthors__id: Artifact_populatedAuthors__id_operator
-  populatedAuthors__name: Artifact_populatedAuthors__name_operator
-  hero__type: Artifact_hero__type_operator
-  hero__richText: Artifact_hero__richText_operator
-  hero__links__link__type: Artifact_hero__links__link__type_operator
-  hero__links__link__newTab: Artifact_hero__links__link__newTab_operator
-  hero__links__link__reference: Artifact_hero__links__link__reference_Relation
-  hero__links__link__url: Artifact_hero__links__link__url_operator
-  hero__links__link__label: Artifact_hero__links__link__label_operator
-  hero__links__link__appearance: Artifact_hero__links__link__appearance_operator
-  hero__links__id: Artifact_hero__links__id_operator
-  hero__media: Artifact_hero__media_operator
-  enablePremiumContent: Artifact_enablePremiumContent_operator
-  relatedArtifacts: Artifact_relatedArtifacts_operator
-  slug: Artifact_slug_operator
-  meta__title: Artifact_meta__title_operator
-  meta__description: Artifact_meta__description_operator
-  meta__image: Artifact_meta__image_operator
-  updatedAt: Artifact_updatedAt_operator
-  createdAt: Artifact_createdAt_operator
-  _status: Artifact__status_operator
-  id: Artifact_id_operator
-  AND: [Artifact_where_and]
-  OR: [Artifact_where_or]
+input Post_where {
+  title: Post_title_operator
+  categories: Post_categories_operator
+  keywords: Post_keywords_operator
+  publishedAt: Post_publishedAt_operator
+  authors: Post_authors_operator
+  populatedAuthors__id: Post_populatedAuthors__id_operator
+  populatedAuthors__name: Post_populatedAuthors__name_operator
+  hero__type: Post_hero__type_operator
+  hero__richText: Post_hero__richText_operator
+  hero__links__link__type: Post_hero__links__link__type_operator
+  hero__links__link__newTab: Post_hero__links__link__newTab_operator
+  hero__links__link__reference: Post_hero__links__link__reference_Relation
+  hero__links__link__url: Post_hero__links__link__url_operator
+  hero__links__link__label: Post_hero__links__link__label_operator
+  hero__links__link__appearance: Post_hero__links__link__appearance_operator
+  hero__links__id: Post_hero__links__id_operator
+  hero__media: Post_hero__media_operator
+  enableRestrictedContent: Post_enableRestrictedContent_operator
+  relatedPosts: Post_relatedPosts_operator
+  slug: Post_slug_operator
+  meta__title: Post_meta__title_operator
+  meta__description: Post_meta__description_operator
+  meta__image: Post_meta__image_operator
+  updatedAt: Post_updatedAt_operator
+  createdAt: Post_createdAt_operator
+  _status: Post__status_operator
+  id: Post_id_operator
+  AND: [Post_where_and]
+  OR: [Post_where_or]
 }
 
-input Artifact_title_operator {
+input Post_title_operator {
   equals: String
   not_equals: String
   like: String
@@ -3014,7 +3148,15 @@ input Artifact_title_operator {
   all: [String]
 }
 
-input Artifact_categories_operator {
+input Post_categories_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+}
+
+input Post_keywords_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -3023,7 +3165,7 @@ input Artifact_categories_operator {
   exists: Boolean
 }
 
-input Artifact_publishedAt_operator {
+input Post_publishedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -3034,7 +3176,7 @@ input Artifact_publishedAt_operator {
   exists: Boolean
 }
 
-input Artifact_authors_operator {
+input Post_authors_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -3043,7 +3185,7 @@ input Artifact_authors_operator {
   exists: Boolean
 }
 
-input Artifact_populatedAuthors__id_operator {
+input Post_populatedAuthors__id_operator {
   equals: String
   not_equals: String
   like: String
@@ -3054,7 +3196,7 @@ input Artifact_populatedAuthors__id_operator {
   exists: Boolean
 }
 
-input Artifact_populatedAuthors__name_operator {
+input Post_populatedAuthors__name_operator {
   equals: String
   not_equals: String
   like: String
@@ -3065,22 +3207,22 @@ input Artifact_populatedAuthors__name_operator {
   exists: Boolean
 }
 
-input Artifact_hero__type_operator {
-  equals: Artifact_hero__type_Input
-  not_equals: Artifact_hero__type_Input
-  in: [Artifact_hero__type_Input]
-  not_in: [Artifact_hero__type_Input]
-  all: [Artifact_hero__type_Input]
+input Post_hero__type_operator {
+  equals: Post_hero__type_Input
+  not_equals: Post_hero__type_Input
+  in: [Post_hero__type_Input]
+  not_in: [Post_hero__type_Input]
+  all: [Post_hero__type_Input]
 }
 
-enum Artifact_hero__type_Input {
+enum Post_hero__type_Input {
   none
   highImpact
   mediumImpact
   lowImpact
 }
 
-input Artifact_hero__richText_operator {
+input Post_hero__richText_operator {
   equals: JSON
   not_equals: JSON
   like: JSON
@@ -3088,35 +3230,35 @@ input Artifact_hero__richText_operator {
   exists: Boolean
 }
 
-input Artifact_hero__links__link__type_operator {
-  equals: Artifact_hero__links__link__type_Input
-  not_equals: Artifact_hero__links__link__type_Input
-  like: Artifact_hero__links__link__type_Input
-  contains: Artifact_hero__links__link__type_Input
+input Post_hero__links__link__type_operator {
+  equals: Post_hero__links__link__type_Input
+  not_equals: Post_hero__links__link__type_Input
+  like: Post_hero__links__link__type_Input
+  contains: Post_hero__links__link__type_Input
   exists: Boolean
 }
 
-enum Artifact_hero__links__link__type_Input {
+enum Post_hero__links__link__type_Input {
   reference
   custom
 }
 
-input Artifact_hero__links__link__newTab_operator {
+input Post_hero__links__link__newTab_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
 }
 
-input Artifact_hero__links__link__reference_Relation {
-  relationTo: Artifact_hero__links__link__reference_Relation_RelationTo
+input Post_hero__links__link__reference_Relation {
+  relationTo: Post_hero__links__link__reference_Relation_RelationTo
   value: JSON
 }
 
-enum Artifact_hero__links__link__reference_Relation_RelationTo {
+enum Post_hero__links__link__reference_Relation_RelationTo {
   pages
 }
 
-input Artifact_hero__links__link__url_operator {
+input Post_hero__links__link__url_operator {
   equals: String
   not_equals: String
   like: String
@@ -3126,7 +3268,7 @@ input Artifact_hero__links__link__url_operator {
   all: [String]
 }
 
-input Artifact_hero__links__link__label_operator {
+input Post_hero__links__link__label_operator {
   equals: String
   not_equals: String
   like: String
@@ -3136,22 +3278,22 @@ input Artifact_hero__links__link__label_operator {
   all: [String]
 }
 
-input Artifact_hero__links__link__appearance_operator {
-  equals: Artifact_hero__links__link__appearance_Input
-  not_equals: Artifact_hero__links__link__appearance_Input
-  in: [Artifact_hero__links__link__appearance_Input]
-  not_in: [Artifact_hero__links__link__appearance_Input]
-  all: [Artifact_hero__links__link__appearance_Input]
+input Post_hero__links__link__appearance_operator {
+  equals: Post_hero__links__link__appearance_Input
+  not_equals: Post_hero__links__link__appearance_Input
+  in: [Post_hero__links__link__appearance_Input]
+  not_in: [Post_hero__links__link__appearance_Input]
+  all: [Post_hero__links__link__appearance_Input]
   exists: Boolean
 }
 
-enum Artifact_hero__links__link__appearance_Input {
+enum Post_hero__links__link__appearance_Input {
   default
   primary
   secondary
 }
 
-input Artifact_hero__links__id_operator {
+input Post_hero__links__id_operator {
   equals: String
   not_equals: String
   like: String
@@ -3162,18 +3304,18 @@ input Artifact_hero__links__id_operator {
   exists: Boolean
 }
 
-input Artifact_hero__media_operator {
+input Post_hero__media_operator {
   equals: String
   not_equals: String
 }
 
-input Artifact_enablePremiumContent_operator {
+input Post_enableRestrictedContent_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
 }
 
-input Artifact_relatedArtifacts_operator {
+input Post_relatedPosts_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -3182,7 +3324,7 @@ input Artifact_relatedArtifacts_operator {
   exists: Boolean
 }
 
-input Artifact_slug_operator {
+input Post_slug_operator {
   equals: String
   not_equals: String
   like: String
@@ -3193,7 +3335,7 @@ input Artifact_slug_operator {
   exists: Boolean
 }
 
-input Artifact_meta__title_operator {
+input Post_meta__title_operator {
   equals: String
   not_equals: String
   like: String
@@ -3204,7 +3346,7 @@ input Artifact_meta__title_operator {
   exists: Boolean
 }
 
-input Artifact_meta__description_operator {
+input Post_meta__description_operator {
   equals: String
   not_equals: String
   like: String
@@ -3212,13 +3354,13 @@ input Artifact_meta__description_operator {
   exists: Boolean
 }
 
-input Artifact_meta__image_operator {
+input Post_meta__image_operator {
   equals: String
   not_equals: String
   exists: Boolean
 }
 
-input Artifact_updatedAt_operator {
+input Post_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -3229,7 +3371,7 @@ input Artifact_updatedAt_operator {
   exists: Boolean
 }
 
-input Artifact_createdAt_operator {
+input Post_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -3240,21 +3382,21 @@ input Artifact_createdAt_operator {
   exists: Boolean
 }
 
-input Artifact__status_operator {
-  equals: Artifact__status_Input
-  not_equals: Artifact__status_Input
-  in: [Artifact__status_Input]
-  not_in: [Artifact__status_Input]
-  all: [Artifact__status_Input]
+input Post__status_operator {
+  equals: Post__status_Input
+  not_equals: Post__status_Input
+  in: [Post__status_Input]
+  not_in: [Post__status_Input]
+  all: [Post__status_Input]
   exists: Boolean
 }
 
-enum Artifact__status_Input {
+enum Post__status_Input {
   draft
   published
 }
 
-input Artifact_id_operator {
+input Post_id_operator {
   equals: Int
   not_equals: Int
   greater_than_equal: Int
@@ -3264,1040 +3406,1068 @@ input Artifact_id_operator {
   exists: Boolean
 }
 
-input Artifact_where_and {
-  title: Artifact_title_operator
-  categories: Artifact_categories_operator
-  publishedAt: Artifact_publishedAt_operator
-  authors: Artifact_authors_operator
-  populatedAuthors__id: Artifact_populatedAuthors__id_operator
-  populatedAuthors__name: Artifact_populatedAuthors__name_operator
-  hero__type: Artifact_hero__type_operator
-  hero__richText: Artifact_hero__richText_operator
-  hero__links__link__type: Artifact_hero__links__link__type_operator
-  hero__links__link__newTab: Artifact_hero__links__link__newTab_operator
-  hero__links__link__reference: Artifact_hero__links__link__reference_Relation
-  hero__links__link__url: Artifact_hero__links__link__url_operator
-  hero__links__link__label: Artifact_hero__links__link__label_operator
-  hero__links__link__appearance: Artifact_hero__links__link__appearance_operator
-  hero__links__id: Artifact_hero__links__id_operator
-  hero__media: Artifact_hero__media_operator
-  enablePremiumContent: Artifact_enablePremiumContent_operator
-  relatedArtifacts: Artifact_relatedArtifacts_operator
-  slug: Artifact_slug_operator
-  meta__title: Artifact_meta__title_operator
-  meta__description: Artifact_meta__description_operator
-  meta__image: Artifact_meta__image_operator
-  updatedAt: Artifact_updatedAt_operator
-  createdAt: Artifact_createdAt_operator
-  _status: Artifact__status_operator
-  id: Artifact_id_operator
-  AND: [Artifact_where_and]
-  OR: [Artifact_where_or]
-}
-
-input Artifact_where_or {
-  title: Artifact_title_operator
-  categories: Artifact_categories_operator
-  publishedAt: Artifact_publishedAt_operator
-  authors: Artifact_authors_operator
-  populatedAuthors__id: Artifact_populatedAuthors__id_operator
-  populatedAuthors__name: Artifact_populatedAuthors__name_operator
-  hero__type: Artifact_hero__type_operator
-  hero__richText: Artifact_hero__richText_operator
-  hero__links__link__type: Artifact_hero__links__link__type_operator
-  hero__links__link__newTab: Artifact_hero__links__link__newTab_operator
-  hero__links__link__reference: Artifact_hero__links__link__reference_Relation
-  hero__links__link__url: Artifact_hero__links__link__url_operator
-  hero__links__link__label: Artifact_hero__links__link__label_operator
-  hero__links__link__appearance: Artifact_hero__links__link__appearance_operator
-  hero__links__id: Artifact_hero__links__id_operator
-  hero__media: Artifact_hero__media_operator
-  enablePremiumContent: Artifact_enablePremiumContent_operator
-  relatedArtifacts: Artifact_relatedArtifacts_operator
-  slug: Artifact_slug_operator
-  meta__title: Artifact_meta__title_operator
-  meta__description: Artifact_meta__description_operator
-  meta__image: Artifact_meta__image_operator
-  updatedAt: Artifact_updatedAt_operator
-  createdAt: Artifact_createdAt_operator
-  _status: Artifact__status_operator
-  id: Artifact_id_operator
-  AND: [Artifact_where_and]
-  OR: [Artifact_where_or]
+input Post_where_and {
+  title: Post_title_operator
+  categories: Post_categories_operator
+  keywords: Post_keywords_operator
+  publishedAt: Post_publishedAt_operator
+  authors: Post_authors_operator
+  populatedAuthors__id: Post_populatedAuthors__id_operator
+  populatedAuthors__name: Post_populatedAuthors__name_operator
+  hero__type: Post_hero__type_operator
+  hero__richText: Post_hero__richText_operator
+  hero__links__link__type: Post_hero__links__link__type_operator
+  hero__links__link__newTab: Post_hero__links__link__newTab_operator
+  hero__links__link__reference: Post_hero__links__link__reference_Relation
+  hero__links__link__url: Post_hero__links__link__url_operator
+  hero__links__link__label: Post_hero__links__link__label_operator
+  hero__links__link__appearance: Post_hero__links__link__appearance_operator
+  hero__links__id: Post_hero__links__id_operator
+  hero__media: Post_hero__media_operator
+  enableRestrictedContent: Post_enableRestrictedContent_operator
+  relatedPosts: Post_relatedPosts_operator
+  slug: Post_slug_operator
+  meta__title: Post_meta__title_operator
+  meta__description: Post_meta__description_operator
+  meta__image: Post_meta__image_operator
+  updatedAt: Post_updatedAt_operator
+  createdAt: Post_createdAt_operator
+  _status: Post__status_operator
+  id: Post_id_operator
+  AND: [Post_where_and]
+  OR: [Post_where_or]
+}
+
+input Post_where_or {
+  title: Post_title_operator
+  categories: Post_categories_operator
+  keywords: Post_keywords_operator
+  publishedAt: Post_publishedAt_operator
+  authors: Post_authors_operator
+  populatedAuthors__id: Post_populatedAuthors__id_operator
+  populatedAuthors__name: Post_populatedAuthors__name_operator
+  hero__type: Post_hero__type_operator
+  hero__richText: Post_hero__richText_operator
+  hero__links__link__type: Post_hero__links__link__type_operator
+  hero__links__link__newTab: Post_hero__links__link__newTab_operator
+  hero__links__link__reference: Post_hero__links__link__reference_Relation
+  hero__links__link__url: Post_hero__links__link__url_operator
+  hero__links__link__label: Post_hero__links__link__label_operator
+  hero__links__link__appearance: Post_hero__links__link__appearance_operator
+  hero__links__id: Post_hero__links__id_operator
+  hero__media: Post_hero__media_operator
+  enableRestrictedContent: Post_enableRestrictedContent_operator
+  relatedPosts: Post_relatedPosts_operator
+  slug: Post_slug_operator
+  meta__title: Post_meta__title_operator
+  meta__description: Post_meta__description_operator
+  meta__image: Post_meta__image_operator
+  updatedAt: Post_updatedAt_operator
+  createdAt: Post_createdAt_operator
+  _status: Post__status_operator
+  id: Post_id_operator
+  AND: [Post_where_and]
+  OR: [Post_where_or]
 }
 
-type artifactsDocAccess {
-  fields: ArtifactsDocAccessFields
-  create: ArtifactsCreateDocAccess
-  read: ArtifactsReadDocAccess
-  update: ArtifactsUpdateDocAccess
-  delete: ArtifactsDeleteDocAccess
-  readVersions: ArtifactsReadVersionsDocAccess
+type postsDocAccess {
+  fields: PostsDocAccessFields
+  create: PostsCreateDocAccess
+  read: PostsReadDocAccess
+  update: PostsUpdateDocAccess
+  delete: PostsDeleteDocAccess
+  readVersions: PostsReadVersionsDocAccess
 }
 
-type ArtifactsDocAccessFields {
-  title: ArtifactsDocAccessFields_title
-  categories: ArtifactsDocAccessFields_categories
-  publishedAt: ArtifactsDocAccessFields_publishedAt
-  authors: ArtifactsDocAccessFields_authors
-  populatedAuthors: ArtifactsDocAccessFields_populatedAuthors
-  hero: ArtifactsDocAccessFields_hero
-  layout: ArtifactsDocAccessFields_layout
-  enablePremiumContent: ArtifactsDocAccessFields_enablePremiumContent
-  premiumContent: ArtifactsDocAccessFields_premiumContent
-  relatedArtifacts: ArtifactsDocAccessFields_relatedArtifacts
-  slug: ArtifactsDocAccessFields_slug
-  meta: ArtifactsDocAccessFields_meta
-  updatedAt: ArtifactsDocAccessFields_updatedAt
-  createdAt: ArtifactsDocAccessFields_createdAt
-  _status: ArtifactsDocAccessFields__status
+type PostsDocAccessFields {
+  title: PostsDocAccessFields_title
+  categories: PostsDocAccessFields_categories
+  keywords: PostsDocAccessFields_keywords
+  publishedAt: PostsDocAccessFields_publishedAt
+  authors: PostsDocAccessFields_authors
+  populatedAuthors: PostsDocAccessFields_populatedAuthors
+  hero: PostsDocAccessFields_hero
+  layout: PostsDocAccessFields_layout
+  enableRestrictedContent: PostsDocAccessFields_enableRestrictedContent
+  restrictedContent: PostsDocAccessFields_restrictedContent
+  relatedPosts: PostsDocAccessFields_relatedPosts
+  slug: PostsDocAccessFields_slug
+  meta: PostsDocAccessFields_meta
+  updatedAt: PostsDocAccessFields_updatedAt
+  createdAt: PostsDocAccessFields_createdAt
+  _status: PostsDocAccessFields__status
 }
 
-type ArtifactsDocAccessFields_title {
-  create: ArtifactsDocAccessFields_title_Create
-  read: ArtifactsDocAccessFields_title_Read
-  update: ArtifactsDocAccessFields_title_Update
-  delete: ArtifactsDocAccessFields_title_Delete
+type PostsDocAccessFields_title {
+  create: PostsDocAccessFields_title_Create
+  read: PostsDocAccessFields_title_Read
+  update: PostsDocAccessFields_title_Update
+  delete: PostsDocAccessFields_title_Delete
 }
 
-type ArtifactsDocAccessFields_title_Create {
+type PostsDocAccessFields_title_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_title_Read {
+type PostsDocAccessFields_title_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_title_Update {
+type PostsDocAccessFields_title_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_title_Delete {
+type PostsDocAccessFields_title_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_categories {
-  create: ArtifactsDocAccessFields_categories_Create
-  read: ArtifactsDocAccessFields_categories_Read
-  update: ArtifactsDocAccessFields_categories_Update
-  delete: ArtifactsDocAccessFields_categories_Delete
+type PostsDocAccessFields_categories {
+  create: PostsDocAccessFields_categories_Create
+  read: PostsDocAccessFields_categories_Read
+  update: PostsDocAccessFields_categories_Update
+  delete: PostsDocAccessFields_categories_Delete
 }
 
-type ArtifactsDocAccessFields_categories_Create {
+type PostsDocAccessFields_categories_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_categories_Read {
+type PostsDocAccessFields_categories_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_categories_Update {
+type PostsDocAccessFields_categories_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_categories_Delete {
+type PostsDocAccessFields_categories_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_publishedAt {
-  create: ArtifactsDocAccessFields_publishedAt_Create
-  read: ArtifactsDocAccessFields_publishedAt_Read
-  update: ArtifactsDocAccessFields_publishedAt_Update
-  delete: ArtifactsDocAccessFields_publishedAt_Delete
+type PostsDocAccessFields_keywords {
+  create: PostsDocAccessFields_keywords_Create
+  read: PostsDocAccessFields_keywords_Read
+  update: PostsDocAccessFields_keywords_Update
+  delete: PostsDocAccessFields_keywords_Delete
 }
 
-type ArtifactsDocAccessFields_publishedAt_Create {
+type PostsDocAccessFields_keywords_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_publishedAt_Read {
+type PostsDocAccessFields_keywords_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_publishedAt_Update {
+type PostsDocAccessFields_keywords_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_publishedAt_Delete {
+type PostsDocAccessFields_keywords_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_authors {
-  create: ArtifactsDocAccessFields_authors_Create
-  read: ArtifactsDocAccessFields_authors_Read
-  update: ArtifactsDocAccessFields_authors_Update
-  delete: ArtifactsDocAccessFields_authors_Delete
+type PostsDocAccessFields_publishedAt {
+  create: PostsDocAccessFields_publishedAt_Create
+  read: PostsDocAccessFields_publishedAt_Read
+  update: PostsDocAccessFields_publishedAt_Update
+  delete: PostsDocAccessFields_publishedAt_Delete
 }
 
-type ArtifactsDocAccessFields_authors_Create {
+type PostsDocAccessFields_publishedAt_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_authors_Read {
+type PostsDocAccessFields_publishedAt_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_authors_Update {
+type PostsDocAccessFields_publishedAt_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_authors_Delete {
+type PostsDocAccessFields_publishedAt_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors {
-  create: ArtifactsDocAccessFields_populatedAuthors_Create
-  read: ArtifactsDocAccessFields_populatedAuthors_Read
-  update: ArtifactsDocAccessFields_populatedAuthors_Update
-  delete: ArtifactsDocAccessFields_populatedAuthors_Delete
-  fields: ArtifactsDocAccessFields_populatedAuthors_Fields
+type PostsDocAccessFields_authors {
+  create: PostsDocAccessFields_authors_Create
+  read: PostsDocAccessFields_authors_Read
+  update: PostsDocAccessFields_authors_Update
+  delete: PostsDocAccessFields_authors_Delete
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_Create {
+type PostsDocAccessFields_authors_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_Read {
+type PostsDocAccessFields_authors_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_Update {
+type PostsDocAccessFields_authors_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_Delete {
+type PostsDocAccessFields_authors_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_Fields {
-  id: ArtifactsDocAccessFields_populatedAuthors_id
-  name: ArtifactsDocAccessFields_populatedAuthors_name
+type PostsDocAccessFields_populatedAuthors {
+  create: PostsDocAccessFields_populatedAuthors_Create
+  read: PostsDocAccessFields_populatedAuthors_Read
+  update: PostsDocAccessFields_populatedAuthors_Update
+  delete: PostsDocAccessFields_populatedAuthors_Delete
+  fields: PostsDocAccessFields_populatedAuthors_Fields
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_id {
-  create: ArtifactsDocAccessFields_populatedAuthors_id_Create
-  read: ArtifactsDocAccessFields_populatedAuthors_id_Read
-  update: ArtifactsDocAccessFields_populatedAuthors_id_Update
-  delete: ArtifactsDocAccessFields_populatedAuthors_id_Delete
+type PostsDocAccessFields_populatedAuthors_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_populatedAuthors_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_populatedAuthors_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_populatedAuthors_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_populatedAuthors_Fields {
+  id: PostsDocAccessFields_populatedAuthors_id
+  name: PostsDocAccessFields_populatedAuthors_name
+}
+
+type PostsDocAccessFields_populatedAuthors_id {
+  create: PostsDocAccessFields_populatedAuthors_id_Create
+  read: PostsDocAccessFields_populatedAuthors_id_Read
+  update: PostsDocAccessFields_populatedAuthors_id_Update
+  delete: PostsDocAccessFields_populatedAuthors_id_Delete
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_id_Create {
+type PostsDocAccessFields_populatedAuthors_id_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_id_Read {
+type PostsDocAccessFields_populatedAuthors_id_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_id_Update {
+type PostsDocAccessFields_populatedAuthors_id_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_id_Delete {
+type PostsDocAccessFields_populatedAuthors_id_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_name {
-  create: ArtifactsDocAccessFields_populatedAuthors_name_Create
-  read: ArtifactsDocAccessFields_populatedAuthors_name_Read
-  update: ArtifactsDocAccessFields_populatedAuthors_name_Update
-  delete: ArtifactsDocAccessFields_populatedAuthors_name_Delete
+type PostsDocAccessFields_populatedAuthors_name {
+  create: PostsDocAccessFields_populatedAuthors_name_Create
+  read: PostsDocAccessFields_populatedAuthors_name_Read
+  update: PostsDocAccessFields_populatedAuthors_name_Update
+  delete: PostsDocAccessFields_populatedAuthors_name_Delete
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_name_Create {
+type PostsDocAccessFields_populatedAuthors_name_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_name_Read {
+type PostsDocAccessFields_populatedAuthors_name_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_name_Update {
+type PostsDocAccessFields_populatedAuthors_name_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_populatedAuthors_name_Delete {
+type PostsDocAccessFields_populatedAuthors_name_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero {
-  create: ArtifactsDocAccessFields_hero_Create
-  read: ArtifactsDocAccessFields_hero_Read
-  update: ArtifactsDocAccessFields_hero_Update
-  delete: ArtifactsDocAccessFields_hero_Delete
-  fields: ArtifactsDocAccessFields_hero_Fields
+type PostsDocAccessFields_hero {
+  create: PostsDocAccessFields_hero_Create
+  read: PostsDocAccessFields_hero_Read
+  update: PostsDocAccessFields_hero_Update
+  delete: PostsDocAccessFields_hero_Delete
+  fields: PostsDocAccessFields_hero_Fields
 }
 
-type ArtifactsDocAccessFields_hero_Create {
+type PostsDocAccessFields_hero_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_Read {
+type PostsDocAccessFields_hero_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_Update {
+type PostsDocAccessFields_hero_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_Delete {
+type PostsDocAccessFields_hero_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_Fields {
-  type: ArtifactsDocAccessFields_hero_type
-  richText: ArtifactsDocAccessFields_hero_richText
-  links: ArtifactsDocAccessFields_hero_links
-  media: ArtifactsDocAccessFields_hero_media
+type PostsDocAccessFields_hero_Fields {
+  type: PostsDocAccessFields_hero_type
+  richText: PostsDocAccessFields_hero_richText
+  links: PostsDocAccessFields_hero_links
+  media: PostsDocAccessFields_hero_media
 }
 
-type ArtifactsDocAccessFields_hero_type {
-  create: ArtifactsDocAccessFields_hero_type_Create
-  read: ArtifactsDocAccessFields_hero_type_Read
-  update: ArtifactsDocAccessFields_hero_type_Update
-  delete: ArtifactsDocAccessFields_hero_type_Delete
+type PostsDocAccessFields_hero_type {
+  create: PostsDocAccessFields_hero_type_Create
+  read: PostsDocAccessFields_hero_type_Read
+  update: PostsDocAccessFields_hero_type_Update
+  delete: PostsDocAccessFields_hero_type_Delete
 }
 
-type ArtifactsDocAccessFields_hero_type_Create {
+type PostsDocAccessFields_hero_type_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_type_Read {
+type PostsDocAccessFields_hero_type_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_type_Update {
+type PostsDocAccessFields_hero_type_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_type_Delete {
+type PostsDocAccessFields_hero_type_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_richText {
-  create: ArtifactsDocAccessFields_hero_richText_Create
-  read: ArtifactsDocAccessFields_hero_richText_Read
-  update: ArtifactsDocAccessFields_hero_richText_Update
-  delete: ArtifactsDocAccessFields_hero_richText_Delete
+type PostsDocAccessFields_hero_richText {
+  create: PostsDocAccessFields_hero_richText_Create
+  read: PostsDocAccessFields_hero_richText_Read
+  update: PostsDocAccessFields_hero_richText_Update
+  delete: PostsDocAccessFields_hero_richText_Delete
 }
 
-type ArtifactsDocAccessFields_hero_richText_Create {
+type PostsDocAccessFields_hero_richText_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_richText_Read {
+type PostsDocAccessFields_hero_richText_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_richText_Update {
+type PostsDocAccessFields_hero_richText_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_richText_Delete {
+type PostsDocAccessFields_hero_richText_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links {
-  create: ArtifactsDocAccessFields_hero_links_Create
-  read: ArtifactsDocAccessFields_hero_links_Read
-  update: ArtifactsDocAccessFields_hero_links_Update
-  delete: ArtifactsDocAccessFields_hero_links_Delete
-  fields: ArtifactsDocAccessFields_hero_links_Fields
+type PostsDocAccessFields_hero_links {
+  create: PostsDocAccessFields_hero_links_Create
+  read: PostsDocAccessFields_hero_links_Read
+  update: PostsDocAccessFields_hero_links_Update
+  delete: PostsDocAccessFields_hero_links_Delete
+  fields: PostsDocAccessFields_hero_links_Fields
 }
 
-type ArtifactsDocAccessFields_hero_links_Create {
+type PostsDocAccessFields_hero_links_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_Read {
+type PostsDocAccessFields_hero_links_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_Update {
+type PostsDocAccessFields_hero_links_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_Delete {
+type PostsDocAccessFields_hero_links_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_Fields {
-  link: ArtifactsDocAccessFields_hero_links_link
-  id: ArtifactsDocAccessFields_hero_links_id
+type PostsDocAccessFields_hero_links_Fields {
+  link: PostsDocAccessFields_hero_links_link
+  id: PostsDocAccessFields_hero_links_id
 }
 
-type ArtifactsDocAccessFields_hero_links_link {
-  create: ArtifactsDocAccessFields_hero_links_link_Create
-  read: ArtifactsDocAccessFields_hero_links_link_Read
-  update: ArtifactsDocAccessFields_hero_links_link_Update
-  delete: ArtifactsDocAccessFields_hero_links_link_Delete
-  fields: ArtifactsDocAccessFields_hero_links_link_Fields
+type PostsDocAccessFields_hero_links_link {
+  create: PostsDocAccessFields_hero_links_link_Create
+  read: PostsDocAccessFields_hero_links_link_Read
+  update: PostsDocAccessFields_hero_links_link_Update
+  delete: PostsDocAccessFields_hero_links_link_Delete
+  fields: PostsDocAccessFields_hero_links_link_Fields
 }
 
-type ArtifactsDocAccessFields_hero_links_link_Create {
+type PostsDocAccessFields_hero_links_link_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_Read {
+type PostsDocAccessFields_hero_links_link_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_Update {
+type PostsDocAccessFields_hero_links_link_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_Delete {
+type PostsDocAccessFields_hero_links_link_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_Fields {
-  type: ArtifactsDocAccessFields_hero_links_link_type
-  newTab: ArtifactsDocAccessFields_hero_links_link_newTab
-  reference: ArtifactsDocAccessFields_hero_links_link_reference
-  url: ArtifactsDocAccessFields_hero_links_link_url
-  label: ArtifactsDocAccessFields_hero_links_link_label
-  appearance: ArtifactsDocAccessFields_hero_links_link_appearance
+type PostsDocAccessFields_hero_links_link_Fields {
+  type: PostsDocAccessFields_hero_links_link_type
+  newTab: PostsDocAccessFields_hero_links_link_newTab
+  reference: PostsDocAccessFields_hero_links_link_reference
+  url: PostsDocAccessFields_hero_links_link_url
+  label: PostsDocAccessFields_hero_links_link_label
+  appearance: PostsDocAccessFields_hero_links_link_appearance
 }
 
-type ArtifactsDocAccessFields_hero_links_link_type {
-  create: ArtifactsDocAccessFields_hero_links_link_type_Create
-  read: ArtifactsDocAccessFields_hero_links_link_type_Read
-  update: ArtifactsDocAccessFields_hero_links_link_type_Update
-  delete: ArtifactsDocAccessFields_hero_links_link_type_Delete
+type PostsDocAccessFields_hero_links_link_type {
+  create: PostsDocAccessFields_hero_links_link_type_Create
+  read: PostsDocAccessFields_hero_links_link_type_Read
+  update: PostsDocAccessFields_hero_links_link_type_Update
+  delete: PostsDocAccessFields_hero_links_link_type_Delete
 }
 
-type ArtifactsDocAccessFields_hero_links_link_type_Create {
+type PostsDocAccessFields_hero_links_link_type_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_type_Read {
+type PostsDocAccessFields_hero_links_link_type_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_type_Update {
+type PostsDocAccessFields_hero_links_link_type_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_type_Delete {
+type PostsDocAccessFields_hero_links_link_type_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_newTab {
-  create: ArtifactsDocAccessFields_hero_links_link_newTab_Create
-  read: ArtifactsDocAccessFields_hero_links_link_newTab_Read
-  update: ArtifactsDocAccessFields_hero_links_link_newTab_Update
-  delete: ArtifactsDocAccessFields_hero_links_link_newTab_Delete
+type PostsDocAccessFields_hero_links_link_newTab {
+  create: PostsDocAccessFields_hero_links_link_newTab_Create
+  read: PostsDocAccessFields_hero_links_link_newTab_Read
+  update: PostsDocAccessFields_hero_links_link_newTab_Update
+  delete: PostsDocAccessFields_hero_links_link_newTab_Delete
 }
 
-type ArtifactsDocAccessFields_hero_links_link_newTab_Create {
+type PostsDocAccessFields_hero_links_link_newTab_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_newTab_Read {
+type PostsDocAccessFields_hero_links_link_newTab_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_newTab_Update {
+type PostsDocAccessFields_hero_links_link_newTab_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_newTab_Delete {
+type PostsDocAccessFields_hero_links_link_newTab_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_reference {
-  create: ArtifactsDocAccessFields_hero_links_link_reference_Create
-  read: ArtifactsDocAccessFields_hero_links_link_reference_Read
-  update: ArtifactsDocAccessFields_hero_links_link_reference_Update
-  delete: ArtifactsDocAccessFields_hero_links_link_reference_Delete
+type PostsDocAccessFields_hero_links_link_reference {
+  create: PostsDocAccessFields_hero_links_link_reference_Create
+  read: PostsDocAccessFields_hero_links_link_reference_Read
+  update: PostsDocAccessFields_hero_links_link_reference_Update
+  delete: PostsDocAccessFields_hero_links_link_reference_Delete
 }
 
-type ArtifactsDocAccessFields_hero_links_link_reference_Create {
+type PostsDocAccessFields_hero_links_link_reference_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_reference_Read {
+type PostsDocAccessFields_hero_links_link_reference_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_reference_Update {
+type PostsDocAccessFields_hero_links_link_reference_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_reference_Delete {
+type PostsDocAccessFields_hero_links_link_reference_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_url {
-  create: ArtifactsDocAccessFields_hero_links_link_url_Create
-  read: ArtifactsDocAccessFields_hero_links_link_url_Read
-  update: ArtifactsDocAccessFields_hero_links_link_url_Update
-  delete: ArtifactsDocAccessFields_hero_links_link_url_Delete
+type PostsDocAccessFields_hero_links_link_url {
+  create: PostsDocAccessFields_hero_links_link_url_Create
+  read: PostsDocAccessFields_hero_links_link_url_Read
+  update: PostsDocAccessFields_hero_links_link_url_Update
+  delete: PostsDocAccessFields_hero_links_link_url_Delete
 }
 
-type ArtifactsDocAccessFields_hero_links_link_url_Create {
+type PostsDocAccessFields_hero_links_link_url_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_url_Read {
+type PostsDocAccessFields_hero_links_link_url_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_url_Update {
+type PostsDocAccessFields_hero_links_link_url_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_url_Delete {
+type PostsDocAccessFields_hero_links_link_url_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_label {
-  create: ArtifactsDocAccessFields_hero_links_link_label_Create
-  read: ArtifactsDocAccessFields_hero_links_link_label_Read
-  update: ArtifactsDocAccessFields_hero_links_link_label_Update
-  delete: ArtifactsDocAccessFields_hero_links_link_label_Delete
+type PostsDocAccessFields_hero_links_link_label {
+  create: PostsDocAccessFields_hero_links_link_label_Create
+  read: PostsDocAccessFields_hero_links_link_label_Read
+  update: PostsDocAccessFields_hero_links_link_label_Update
+  delete: PostsDocAccessFields_hero_links_link_label_Delete
 }
 
-type ArtifactsDocAccessFields_hero_links_link_label_Create {
+type PostsDocAccessFields_hero_links_link_label_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_label_Read {
+type PostsDocAccessFields_hero_links_link_label_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_label_Update {
+type PostsDocAccessFields_hero_links_link_label_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_label_Delete {
+type PostsDocAccessFields_hero_links_link_label_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_appearance {
-  create: ArtifactsDocAccessFields_hero_links_link_appearance_Create
-  read: ArtifactsDocAccessFields_hero_links_link_appearance_Read
-  update: ArtifactsDocAccessFields_hero_links_link_appearance_Update
-  delete: ArtifactsDocAccessFields_hero_links_link_appearance_Delete
+type PostsDocAccessFields_hero_links_link_appearance {
+  create: PostsDocAccessFields_hero_links_link_appearance_Create
+  read: PostsDocAccessFields_hero_links_link_appearance_Read
+  update: PostsDocAccessFields_hero_links_link_appearance_Update
+  delete: PostsDocAccessFields_hero_links_link_appearance_Delete
 }
 
-type ArtifactsDocAccessFields_hero_links_link_appearance_Create {
+type PostsDocAccessFields_hero_links_link_appearance_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_appearance_Read {
+type PostsDocAccessFields_hero_links_link_appearance_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_appearance_Update {
+type PostsDocAccessFields_hero_links_link_appearance_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_link_appearance_Delete {
+type PostsDocAccessFields_hero_links_link_appearance_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_id {
-  create: ArtifactsDocAccessFields_hero_links_id_Create
-  read: ArtifactsDocAccessFields_hero_links_id_Read
-  update: ArtifactsDocAccessFields_hero_links_id_Update
-  delete: ArtifactsDocAccessFields_hero_links_id_Delete
+type PostsDocAccessFields_hero_links_id {
+  create: PostsDocAccessFields_hero_links_id_Create
+  read: PostsDocAccessFields_hero_links_id_Read
+  update: PostsDocAccessFields_hero_links_id_Update
+  delete: PostsDocAccessFields_hero_links_id_Delete
 }
 
-type ArtifactsDocAccessFields_hero_links_id_Create {
+type PostsDocAccessFields_hero_links_id_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_id_Read {
+type PostsDocAccessFields_hero_links_id_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_id_Update {
+type PostsDocAccessFields_hero_links_id_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_links_id_Delete {
+type PostsDocAccessFields_hero_links_id_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_media {
-  create: ArtifactsDocAccessFields_hero_media_Create
-  read: ArtifactsDocAccessFields_hero_media_Read
-  update: ArtifactsDocAccessFields_hero_media_Update
-  delete: ArtifactsDocAccessFields_hero_media_Delete
+type PostsDocAccessFields_hero_media {
+  create: PostsDocAccessFields_hero_media_Create
+  read: PostsDocAccessFields_hero_media_Read
+  update: PostsDocAccessFields_hero_media_Update
+  delete: PostsDocAccessFields_hero_media_Delete
 }
 
-type ArtifactsDocAccessFields_hero_media_Create {
+type PostsDocAccessFields_hero_media_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_media_Read {
+type PostsDocAccessFields_hero_media_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_media_Update {
+type PostsDocAccessFields_hero_media_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_hero_media_Delete {
+type PostsDocAccessFields_hero_media_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_layout {
-  create: ArtifactsDocAccessFields_layout_Create
-  read: ArtifactsDocAccessFields_layout_Read
-  update: ArtifactsDocAccessFields_layout_Update
-  delete: ArtifactsDocAccessFields_layout_Delete
+type PostsDocAccessFields_layout {
+  create: PostsDocAccessFields_layout_Create
+  read: PostsDocAccessFields_layout_Read
+  update: PostsDocAccessFields_layout_Update
+  delete: PostsDocAccessFields_layout_Delete
 }
 
-type ArtifactsDocAccessFields_layout_Create {
+type PostsDocAccessFields_layout_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_layout_Read {
+type PostsDocAccessFields_layout_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_layout_Update {
+type PostsDocAccessFields_layout_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_layout_Delete {
+type PostsDocAccessFields_layout_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_enablePremiumContent {
-  create: ArtifactsDocAccessFields_enablePremiumContent_Create
-  read: ArtifactsDocAccessFields_enablePremiumContent_Read
-  update: ArtifactsDocAccessFields_enablePremiumContent_Update
-  delete: ArtifactsDocAccessFields_enablePremiumContent_Delete
+type PostsDocAccessFields_enableRestrictedContent {
+  create: PostsDocAccessFields_enableRestrictedContent_Create
+  read: PostsDocAccessFields_enableRestrictedContent_Read
+  update: PostsDocAccessFields_enableRestrictedContent_Update
+  delete: PostsDocAccessFields_enableRestrictedContent_Delete
 }
 
-type ArtifactsDocAccessFields_enablePremiumContent_Create {
+type PostsDocAccessFields_enableRestrictedContent_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_enablePremiumContent_Read {
+type PostsDocAccessFields_enableRestrictedContent_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_enablePremiumContent_Update {
+type PostsDocAccessFields_enableRestrictedContent_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_enablePremiumContent_Delete {
+type PostsDocAccessFields_enableRestrictedContent_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_premiumContent {
-  create: ArtifactsDocAccessFields_premiumContent_Create
-  read: ArtifactsDocAccessFields_premiumContent_Read
-  update: ArtifactsDocAccessFields_premiumContent_Update
-  delete: ArtifactsDocAccessFields_premiumContent_Delete
+type PostsDocAccessFields_restrictedContent {
+  create: PostsDocAccessFields_restrictedContent_Create
+  read: PostsDocAccessFields_restrictedContent_Read
+  update: PostsDocAccessFields_restrictedContent_Update
+  delete: PostsDocAccessFields_restrictedContent_Delete
 }
 
-type ArtifactsDocAccessFields_premiumContent_Create {
+type PostsDocAccessFields_restrictedContent_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_premiumContent_Read {
+type PostsDocAccessFields_restrictedContent_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_premiumContent_Update {
+type PostsDocAccessFields_restrictedContent_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_premiumContent_Delete {
+type PostsDocAccessFields_restrictedContent_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_relatedArtifacts {
-  create: ArtifactsDocAccessFields_relatedArtifacts_Create
-  read: ArtifactsDocAccessFields_relatedArtifacts_Read
-  update: ArtifactsDocAccessFields_relatedArtifacts_Update
-  delete: ArtifactsDocAccessFields_relatedArtifacts_Delete
+type PostsDocAccessFields_relatedPosts {
+  create: PostsDocAccessFields_relatedPosts_Create
+  read: PostsDocAccessFields_relatedPosts_Read
+  update: PostsDocAccessFields_relatedPosts_Update
+  delete: PostsDocAccessFields_relatedPosts_Delete
 }
 
-type ArtifactsDocAccessFields_relatedArtifacts_Create {
+type PostsDocAccessFields_relatedPosts_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_relatedArtifacts_Read {
+type PostsDocAccessFields_relatedPosts_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_relatedArtifacts_Update {
+type PostsDocAccessFields_relatedPosts_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_relatedArtifacts_Delete {
+type PostsDocAccessFields_relatedPosts_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_slug {
-  create: ArtifactsDocAccessFields_slug_Create
-  read: ArtifactsDocAccessFields_slug_Read
-  update: ArtifactsDocAccessFields_slug_Update
-  delete: ArtifactsDocAccessFields_slug_Delete
+type PostsDocAccessFields_slug {
+  create: PostsDocAccessFields_slug_Create
+  read: PostsDocAccessFields_slug_Read
+  update: PostsDocAccessFields_slug_Update
+  delete: PostsDocAccessFields_slug_Delete
 }
 
-type ArtifactsDocAccessFields_slug_Create {
+type PostsDocAccessFields_slug_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_slug_Read {
+type PostsDocAccessFields_slug_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_slug_Update {
+type PostsDocAccessFields_slug_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_slug_Delete {
+type PostsDocAccessFields_slug_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta {
-  create: ArtifactsDocAccessFields_meta_Create
-  read: ArtifactsDocAccessFields_meta_Read
-  update: ArtifactsDocAccessFields_meta_Update
-  delete: ArtifactsDocAccessFields_meta_Delete
-  fields: ArtifactsDocAccessFields_meta_Fields
+type PostsDocAccessFields_meta {
+  create: PostsDocAccessFields_meta_Create
+  read: PostsDocAccessFields_meta_Read
+  update: PostsDocAccessFields_meta_Update
+  delete: PostsDocAccessFields_meta_Delete
+  fields: PostsDocAccessFields_meta_Fields
 }
 
-type ArtifactsDocAccessFields_meta_Create {
+type PostsDocAccessFields_meta_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_Read {
+type PostsDocAccessFields_meta_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_Update {
+type PostsDocAccessFields_meta_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_Delete {
+type PostsDocAccessFields_meta_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_Fields {
-  overview: ArtifactsDocAccessFields_meta_overview
-  title: ArtifactsDocAccessFields_meta_title
-  description: ArtifactsDocAccessFields_meta_description
-  image: ArtifactsDocAccessFields_meta_image
-  preview: ArtifactsDocAccessFields_meta_preview
+type PostsDocAccessFields_meta_Fields {
+  overview: PostsDocAccessFields_meta_overview
+  title: PostsDocAccessFields_meta_title
+  description: PostsDocAccessFields_meta_description
+  image: PostsDocAccessFields_meta_image
+  preview: PostsDocAccessFields_meta_preview
 }
 
-type ArtifactsDocAccessFields_meta_overview {
-  create: ArtifactsDocAccessFields_meta_overview_Create
-  read: ArtifactsDocAccessFields_meta_overview_Read
-  update: ArtifactsDocAccessFields_meta_overview_Update
-  delete: ArtifactsDocAccessFields_meta_overview_Delete
+type PostsDocAccessFields_meta_overview {
+  create: PostsDocAccessFields_meta_overview_Create
+  read: PostsDocAccessFields_meta_overview_Read
+  update: PostsDocAccessFields_meta_overview_Update
+  delete: PostsDocAccessFields_meta_overview_Delete
 }
 
-type ArtifactsDocAccessFields_meta_overview_Create {
+type PostsDocAccessFields_meta_overview_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_overview_Read {
+type PostsDocAccessFields_meta_overview_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_overview_Update {
+type PostsDocAccessFields_meta_overview_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_overview_Delete {
+type PostsDocAccessFields_meta_overview_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_title {
-  create: ArtifactsDocAccessFields_meta_title_Create
-  read: ArtifactsDocAccessFields_meta_title_Read
-  update: ArtifactsDocAccessFields_meta_title_Update
-  delete: ArtifactsDocAccessFields_meta_title_Delete
+type PostsDocAccessFields_meta_title {
+  create: PostsDocAccessFields_meta_title_Create
+  read: PostsDocAccessFields_meta_title_Read
+  update: PostsDocAccessFields_meta_title_Update
+  delete: PostsDocAccessFields_meta_title_Delete
 }
 
-type ArtifactsDocAccessFields_meta_title_Create {
+type PostsDocAccessFields_meta_title_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_title_Read {
+type PostsDocAccessFields_meta_title_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_title_Update {
+type PostsDocAccessFields_meta_title_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_title_Delete {
+type PostsDocAccessFields_meta_title_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_description {
-  create: ArtifactsDocAccessFields_meta_description_Create
-  read: ArtifactsDocAccessFields_meta_description_Read
-  update: ArtifactsDocAccessFields_meta_description_Update
-  delete: ArtifactsDocAccessFields_meta_description_Delete
+type PostsDocAccessFields_meta_description {
+  create: PostsDocAccessFields_meta_description_Create
+  read: PostsDocAccessFields_meta_description_Read
+  update: PostsDocAccessFields_meta_description_Update
+  delete: PostsDocAccessFields_meta_description_Delete
 }
 
-type ArtifactsDocAccessFields_meta_description_Create {
+type PostsDocAccessFields_meta_description_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_description_Read {
+type PostsDocAccessFields_meta_description_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_description_Update {
+type PostsDocAccessFields_meta_description_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_description_Delete {
+type PostsDocAccessFields_meta_description_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_image {
-  create: ArtifactsDocAccessFields_meta_image_Create
-  read: ArtifactsDocAccessFields_meta_image_Read
-  update: ArtifactsDocAccessFields_meta_image_Update
-  delete: ArtifactsDocAccessFields_meta_image_Delete
+type PostsDocAccessFields_meta_image {
+  create: PostsDocAccessFields_meta_image_Create
+  read: PostsDocAccessFields_meta_image_Read
+  update: PostsDocAccessFields_meta_image_Update
+  delete: PostsDocAccessFields_meta_image_Delete
 }
 
-type ArtifactsDocAccessFields_meta_image_Create {
+type PostsDocAccessFields_meta_image_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_image_Read {
+type PostsDocAccessFields_meta_image_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_image_Update {
+type PostsDocAccessFields_meta_image_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_image_Delete {
+type PostsDocAccessFields_meta_image_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_preview {
-  create: ArtifactsDocAccessFields_meta_preview_Create
-  read: ArtifactsDocAccessFields_meta_preview_Read
-  update: ArtifactsDocAccessFields_meta_preview_Update
-  delete: ArtifactsDocAccessFields_meta_preview_Delete
+type PostsDocAccessFields_meta_preview {
+  create: PostsDocAccessFields_meta_preview_Create
+  read: PostsDocAccessFields_meta_preview_Read
+  update: PostsDocAccessFields_meta_preview_Update
+  delete: PostsDocAccessFields_meta_preview_Delete
 }
 
-type ArtifactsDocAccessFields_meta_preview_Create {
+type PostsDocAccessFields_meta_preview_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_preview_Read {
+type PostsDocAccessFields_meta_preview_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_preview_Update {
+type PostsDocAccessFields_meta_preview_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_meta_preview_Delete {
+type PostsDocAccessFields_meta_preview_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_updatedAt {
-  create: ArtifactsDocAccessFields_updatedAt_Create
-  read: ArtifactsDocAccessFields_updatedAt_Read
-  update: ArtifactsDocAccessFields_updatedAt_Update
-  delete: ArtifactsDocAccessFields_updatedAt_Delete
+type PostsDocAccessFields_updatedAt {
+  create: PostsDocAccessFields_updatedAt_Create
+  read: PostsDocAccessFields_updatedAt_Read
+  update: PostsDocAccessFields_updatedAt_Update
+  delete: PostsDocAccessFields_updatedAt_Delete
 }
 
-type ArtifactsDocAccessFields_updatedAt_Create {
+type PostsDocAccessFields_updatedAt_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_updatedAt_Read {
+type PostsDocAccessFields_updatedAt_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_updatedAt_Update {
+type PostsDocAccessFields_updatedAt_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_updatedAt_Delete {
+type PostsDocAccessFields_updatedAt_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_createdAt {
-  create: ArtifactsDocAccessFields_createdAt_Create
-  read: ArtifactsDocAccessFields_createdAt_Read
-  update: ArtifactsDocAccessFields_createdAt_Update
-  delete: ArtifactsDocAccessFields_createdAt_Delete
+type PostsDocAccessFields_createdAt {
+  create: PostsDocAccessFields_createdAt_Create
+  read: PostsDocAccessFields_createdAt_Read
+  update: PostsDocAccessFields_createdAt_Update
+  delete: PostsDocAccessFields_createdAt_Delete
 }
 
-type ArtifactsDocAccessFields_createdAt_Create {
+type PostsDocAccessFields_createdAt_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_createdAt_Read {
+type PostsDocAccessFields_createdAt_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_createdAt_Update {
+type PostsDocAccessFields_createdAt_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields_createdAt_Delete {
+type PostsDocAccessFields_createdAt_Delete {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields__status {
-  create: ArtifactsDocAccessFields__status_Create
-  read: ArtifactsDocAccessFields__status_Read
-  update: ArtifactsDocAccessFields__status_Update
-  delete: ArtifactsDocAccessFields__status_Delete
+type PostsDocAccessFields__status {
+  create: PostsDocAccessFields__status_Create
+  read: PostsDocAccessFields__status_Read
+  update: PostsDocAccessFields__status_Update
+  delete: PostsDocAccessFields__status_Delete
 }
 
-type ArtifactsDocAccessFields__status_Create {
+type PostsDocAccessFields__status_Create {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields__status_Read {
+type PostsDocAccessFields__status_Read {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields__status_Update {
+type PostsDocAccessFields__status_Update {
   permission: Boolean!
 }
 
-type ArtifactsDocAccessFields__status_Delete {
+type PostsDocAccessFields__status_Delete {
   permission: Boolean!
 }
 
-type ArtifactsCreateDocAccess {
+type PostsCreateDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsReadDocAccess {
+type PostsReadDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsUpdateDocAccess {
+type PostsUpdateDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsDeleteDocAccess {
+type PostsDeleteDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsReadVersionsDocAccess {
+type PostsReadVersionsDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactVersion {
-  parent: Artifact
-  version: ArtifactVersion_Version
+type PostVersion {
+  parent: Post
+  version: PostVersion_Version
   createdAt: DateTime
   updatedAt: DateTime
   latest: Boolean
   id: Int
 }
 
-type ArtifactVersion_Version {
+type PostVersion_Version {
   title: String
-  categories: [Category!]
+  categories: Category
+  keywords: [Keyword!]
   publishedAt: DateTime
   authors: [User!]
-  populatedAuthors: [ArtifactVersion_Version_PopulatedAuthors!]
-  hero: ArtifactVersion_Version_Hero
-  layout: [ArtifactVersion_Version_Layout!]!
-  enablePremiumContent: Boolean
-  premiumContent: [ArtifactVersion_Version_PremiumContent!]
-  relatedArtifacts: [Artifact!]
+  populatedAuthors: [PostVersion_Version_PopulatedAuthors!]
+  hero: PostVersion_Version_Hero
+  layout: [PostVersion_Version_Layout!]!
+  enableRestrictedContent: Boolean
+  restrictedContent: [PostVersion_Version_RestrictedContent!]
+  relatedPosts: [Post!]
   slug: String
-  meta: ArtifactVersion_Version_Meta
+  meta: PostVersion_Version_Meta
   updatedAt: DateTime
   createdAt: DateTime
-  _status: ArtifactVersion_Version__status
+  _status: PostVersion_Version__status
 }
 
-type ArtifactVersion_Version_PopulatedAuthors {
+type PostVersion_Version_PopulatedAuthors {
   id: String
   name: String
 }
 
-type ArtifactVersion_Version_Hero {
-  type: ArtifactVersion_Version_Hero_type
+type PostVersion_Version_Hero {
+  type: PostVersion_Version_Hero_type
   richText(depth: Int): JSON
-  links: [ArtifactVersion_Version_Hero_Links!]
-  media(where: ArtifactVersion_Version_Hero_Media_where): Media
+  links: [PostVersion_Version_Hero_Links!]
+  media(where: PostVersion_Version_Hero_Media_where): Media
 }
 
-enum ArtifactVersion_Version_Hero_type {
+enum PostVersion_Version_Hero_type {
   none
   highImpact
   mediumImpact
   lowImpact
 }
 
-type ArtifactVersion_Version_Hero_Links {
-  link: ArtifactVersion_Version_Hero_Links_Link
+type PostVersion_Version_Hero_Links {
+  link: PostVersion_Version_Hero_Links_Link
   id: String
 }
 
-type ArtifactVersion_Version_Hero_Links_Link {
-  type: ArtifactVersion_Version_Hero_Links_Link_type
+type PostVersion_Version_Hero_Links_Link {
+  type: PostVersion_Version_Hero_Links_Link_type
   newTab: Boolean
-  reference: ArtifactVersion_Version_Hero_Links_Link_Reference_Relationship
+  reference: PostVersion_Version_Hero_Links_Link_Reference_Relationship
   url: String
   label: String
-  appearance: ArtifactVersion_Version_Hero_Links_Link_appearance
+  appearance: PostVersion_Version_Hero_Links_Link_appearance
 }
 
-enum ArtifactVersion_Version_Hero_Links_Link_type {
+enum PostVersion_Version_Hero_Links_Link_type {
   reference
   custom
 }
 
-type ArtifactVersion_Version_Hero_Links_Link_Reference_Relationship {
-  relationTo: ArtifactVersion_Version_Hero_Links_Link_Reference_RelationTo
-  value: ArtifactVersion_Version_Hero_Links_Link_Reference
+type PostVersion_Version_Hero_Links_Link_Reference_Relationship {
+  relationTo: PostVersion_Version_Hero_Links_Link_Reference_RelationTo
+  value: PostVersion_Version_Hero_Links_Link_Reference
 }
 
-enum ArtifactVersion_Version_Hero_Links_Link_Reference_RelationTo {
+enum PostVersion_Version_Hero_Links_Link_Reference_RelationTo {
   pages
 }
 
-union ArtifactVersion_Version_Hero_Links_Link_Reference = Page
+union PostVersion_Version_Hero_Links_Link_Reference = Page
 
-enum ArtifactVersion_Version_Hero_Links_Link_appearance {
+enum PostVersion_Version_Hero_Links_Link_appearance {
   default
   primary
   secondary
 }
 
-input ArtifactVersion_Version_Hero_Media_where {
-  alt: ArtifactVersion_Version_Hero_Media_alt_operator
-  caption: ArtifactVersion_Version_Hero_Media_caption_operator
-  updatedAt: ArtifactVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: ArtifactVersion_Version_Hero_Media_createdAt_operator
-  url: ArtifactVersion_Version_Hero_Media_url_operator
-  filename: ArtifactVersion_Version_Hero_Media_filename_operator
-  mimeType: ArtifactVersion_Version_Hero_Media_mimeType_operator
-  filesize: ArtifactVersion_Version_Hero_Media_filesize_operator
-  width: ArtifactVersion_Version_Hero_Media_width_operator
-  height: ArtifactVersion_Version_Hero_Media_height_operator
-  id: ArtifactVersion_Version_Hero_Media_id_operator
-  AND: [ArtifactVersion_Version_Hero_Media_where_and]
-  OR: [ArtifactVersion_Version_Hero_Media_where_or]
+input PostVersion_Version_Hero_Media_where {
+  alt: PostVersion_Version_Hero_Media_alt_operator
+  caption: PostVersion_Version_Hero_Media_caption_operator
+  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
+  updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
+  createdAt: PostVersion_Version_Hero_Media_createdAt_operator
+  url: PostVersion_Version_Hero_Media_url_operator
+  filename: PostVersion_Version_Hero_Media_filename_operator
+  mimeType: PostVersion_Version_Hero_Media_mimeType_operator
+  filesize: PostVersion_Version_Hero_Media_filesize_operator
+  width: PostVersion_Version_Hero_Media_width_operator
+  height: PostVersion_Version_Hero_Media_height_operator
+  id: PostVersion_Version_Hero_Media_id_operator
+  AND: [PostVersion_Version_Hero_Media_where_and]
+  OR: [PostVersion_Version_Hero_Media_where_or]
 }
 
-input ArtifactVersion_Version_Hero_Media_alt_operator {
+input PostVersion_Version_Hero_Media_alt_operator {
   equals: String
   not_equals: String
   like: String
@@ -4307,7 +4477,7 @@ input ArtifactVersion_Version_Hero_Media_alt_operator {
   all: [String]
 }
 
-input ArtifactVersion_Version_Hero_Media_caption_operator {
+input PostVersion_Version_Hero_Media_caption_operator {
   equals: JSON
   not_equals: JSON
   like: JSON
@@ -4315,7 +4485,18 @@ input ArtifactVersion_Version_Hero_Media_caption_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_updatedAt_operator {
+input PostVersion_Version_Hero_Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input PostVersion_Version_Hero_Media_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4326,7 +4507,7 @@ input ArtifactVersion_Version_Hero_Media_updatedAt_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_createdAt_operator {
+input PostVersion_Version_Hero_Media_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4337,7 +4518,7 @@ input ArtifactVersion_Version_Hero_Media_createdAt_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_url_operator {
+input PostVersion_Version_Hero_Media_url_operator {
   equals: String
   not_equals: String
   like: String
@@ -4348,7 +4529,7 @@ input ArtifactVersion_Version_Hero_Media_url_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_filename_operator {
+input PostVersion_Version_Hero_Media_filename_operator {
   equals: String
   not_equals: String
   like: String
@@ -4359,7 +4540,7 @@ input ArtifactVersion_Version_Hero_Media_filename_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_mimeType_operator {
+input PostVersion_Version_Hero_Media_mimeType_operator {
   equals: String
   not_equals: String
   like: String
@@ -4370,7 +4551,7 @@ input ArtifactVersion_Version_Hero_Media_mimeType_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_filesize_operator {
+input PostVersion_Version_Hero_Media_filesize_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4380,7 +4561,7 @@ input ArtifactVersion_Version_Hero_Media_filesize_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_width_operator {
+input PostVersion_Version_Hero_Media_width_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4390,7 +4571,7 @@ input ArtifactVersion_Version_Hero_Media_width_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_height_operator {
+input PostVersion_Version_Hero_Media_height_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4400,7 +4581,7 @@ input ArtifactVersion_Version_Hero_Media_height_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_id_operator {
+input PostVersion_Version_Hero_Media_id_operator {
   equals: String
   not_equals: String
   like: String
@@ -4411,65 +4592,68 @@ input ArtifactVersion_Version_Hero_Media_id_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Hero_Media_where_and {
-  alt: ArtifactVersion_Version_Hero_Media_alt_operator
-  caption: ArtifactVersion_Version_Hero_Media_caption_operator
-  updatedAt: ArtifactVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: ArtifactVersion_Version_Hero_Media_createdAt_operator
-  url: ArtifactVersion_Version_Hero_Media_url_operator
-  filename: ArtifactVersion_Version_Hero_Media_filename_operator
-  mimeType: ArtifactVersion_Version_Hero_Media_mimeType_operator
-  filesize: ArtifactVersion_Version_Hero_Media_filesize_operator
-  width: ArtifactVersion_Version_Hero_Media_width_operator
-  height: ArtifactVersion_Version_Hero_Media_height_operator
-  id: ArtifactVersion_Version_Hero_Media_id_operator
-  AND: [ArtifactVersion_Version_Hero_Media_where_and]
-  OR: [ArtifactVersion_Version_Hero_Media_where_or]
+input PostVersion_Version_Hero_Media_where_and {
+  alt: PostVersion_Version_Hero_Media_alt_operator
+  caption: PostVersion_Version_Hero_Media_caption_operator
+  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
+  updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
+  createdAt: PostVersion_Version_Hero_Media_createdAt_operator
+  url: PostVersion_Version_Hero_Media_url_operator
+  filename: PostVersion_Version_Hero_Media_filename_operator
+  mimeType: PostVersion_Version_Hero_Media_mimeType_operator
+  filesize: PostVersion_Version_Hero_Media_filesize_operator
+  width: PostVersion_Version_Hero_Media_width_operator
+  height: PostVersion_Version_Hero_Media_height_operator
+  id: PostVersion_Version_Hero_Media_id_operator
+  AND: [PostVersion_Version_Hero_Media_where_and]
+  OR: [PostVersion_Version_Hero_Media_where_or]
 }
 
-input ArtifactVersion_Version_Hero_Media_where_or {
-  alt: ArtifactVersion_Version_Hero_Media_alt_operator
-  caption: ArtifactVersion_Version_Hero_Media_caption_operator
-  updatedAt: ArtifactVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: ArtifactVersion_Version_Hero_Media_createdAt_operator
-  url: ArtifactVersion_Version_Hero_Media_url_operator
-  filename: ArtifactVersion_Version_Hero_Media_filename_operator
-  mimeType: ArtifactVersion_Version_Hero_Media_mimeType_operator
-  filesize: ArtifactVersion_Version_Hero_Media_filesize_operator
-  width: ArtifactVersion_Version_Hero_Media_width_operator
-  height: ArtifactVersion_Version_Hero_Media_height_operator
-  id: ArtifactVersion_Version_Hero_Media_id_operator
-  AND: [ArtifactVersion_Version_Hero_Media_where_and]
-  OR: [ArtifactVersion_Version_Hero_Media_where_or]
+input PostVersion_Version_Hero_Media_where_or {
+  alt: PostVersion_Version_Hero_Media_alt_operator
+  caption: PostVersion_Version_Hero_Media_caption_operator
+  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
+  updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
+  createdAt: PostVersion_Version_Hero_Media_createdAt_operator
+  url: PostVersion_Version_Hero_Media_url_operator
+  filename: PostVersion_Version_Hero_Media_filename_operator
+  mimeType: PostVersion_Version_Hero_Media_mimeType_operator
+  filesize: PostVersion_Version_Hero_Media_filesize_operator
+  width: PostVersion_Version_Hero_Media_width_operator
+  height: PostVersion_Version_Hero_Media_height_operator
+  id: PostVersion_Version_Hero_Media_id_operator
+  AND: [PostVersion_Version_Hero_Media_where_and]
+  OR: [PostVersion_Version_Hero_Media_where_or]
 }
 
-union ArtifactVersion_Version_Layout = Cta | Content | MediaBlock | Archive
+union PostVersion_Version_Layout = Cta | Content | MediaBlock | Archive | Code
 
-union ArtifactVersion_Version_PremiumContent = Cta | Content | MediaBlock | Archive
+union PostVersion_Version_RestrictedContent = Cta | Content | MediaBlock | Archive | Code
 
-type ArtifactVersion_Version_Meta {
+type PostVersion_Version_Meta {
   title: String
   description: String
-  image(where: ArtifactVersion_Version_Meta_Image_where): Media
+  image(where: PostVersion_Version_Meta_Image_where): Media
 }
 
-input ArtifactVersion_Version_Meta_Image_where {
-  alt: ArtifactVersion_Version_Meta_Image_alt_operator
-  caption: ArtifactVersion_Version_Meta_Image_caption_operator
-  updatedAt: ArtifactVersion_Version_Meta_Image_updatedAt_operator
-  createdAt: ArtifactVersion_Version_Meta_Image_createdAt_operator
-  url: ArtifactVersion_Version_Meta_Image_url_operator
-  filename: ArtifactVersion_Version_Meta_Image_filename_operator
-  mimeType: ArtifactVersion_Version_Meta_Image_mimeType_operator
-  filesize: ArtifactVersion_Version_Meta_Image_filesize_operator
-  width: ArtifactVersion_Version_Meta_Image_width_operator
-  height: ArtifactVersion_Version_Meta_Image_height_operator
-  id: ArtifactVersion_Version_Meta_Image_id_operator
-  AND: [ArtifactVersion_Version_Meta_Image_where_and]
-  OR: [ArtifactVersion_Version_Meta_Image_where_or]
+input PostVersion_Version_Meta_Image_where {
+  alt: PostVersion_Version_Meta_Image_alt_operator
+  caption: PostVersion_Version_Meta_Image_caption_operator
+  blurhash: PostVersion_Version_Meta_Image_blurhash_operator
+  updatedAt: PostVersion_Version_Meta_Image_updatedAt_operator
+  createdAt: PostVersion_Version_Meta_Image_createdAt_operator
+  url: PostVersion_Version_Meta_Image_url_operator
+  filename: PostVersion_Version_Meta_Image_filename_operator
+  mimeType: PostVersion_Version_Meta_Image_mimeType_operator
+  filesize: PostVersion_Version_Meta_Image_filesize_operator
+  width: PostVersion_Version_Meta_Image_width_operator
+  height: PostVersion_Version_Meta_Image_height_operator
+  id: PostVersion_Version_Meta_Image_id_operator
+  AND: [PostVersion_Version_Meta_Image_where_and]
+  OR: [PostVersion_Version_Meta_Image_where_or]
 }
 
-input ArtifactVersion_Version_Meta_Image_alt_operator {
+input PostVersion_Version_Meta_Image_alt_operator {
   equals: String
   not_equals: String
   like: String
@@ -4479,7 +4663,7 @@ input ArtifactVersion_Version_Meta_Image_alt_operator {
   all: [String]
 }
 
-input ArtifactVersion_Version_Meta_Image_caption_operator {
+input PostVersion_Version_Meta_Image_caption_operator {
   equals: JSON
   not_equals: JSON
   like: JSON
@@ -4487,7 +4671,18 @@ input ArtifactVersion_Version_Meta_Image_caption_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_updatedAt_operator {
+input PostVersion_Version_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input PostVersion_Version_Meta_Image_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4498,7 +4693,7 @@ input ArtifactVersion_Version_Meta_Image_updatedAt_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_createdAt_operator {
+input PostVersion_Version_Meta_Image_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4509,7 +4704,7 @@ input ArtifactVersion_Version_Meta_Image_createdAt_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_url_operator {
+input PostVersion_Version_Meta_Image_url_operator {
   equals: String
   not_equals: String
   like: String
@@ -4520,7 +4715,7 @@ input ArtifactVersion_Version_Meta_Image_url_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_filename_operator {
+input PostVersion_Version_Meta_Image_filename_operator {
   equals: String
   not_equals: String
   like: String
@@ -4531,7 +4726,7 @@ input ArtifactVersion_Version_Meta_Image_filename_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_mimeType_operator {
+input PostVersion_Version_Meta_Image_mimeType_operator {
   equals: String
   not_equals: String
   like: String
@@ -4542,7 +4737,7 @@ input ArtifactVersion_Version_Meta_Image_mimeType_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_filesize_operator {
+input PostVersion_Version_Meta_Image_filesize_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4552,7 +4747,7 @@ input ArtifactVersion_Version_Meta_Image_filesize_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_width_operator {
+input PostVersion_Version_Meta_Image_width_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4562,7 +4757,7 @@ input ArtifactVersion_Version_Meta_Image_width_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_height_operator {
+input PostVersion_Version_Meta_Image_height_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -4572,7 +4767,7 @@ input ArtifactVersion_Version_Meta_Image_height_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_id_operator {
+input PostVersion_Version_Meta_Image_id_operator {
   equals: String
   not_equals: String
   like: String
@@ -4583,45 +4778,47 @@ input ArtifactVersion_Version_Meta_Image_id_operator {
   exists: Boolean
 }
 
-input ArtifactVersion_Version_Meta_Image_where_and {
-  alt: ArtifactVersion_Version_Meta_Image_alt_operator
-  caption: ArtifactVersion_Version_Meta_Image_caption_operator
-  updatedAt: ArtifactVersion_Version_Meta_Image_updatedAt_operator
-  createdAt: ArtifactVersion_Version_Meta_Image_createdAt_operator
-  url: ArtifactVersion_Version_Meta_Image_url_operator
-  filename: ArtifactVersion_Version_Meta_Image_filename_operator
-  mimeType: ArtifactVersion_Version_Meta_Image_mimeType_operator
-  filesize: ArtifactVersion_Version_Meta_Image_filesize_operator
-  width: ArtifactVersion_Version_Meta_Image_width_operator
-  height: ArtifactVersion_Version_Meta_Image_height_operator
-  id: ArtifactVersion_Version_Meta_Image_id_operator
-  AND: [ArtifactVersion_Version_Meta_Image_where_and]
-  OR: [ArtifactVersion_Version_Meta_Image_where_or]
+input PostVersion_Version_Meta_Image_where_and {
+  alt: PostVersion_Version_Meta_Image_alt_operator
+  caption: PostVersion_Version_Meta_Image_caption_operator
+  blurhash: PostVersion_Version_Meta_Image_blurhash_operator
+  updatedAt: PostVersion_Version_Meta_Image_updatedAt_operator
+  createdAt: PostVersion_Version_Meta_Image_createdAt_operator
+  url: PostVersion_Version_Meta_Image_url_operator
+  filename: PostVersion_Version_Meta_Image_filename_operator
+  mimeType: PostVersion_Version_Meta_Image_mimeType_operator
+  filesize: PostVersion_Version_Meta_Image_filesize_operator
+  width: PostVersion_Version_Meta_Image_width_operator
+  height: PostVersion_Version_Meta_Image_height_operator
+  id: PostVersion_Version_Meta_Image_id_operator
+  AND: [PostVersion_Version_Meta_Image_where_and]
+  OR: [PostVersion_Version_Meta_Image_where_or]
 }
 
-input ArtifactVersion_Version_Meta_Image_where_or {
-  alt: ArtifactVersion_Version_Meta_Image_alt_operator
-  caption: ArtifactVersion_Version_Meta_Image_caption_operator
-  updatedAt: ArtifactVersion_Version_Meta_Image_updatedAt_operator
-  createdAt: ArtifactVersion_Version_Meta_Image_createdAt_operator
-  url: ArtifactVersion_Version_Meta_Image_url_operator
-  filename: ArtifactVersion_Version_Meta_Image_filename_operator
-  mimeType: ArtifactVersion_Version_Meta_Image_mimeType_operator
-  filesize: ArtifactVersion_Version_Meta_Image_filesize_operator
-  width: ArtifactVersion_Version_Meta_Image_width_operator
-  height: ArtifactVersion_Version_Meta_Image_height_operator
-  id: ArtifactVersion_Version_Meta_Image_id_operator
-  AND: [ArtifactVersion_Version_Meta_Image_where_and]
-  OR: [ArtifactVersion_Version_Meta_Image_where_or]
+input PostVersion_Version_Meta_Image_where_or {
+  alt: PostVersion_Version_Meta_Image_alt_operator
+  caption: PostVersion_Version_Meta_Image_caption_operator
+  blurhash: PostVersion_Version_Meta_Image_blurhash_operator
+  updatedAt: PostVersion_Version_Meta_Image_updatedAt_operator
+  createdAt: PostVersion_Version_Meta_Image_createdAt_operator
+  url: PostVersion_Version_Meta_Image_url_operator
+  filename: PostVersion_Version_Meta_Image_filename_operator
+  mimeType: PostVersion_Version_Meta_Image_mimeType_operator
+  filesize: PostVersion_Version_Meta_Image_filesize_operator
+  width: PostVersion_Version_Meta_Image_width_operator
+  height: PostVersion_Version_Meta_Image_height_operator
+  id: PostVersion_Version_Meta_Image_id_operator
+  AND: [PostVersion_Version_Meta_Image_where_and]
+  OR: [PostVersion_Version_Meta_Image_where_or]
 }
 
-enum ArtifactVersion_Version__status {
+enum PostVersion_Version__status {
   draft
   published
 }
 
-type versionsArtifacts {
-  docs: [ArtifactVersion]
+type versionsPosts {
+  docs: [PostVersion]
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -4634,42 +4831,43 @@ type versionsArtifacts {
   totalPages: Int
 }
 
-input versionsArtifact_where {
-  parent: versionsArtifact_parent_operator
-  version__title: versionsArtifact_version__title_operator
-  version__categories: versionsArtifact_version__categories_operator
-  version__publishedAt: versionsArtifact_version__publishedAt_operator
-  version__authors: versionsArtifact_version__authors_operator
-  version__populatedAuthors__id: versionsArtifact_version__populatedAuthors__id_operator
-  version__populatedAuthors__name: versionsArtifact_version__populatedAuthors__name_operator
-  version__hero__type: versionsArtifact_version__hero__type_operator
-  version__hero__richText: versionsArtifact_version__hero__richText_operator
-  version__hero__links__link__type: versionsArtifact_version__hero__links__link__type_operator
-  version__hero__links__link__newTab: versionsArtifact_version__hero__links__link__newTab_operator
-  version__hero__links__link__reference: versionsArtifact_version__hero__links__link__reference_Relation
-  version__hero__links__link__url: versionsArtifact_version__hero__links__link__url_operator
-  version__hero__links__link__label: versionsArtifact_version__hero__links__link__label_operator
-  version__hero__links__link__appearance: versionsArtifact_version__hero__links__link__appearance_operator
-  version__hero__links__id: versionsArtifact_version__hero__links__id_operator
-  version__hero__media: versionsArtifact_version__hero__media_operator
-  version__enablePremiumContent: versionsArtifact_version__enablePremiumContent_operator
-  version__relatedArtifacts: versionsArtifact_version__relatedArtifacts_operator
-  version__slug: versionsArtifact_version__slug_operator
-  version__meta__title: versionsArtifact_version__meta__title_operator
-  version__meta__description: versionsArtifact_version__meta__description_operator
-  version__meta__image: versionsArtifact_version__meta__image_operator
-  version__updatedAt: versionsArtifact_version__updatedAt_operator
-  version__createdAt: versionsArtifact_version__createdAt_operator
-  version___status: versionsArtifact_version___status_operator
-  createdAt: versionsArtifact_createdAt_operator
-  updatedAt: versionsArtifact_updatedAt_operator
-  latest: versionsArtifact_latest_operator
-  id: versionsArtifact_id_operator
-  AND: [versionsArtifact_where_and]
-  OR: [versionsArtifact_where_or]
+input versionsPost_where {
+  parent: versionsPost_parent_operator
+  version__title: versionsPost_version__title_operator
+  version__categories: versionsPost_version__categories_operator
+  version__keywords: versionsPost_version__keywords_operator
+  version__publishedAt: versionsPost_version__publishedAt_operator
+  version__authors: versionsPost_version__authors_operator
+  version__populatedAuthors__id: versionsPost_version__populatedAuthors__id_operator
+  version__populatedAuthors__name: versionsPost_version__populatedAuthors__name_operator
+  version__hero__type: versionsPost_version__hero__type_operator
+  version__hero__richText: versionsPost_version__hero__richText_operator
+  version__hero__links__link__type: versionsPost_version__hero__links__link__type_operator
+  version__hero__links__link__newTab: versionsPost_version__hero__links__link__newTab_operator
+  version__hero__links__link__reference: versionsPost_version__hero__links__link__reference_Relation
+  version__hero__links__link__url: versionsPost_version__hero__links__link__url_operator
+  version__hero__links__link__label: versionsPost_version__hero__links__link__label_operator
+  version__hero__links__link__appearance: versionsPost_version__hero__links__link__appearance_operator
+  version__hero__links__id: versionsPost_version__hero__links__id_operator
+  version__hero__media: versionsPost_version__hero__media_operator
+  version__enableRestrictedContent: versionsPost_version__enableRestrictedContent_operator
+  version__relatedPosts: versionsPost_version__relatedPosts_operator
+  version__slug: versionsPost_version__slug_operator
+  version__meta__title: versionsPost_version__meta__title_operator
+  version__meta__description: versionsPost_version__meta__description_operator
+  version__meta__image: versionsPost_version__meta__image_operator
+  version__updatedAt: versionsPost_version__updatedAt_operator
+  version__createdAt: versionsPost_version__createdAt_operator
+  version___status: versionsPost_version___status_operator
+  createdAt: versionsPost_createdAt_operator
+  updatedAt: versionsPost_updatedAt_operator
+  latest: versionsPost_latest_operator
+  id: versionsPost_id_operator
+  AND: [versionsPost_where_and]
+  OR: [versionsPost_where_or]
 }
 
-input versionsArtifact_parent_operator {
+input versionsPost_parent_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -4678,7 +4876,7 @@ input versionsArtifact_parent_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__title_operator {
+input versionsPost_version__title_operator {
   equals: String
   not_equals: String
   like: String
@@ -4688,7 +4886,15 @@ input versionsArtifact_version__title_operator {
   all: [String]
 }
 
-input versionsArtifact_version__categories_operator {
+input versionsPost_version__categories_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+}
+
+input versionsPost_version__keywords_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -4697,7 +4903,7 @@ input versionsArtifact_version__categories_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__publishedAt_operator {
+input versionsPost_version__publishedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4708,7 +4914,7 @@ input versionsArtifact_version__publishedAt_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__authors_operator {
+input versionsPost_version__authors_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -4717,7 +4923,7 @@ input versionsArtifact_version__authors_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__populatedAuthors__id_operator {
+input versionsPost_version__populatedAuthors__id_operator {
   equals: String
   not_equals: String
   like: String
@@ -4728,7 +4934,7 @@ input versionsArtifact_version__populatedAuthors__id_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__populatedAuthors__name_operator {
+input versionsPost_version__populatedAuthors__name_operator {
   equals: String
   not_equals: String
   like: String
@@ -4739,22 +4945,22 @@ input versionsArtifact_version__populatedAuthors__name_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__hero__type_operator {
-  equals: versionsArtifact_version__hero__type_Input
-  not_equals: versionsArtifact_version__hero__type_Input
-  in: [versionsArtifact_version__hero__type_Input]
-  not_in: [versionsArtifact_version__hero__type_Input]
-  all: [versionsArtifact_version__hero__type_Input]
+input versionsPost_version__hero__type_operator {
+  equals: versionsPost_version__hero__type_Input
+  not_equals: versionsPost_version__hero__type_Input
+  in: [versionsPost_version__hero__type_Input]
+  not_in: [versionsPost_version__hero__type_Input]
+  all: [versionsPost_version__hero__type_Input]
 }
 
-enum versionsArtifact_version__hero__type_Input {
+enum versionsPost_version__hero__type_Input {
   none
   highImpact
   mediumImpact
   lowImpact
 }
 
-input versionsArtifact_version__hero__richText_operator {
+input versionsPost_version__hero__richText_operator {
   equals: JSON
   not_equals: JSON
   like: JSON
@@ -4762,35 +4968,35 @@ input versionsArtifact_version__hero__richText_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__hero__links__link__type_operator {
-  equals: versionsArtifact_version__hero__links__link__type_Input
-  not_equals: versionsArtifact_version__hero__links__link__type_Input
-  like: versionsArtifact_version__hero__links__link__type_Input
-  contains: versionsArtifact_version__hero__links__link__type_Input
+input versionsPost_version__hero__links__link__type_operator {
+  equals: versionsPost_version__hero__links__link__type_Input
+  not_equals: versionsPost_version__hero__links__link__type_Input
+  like: versionsPost_version__hero__links__link__type_Input
+  contains: versionsPost_version__hero__links__link__type_Input
   exists: Boolean
 }
 
-enum versionsArtifact_version__hero__links__link__type_Input {
+enum versionsPost_version__hero__links__link__type_Input {
   reference
   custom
 }
 
-input versionsArtifact_version__hero__links__link__newTab_operator {
+input versionsPost_version__hero__links__link__newTab_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
 }
 
-input versionsArtifact_version__hero__links__link__reference_Relation {
-  relationTo: versionsArtifact_version__hero__links__link__reference_Relation_RelationTo
+input versionsPost_version__hero__links__link__reference_Relation {
+  relationTo: versionsPost_version__hero__links__link__reference_Relation_RelationTo
   value: JSON
 }
 
-enum versionsArtifact_version__hero__links__link__reference_Relation_RelationTo {
+enum versionsPost_version__hero__links__link__reference_Relation_RelationTo {
   pages
 }
 
-input versionsArtifact_version__hero__links__link__url_operator {
+input versionsPost_version__hero__links__link__url_operator {
   equals: String
   not_equals: String
   like: String
@@ -4800,7 +5006,7 @@ input versionsArtifact_version__hero__links__link__url_operator {
   all: [String]
 }
 
-input versionsArtifact_version__hero__links__link__label_operator {
+input versionsPost_version__hero__links__link__label_operator {
   equals: String
   not_equals: String
   like: String
@@ -4810,22 +5016,22 @@ input versionsArtifact_version__hero__links__link__label_operator {
   all: [String]
 }
 
-input versionsArtifact_version__hero__links__link__appearance_operator {
-  equals: versionsArtifact_version__hero__links__link__appearance_Input
-  not_equals: versionsArtifact_version__hero__links__link__appearance_Input
-  in: [versionsArtifact_version__hero__links__link__appearance_Input]
-  not_in: [versionsArtifact_version__hero__links__link__appearance_Input]
-  all: [versionsArtifact_version__hero__links__link__appearance_Input]
+input versionsPost_version__hero__links__link__appearance_operator {
+  equals: versionsPost_version__hero__links__link__appearance_Input
+  not_equals: versionsPost_version__hero__links__link__appearance_Input
+  in: [versionsPost_version__hero__links__link__appearance_Input]
+  not_in: [versionsPost_version__hero__links__link__appearance_Input]
+  all: [versionsPost_version__hero__links__link__appearance_Input]
   exists: Boolean
 }
 
-enum versionsArtifact_version__hero__links__link__appearance_Input {
+enum versionsPost_version__hero__links__link__appearance_Input {
   default
   primary
   secondary
 }
 
-input versionsArtifact_version__hero__links__id_operator {
+input versionsPost_version__hero__links__id_operator {
   equals: String
   not_equals: String
   like: String
@@ -4836,18 +5042,18 @@ input versionsArtifact_version__hero__links__id_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__hero__media_operator {
+input versionsPost_version__hero__media_operator {
   equals: String
   not_equals: String
 }
 
-input versionsArtifact_version__enablePremiumContent_operator {
+input versionsPost_version__enableRestrictedContent_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
 }
 
-input versionsArtifact_version__relatedArtifacts_operator {
+input versionsPost_version__relatedPosts_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -4856,7 +5062,7 @@ input versionsArtifact_version__relatedArtifacts_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__slug_operator {
+input versionsPost_version__slug_operator {
   equals: String
   not_equals: String
   like: String
@@ -4867,7 +5073,7 @@ input versionsArtifact_version__slug_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__meta__title_operator {
+input versionsPost_version__meta__title_operator {
   equals: String
   not_equals: String
   like: String
@@ -4878,7 +5084,7 @@ input versionsArtifact_version__meta__title_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__meta__description_operator {
+input versionsPost_version__meta__description_operator {
   equals: String
   not_equals: String
   like: String
@@ -4886,13 +5092,13 @@ input versionsArtifact_version__meta__description_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__meta__image_operator {
+input versionsPost_version__meta__image_operator {
   equals: String
   not_equals: String
   exists: Boolean
 }
 
-input versionsArtifact_version__updatedAt_operator {
+input versionsPost_version__updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4903,7 +5109,7 @@ input versionsArtifact_version__updatedAt_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version__createdAt_operator {
+input versionsPost_version__createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4914,21 +5120,21 @@ input versionsArtifact_version__createdAt_operator {
   exists: Boolean
 }
 
-input versionsArtifact_version___status_operator {
-  equals: versionsArtifact_version___status_Input
-  not_equals: versionsArtifact_version___status_Input
-  in: [versionsArtifact_version___status_Input]
-  not_in: [versionsArtifact_version___status_Input]
-  all: [versionsArtifact_version___status_Input]
+input versionsPost_version___status_operator {
+  equals: versionsPost_version___status_Input
+  not_equals: versionsPost_version___status_Input
+  in: [versionsPost_version___status_Input]
+  not_in: [versionsPost_version___status_Input]
+  all: [versionsPost_version___status_Input]
   exists: Boolean
 }
 
-enum versionsArtifact_version___status_Input {
+enum versionsPost_version___status_Input {
   draft
   published
 }
 
-input versionsArtifact_createdAt_operator {
+input versionsPost_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4939,7 +5145,7 @@ input versionsArtifact_createdAt_operator {
   exists: Boolean
 }
 
-input versionsArtifact_updatedAt_operator {
+input versionsPost_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -4950,13 +5156,13 @@ input versionsArtifact_updatedAt_operator {
   exists: Boolean
 }
 
-input versionsArtifact_latest_operator {
+input versionsPost_latest_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
 }
 
-input versionsArtifact_id_operator {
+input versionsPost_id_operator {
   equals: Int
   not_equals: Int
   greater_than_equal: Int
@@ -4966,74 +5172,76 @@ input versionsArtifact_id_operator {
   exists: Boolean
 }
 
-input versionsArtifact_where_and {
-  parent: versionsArtifact_parent_operator
-  version__title: versionsArtifact_version__title_operator
-  version__categories: versionsArtifact_version__categories_operator
-  version__publishedAt: versionsArtifact_version__publishedAt_operator
-  version__authors: versionsArtifact_version__authors_operator
-  version__populatedAuthors__id: versionsArtifact_version__populatedAuthors__id_operator
-  version__populatedAuthors__name: versionsArtifact_version__populatedAuthors__name_operator
-  version__hero__type: versionsArtifact_version__hero__type_operator
-  version__hero__richText: versionsArtifact_version__hero__richText_operator
-  version__hero__links__link__type: versionsArtifact_version__hero__links__link__type_operator
-  version__hero__links__link__newTab: versionsArtifact_version__hero__links__link__newTab_operator
-  version__hero__links__link__reference: versionsArtifact_version__hero__links__link__reference_Relation
-  version__hero__links__link__url: versionsArtifact_version__hero__links__link__url_operator
-  version__hero__links__link__label: versionsArtifact_version__hero__links__link__label_operator
-  version__hero__links__link__appearance: versionsArtifact_version__hero__links__link__appearance_operator
-  version__hero__links__id: versionsArtifact_version__hero__links__id_operator
-  version__hero__media: versionsArtifact_version__hero__media_operator
-  version__enablePremiumContent: versionsArtifact_version__enablePremiumContent_operator
-  version__relatedArtifacts: versionsArtifact_version__relatedArtifacts_operator
-  version__slug: versionsArtifact_version__slug_operator
-  version__meta__title: versionsArtifact_version__meta__title_operator
-  version__meta__description: versionsArtifact_version__meta__description_operator
-  version__meta__image: versionsArtifact_version__meta__image_operator
-  version__updatedAt: versionsArtifact_version__updatedAt_operator
-  version__createdAt: versionsArtifact_version__createdAt_operator
-  version___status: versionsArtifact_version___status_operator
-  createdAt: versionsArtifact_createdAt_operator
-  updatedAt: versionsArtifact_updatedAt_operator
-  latest: versionsArtifact_latest_operator
-  id: versionsArtifact_id_operator
-  AND: [versionsArtifact_where_and]
-  OR: [versionsArtifact_where_or]
+input versionsPost_where_and {
+  parent: versionsPost_parent_operator
+  version__title: versionsPost_version__title_operator
+  version__categories: versionsPost_version__categories_operator
+  version__keywords: versionsPost_version__keywords_operator
+  version__publishedAt: versionsPost_version__publishedAt_operator
+  version__authors: versionsPost_version__authors_operator
+  version__populatedAuthors__id: versionsPost_version__populatedAuthors__id_operator
+  version__populatedAuthors__name: versionsPost_version__populatedAuthors__name_operator
+  version__hero__type: versionsPost_version__hero__type_operator
+  version__hero__richText: versionsPost_version__hero__richText_operator
+  version__hero__links__link__type: versionsPost_version__hero__links__link__type_operator
+  version__hero__links__link__newTab: versionsPost_version__hero__links__link__newTab_operator
+  version__hero__links__link__reference: versionsPost_version__hero__links__link__reference_Relation
+  version__hero__links__link__url: versionsPost_version__hero__links__link__url_operator
+  version__hero__links__link__label: versionsPost_version__hero__links__link__label_operator
+  version__hero__links__link__appearance: versionsPost_version__hero__links__link__appearance_operator
+  version__hero__links__id: versionsPost_version__hero__links__id_operator
+  version__hero__media: versionsPost_version__hero__media_operator
+  version__enableRestrictedContent: versionsPost_version__enableRestrictedContent_operator
+  version__relatedPosts: versionsPost_version__relatedPosts_operator
+  version__slug: versionsPost_version__slug_operator
+  version__meta__title: versionsPost_version__meta__title_operator
+  version__meta__description: versionsPost_version__meta__description_operator
+  version__meta__image: versionsPost_version__meta__image_operator
+  version__updatedAt: versionsPost_version__updatedAt_operator
+  version__createdAt: versionsPost_version__createdAt_operator
+  version___status: versionsPost_version___status_operator
+  createdAt: versionsPost_createdAt_operator
+  updatedAt: versionsPost_updatedAt_operator
+  latest: versionsPost_latest_operator
+  id: versionsPost_id_operator
+  AND: [versionsPost_where_and]
+  OR: [versionsPost_where_or]
 }
 
-input versionsArtifact_where_or {
-  parent: versionsArtifact_parent_operator
-  version__title: versionsArtifact_version__title_operator
-  version__categories: versionsArtifact_version__categories_operator
-  version__publishedAt: versionsArtifact_version__publishedAt_operator
-  version__authors: versionsArtifact_version__authors_operator
-  version__populatedAuthors__id: versionsArtifact_version__populatedAuthors__id_operator
-  version__populatedAuthors__name: versionsArtifact_version__populatedAuthors__name_operator
-  version__hero__type: versionsArtifact_version__hero__type_operator
-  version__hero__richText: versionsArtifact_version__hero__richText_operator
-  version__hero__links__link__type: versionsArtifact_version__hero__links__link__type_operator
-  version__hero__links__link__newTab: versionsArtifact_version__hero__links__link__newTab_operator
-  version__hero__links__link__reference: versionsArtifact_version__hero__links__link__reference_Relation
-  version__hero__links__link__url: versionsArtifact_version__hero__links__link__url_operator
-  version__hero__links__link__label: versionsArtifact_version__hero__links__link__label_operator
-  version__hero__links__link__appearance: versionsArtifact_version__hero__links__link__appearance_operator
-  version__hero__links__id: versionsArtifact_version__hero__links__id_operator
-  version__hero__media: versionsArtifact_version__hero__media_operator
-  version__enablePremiumContent: versionsArtifact_version__enablePremiumContent_operator
-  version__relatedArtifacts: versionsArtifact_version__relatedArtifacts_operator
-  version__slug: versionsArtifact_version__slug_operator
-  version__meta__title: versionsArtifact_version__meta__title_operator
-  version__meta__description: versionsArtifact_version__meta__description_operator
-  version__meta__image: versionsArtifact_version__meta__image_operator
-  version__updatedAt: versionsArtifact_version__updatedAt_operator
-  version__createdAt: versionsArtifact_version__createdAt_operator
-  version___status: versionsArtifact_version___status_operator
-  createdAt: versionsArtifact_createdAt_operator
-  updatedAt: versionsArtifact_updatedAt_operator
-  latest: versionsArtifact_latest_operator
-  id: versionsArtifact_id_operator
-  AND: [versionsArtifact_where_and]
-  OR: [versionsArtifact_where_or]
+input versionsPost_where_or {
+  parent: versionsPost_parent_operator
+  version__title: versionsPost_version__title_operator
+  version__categories: versionsPost_version__categories_operator
+  version__keywords: versionsPost_version__keywords_operator
+  version__publishedAt: versionsPost_version__publishedAt_operator
+  version__authors: versionsPost_version__authors_operator
+  version__populatedAuthors__id: versionsPost_version__populatedAuthors__id_operator
+  version__populatedAuthors__name: versionsPost_version__populatedAuthors__name_operator
+  version__hero__type: versionsPost_version__hero__type_operator
+  version__hero__richText: versionsPost_version__hero__richText_operator
+  version__hero__links__link__type: versionsPost_version__hero__links__link__type_operator
+  version__hero__links__link__newTab: versionsPost_version__hero__links__link__newTab_operator
+  version__hero__links__link__reference: versionsPost_version__hero__links__link__reference_Relation
+  version__hero__links__link__url: versionsPost_version__hero__links__link__url_operator
+  version__hero__links__link__label: versionsPost_version__hero__links__link__label_operator
+  version__hero__links__link__appearance: versionsPost_version__hero__links__link__appearance_operator
+  version__hero__links__id: versionsPost_version__hero__links__id_operator
+  version__hero__media: versionsPost_version__hero__media_operator
+  version__enableRestrictedContent: versionsPost_version__enableRestrictedContent_operator
+  version__relatedPosts: versionsPost_version__relatedPosts_operator
+  version__slug: versionsPost_version__slug_operator
+  version__meta__title: versionsPost_version__meta__title_operator
+  version__meta__description: versionsPost_version__meta__description_operator
+  version__meta__image: versionsPost_version__meta__image_operator
+  version__updatedAt: versionsPost_version__updatedAt_operator
+  version__createdAt: versionsPost_version__createdAt_operator
+  version___status: versionsPost_version___status_operator
+  createdAt: versionsPost_createdAt_operator
+  updatedAt: versionsPost_updatedAt_operator
+  latest: versionsPost_latest_operator
+  id: versionsPost_id_operator
+  AND: [versionsPost_where_and]
+  OR: [versionsPost_where_or]
 }
 
 type allMedia {
@@ -5053,6 +5261,7 @@ type allMedia {
 input Media_where {
   alt: Media_alt_operator
   caption: Media_caption_operator
+  blurhash: Media_blurhash_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   url: Media_url_operator
@@ -5081,6 +5290,17 @@ input Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Media_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
   exists: Boolean
 }
 
@@ -5182,6 +5402,7 @@ input Media_id_operator {
 input Media_where_and {
   alt: Media_alt_operator
   caption: Media_caption_operator
+  blurhash: Media_blurhash_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   url: Media_url_operator
@@ -5198,6 +5419,7 @@ input Media_where_and {
 input Media_where_or {
   alt: Media_alt_operator
   caption: Media_caption_operator
+  blurhash: Media_blurhash_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   url: Media_url_operator
@@ -5222,6 +5444,7 @@ type mediaDocAccess {
 type MediaDocAccessFields {
   alt: MediaDocAccessFields_alt
   caption: MediaDocAccessFields_caption
+  blurhash: MediaDocAccessFields_blurhash
   updatedAt: MediaDocAccessFields_updatedAt
   createdAt: MediaDocAccessFields_createdAt
   url: MediaDocAccessFields_url
@@ -5275,6 +5498,29 @@ type MediaDocAccessFields_caption_Update {
 }
 
 type MediaDocAccessFields_caption_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash {
+  create: MediaDocAccessFields_blurhash_Create
+  read: MediaDocAccessFields_blurhash_Read
+  update: MediaDocAccessFields_blurhash_Update
+  delete: MediaDocAccessFields_blurhash_Delete
+}
+
+type MediaDocAccessFields_blurhash_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_blurhash_Delete {
   permission: Boolean!
 }
 
@@ -5883,6 +6129,407 @@ type CategoriesDeleteDocAccess {
   where: JSONObject
 }
 
+type Keywords {
+  docs: [Keyword]
+  hasNextPage: Boolean
+  hasPrevPage: Boolean
+  limit: Int
+  nextPage: Int
+  offset: Int
+  page: Int
+  pagingCounter: Int
+  prevPage: Int
+  totalDocs: Int
+  totalPages: Int
+}
+
+input Keyword_where {
+  title: Keyword_title_operator
+  parent: Keyword_parent_operator
+  breadcrumbs__doc: Keyword_breadcrumbs__doc_operator
+  breadcrumbs__url: Keyword_breadcrumbs__url_operator
+  breadcrumbs__label: Keyword_breadcrumbs__label_operator
+  breadcrumbs__id: Keyword_breadcrumbs__id_operator
+  updatedAt: Keyword_updatedAt_operator
+  createdAt: Keyword_createdAt_operator
+  id: Keyword_id_operator
+  AND: [Keyword_where_and]
+  OR: [Keyword_where_or]
+}
+
+input Keyword_title_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_parent_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__doc_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__label_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_breadcrumbs__id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Keyword_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Keyword_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Keyword_id_operator {
+  equals: Int
+  not_equals: Int
+  greater_than_equal: Int
+  greater_than: Int
+  less_than_equal: Int
+  less_than: Int
+  exists: Boolean
+}
+
+input Keyword_where_and {
+  title: Keyword_title_operator
+  parent: Keyword_parent_operator
+  breadcrumbs__doc: Keyword_breadcrumbs__doc_operator
+  breadcrumbs__url: Keyword_breadcrumbs__url_operator
+  breadcrumbs__label: Keyword_breadcrumbs__label_operator
+  breadcrumbs__id: Keyword_breadcrumbs__id_operator
+  updatedAt: Keyword_updatedAt_operator
+  createdAt: Keyword_createdAt_operator
+  id: Keyword_id_operator
+  AND: [Keyword_where_and]
+  OR: [Keyword_where_or]
+}
+
+input Keyword_where_or {
+  title: Keyword_title_operator
+  parent: Keyword_parent_operator
+  breadcrumbs__doc: Keyword_breadcrumbs__doc_operator
+  breadcrumbs__url: Keyword_breadcrumbs__url_operator
+  breadcrumbs__label: Keyword_breadcrumbs__label_operator
+  breadcrumbs__id: Keyword_breadcrumbs__id_operator
+  updatedAt: Keyword_updatedAt_operator
+  createdAt: Keyword_createdAt_operator
+  id: Keyword_id_operator
+  AND: [Keyword_where_and]
+  OR: [Keyword_where_or]
+}
+
+type keywordsDocAccess {
+  fields: KeywordsDocAccessFields
+  create: KeywordsCreateDocAccess
+  read: KeywordsReadDocAccess
+  update: KeywordsUpdateDocAccess
+  delete: KeywordsDeleteDocAccess
+}
+
+type KeywordsDocAccessFields {
+  title: KeywordsDocAccessFields_title
+  parent: KeywordsDocAccessFields_parent
+  breadcrumbs: KeywordsDocAccessFields_breadcrumbs
+  updatedAt: KeywordsDocAccessFields_updatedAt
+  createdAt: KeywordsDocAccessFields_createdAt
+}
+
+type KeywordsDocAccessFields_title {
+  create: KeywordsDocAccessFields_title_Create
+  read: KeywordsDocAccessFields_title_Read
+  update: KeywordsDocAccessFields_title_Update
+  delete: KeywordsDocAccessFields_title_Delete
+}
+
+type KeywordsDocAccessFields_title_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_title_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_title_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_title_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent {
+  create: KeywordsDocAccessFields_parent_Create
+  read: KeywordsDocAccessFields_parent_Read
+  update: KeywordsDocAccessFields_parent_Update
+  delete: KeywordsDocAccessFields_parent_Delete
+}
+
+type KeywordsDocAccessFields_parent_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_parent_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs {
+  create: KeywordsDocAccessFields_breadcrumbs_Create
+  read: KeywordsDocAccessFields_breadcrumbs_Read
+  update: KeywordsDocAccessFields_breadcrumbs_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_Delete
+  fields: KeywordsDocAccessFields_breadcrumbs_Fields
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_Fields {
+  doc: KeywordsDocAccessFields_breadcrumbs_doc
+  url: KeywordsDocAccessFields_breadcrumbs_url
+  label: KeywordsDocAccessFields_breadcrumbs_label
+  id: KeywordsDocAccessFields_breadcrumbs_id
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc {
+  create: KeywordsDocAccessFields_breadcrumbs_doc_Create
+  read: KeywordsDocAccessFields_breadcrumbs_doc_Read
+  update: KeywordsDocAccessFields_breadcrumbs_doc_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_doc_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_doc_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url {
+  create: KeywordsDocAccessFields_breadcrumbs_url_Create
+  read: KeywordsDocAccessFields_breadcrumbs_url_Read
+  update: KeywordsDocAccessFields_breadcrumbs_url_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_url_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_url_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label {
+  create: KeywordsDocAccessFields_breadcrumbs_label_Create
+  read: KeywordsDocAccessFields_breadcrumbs_label_Read
+  update: KeywordsDocAccessFields_breadcrumbs_label_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_label_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_label_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id {
+  create: KeywordsDocAccessFields_breadcrumbs_id_Create
+  read: KeywordsDocAccessFields_breadcrumbs_id_Read
+  update: KeywordsDocAccessFields_breadcrumbs_id_Update
+  delete: KeywordsDocAccessFields_breadcrumbs_id_Delete
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_breadcrumbs_id_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt {
+  create: KeywordsDocAccessFields_updatedAt_Create
+  read: KeywordsDocAccessFields_updatedAt_Read
+  update: KeywordsDocAccessFields_updatedAt_Update
+  delete: KeywordsDocAccessFields_updatedAt_Delete
+}
+
+type KeywordsDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt {
+  create: KeywordsDocAccessFields_createdAt_Create
+  read: KeywordsDocAccessFields_createdAt_Read
+  update: KeywordsDocAccessFields_createdAt_Update
+  delete: KeywordsDocAccessFields_createdAt_Delete
+}
+
+type KeywordsDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsCreateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsReadDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsUpdateDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsDeleteDocAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
 type Users {
   docs: [User]
   hasNextPage: Boolean
@@ -6211,10 +6858,10 @@ type Redirect_To_Reference_Relationship {
 
 enum Redirect_To_Reference_RelationTo {
   pages
-  artifacts
+  posts
 }
 
-union Redirect_To_Reference = Page | Artifact
+union Redirect_To_Reference = Page | Post
 
 type Redirects {
   docs: [Redirect]
@@ -6272,7 +6919,7 @@ input Redirect_to__reference_Relation {
 
 enum Redirect_to__reference_Relation_RelationTo {
   pages
-  artifacts
+  posts
 }
 
 input Redirect_to__url_operator {
@@ -7431,9 +8078,10 @@ type FooterUpdateDocAccess {
 type Access {
   canAccessAdmin: Boolean!
   pages: pagesAccess
-  artifacts: artifactsAccess
+  posts: postsAccess
   media: mediaAccess
   categories: categoriesAccess
+  keywords: keywordsAccess
   users: usersAccess
   redirects: redirectsAccess
   payload_preferences: payload_preferencesAccess
@@ -8118,875 +8766,899 @@ type PagesReadVersionsAccess {
   where: JSONObject
 }
 
-type artifactsAccess {
-  fields: ArtifactsFields
-  create: ArtifactsCreateAccess
-  read: ArtifactsReadAccess
-  update: ArtifactsUpdateAccess
-  delete: ArtifactsDeleteAccess
-  readVersions: ArtifactsReadVersionsAccess
+type postsAccess {
+  fields: PostsFields
+  create: PostsCreateAccess
+  read: PostsReadAccess
+  update: PostsUpdateAccess
+  delete: PostsDeleteAccess
+  readVersions: PostsReadVersionsAccess
 }
 
-type ArtifactsFields {
-  title: ArtifactsFields_title
-  categories: ArtifactsFields_categories
-  publishedAt: ArtifactsFields_publishedAt
-  authors: ArtifactsFields_authors
-  populatedAuthors: ArtifactsFields_populatedAuthors
-  hero: ArtifactsFields_hero
-  layout: ArtifactsFields_layout
-  enablePremiumContent: ArtifactsFields_enablePremiumContent
-  premiumContent: ArtifactsFields_premiumContent
-  relatedArtifacts: ArtifactsFields_relatedArtifacts
-  slug: ArtifactsFields_slug
-  meta: ArtifactsFields_meta
-  updatedAt: ArtifactsFields_updatedAt
-  createdAt: ArtifactsFields_createdAt
-  _status: ArtifactsFields__status
+type PostsFields {
+  title: PostsFields_title
+  categories: PostsFields_categories
+  keywords: PostsFields_keywords
+  publishedAt: PostsFields_publishedAt
+  authors: PostsFields_authors
+  populatedAuthors: PostsFields_populatedAuthors
+  hero: PostsFields_hero
+  layout: PostsFields_layout
+  enableRestrictedContent: PostsFields_enableRestrictedContent
+  restrictedContent: PostsFields_restrictedContent
+  relatedPosts: PostsFields_relatedPosts
+  slug: PostsFields_slug
+  meta: PostsFields_meta
+  updatedAt: PostsFields_updatedAt
+  createdAt: PostsFields_createdAt
+  _status: PostsFields__status
 }
 
-type ArtifactsFields_title {
-  create: ArtifactsFields_title_Create
-  read: ArtifactsFields_title_Read
-  update: ArtifactsFields_title_Update
-  delete: ArtifactsFields_title_Delete
+type PostsFields_title {
+  create: PostsFields_title_Create
+  read: PostsFields_title_Read
+  update: PostsFields_title_Update
+  delete: PostsFields_title_Delete
 }
 
-type ArtifactsFields_title_Create {
+type PostsFields_title_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_title_Read {
+type PostsFields_title_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_title_Update {
+type PostsFields_title_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_title_Delete {
+type PostsFields_title_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_categories {
-  create: ArtifactsFields_categories_Create
-  read: ArtifactsFields_categories_Read
-  update: ArtifactsFields_categories_Update
-  delete: ArtifactsFields_categories_Delete
+type PostsFields_categories {
+  create: PostsFields_categories_Create
+  read: PostsFields_categories_Read
+  update: PostsFields_categories_Update
+  delete: PostsFields_categories_Delete
 }
 
-type ArtifactsFields_categories_Create {
+type PostsFields_categories_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_categories_Read {
+type PostsFields_categories_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_categories_Update {
+type PostsFields_categories_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_categories_Delete {
+type PostsFields_categories_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_publishedAt {
-  create: ArtifactsFields_publishedAt_Create
-  read: ArtifactsFields_publishedAt_Read
-  update: ArtifactsFields_publishedAt_Update
-  delete: ArtifactsFields_publishedAt_Delete
+type PostsFields_keywords {
+  create: PostsFields_keywords_Create
+  read: PostsFields_keywords_Read
+  update: PostsFields_keywords_Update
+  delete: PostsFields_keywords_Delete
 }
 
-type ArtifactsFields_publishedAt_Create {
+type PostsFields_keywords_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_publishedAt_Read {
+type PostsFields_keywords_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_publishedAt_Update {
+type PostsFields_keywords_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_publishedAt_Delete {
+type PostsFields_keywords_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_authors {
-  create: ArtifactsFields_authors_Create
-  read: ArtifactsFields_authors_Read
-  update: ArtifactsFields_authors_Update
-  delete: ArtifactsFields_authors_Delete
+type PostsFields_publishedAt {
+  create: PostsFields_publishedAt_Create
+  read: PostsFields_publishedAt_Read
+  update: PostsFields_publishedAt_Update
+  delete: PostsFields_publishedAt_Delete
 }
 
-type ArtifactsFields_authors_Create {
+type PostsFields_publishedAt_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_authors_Read {
+type PostsFields_publishedAt_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_authors_Update {
+type PostsFields_publishedAt_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_authors_Delete {
+type PostsFields_publishedAt_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors {
-  create: ArtifactsFields_populatedAuthors_Create
-  read: ArtifactsFields_populatedAuthors_Read
-  update: ArtifactsFields_populatedAuthors_Update
-  delete: ArtifactsFields_populatedAuthors_Delete
-  fields: ArtifactsFields_populatedAuthors_Fields
+type PostsFields_authors {
+  create: PostsFields_authors_Create
+  read: PostsFields_authors_Read
+  update: PostsFields_authors_Update
+  delete: PostsFields_authors_Delete
 }
 
-type ArtifactsFields_populatedAuthors_Create {
+type PostsFields_authors_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_Read {
+type PostsFields_authors_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_Update {
+type PostsFields_authors_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_Delete {
+type PostsFields_authors_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_Fields {
-  id: ArtifactsFields_populatedAuthors_id
-  name: ArtifactsFields_populatedAuthors_name
+type PostsFields_populatedAuthors {
+  create: PostsFields_populatedAuthors_Create
+  read: PostsFields_populatedAuthors_Read
+  update: PostsFields_populatedAuthors_Update
+  delete: PostsFields_populatedAuthors_Delete
+  fields: PostsFields_populatedAuthors_Fields
 }
 
-type ArtifactsFields_populatedAuthors_id {
-  create: ArtifactsFields_populatedAuthors_id_Create
-  read: ArtifactsFields_populatedAuthors_id_Read
-  update: ArtifactsFields_populatedAuthors_id_Update
-  delete: ArtifactsFields_populatedAuthors_id_Delete
+type PostsFields_populatedAuthors_Create {
+  permission: Boolean!
+}
+
+type PostsFields_populatedAuthors_Read {
+  permission: Boolean!
+}
+
+type PostsFields_populatedAuthors_Update {
+  permission: Boolean!
+}
+
+type PostsFields_populatedAuthors_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_populatedAuthors_Fields {
+  id: PostsFields_populatedAuthors_id
+  name: PostsFields_populatedAuthors_name
+}
+
+type PostsFields_populatedAuthors_id {
+  create: PostsFields_populatedAuthors_id_Create
+  read: PostsFields_populatedAuthors_id_Read
+  update: PostsFields_populatedAuthors_id_Update
+  delete: PostsFields_populatedAuthors_id_Delete
 }
 
-type ArtifactsFields_populatedAuthors_id_Create {
+type PostsFields_populatedAuthors_id_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_id_Read {
+type PostsFields_populatedAuthors_id_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_id_Update {
+type PostsFields_populatedAuthors_id_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_id_Delete {
+type PostsFields_populatedAuthors_id_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_name {
-  create: ArtifactsFields_populatedAuthors_name_Create
-  read: ArtifactsFields_populatedAuthors_name_Read
-  update: ArtifactsFields_populatedAuthors_name_Update
-  delete: ArtifactsFields_populatedAuthors_name_Delete
+type PostsFields_populatedAuthors_name {
+  create: PostsFields_populatedAuthors_name_Create
+  read: PostsFields_populatedAuthors_name_Read
+  update: PostsFields_populatedAuthors_name_Update
+  delete: PostsFields_populatedAuthors_name_Delete
 }
 
-type ArtifactsFields_populatedAuthors_name_Create {
+type PostsFields_populatedAuthors_name_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_name_Read {
+type PostsFields_populatedAuthors_name_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_name_Update {
+type PostsFields_populatedAuthors_name_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_populatedAuthors_name_Delete {
+type PostsFields_populatedAuthors_name_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero {
-  create: ArtifactsFields_hero_Create
-  read: ArtifactsFields_hero_Read
-  update: ArtifactsFields_hero_Update
-  delete: ArtifactsFields_hero_Delete
-  fields: ArtifactsFields_hero_Fields
+type PostsFields_hero {
+  create: PostsFields_hero_Create
+  read: PostsFields_hero_Read
+  update: PostsFields_hero_Update
+  delete: PostsFields_hero_Delete
+  fields: PostsFields_hero_Fields
 }
 
-type ArtifactsFields_hero_Create {
+type PostsFields_hero_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_Read {
+type PostsFields_hero_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_Update {
+type PostsFields_hero_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_Delete {
+type PostsFields_hero_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_Fields {
-  type: ArtifactsFields_hero_type
-  richText: ArtifactsFields_hero_richText
-  links: ArtifactsFields_hero_links
-  media: ArtifactsFields_hero_media
+type PostsFields_hero_Fields {
+  type: PostsFields_hero_type
+  richText: PostsFields_hero_richText
+  links: PostsFields_hero_links
+  media: PostsFields_hero_media
 }
 
-type ArtifactsFields_hero_type {
-  create: ArtifactsFields_hero_type_Create
-  read: ArtifactsFields_hero_type_Read
-  update: ArtifactsFields_hero_type_Update
-  delete: ArtifactsFields_hero_type_Delete
+type PostsFields_hero_type {
+  create: PostsFields_hero_type_Create
+  read: PostsFields_hero_type_Read
+  update: PostsFields_hero_type_Update
+  delete: PostsFields_hero_type_Delete
 }
 
-type ArtifactsFields_hero_type_Create {
+type PostsFields_hero_type_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_type_Read {
+type PostsFields_hero_type_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_type_Update {
+type PostsFields_hero_type_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_type_Delete {
+type PostsFields_hero_type_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_richText {
-  create: ArtifactsFields_hero_richText_Create
-  read: ArtifactsFields_hero_richText_Read
-  update: ArtifactsFields_hero_richText_Update
-  delete: ArtifactsFields_hero_richText_Delete
+type PostsFields_hero_richText {
+  create: PostsFields_hero_richText_Create
+  read: PostsFields_hero_richText_Read
+  update: PostsFields_hero_richText_Update
+  delete: PostsFields_hero_richText_Delete
 }
 
-type ArtifactsFields_hero_richText_Create {
+type PostsFields_hero_richText_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_richText_Read {
+type PostsFields_hero_richText_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_richText_Update {
+type PostsFields_hero_richText_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_richText_Delete {
+type PostsFields_hero_richText_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links {
-  create: ArtifactsFields_hero_links_Create
-  read: ArtifactsFields_hero_links_Read
-  update: ArtifactsFields_hero_links_Update
-  delete: ArtifactsFields_hero_links_Delete
-  fields: ArtifactsFields_hero_links_Fields
+type PostsFields_hero_links {
+  create: PostsFields_hero_links_Create
+  read: PostsFields_hero_links_Read
+  update: PostsFields_hero_links_Update
+  delete: PostsFields_hero_links_Delete
+  fields: PostsFields_hero_links_Fields
 }
 
-type ArtifactsFields_hero_links_Create {
+type PostsFields_hero_links_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_Read {
+type PostsFields_hero_links_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_Update {
+type PostsFields_hero_links_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_Delete {
+type PostsFields_hero_links_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_Fields {
-  link: ArtifactsFields_hero_links_link
-  id: ArtifactsFields_hero_links_id
+type PostsFields_hero_links_Fields {
+  link: PostsFields_hero_links_link
+  id: PostsFields_hero_links_id
 }
 
-type ArtifactsFields_hero_links_link {
-  create: ArtifactsFields_hero_links_link_Create
-  read: ArtifactsFields_hero_links_link_Read
-  update: ArtifactsFields_hero_links_link_Update
-  delete: ArtifactsFields_hero_links_link_Delete
-  fields: ArtifactsFields_hero_links_link_Fields
+type PostsFields_hero_links_link {
+  create: PostsFields_hero_links_link_Create
+  read: PostsFields_hero_links_link_Read
+  update: PostsFields_hero_links_link_Update
+  delete: PostsFields_hero_links_link_Delete
+  fields: PostsFields_hero_links_link_Fields
 }
 
-type ArtifactsFields_hero_links_link_Create {
+type PostsFields_hero_links_link_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_Read {
+type PostsFields_hero_links_link_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_Update {
+type PostsFields_hero_links_link_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_Delete {
+type PostsFields_hero_links_link_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_Fields {
-  type: ArtifactsFields_hero_links_link_type
-  newTab: ArtifactsFields_hero_links_link_newTab
-  reference: ArtifactsFields_hero_links_link_reference
-  url: ArtifactsFields_hero_links_link_url
-  label: ArtifactsFields_hero_links_link_label
-  appearance: ArtifactsFields_hero_links_link_appearance
+type PostsFields_hero_links_link_Fields {
+  type: PostsFields_hero_links_link_type
+  newTab: PostsFields_hero_links_link_newTab
+  reference: PostsFields_hero_links_link_reference
+  url: PostsFields_hero_links_link_url
+  label: PostsFields_hero_links_link_label
+  appearance: PostsFields_hero_links_link_appearance
 }
 
-type ArtifactsFields_hero_links_link_type {
-  create: ArtifactsFields_hero_links_link_type_Create
-  read: ArtifactsFields_hero_links_link_type_Read
-  update: ArtifactsFields_hero_links_link_type_Update
-  delete: ArtifactsFields_hero_links_link_type_Delete
+type PostsFields_hero_links_link_type {
+  create: PostsFields_hero_links_link_type_Create
+  read: PostsFields_hero_links_link_type_Read
+  update: PostsFields_hero_links_link_type_Update
+  delete: PostsFields_hero_links_link_type_Delete
 }
 
-type ArtifactsFields_hero_links_link_type_Create {
+type PostsFields_hero_links_link_type_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_type_Read {
+type PostsFields_hero_links_link_type_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_type_Update {
+type PostsFields_hero_links_link_type_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_type_Delete {
+type PostsFields_hero_links_link_type_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_newTab {
-  create: ArtifactsFields_hero_links_link_newTab_Create
-  read: ArtifactsFields_hero_links_link_newTab_Read
-  update: ArtifactsFields_hero_links_link_newTab_Update
-  delete: ArtifactsFields_hero_links_link_newTab_Delete
+type PostsFields_hero_links_link_newTab {
+  create: PostsFields_hero_links_link_newTab_Create
+  read: PostsFields_hero_links_link_newTab_Read
+  update: PostsFields_hero_links_link_newTab_Update
+  delete: PostsFields_hero_links_link_newTab_Delete
 }
 
-type ArtifactsFields_hero_links_link_newTab_Create {
+type PostsFields_hero_links_link_newTab_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_newTab_Read {
+type PostsFields_hero_links_link_newTab_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_newTab_Update {
+type PostsFields_hero_links_link_newTab_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_newTab_Delete {
+type PostsFields_hero_links_link_newTab_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_reference {
-  create: ArtifactsFields_hero_links_link_reference_Create
-  read: ArtifactsFields_hero_links_link_reference_Read
-  update: ArtifactsFields_hero_links_link_reference_Update
-  delete: ArtifactsFields_hero_links_link_reference_Delete
+type PostsFields_hero_links_link_reference {
+  create: PostsFields_hero_links_link_reference_Create
+  read: PostsFields_hero_links_link_reference_Read
+  update: PostsFields_hero_links_link_reference_Update
+  delete: PostsFields_hero_links_link_reference_Delete
 }
 
-type ArtifactsFields_hero_links_link_reference_Create {
+type PostsFields_hero_links_link_reference_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_reference_Read {
+type PostsFields_hero_links_link_reference_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_reference_Update {
+type PostsFields_hero_links_link_reference_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_reference_Delete {
+type PostsFields_hero_links_link_reference_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_url {
-  create: ArtifactsFields_hero_links_link_url_Create
-  read: ArtifactsFields_hero_links_link_url_Read
-  update: ArtifactsFields_hero_links_link_url_Update
-  delete: ArtifactsFields_hero_links_link_url_Delete
+type PostsFields_hero_links_link_url {
+  create: PostsFields_hero_links_link_url_Create
+  read: PostsFields_hero_links_link_url_Read
+  update: PostsFields_hero_links_link_url_Update
+  delete: PostsFields_hero_links_link_url_Delete
 }
 
-type ArtifactsFields_hero_links_link_url_Create {
+type PostsFields_hero_links_link_url_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_url_Read {
+type PostsFields_hero_links_link_url_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_url_Update {
+type PostsFields_hero_links_link_url_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_url_Delete {
+type PostsFields_hero_links_link_url_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_label {
-  create: ArtifactsFields_hero_links_link_label_Create
-  read: ArtifactsFields_hero_links_link_label_Read
-  update: ArtifactsFields_hero_links_link_label_Update
-  delete: ArtifactsFields_hero_links_link_label_Delete
+type PostsFields_hero_links_link_label {
+  create: PostsFields_hero_links_link_label_Create
+  read: PostsFields_hero_links_link_label_Read
+  update: PostsFields_hero_links_link_label_Update
+  delete: PostsFields_hero_links_link_label_Delete
 }
 
-type ArtifactsFields_hero_links_link_label_Create {
+type PostsFields_hero_links_link_label_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_label_Read {
+type PostsFields_hero_links_link_label_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_label_Update {
+type PostsFields_hero_links_link_label_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_label_Delete {
+type PostsFields_hero_links_link_label_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_appearance {
-  create: ArtifactsFields_hero_links_link_appearance_Create
-  read: ArtifactsFields_hero_links_link_appearance_Read
-  update: ArtifactsFields_hero_links_link_appearance_Update
-  delete: ArtifactsFields_hero_links_link_appearance_Delete
+type PostsFields_hero_links_link_appearance {
+  create: PostsFields_hero_links_link_appearance_Create
+  read: PostsFields_hero_links_link_appearance_Read
+  update: PostsFields_hero_links_link_appearance_Update
+  delete: PostsFields_hero_links_link_appearance_Delete
 }
 
-type ArtifactsFields_hero_links_link_appearance_Create {
+type PostsFields_hero_links_link_appearance_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_appearance_Read {
+type PostsFields_hero_links_link_appearance_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_appearance_Update {
+type PostsFields_hero_links_link_appearance_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_link_appearance_Delete {
+type PostsFields_hero_links_link_appearance_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_id {
-  create: ArtifactsFields_hero_links_id_Create
-  read: ArtifactsFields_hero_links_id_Read
-  update: ArtifactsFields_hero_links_id_Update
-  delete: ArtifactsFields_hero_links_id_Delete
+type PostsFields_hero_links_id {
+  create: PostsFields_hero_links_id_Create
+  read: PostsFields_hero_links_id_Read
+  update: PostsFields_hero_links_id_Update
+  delete: PostsFields_hero_links_id_Delete
 }
 
-type ArtifactsFields_hero_links_id_Create {
+type PostsFields_hero_links_id_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_id_Read {
+type PostsFields_hero_links_id_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_id_Update {
+type PostsFields_hero_links_id_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_links_id_Delete {
+type PostsFields_hero_links_id_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_media {
-  create: ArtifactsFields_hero_media_Create
-  read: ArtifactsFields_hero_media_Read
-  update: ArtifactsFields_hero_media_Update
-  delete: ArtifactsFields_hero_media_Delete
+type PostsFields_hero_media {
+  create: PostsFields_hero_media_Create
+  read: PostsFields_hero_media_Read
+  update: PostsFields_hero_media_Update
+  delete: PostsFields_hero_media_Delete
 }
 
-type ArtifactsFields_hero_media_Create {
+type PostsFields_hero_media_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_media_Read {
+type PostsFields_hero_media_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_media_Update {
+type PostsFields_hero_media_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_hero_media_Delete {
+type PostsFields_hero_media_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_layout {
-  create: ArtifactsFields_layout_Create
-  read: ArtifactsFields_layout_Read
-  update: ArtifactsFields_layout_Update
-  delete: ArtifactsFields_layout_Delete
+type PostsFields_layout {
+  create: PostsFields_layout_Create
+  read: PostsFields_layout_Read
+  update: PostsFields_layout_Update
+  delete: PostsFields_layout_Delete
 }
 
-type ArtifactsFields_layout_Create {
+type PostsFields_layout_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_layout_Read {
+type PostsFields_layout_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_layout_Update {
+type PostsFields_layout_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_layout_Delete {
+type PostsFields_layout_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_enablePremiumContent {
-  create: ArtifactsFields_enablePremiumContent_Create
-  read: ArtifactsFields_enablePremiumContent_Read
-  update: ArtifactsFields_enablePremiumContent_Update
-  delete: ArtifactsFields_enablePremiumContent_Delete
+type PostsFields_enableRestrictedContent {
+  create: PostsFields_enableRestrictedContent_Create
+  read: PostsFields_enableRestrictedContent_Read
+  update: PostsFields_enableRestrictedContent_Update
+  delete: PostsFields_enableRestrictedContent_Delete
 }
 
-type ArtifactsFields_enablePremiumContent_Create {
+type PostsFields_enableRestrictedContent_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_enablePremiumContent_Read {
+type PostsFields_enableRestrictedContent_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_enablePremiumContent_Update {
+type PostsFields_enableRestrictedContent_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_enablePremiumContent_Delete {
+type PostsFields_enableRestrictedContent_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_premiumContent {
-  create: ArtifactsFields_premiumContent_Create
-  read: ArtifactsFields_premiumContent_Read
-  update: ArtifactsFields_premiumContent_Update
-  delete: ArtifactsFields_premiumContent_Delete
+type PostsFields_restrictedContent {
+  create: PostsFields_restrictedContent_Create
+  read: PostsFields_restrictedContent_Read
+  update: PostsFields_restrictedContent_Update
+  delete: PostsFields_restrictedContent_Delete
 }
 
-type ArtifactsFields_premiumContent_Create {
+type PostsFields_restrictedContent_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_premiumContent_Read {
+type PostsFields_restrictedContent_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_premiumContent_Update {
+type PostsFields_restrictedContent_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_premiumContent_Delete {
+type PostsFields_restrictedContent_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_relatedArtifacts {
-  create: ArtifactsFields_relatedArtifacts_Create
-  read: ArtifactsFields_relatedArtifacts_Read
-  update: ArtifactsFields_relatedArtifacts_Update
-  delete: ArtifactsFields_relatedArtifacts_Delete
+type PostsFields_relatedPosts {
+  create: PostsFields_relatedPosts_Create
+  read: PostsFields_relatedPosts_Read
+  update: PostsFields_relatedPosts_Update
+  delete: PostsFields_relatedPosts_Delete
 }
 
-type ArtifactsFields_relatedArtifacts_Create {
+type PostsFields_relatedPosts_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_relatedArtifacts_Read {
+type PostsFields_relatedPosts_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_relatedArtifacts_Update {
+type PostsFields_relatedPosts_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_relatedArtifacts_Delete {
+type PostsFields_relatedPosts_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_slug {
-  create: ArtifactsFields_slug_Create
-  read: ArtifactsFields_slug_Read
-  update: ArtifactsFields_slug_Update
-  delete: ArtifactsFields_slug_Delete
+type PostsFields_slug {
+  create: PostsFields_slug_Create
+  read: PostsFields_slug_Read
+  update: PostsFields_slug_Update
+  delete: PostsFields_slug_Delete
 }
 
-type ArtifactsFields_slug_Create {
+type PostsFields_slug_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_slug_Read {
+type PostsFields_slug_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_slug_Update {
+type PostsFields_slug_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_slug_Delete {
+type PostsFields_slug_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta {
-  create: ArtifactsFields_meta_Create
-  read: ArtifactsFields_meta_Read
-  update: ArtifactsFields_meta_Update
-  delete: ArtifactsFields_meta_Delete
-  fields: ArtifactsFields_meta_Fields
+type PostsFields_meta {
+  create: PostsFields_meta_Create
+  read: PostsFields_meta_Read
+  update: PostsFields_meta_Update
+  delete: PostsFields_meta_Delete
+  fields: PostsFields_meta_Fields
 }
 
-type ArtifactsFields_meta_Create {
+type PostsFields_meta_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_Read {
+type PostsFields_meta_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_Update {
+type PostsFields_meta_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_Delete {
+type PostsFields_meta_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_Fields {
-  overview: ArtifactsFields_meta_overview
-  title: ArtifactsFields_meta_title
-  description: ArtifactsFields_meta_description
-  image: ArtifactsFields_meta_image
-  preview: ArtifactsFields_meta_preview
+type PostsFields_meta_Fields {
+  overview: PostsFields_meta_overview
+  title: PostsFields_meta_title
+  description: PostsFields_meta_description
+  image: PostsFields_meta_image
+  preview: PostsFields_meta_preview
 }
 
-type ArtifactsFields_meta_overview {
-  create: ArtifactsFields_meta_overview_Create
-  read: ArtifactsFields_meta_overview_Read
-  update: ArtifactsFields_meta_overview_Update
-  delete: ArtifactsFields_meta_overview_Delete
+type PostsFields_meta_overview {
+  create: PostsFields_meta_overview_Create
+  read: PostsFields_meta_overview_Read
+  update: PostsFields_meta_overview_Update
+  delete: PostsFields_meta_overview_Delete
 }
 
-type ArtifactsFields_meta_overview_Create {
+type PostsFields_meta_overview_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_overview_Read {
+type PostsFields_meta_overview_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_overview_Update {
+type PostsFields_meta_overview_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_overview_Delete {
+type PostsFields_meta_overview_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_title {
-  create: ArtifactsFields_meta_title_Create
-  read: ArtifactsFields_meta_title_Read
-  update: ArtifactsFields_meta_title_Update
-  delete: ArtifactsFields_meta_title_Delete
+type PostsFields_meta_title {
+  create: PostsFields_meta_title_Create
+  read: PostsFields_meta_title_Read
+  update: PostsFields_meta_title_Update
+  delete: PostsFields_meta_title_Delete
 }
 
-type ArtifactsFields_meta_title_Create {
+type PostsFields_meta_title_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_title_Read {
+type PostsFields_meta_title_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_title_Update {
+type PostsFields_meta_title_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_title_Delete {
+type PostsFields_meta_title_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_description {
-  create: ArtifactsFields_meta_description_Create
-  read: ArtifactsFields_meta_description_Read
-  update: ArtifactsFields_meta_description_Update
-  delete: ArtifactsFields_meta_description_Delete
+type PostsFields_meta_description {
+  create: PostsFields_meta_description_Create
+  read: PostsFields_meta_description_Read
+  update: PostsFields_meta_description_Update
+  delete: PostsFields_meta_description_Delete
 }
 
-type ArtifactsFields_meta_description_Create {
+type PostsFields_meta_description_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_description_Read {
+type PostsFields_meta_description_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_description_Update {
+type PostsFields_meta_description_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_description_Delete {
+type PostsFields_meta_description_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_image {
-  create: ArtifactsFields_meta_image_Create
-  read: ArtifactsFields_meta_image_Read
-  update: ArtifactsFields_meta_image_Update
-  delete: ArtifactsFields_meta_image_Delete
+type PostsFields_meta_image {
+  create: PostsFields_meta_image_Create
+  read: PostsFields_meta_image_Read
+  update: PostsFields_meta_image_Update
+  delete: PostsFields_meta_image_Delete
 }
 
-type ArtifactsFields_meta_image_Create {
+type PostsFields_meta_image_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_image_Read {
+type PostsFields_meta_image_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_image_Update {
+type PostsFields_meta_image_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_image_Delete {
+type PostsFields_meta_image_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_preview {
-  create: ArtifactsFields_meta_preview_Create
-  read: ArtifactsFields_meta_preview_Read
-  update: ArtifactsFields_meta_preview_Update
-  delete: ArtifactsFields_meta_preview_Delete
+type PostsFields_meta_preview {
+  create: PostsFields_meta_preview_Create
+  read: PostsFields_meta_preview_Read
+  update: PostsFields_meta_preview_Update
+  delete: PostsFields_meta_preview_Delete
 }
 
-type ArtifactsFields_meta_preview_Create {
+type PostsFields_meta_preview_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_preview_Read {
+type PostsFields_meta_preview_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_preview_Update {
+type PostsFields_meta_preview_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_meta_preview_Delete {
+type PostsFields_meta_preview_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_updatedAt {
-  create: ArtifactsFields_updatedAt_Create
-  read: ArtifactsFields_updatedAt_Read
-  update: ArtifactsFields_updatedAt_Update
-  delete: ArtifactsFields_updatedAt_Delete
+type PostsFields_updatedAt {
+  create: PostsFields_updatedAt_Create
+  read: PostsFields_updatedAt_Read
+  update: PostsFields_updatedAt_Update
+  delete: PostsFields_updatedAt_Delete
 }
 
-type ArtifactsFields_updatedAt_Create {
+type PostsFields_updatedAt_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_updatedAt_Read {
+type PostsFields_updatedAt_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_updatedAt_Update {
+type PostsFields_updatedAt_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_updatedAt_Delete {
+type PostsFields_updatedAt_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields_createdAt {
-  create: ArtifactsFields_createdAt_Create
-  read: ArtifactsFields_createdAt_Read
-  update: ArtifactsFields_createdAt_Update
-  delete: ArtifactsFields_createdAt_Delete
+type PostsFields_createdAt {
+  create: PostsFields_createdAt_Create
+  read: PostsFields_createdAt_Read
+  update: PostsFields_createdAt_Update
+  delete: PostsFields_createdAt_Delete
 }
 
-type ArtifactsFields_createdAt_Create {
+type PostsFields_createdAt_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields_createdAt_Read {
+type PostsFields_createdAt_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields_createdAt_Update {
+type PostsFields_createdAt_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields_createdAt_Delete {
+type PostsFields_createdAt_Delete {
   permission: Boolean!
 }
 
-type ArtifactsFields__status {
-  create: ArtifactsFields__status_Create
-  read: ArtifactsFields__status_Read
-  update: ArtifactsFields__status_Update
-  delete: ArtifactsFields__status_Delete
+type PostsFields__status {
+  create: PostsFields__status_Create
+  read: PostsFields__status_Read
+  update: PostsFields__status_Update
+  delete: PostsFields__status_Delete
 }
 
-type ArtifactsFields__status_Create {
+type PostsFields__status_Create {
   permission: Boolean!
 }
 
-type ArtifactsFields__status_Read {
+type PostsFields__status_Read {
   permission: Boolean!
 }
 
-type ArtifactsFields__status_Update {
+type PostsFields__status_Update {
   permission: Boolean!
 }
 
-type ArtifactsFields__status_Delete {
+type PostsFields__status_Delete {
   permission: Boolean!
 }
 
-type ArtifactsCreateAccess {
+type PostsCreateAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsReadAccess {
+type PostsReadAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsUpdateAccess {
+type PostsUpdateAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsDeleteAccess {
+type PostsDeleteAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type ArtifactsReadVersionsAccess {
+type PostsReadVersionsAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -9002,6 +9674,7 @@ type mediaAccess {
 type MediaFields {
   alt: MediaFields_alt
   caption: MediaFields_caption
+  blurhash: MediaFields_blurhash
   updatedAt: MediaFields_updatedAt
   createdAt: MediaFields_createdAt
   url: MediaFields_url
@@ -9055,6 +9728,29 @@ type MediaFields_caption_Update {
 }
 
 type MediaFields_caption_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash {
+  create: MediaFields_blurhash_Create
+  read: MediaFields_blurhash_Read
+  update: MediaFields_blurhash_Update
+  delete: MediaFields_blurhash_Delete
+}
+
+type MediaFields_blurhash_Create {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash_Read {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash_Update {
+  permission: Boolean!
+}
+
+type MediaFields_blurhash_Delete {
   permission: Boolean!
 }
 
@@ -9509,6 +10205,257 @@ type CategoriesUpdateAccess {
 }
 
 type CategoriesDeleteAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type keywordsAccess {
+  fields: KeywordsFields
+  create: KeywordsCreateAccess
+  read: KeywordsReadAccess
+  update: KeywordsUpdateAccess
+  delete: KeywordsDeleteAccess
+}
+
+type KeywordsFields {
+  title: KeywordsFields_title
+  parent: KeywordsFields_parent
+  breadcrumbs: KeywordsFields_breadcrumbs
+  updatedAt: KeywordsFields_updatedAt
+  createdAt: KeywordsFields_createdAt
+}
+
+type KeywordsFields_title {
+  create: KeywordsFields_title_Create
+  read: KeywordsFields_title_Read
+  update: KeywordsFields_title_Update
+  delete: KeywordsFields_title_Delete
+}
+
+type KeywordsFields_title_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_title_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_title_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_title_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent {
+  create: KeywordsFields_parent_Create
+  read: KeywordsFields_parent_Read
+  update: KeywordsFields_parent_Update
+  delete: KeywordsFields_parent_Delete
+}
+
+type KeywordsFields_parent_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_parent_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs {
+  create: KeywordsFields_breadcrumbs_Create
+  read: KeywordsFields_breadcrumbs_Read
+  update: KeywordsFields_breadcrumbs_Update
+  delete: KeywordsFields_breadcrumbs_Delete
+  fields: KeywordsFields_breadcrumbs_Fields
+}
+
+type KeywordsFields_breadcrumbs_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_Fields {
+  doc: KeywordsFields_breadcrumbs_doc
+  url: KeywordsFields_breadcrumbs_url
+  label: KeywordsFields_breadcrumbs_label
+  id: KeywordsFields_breadcrumbs_id
+}
+
+type KeywordsFields_breadcrumbs_doc {
+  create: KeywordsFields_breadcrumbs_doc_Create
+  read: KeywordsFields_breadcrumbs_doc_Read
+  update: KeywordsFields_breadcrumbs_doc_Update
+  delete: KeywordsFields_breadcrumbs_doc_Delete
+}
+
+type KeywordsFields_breadcrumbs_doc_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_doc_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_doc_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_doc_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url {
+  create: KeywordsFields_breadcrumbs_url_Create
+  read: KeywordsFields_breadcrumbs_url_Read
+  update: KeywordsFields_breadcrumbs_url_Update
+  delete: KeywordsFields_breadcrumbs_url_Delete
+}
+
+type KeywordsFields_breadcrumbs_url_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_url_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label {
+  create: KeywordsFields_breadcrumbs_label_Create
+  read: KeywordsFields_breadcrumbs_label_Read
+  update: KeywordsFields_breadcrumbs_label_Update
+  delete: KeywordsFields_breadcrumbs_label_Delete
+}
+
+type KeywordsFields_breadcrumbs_label_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_label_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id {
+  create: KeywordsFields_breadcrumbs_id_Create
+  read: KeywordsFields_breadcrumbs_id_Read
+  update: KeywordsFields_breadcrumbs_id_Update
+  delete: KeywordsFields_breadcrumbs_id_Delete
+}
+
+type KeywordsFields_breadcrumbs_id_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_breadcrumbs_id_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt {
+  create: KeywordsFields_updatedAt_Create
+  read: KeywordsFields_updatedAt_Read
+  update: KeywordsFields_updatedAt_Update
+  delete: KeywordsFields_updatedAt_Delete
+}
+
+type KeywordsFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt {
+  create: KeywordsFields_createdAt_Create
+  read: KeywordsFields_createdAt_Read
+  update: KeywordsFields_createdAt_Update
+  delete: KeywordsFields_createdAt_Delete
+}
+
+type KeywordsFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type KeywordsFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type KeywordsCreateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsReadAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsUpdateAccess {
+  permission: Boolean!
+  where: JSONObject
+}
+
+type KeywordsDeleteAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -10587,16 +11534,19 @@ type Mutation {
   updatePage(id: Int!, autosave: Boolean, data: mutationPageUpdateInput!, draft: Boolean): Page
   deletePage(id: Int!): Page
   restoreVersionPage(id: Int): Page
-  createArtifact(data: mutationArtifactInput!, draft: Boolean): Artifact
-  updateArtifact(id: Int!, autosave: Boolean, data: mutationArtifactUpdateInput!, draft: Boolean): Artifact
-  deleteArtifact(id: Int!): Artifact
-  restoreVersionArtifact(id: Int): Artifact
+  createPost(data: mutationPostInput!, draft: Boolean): Post
+  updatePost(id: Int!, autosave: Boolean, data: mutationPostUpdateInput!, draft: Boolean): Post
+  deletePost(id: Int!): Post
+  restoreVersionPost(id: Int): Post
   createMedia(data: mutationMediaInput!, draft: Boolean): Media
   updateMedia(id: Int!, autosave: Boolean, data: mutationMediaUpdateInput!, draft: Boolean): Media
   deleteMedia(id: Int!): Media
   createCategory(data: mutationCategoryInput!, draft: Boolean): Category
   updateCategory(id: Int!, autosave: Boolean, data: mutationCategoryUpdateInput!, draft: Boolean): Category
   deleteCategory(id: Int!): Category
+  createKeyword(data: mutationKeywordInput!, draft: Boolean): Keyword
+  updateKeyword(id: Int!, autosave: Boolean, data: mutationKeywordUpdateInput!, draft: Boolean): Keyword
+  deleteKeyword(id: Int!): Keyword
   createUser(data: mutationUserInput!, draft: Boolean): User
   updateUser(id: Int!, autosave: Boolean, data: mutationUserUpdateInput!, draft: Boolean): User
   deleteUser(id: Int!): User
@@ -10749,156 +11699,158 @@ enum PageUpdate__status_MutationInput {
   published
 }
 
-input mutationArtifactInput {
+input mutationPostInput {
   title: String!
-  categories: [Int]
+  categories: Int
+  keywords: [Int]
   publishedAt: String
   authors: [Int]
-  populatedAuthors: [mutationArtifact_PopulatedAuthorsInput]
-  hero: mutationArtifact_HeroInput!
+  populatedAuthors: [mutationPost_PopulatedAuthorsInput]
+  hero: mutationPost_HeroInput!
   layout: JSON
-  enablePremiumContent: Boolean
-  premiumContent: JSON
-  relatedArtifacts: [Int]
+  enableRestrictedContent: Boolean
+  restrictedContent: JSON
+  relatedPosts: [Int]
   slug: String
-  meta: mutationArtifact_MetaInput
+  meta: mutationPost_MetaInput
   updatedAt: String
   createdAt: String
-  _status: Artifact__status_MutationInput
+  _status: Post__status_MutationInput
 }
 
-input mutationArtifact_PopulatedAuthorsInput {
+input mutationPost_PopulatedAuthorsInput {
   id: String
   name: String
 }
 
-input mutationArtifact_HeroInput {
-  type: Artifact_Hero_type_MutationInput!
+input mutationPost_HeroInput {
+  type: Post_Hero_type_MutationInput!
   richText: JSON
-  links: [mutationArtifact_Hero_LinksInput]
+  links: [mutationPost_Hero_LinksInput]
   media: String
 }
 
-enum Artifact_Hero_type_MutationInput {
+enum Post_Hero_type_MutationInput {
   none
   highImpact
   mediumImpact
   lowImpact
 }
 
-input mutationArtifact_Hero_LinksInput {
-  link: mutationArtifact_Hero_Links_LinkInput
+input mutationPost_Hero_LinksInput {
+  link: mutationPost_Hero_Links_LinkInput
   id: String
 }
 
-input mutationArtifact_Hero_Links_LinkInput {
+input mutationPost_Hero_Links_LinkInput {
   type: String
   newTab: Boolean
-  reference: Artifact_Hero_Links_Link_ReferenceRelationshipInput
+  reference: Post_Hero_Links_Link_ReferenceRelationshipInput
   url: String
   label: String!
-  appearance: Artifact_Hero_Links_Link_appearance_MutationInput
+  appearance: Post_Hero_Links_Link_appearance_MutationInput
 }
 
-input Artifact_Hero_Links_Link_ReferenceRelationshipInput {
-  relationTo: Artifact_Hero_Links_Link_ReferenceRelationshipInputRelationTo
+input Post_Hero_Links_Link_ReferenceRelationshipInput {
+  relationTo: Post_Hero_Links_Link_ReferenceRelationshipInputRelationTo
   value: JSON
 }
 
-enum Artifact_Hero_Links_Link_ReferenceRelationshipInputRelationTo {
+enum Post_Hero_Links_Link_ReferenceRelationshipInputRelationTo {
   pages
 }
 
-enum Artifact_Hero_Links_Link_appearance_MutationInput {
+enum Post_Hero_Links_Link_appearance_MutationInput {
   default
   primary
   secondary
 }
 
-input mutationArtifact_MetaInput {
+input mutationPost_MetaInput {
   title: String
   description: String
   image: String
 }
 
-enum Artifact__status_MutationInput {
+enum Post__status_MutationInput {
   draft
   published
 }
 
-input mutationArtifactUpdateInput {
+input mutationPostUpdateInput {
   title: String
-  categories: [Int]
+  categories: Int
+  keywords: [Int]
   publishedAt: String
   authors: [Int]
-  populatedAuthors: [mutationArtifactUpdate_PopulatedAuthorsInput]
-  hero: mutationArtifactUpdate_HeroInput!
+  populatedAuthors: [mutationPostUpdate_PopulatedAuthorsInput]
+  hero: mutationPostUpdate_HeroInput!
   layout: JSON
-  enablePremiumContent: Boolean
-  premiumContent: JSON
-  relatedArtifacts: [Int]
+  enableRestrictedContent: Boolean
+  restrictedContent: JSON
+  relatedPosts: [Int]
   slug: String
-  meta: mutationArtifactUpdate_MetaInput
+  meta: mutationPostUpdate_MetaInput
   updatedAt: String
   createdAt: String
-  _status: ArtifactUpdate__status_MutationInput
+  _status: PostUpdate__status_MutationInput
 }
 
-input mutationArtifactUpdate_PopulatedAuthorsInput {
+input mutationPostUpdate_PopulatedAuthorsInput {
   id: String
   name: String
 }
 
-input mutationArtifactUpdate_HeroInput {
-  type: ArtifactUpdate_Hero_type_MutationInput!
+input mutationPostUpdate_HeroInput {
+  type: PostUpdate_Hero_type_MutationInput!
   richText: JSON
-  links: [mutationArtifactUpdate_Hero_LinksInput]
+  links: [mutationPostUpdate_Hero_LinksInput]
   media: String
 }
 
-enum ArtifactUpdate_Hero_type_MutationInput {
+enum PostUpdate_Hero_type_MutationInput {
   none
   highImpact
   mediumImpact
   lowImpact
 }
 
-input mutationArtifactUpdate_Hero_LinksInput {
-  link: mutationArtifactUpdate_Hero_Links_LinkInput
+input mutationPostUpdate_Hero_LinksInput {
+  link: mutationPostUpdate_Hero_Links_LinkInput
   id: String
 }
 
-input mutationArtifactUpdate_Hero_Links_LinkInput {
+input mutationPostUpdate_Hero_Links_LinkInput {
   type: String
   newTab: Boolean
-  reference: ArtifactUpdate_Hero_Links_Link_ReferenceRelationshipInput
+  reference: PostUpdate_Hero_Links_Link_ReferenceRelationshipInput
   url: String
   label: String!
-  appearance: ArtifactUpdate_Hero_Links_Link_appearance_MutationInput
+  appearance: PostUpdate_Hero_Links_Link_appearance_MutationInput
 }
 
-input ArtifactUpdate_Hero_Links_Link_ReferenceRelationshipInput {
-  relationTo: ArtifactUpdate_Hero_Links_Link_ReferenceRelationshipInputRelationTo
+input PostUpdate_Hero_Links_Link_ReferenceRelationshipInput {
+  relationTo: PostUpdate_Hero_Links_Link_ReferenceRelationshipInputRelationTo
   value: JSON
 }
 
-enum ArtifactUpdate_Hero_Links_Link_ReferenceRelationshipInputRelationTo {
+enum PostUpdate_Hero_Links_Link_ReferenceRelationshipInputRelationTo {
   pages
 }
 
-enum ArtifactUpdate_Hero_Links_Link_appearance_MutationInput {
+enum PostUpdate_Hero_Links_Link_appearance_MutationInput {
   default
   primary
   secondary
 }
 
-input mutationArtifactUpdate_MetaInput {
+input mutationPostUpdate_MetaInput {
   title: String
   description: String
   image: String
 }
 
-enum ArtifactUpdate__status_MutationInput {
+enum PostUpdate__status_MutationInput {
   draft
   published
 }
@@ -10906,6 +11858,7 @@ enum ArtifactUpdate__status_MutationInput {
 input mutationMediaInput {
   alt: String!
   caption: JSON
+  blurhash: String
   updatedAt: String
   createdAt: String
   url: String
@@ -10919,6 +11872,7 @@ input mutationMediaInput {
 input mutationMediaUpdateInput {
   alt: String
   caption: JSON
+  blurhash: String
   updatedAt: String
   createdAt: String
   url: String
@@ -10953,6 +11907,36 @@ input mutationCategoryUpdateInput {
 }
 
 input mutationCategoryUpdate_BreadcrumbsInput {
+  doc: Int
+  url: String
+  label: String
+  id: String
+}
+
+input mutationKeywordInput {
+  title: String
+  parent: Int
+  breadcrumbs: [mutationKeyword_BreadcrumbsInput]
+  updatedAt: String
+  createdAt: String
+}
+
+input mutationKeyword_BreadcrumbsInput {
+  doc: Int
+  url: String
+  label: String
+  id: String
+}
+
+input mutationKeywordUpdateInput {
+  title: String
+  parent: Int
+  breadcrumbs: [mutationKeywordUpdate_BreadcrumbsInput]
+  updatedAt: String
+  createdAt: String
+}
+
+input mutationKeywordUpdate_BreadcrumbsInput {
   doc: Int
   url: String
   label: String
@@ -11041,7 +12025,7 @@ input Redirect_To_ReferenceRelationshipInput {
 
 enum Redirect_To_ReferenceRelationshipInputRelationTo {
   pages
-  artifacts
+  posts
 }
 
 input mutationRedirectUpdateInput {
@@ -11064,7 +12048,7 @@ input RedirectUpdate_To_ReferenceRelationshipInput {
 
 enum RedirectUpdate_To_ReferenceRelationshipInputRelationTo {
   pages
-  artifacts
+  posts
 }
 
 input mutationPayloadPreferenceInput {

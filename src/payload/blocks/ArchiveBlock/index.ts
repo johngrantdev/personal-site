@@ -1,4 +1,3 @@
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import type { Block } from 'payload/types'
 
 export const Archive: Block = {
@@ -32,14 +31,14 @@ export const Archive: Block = {
       type: 'select',
       name: 'relationTo',
       label: 'Collections To Show',
-      defaultValue: 'artifacts',
+      defaultValue: 'posts',
       admin: {
         condition: (_, siblingData) => siblingData.populateBy === 'collection',
       },
       options: [
         {
-          label: 'Artifacts',
-          value: 'artifacts',
+          label: 'Posts',
+          value: 'posts',
         },
       ],
     },
@@ -76,7 +75,7 @@ export const Archive: Block = {
       type: 'relationship',
       name: 'selectedDocs',
       label: 'Selection',
-      relationTo: ['artifacts'],
+      relationTo: ['posts'],
       hasMany: true,
       admin: {
         condition: (_, siblingData) => siblingData.populateBy === 'selection',
@@ -86,7 +85,7 @@ export const Archive: Block = {
       type: 'relationship',
       name: 'populatedDocs',
       label: 'Populated Docs',
-      relationTo: ['artifacts'],
+      relationTo: ['posts'],
       hasMany: true,
       admin: {
         disabled: true,

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Page } from '../../../payload/payload-types'
-import { Gutter } from '../../_components/Gutter'
 import { CMSLink } from '../../_components/Link'
 import RichText from '../../_components/RichText'
 
@@ -16,26 +15,35 @@ export const ContentBlock: React.FC<
 > = props => {
   const { columns } = props
 
-  return (
-    // add content styling
-    <Gutter>
-      {/* add grid styling */}
-      <div className="grid grid-cols-3 gap-6">
-        {columns &&
-          columns.length > 0 &&
-          columns.map((col, index) => {
-            const { enableLink, richText, link, size } = col
+  const getColSpan = size => {
+    switch (size) {
+      case 'oneThird':
+        return 'col-span-4'
+      case 'half':
+        return 'col-span-6'
+      case 'twoThirds':
+        return 'col-span-8'
+      case 'full':
+        return 'col-span-12'
+    }
+  }
 
-            return (
-              // add column and column--${size} styling
-              <div className="" key={index}>
-                <RichText content={richText} />
-                {/* add link styling */}
-                {enableLink && <CMSLink className="mt-6" {...link} />}
-              </div>
-            )
-          })}
-      </div>
-    </Gutter>
+  return (
+    <div className="grid grid-cols-12 gap-6">
+      {columns &&
+        columns.length > 0 &&
+        columns.map((col, index) => {
+          const { enableLink, richText, link, size } = col
+          const colSpan = getColSpan(size)
+          return (
+            // add column and column--${size} styling
+            <div className={colSpan} key={index}>
+              <RichText content={richText} />
+              {/* add link styling */}
+              {enableLink && <CMSLink className="mt-6" {...link} />}
+            </div>
+          )
+        })}
+    </div>
   )
 }

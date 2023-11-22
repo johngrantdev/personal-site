@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react'
 
 import { Page } from '../../../payload/payload-types'
-import { Gutter } from '../../_components/Gutter'
 import { CMSLink } from '../../_components/Link'
 import { Media } from '../../_components/Media'
+import { Padding } from '../../_components/Padding'
 import RichText from '../../_components/RichText'
 
 // todo: update styles with mid-break behavior from old sass styles
 
 export const HighImpactHero: React.FC<Page['hero']> = ({ richText, media, links }) => {
   return (
-    <Gutter className="pt-12 relative overflow-hidden">
+    <Padding className="pt-12 relative overflow-hidden">
       <div className="relative">
         <RichText content={richText} />
         {Array.isArray(links) && links.length > 0 && (
@@ -48,6 +48,6 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ richText, media, links 
           </Fragment>
         )}
       </div>
-    </Gutter>
+    </Padding>
   )
 }

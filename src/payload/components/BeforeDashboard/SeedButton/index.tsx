@@ -30,11 +30,11 @@ export const SeedButton: React.FC = () => {
   if (error) message = ` (error: ${error})`
 
   return (
-    <Fragment>
+    <div className="text-lg">
       <a href="/api/seed" target="_blank" rel="noopener noreferrer" onClick={handleClick}>
         Seed your database
       </a>
       {message}
-    </Fragment>
+    </div>
   )
 }

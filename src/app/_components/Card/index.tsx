@@ -1,7 +1,10 @@
-import React, { Fragment } from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
+import { animated, useSpring } from '@react-spring/web'
 import Link from 'next/link'
 
-import { Artifact } from '../../../payload/payload-types'
+import { Post } from '../../../payload/payload-types'
 import { Media } from '../Media'
 
 // import classes from './index.module.scss'
@@ -12,23 +15,24 @@ export const Card: React.FC<{
   showCategories?: boolean
   hideImagesOnMobile?: boolean
   title?: string
-  relationTo?: 'artifacts'
-  doc?: Artifact
+  relationTo?: 'posts'
+  doc?: Post
   orientation?: 'horizontal' | 'vertical'
+  index?: number
 }> = props => {
   const {
     relationTo,
-    showCategories,
     title: titleFromProps,
     doc,
     className,
     orientation = 'vertical',
+    index = 0,
   } = props
 
-  const { slug, title, categories, meta } = doc || {}
+  const { slug, title, keywords = [], meta } = doc || {}
   const { description, image: metaImage } = meta || {}
 
-  const hasCategories = categories && Array.isArray(categories) && categories.length > 0
+  const hasKeywords = keywords && Array.isArray(keywords) && keywords.length > 0
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
   const href = `/${relationTo}/${slug}`
@@ -48,60 +52,94 @@ export const Card: React.FC<{
   }
   orientationStyle(orientation)
 
+  const [hover, setHover] = useState(false)
+  const [hoverDelayed, setHoverDelayed] = useState(false)
+
+  const handleMouseEnter = () => setHover(true)
+  const handleMouseLeave = () => setHover(false)
+
+  const animationDuration = 400
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setTimeout(() => {
+      setLoaded(true)
+    }, (animationDuration * (index + 1)) / 8)
+  }, [])
+  useEffect(() => {
+    let timeoutId
+
+    if (hover) {
+      timeoutId = setTimeout(() => {
+        setHoverDelayed(true)
+      }, 300)
+    } else {
+      setHoverDelayed(false)
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [hover])
+
+  const fadeIn = useSpring({
+    opacity: loaded ? 1 : 0,
+    config: { duration: animationDuration },
+  })
+
   return (
-    <div
+    <animated.div
+      style={fadeIn}
       className={[
-        'rounded-xl overflow-hidden drop-shadow-md bg-zinc-300 h-full flex flex-col',
+        'relative rounded-xl overflow-hidden drop-shadow-md bg-zinc-900 h-full aspect-square',
         className,
         orientation && appearanceStyle,
       ]
         .filter(Boolean)
         .join(' ')}
     >
-      <Link href={href} className="no-underline	block relative aspect-video">
-        {!metaImage && (
-          <div className="w-full h-full flex items-center justify-center">No image</div>
-        )}
-        {metaImage && typeof metaImage !== 'string' && (
-          <Media imgClassName="object-cover" resource={metaImage} fill />
-        )}
+      {metaImage && typeof metaImage !== 'string' && (
+        <Media
+          className=""
+          imgClassName={`absolute inset-0 z-[-1] object-cover transition-all duration-300 ${
+            hover ? 'opacity-50 blur-sm' : 'opacity-100'
+          }`}
+          resource={metaImage}
+          fill
+        />
+      )}
+      <Link href={href}>
+        <div
+          className="p-4 h-full flex-grow flex flex-col text-zinc-300 "
+          onMouseOver={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div
+            className={`flex w-full h-full items-center justify-center transition-opacity duration-500 ${
+              hoverDelayed ? 'opacity-50' : 'opacity-0'
+            }`}
+          />
+          {titleToUse && (
+            <div className="flex w-full h-fit p-6 items-center justify-center">
+              <h1 className=" text-2xl">{titleToUse}</h1>
+            </div>
+          )}
+          <div
+            className={`flex flex-col items-center h-full justify-center transition-opacity duration-500 ${
+              hoverDelayed ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="flex h-full w-full items-center justify-center content-center">
+              {description && sanitizedDescription}
+            </div>
+            <div className="flex items-center justify-center h-full w-full content-center">
+              {hasKeywords ? keywords.map(keyword => keyword.title).join(', ') : null}
+            </div>
+          </div>
+        </div>
       </Link>
-      <div className="p-6 flex-grow flex flex-col gap-3">
-        {showCategories && hasCategories && (
-          <div className="flex gap-6">
-            {showCategories && hasCategories && (
-              <div>
-                {categories?.map((category, index) => {
-                  const { title: titleFromCategory } = category
-
-                  const categoryTitle = titleFromCategory || 'Untitled category'
-
-                  const isLast = index === categories.length - 1
-
-                  return (
-                    <Fragment key={index}>
-                      {categoryTitle}
-                      {!isLast && <Fragment>, &nbsp;</Fragment>}
-                    </Fragment>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        )}
-        {titleToUse && (
-          <h4 className="m-0">
-            <Link className="no-underline" href={href}>
-              {titleToUse}
-            </Link>
-          </h4>
-        )}
-        {description && (
-          <div className="flex-grow">
-            {description && <p className="m-0">{sanitizedDescription}</p>}
-          </div>
-        )}
-      </div>
-    </div>
+    </animated.div>
   )
 }

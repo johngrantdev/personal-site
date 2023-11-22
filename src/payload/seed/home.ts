@@ -5,8 +5,8 @@ export const home: Partial<Page> = {
   slug: 'home',
   _status: 'published',
   meta: {
-    title: 'Payload Website Template',
-    description: 'An open-source website built with Payload and Next.js.',
+    title: '',
+    description: process.env.SITE_DESCRIPTION,
     image: '{{IMAGE_1}}',
   },
   hero: {
@@ -21,7 +21,7 @@ export const home: Partial<Page> = {
         children: [
           {
             type: 'heading',
-            tag: 'h1',
+            tag: 'h3',
             format: '',
             indent: 0,
             version: 1,
@@ -96,7 +96,7 @@ export const home: Partial<Page> = {
         },
       },
       populateBy: 'collection',
-      relationTo: 'artifacts',
+      relationTo: 'posts',
       limit: 12,
       showPageRange: false,
       categories: [],
@@ -138,10 +138,10 @@ export const home: Partial<Page> = {
           link: {
             type: 'reference',
             url: '',
-            label: 'All artifacts',
+            label: 'All posts',
             appearance: 'primary',
             reference: {
-              value: '{{ARTIFACTS_PAGE_ID}}',
+              value: '{{POSTS_PAGE_ID}}',
               relationTo: 'pages',
             },
           },
