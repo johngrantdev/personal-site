@@ -39,12 +39,6 @@ export const hero: Field = {
       type: 'richText',
       editor: lexicalEditor({}),
     },
-    // richText({
-    //   admin: {
-    //     elements: ['h1', largeBody, label, 'link'],
-    //     leaves: [],
-    //   },
-    // }),
     linkGroup({
       overrides: {
         maxRows: 2,
