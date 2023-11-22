@@ -3,6 +3,7 @@ import escapeHTML from 'escape-html'
 
 import { RichTextNode } from '../../../payload/payload-types'
 import { CMSLink } from '../Link'
+import { Media } from '../Media'
 
 /*
 the text formats are stored as a bitwise value eg.
@@ -40,6 +41,8 @@ const serialize = (nodes?: RichTextNode[], i?: number): React.ReactNode => {
     if (!node) {
       return null
     }
+    // text styles
+    const paddingTop = ' pt-3'
     // set alignment styles
     let textAlignment = ''
     if (typeof node.format === 'string') {
@@ -52,13 +55,13 @@ const serialize = (nodes?: RichTextNode[], i?: number): React.ReactNode => {
           break
       }
     }
-
     // keep the below comment for tailwind parser
     // indent-6 indent-12 indent-18 indent-24 indent-30 indent-36 indent-42 indent-48
     let textIndent = ''
     if (node.indent) {
       textIndent = ` indent-${node.indent * 6}`
     }
+    const textStyles = `${paddingTop}${textAlignment}${textIndent}`
 
     switch (node.type) {
       case 'root':
@@ -108,37 +111,37 @@ const serialize = (nodes?: RichTextNode[], i?: number): React.ReactNode => {
         switch (node.tag) {
           case 'h1':
             return (
-              <h1 className={`text-5xl${textAlignment}${textIndent}`} key={i}>
+              <h1 className={`text-5xl ${textStyles}`} key={i}>
                 {serialize(node.children)}
               </h1>
             )
           case 'h2':
             return (
-              <h2 className={`text-4xl${textAlignment}${textIndent}`} key={i}>
+              <h2 className={`text-4xl ${textStyles}`} key={i}>
                 {serialize(node.children)}
               </h2>
             )
           case 'h3':
             return (
-              <h3 className={`text-3xl${textAlignment}${textIndent}`} key={i}>
+              <h3 className={`text-3xl ${textStyles}`} key={i}>
                 {serialize(node.children)}
               </h3>
             )
           case 'h4':
             return (
-              <h4 className={`text-2xl${textAlignment}${textIndent}`} key={i}>
+              <h4 className={`text-2xl ${textStyles}`} key={i}>
                 {serialize(node.children)}
               </h4>
             )
           case 'h5':
             return (
-              <h5 className={`text-xl${textAlignment}${textIndent}`} key={i}>
+              <h5 className={`text-xl ${textStyles}`} key={i}>
                 {serialize(node.children)}
               </h5>
             )
           case 'h6':
             return (
-              <h6 className={`text-lg${textAlignment}${textIndent}`} key={i}>
+              <h6 className={`text-lg ${textStyles}`} key={i}>
                 {serialize(node.children)}
               </h6>
             )
@@ -163,10 +166,12 @@ const serialize = (nodes?: RichTextNode[], i?: number): React.ReactNode => {
         )
       case 'paragraph':
         return (
-          <p className={`${textAlignment}${textIndent}`} key={i}>
+          <p className={`${textStyles}`} key={i}>
             {serialize(node.children)}
           </p>
         )
+      case 'upload':
+        return <Media resource={node.value} />
     }
   })
 }
