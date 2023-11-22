@@ -1,8 +1,8 @@
 import type { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies'
 
 import type { Config } from '../../payload/payload-types'
-import { ARTIFACTS } from '../_graphql/artifacts'
 import { PAGES } from '../_graphql/pages'
+import { POSTS } from '../_graphql/posts'
 import { payloadToken } from './token'
 
 const queryMap = {
@@ -10,9 +10,9 @@ const queryMap = {
     query: PAGES,
     key: 'Pages',
   },
-  artifacts: {
-    query: ARTIFACTS,
-    key: 'Artifacts',
+  posts: {
+    query: POSTS,
+    key: 'Posts',
   },
 }
 
@@ -36,7 +36,6 @@ export const fetchDocs = async <T>(
       'Content-Type': 'application/json',
       ...(token?.value && draft ? { Authorization: `JWT ${token.value}` } : {}),
     },
-    cache: 'no-store',
     next: { tags: [collection] },
     body: JSON.stringify({
       query: queryMap[collection].query,

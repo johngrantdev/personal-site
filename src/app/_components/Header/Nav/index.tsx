@@ -1,43 +1,62 @@
 'use client'
 
-import React from 'react'
-import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
+import { animated, useSpring } from '@react-spring/web'
 import { usePathname } from 'next/navigation'
 
 import { Header as HeaderType } from '../../../../payload/payload-types'
+import { useTitle } from '../../../_providers/Context/Title/titleContext'
 import { CMSLink } from '../../Link'
 
 export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
   const navItems = header?.navItems || []
-  const currentRoute = usePathname()
+  const { title } = useTitle()
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const navAnimation = useSpring({
+    right: menuOpen ? '0%' : '-100%',
+    config: { tension: 170, friction: 26 },
+  })
 
   return (
-    <nav className={`flex gap-2 items-center flex-wrap text-2xl`}>
-      {navItems.map(({ link }, i) => {
-        return (
-          <CMSLink
-            key={i}
-            {...link}
-            className={`border-none last:pr-0 last:mr-0 hover:text-green-600 transition-colors ${
-              // normalizing - removing leading '/' and cases
-              currentRoute.substring(1).toLowerCase() === link.label.toLowerCase()
-                ? 'text-zinc-950'
-                : ''
-            }`}
-            appearance="none"
-          />
-        )
-      })}
-      {/*
-        // Uncomment this code if you want to add a login and account links to the header
-        {user && <Link href="/account">Account</Link>}
-        {!user && (
-          <React.Fragment>
-            <Link href="/login">Login</Link>
-            <Link href="/create-account">Create Account</Link>
-          </React.Fragment>
-        )}
-      */}
+    <nav role="navigation" aria-label="Main menu" className="flex static">
+      <button onClick={() => setMenuOpen(true)} className="md:hidden text-2xl">
+        menu
+      </button>
+      <animated.div
+        style={navAnimation}
+        className="fixed w-fit h-full top-0 right-0 z-20 bg-zinc-700 md:relative md:left-0 md:bg-transparent"
+      >
+        <ul className="md:flex md:flex-row gap-4 text-2xl">
+          {navItems.map(({ link }, i) => {
+            return (
+              <li>
+                <div
+                  className={` pl-10 pr-32 md:px-0 ${i === 0 && 'pt-6 md:pt-0'}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <CMSLink
+                    key={i}
+                    {...link}
+                    className={`border-none last:pr-0 last:mr-0 transition-all ${
+                      title.toLowerCase() === link.label.toLowerCase()
+                        ? 'underline dark:underline underline-offset-[14px] dark:text-white'
+                        : ''
+                    } hover:underline hover:underline-offset-[14px] dark:hover:text-white`}
+                    appearance="none"
+                  />
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      </animated.div>
+      <div
+        className={`${
+          menuOpen ? 'fixed w-full h-full top-0 left-0 z-10 backdrop-blur-sm' : 'hidden'
+        }`}
+        onClick={() => setMenuOpen(false)}
+      ></div>
     </nav>
   )
 }

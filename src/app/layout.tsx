@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import { JetBrains_Mono, Poppins } from 'next/font/google'
 
 import { AdminBar } from './_components/AdminBar'
 import { Footer } from './_components/Footer'
@@ -10,9 +11,27 @@ import { mergeOpenGraph } from './_utilities/mergeOpenGraph'
 
 import './globals.css'
 
+const poppins = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: '400',
+  variable: '--font-poppins',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  display: 'swap',
+  weight: '300',
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+})
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${poppins.variable} ${jetbrainsMono.variable}`}
+    >
       <head>
         <InitTheme />
         <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -20,14 +39,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <div className="font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300">
+          <main className="flex flex-col min-h-screen font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 transition-all duration-200">
             <AdminBar />
             {/* @ts-expect-error */}
             <Header />
-            {children}
+            <div className="flex-grow">{children}</div>
             {/* @ts-expect-error */}
             <Footer />
-          </div>
+          </main>
         </Providers>
       </body>
     </html>

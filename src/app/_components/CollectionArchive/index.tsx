@@ -1,20 +1,17 @@
 'use client'
-
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { animated, useTransition } from '@react-spring/web'
 import qs from 'qs'
 
-import { Artifact } from '../../../payload/payload-types'
+import { Post } from '../../../payload/payload-types'
 import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/types'
 import { Card } from '../Card'
-import { Gutter } from '../Gutter'
 import { PageRange } from '../PageRange'
 import { Pagination } from '../Pagination'
 
-// import classes from './index.module.scss'
-
 type Result = {
   totalDocs: number
-  docs: Artifact[]
+  docs: Post[]
   page: number
   totalPages: number
   hasPrevPage: boolean
@@ -25,7 +22,7 @@ type Result = {
 
 export type Props = {
   className?: string
-  relationTo?: 'artifacts'
+  relationTo?: 'posts'
   populateBy?: 'collection' | 'selection'
   showPageRange?: boolean
   onResultChange?: (result: Result) => void // eslint-disable-line no-unused-vars
@@ -106,7 +103,7 @@ export const CollectionArchive: React.FC<Props> = props => {
                     in:
                       typeof catsFromProps === 'string'
                         ? [catsFromProps]
-                        : catsFromProps.map(cat => cat.id).join(','),
+                        : catsFromProps.map(category => category.id).join(','),
                   },
                 }
               : {}),
@@ -127,7 +124,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           clearTimeout(timer)
           hasHydrated.current = true
 
-          const { docs } = json as { docs: Artifact[] }
+          const { docs } = json as { docs: Post[] }
 
           if (docs && Array.isArray(docs)) {
             setResults(json)
@@ -151,50 +148,45 @@ export const CollectionArchive: React.FC<Props> = props => {
     }
   }, [page, catsFromProps, relationTo, onResultChange, sort, limit, populateBy])
 
+  const [currentResult, setCurrentResult] = useState<Result>()
+  useEffect(() => {
+    setTimeout(() => {
+      setCurrentResult(results)
+    }, 300)
+  }, [results])
+
   return (
-    // add CollectionArchive with className props
     <div className={[className].filter(Boolean).join(' ')}>
-      {/* add scrollRef styles */}
-      <div className="absolute left-0 top-0" ref={scrollRef} />
-      {!isLoading && error && <Gutter>{error}</Gutter>}
-      <Fragment>
-        <Gutter>
-          {/* add grid styles */}
-          <div className=" grid grid-cols-3 w-full gap-3">
-            {results.docs?.map((result, index) => {
-              return (
-                // add column props
-                // className="col-end-4"
-                <div key={index}>
-                  <Card relationTo={relationTo} doc={result} showCategories />
-                </div>
-              )
-            })}
-          </div>
-          {results.totalPages > 1 && (
-            // add pagnation styles
-            <Pagination
-              className="mt-12"
-              page={results.page}
-              totalPages={results.totalPages}
-              onClick={setPage}
-            />
-          )}
-        </Gutter>
-        {showPageRange !== false && (
-          <Gutter>
-            {/* add pageRange styles */}
-            <div className="py-6">
-              <PageRange
-                totalDocs={results.totalDocs}
-                currentPage={results.page}
-                collection={relationTo}
-                limit={limit}
-              />
-            </div>
-          </Gutter>
-        )}
-      </Fragment>
+      <div className="absolute left-0 top-[-24]" ref={scrollRef} />
+      {!isLoading && error && <>{error}</>}
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl-grid-cols-5 w-full gap-3">
+        {currentResult &&
+          currentResult.docs?.map((result, index) => {
+            return (
+              <div key={index}>
+                <Card index={index} relationTo={relationTo} doc={result} showCategories />
+              </div>
+            )
+          })}
+      </div>
+      {currentResult && currentResult.totalPages > 1 && (
+        <Pagination
+          className="mt-12"
+          page={results.page}
+          totalPages={results.totalPages}
+          onClick={setPage}
+        />
+      )}
+      {showPageRange !== false && (
+        <div className="py-6">
+          <PageRange
+            totalDocs={results.totalDocs}
+            currentPage={results.page}
+            collection={relationTo}
+            limit={limit}
+          />
+        </div>
+      )}
     </div>
   )
 }

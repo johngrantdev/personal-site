@@ -5,8 +5,8 @@ export const notesPage: Partial<Page> = {
   slug: 'notes',
   _status: 'published',
   meta: {
-    title: 'Payload Website Template',
-    description: 'An open-source website built with Payload and Next.js.',
+    title: 'Notes',
+    description: process.env.SITE_DESCRIPTION,
     image: '{{IMAGE}}',
   },
   hero: {
@@ -21,7 +21,7 @@ export const notesPage: Partial<Page> = {
         children: [
           {
             type: 'heading',
-            tag: 'h1',
+            tag: 'h3',
             format: '',
             indent: 0,
             version: 1,
@@ -96,7 +96,7 @@ export const notesPage: Partial<Page> = {
         },
       },
       populateBy: 'collection',
-      relationTo: 'artifacts',
+      relationTo: 'posts',
       limit: 12,
       showPageRange: false,
       categories: [],

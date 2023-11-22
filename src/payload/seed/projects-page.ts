@@ -5,8 +5,8 @@ export const projectsPage: Partial<Page> = {
   slug: 'projects',
   _status: 'published',
   meta: {
-    title: 'Payload Website Template',
-    description: 'An open-source website built with Payload and Next.js.',
+    title: 'Projects',
+    description: process.env.SITE_DESCRIPTION,
     image: '{{IMAGE}}',
   },
   hero: {
@@ -21,7 +21,7 @@ export const projectsPage: Partial<Page> = {
         children: [
           {
             type: 'heading',
-            tag: 'h1',
+            tag: 'h3',
             format: '',
             indent: 0,
             version: 1,
@@ -96,7 +96,7 @@ export const projectsPage: Partial<Page> = {
         },
       },
       populateBy: 'collection',
-      relationTo: 'artifacts',
+      relationTo: 'posts',
       limit: 12,
       showPageRange: false,
       categories: [],

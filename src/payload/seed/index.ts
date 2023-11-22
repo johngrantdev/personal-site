@@ -14,7 +14,7 @@ import { project2 } from './project-2'
 import { project3 } from './project-3'
 import { projectsPage } from './projects-page'
 
-const collections = ['categories', 'media', 'pages', 'artifacts']
+const collections = ['categories', 'keywords', 'media', 'pages', 'posts']
 const globals = ['header', 'footer']
 
 // Next.js revalidation errors are normal when seeding the database without a server running
@@ -131,12 +131,12 @@ export const seed = async (payload: Payload): Promise<void> => {
     demoAuthorID = `"${demoAuthorID}"`
   }
 
-  payload.logger.info(`— Seeding artifacts...`)
+  payload.logger.info(`— Seeding posts...`)
 
-  // Do not create artifacts with `Promise.all` because we want the artifacts to be created in order
+  // Do not create posts with `Promise.all` because we want the posts to be created in order
   // This way we can sort them by `createdAt` or `publishedAt` and they will be in the expected order
   const note1Doc = await payload.create({
-    collection: 'artifacts',
+    collection: 'posts',
     data: JSON.parse(
       JSON.stringify({ ...note1, categories: [notesCategory.id] })
         .replace(/"\{\{IMAGE\}\}"/g, image1ID)
@@ -145,7 +145,7 @@ export const seed = async (payload: Payload): Promise<void> => {
   })
 
   const note2Doc = await payload.create({
-    collection: 'artifacts',
+    collection: 'posts',
     data: JSON.parse(
       JSON.stringify({ ...note2, categories: [notesCategory.id] })
         .replace(/"\{\{IMAGE\}\}"/g, image1ID)
@@ -154,7 +154,7 @@ export const seed = async (payload: Payload): Promise<void> => {
   })
 
   const project1Doc = await payload.create({
-    collection: 'artifacts',
+    collection: 'posts',
     data: JSON.parse(
       JSON.stringify({ ...project1, categories: [projectsCategory.id] })
         .replace(/"\{\{IMAGE\}\}"/g, image2ID)
@@ -163,7 +163,7 @@ export const seed = async (payload: Payload): Promise<void> => {
   })
 
   const note3Doc = await payload.create({
-    collection: 'artifacts',
+    collection: 'posts',
     data: JSON.parse(
       JSON.stringify({ ...note3, categories: [notesCategory.id] })
         .replace(/"\{\{IMAGE\}\}"/g, image1ID)
@@ -172,7 +172,7 @@ export const seed = async (payload: Payload): Promise<void> => {
   })
 
   const project2Doc = await payload.create({
-    collection: 'artifacts',
+    collection: 'posts',
     data: JSON.parse(
       JSON.stringify({ ...project2, categories: [projectsCategory.id] })
         .replace(/"\{\{IMAGE\}\}"/g, image2ID)
@@ -181,7 +181,7 @@ export const seed = async (payload: Payload): Promise<void> => {
   })
 
   const project3Doc = await payload.create({
-    collection: 'artifacts',
+    collection: 'posts',
     data: JSON.parse(
       JSON.stringify({ ...project3, categories: [projectsCategory.id] })
         .replace(/"\{\{IMAGE\}\}"/g, image2ID)
@@ -189,49 +189,49 @@ export const seed = async (payload: Payload): Promise<void> => {
     ),
   })
 
-  // update each artifact with related artifacts
+  // update each post with related posts
 
   await Promise.all([
     await payload.update({
-      collection: 'artifacts',
+      collection: 'posts',
       id: note1Doc.id,
       data: {
-        relatedArtifacts: [note2Doc.id, note3Doc.id],
+        relatedPosts: [note2Doc.id, note3Doc.id],
       },
     }),
     await payload.update({
-      collection: 'artifacts',
+      collection: 'posts',
       id: note2Doc.id,
       data: {
-        relatedArtifacts: [note1Doc.id, note3Doc.id],
+        relatedPosts: [note1Doc.id, note3Doc.id],
       },
     }),
     await payload.update({
-      collection: 'artifacts',
+      collection: 'posts',
       id: note3Doc.id,
       data: {
-        relatedArtifacts: [note1Doc.id, note2Doc.id],
+        relatedPosts: [note1Doc.id, note2Doc.id],
       },
     }),
     await payload.update({
-      collection: 'artifacts',
+      collection: 'posts',
       id: project1Doc.id,
       data: {
-        relatedArtifacts: [project2Doc.id, project3Doc.id],
+        relatedPosts: [project2Doc.id, project3Doc.id],
       },
     }),
     await payload.update({
-      collection: 'artifacts',
+      collection: 'posts',
       id: note2Doc.id,
       data: {
-        relatedArtifacts: [project1Doc.id, project3Doc.id],
+        relatedPosts: [project1Doc.id, project3Doc.id],
       },
     }),
     await payload.update({
-      collection: 'artifacts',
+      collection: 'posts',
       id: note3Doc.id,
       data: {
-        relatedArtifacts: [project1Doc.id, project2Doc.id],
+        relatedPosts: [project1Doc.id, project2Doc.id],
       },
     }),
   ])
@@ -253,7 +253,7 @@ export const seed = async (payload: Payload): Promise<void> => {
 
   const projectsPageDoc = await payload.create({
     collection: 'pages',
-    data: JSON.parse(JSON.stringify(projectsPage).replace(/"\{\{IMAGE\}\}"/g, image1ID)),
+    data: JSON.parse(JSON.stringify(projectsPage).replace(/"\{\{IMAGE\}\}"/g, image2ID)),
   })
 
   let projectPageID = projectsPageDoc.id
@@ -270,7 +270,7 @@ export const seed = async (payload: Payload): Promise<void> => {
       JSON.stringify(home)
         .replace(/"\{\{IMAGE_1\}\}"/g, image1ID)
         .replace(/"\{\{IMAGE_2\}\}"/g, image2ID)
-        .replace(/"\{\{ARTIFACTS_PAGE_ID\}\}"/g, notesPageID),
+        .replace(/"\{\{POSTS_PAGE_ID\}\}"/g, notesPageID),
     ),
   })
 

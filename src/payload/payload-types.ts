@@ -10,9 +10,10 @@
 export interface Config {
   collections: {
     pages: Page
-    artifacts: Artifact
-    media: Media
+    posts: Post
     categories: Category
+    keywords: Keyword
+    media: Media
     users: User
     comments: Comment
     redirects: Redirect
@@ -112,34 +113,35 @@ export interface Page {
           root: RichTextNode
         }
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts'
+        relationTo?: 'posts'
         categories?: string[] | Category[]
+        keywords?: string[] | Keyword[]
         limit?: number
         showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocsTotal?: number
@@ -163,8 +165,8 @@ export interface Media {
   id: string
   alt: string
   caption?: {
-    [k: string]: unknown
-  }[]
+    root: RichTextNode
+  }
   updatedAt: string
   createdAt: string
   url?: string
@@ -189,6 +191,20 @@ export interface Category {
   createdAt: string
 }
 
+export interface Keyword {
+  id: string
+  title?: string
+  parent?: string | Keyword
+  breadcrumbs?: {
+    doc?: string | Keyword
+    url?: string
+    label?: string
+    id?: string
+  }[]
+  updatedAt: string
+  createdAt: string
+}
+
 export interface RichTextNode {
     // common
     type?: string
@@ -203,19 +219,7 @@ export interface RichTextNode {
     start?: number
     listType?: string
     // upload and listItem
-    value?: {
-      id: number
-      alt: string
-      caption?: string
-      updatedAt: string
-      createdAt: string
-      url: string
-      filename: string
-      mineType: string
-      filesize: number
-      width: number
-      height: number
-    }
+    value?: Media
     // link
     fields?:
       | {
@@ -240,10 +244,11 @@ export interface RichTextNode {
     detail?: number
 }
 
-export interface Artifact {
+export interface Post {
   id: string
   title: string
   categories?: string[] | Category[]
+  keywords?: string[] | Keyword[]
   publishedAt?: string
   authors?: string[] | User[]
   populatedAuthors?: {
@@ -333,34 +338,35 @@ export interface Artifact {
           root: RichTextNode
         }
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts'
+        relationTo?: 'posts'
         categories?: string[] | Category[]
+        keywords?: string[] | Keyword[]
         limit?: number
         showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocsTotal?: number
@@ -369,8 +375,8 @@ export interface Artifact {
         blockType: 'archive'
       }
   )[]
-  enablePremiumContent?: boolean
-  premiumContent?: (
+  enableRestrictedContent?: boolean
+  restrictedContent?: (
     | {
         invertBackground?: boolean
         richText: {
@@ -432,34 +438,34 @@ export interface Artifact {
           root: RichTextNode
         }
         populateBy?: 'collection' | 'selection'
-        relationTo?: 'artifacts'
+        relationTo?: 'posts'
         categories?: string[] | Category[]
         limit?: number
         showPageRange?: boolean
         selectedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocs?:
           | (
               | {
-                  relationTo: 'artifacts'
+                  relationTo: 'posts'
                   value: string
                 }
             )[]
           | (
               | {
-                  relationTo: 'artifacts'
-                  value: Artifact
+                  relationTo: 'posts'
+                  value: Post
                 }
             )[]
         populatedDocsTotal?: number
@@ -468,7 +474,7 @@ export interface Artifact {
         blockType: 'archive'
       }
   )[]
-  relatedArtifacts?: string[] | Artifact[]
+  relatedPosts?: string[] | Post[]
   slug?: string
   meta?: {
     title?: string
@@ -507,8 +513,8 @@ export interface Redirect {
           value: string | Page
         }
       | {
-          relationTo: 'artifacts'
-          value: string | Artifact
+          relationTo: 'posts'
+          value: string | Post
         }
     url: string
   }
@@ -586,9 +592,10 @@ declare module 'payload' {
   export interface GeneratedTypes {
     collections: {
       pages: Page
-      artifacts: Artifact
+      posts: Post
       media: Media
       categories: Category
+      keywords: Keyword
       users: User
       comments: Comment
       redirects: Redirect

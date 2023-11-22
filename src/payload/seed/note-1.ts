@@ -1,5 +1,5 @@
-import type { Artifact } from '../payload-types'
-export const note1: Partial<Artifact> = {
+import type { Post } from '../payload-types'
+export const note1: Partial<Post> = {
   title: 'Note 1',
   slug: 'note-1',
   _status: 'published',
@@ -88,8 +88,8 @@ export const note1: Partial<Artifact> = {
       ],
     },
   ],
-  enablePremiumContent: true,
-  premiumContent: [
+  enableRestrictedContent: true,
+  restrictedContent: [
     {
       blockType: 'content',
       columns: [
@@ -117,7 +117,7 @@ export const note1: Partial<Artifact> = {
                       detail: 0,
                       version: 1,
                       format: 1,
-                      text: 'This is premium content.',
+                      text: 'This is restricted content.',
                     },
                     {
                       mode: 'normal',
@@ -142,5 +142,5 @@ export const note1: Partial<Artifact> = {
       ],
     },
   ],
-  relatedArtifacts: [], // this is populated by the seed script
+  relatedPosts: [], // this is populated by the seed script
 }
