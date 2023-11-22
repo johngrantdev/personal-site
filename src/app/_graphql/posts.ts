@@ -43,7 +43,7 @@ export const POST = `
           ${MEDIA_BLOCK}
           ${ARCHIVE_BLOCK}
         }
-        enablePremiumContent
+        enableRestrictedContent
         relatedPosts {
           id
           slug
@@ -56,11 +56,11 @@ export const POST = `
   }
 `
 
-export const POST_PREMIUM_CONTENT = `
+export const POST_RESTRICTED_CONTENT = `
   query Posts($slug: String, $draft: Boolean) {
     Posts(where: { slug: { equals: $slug }}, limit: 1, draft: $draft) {
       docs {
-        premiumContent {
+        restrictedContent {
           ${CALL_TO_ACTION}
           ${CONTENT}
           ${MEDIA_BLOCK}
