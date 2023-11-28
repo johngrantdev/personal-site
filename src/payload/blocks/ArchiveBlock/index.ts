@@ -2,6 +2,7 @@ import type { Block } from 'payload/types'
 
 export const Archive: Block = {
   slug: 'archive',
+  interfaceName: 'ArchiveBlock',
   labels: {
     singular: 'Archive',
     plural: 'Archives',
