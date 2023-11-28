@@ -4,7 +4,7 @@ import { animated, useTransition } from '@react-spring/web'
 import qs from 'qs'
 
 import { Post } from '../../../payload/payload-types'
-import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock/types'
+import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock'
 import { Card } from '../Card'
 import { PageRange } from '../PageRange'
 import { Pagination } from '../Pagination'
@@ -51,7 +51,10 @@ export const CollectionArchive: React.FC<Props> = props => {
 
   const [results, setResults] = useState<Result>({
     totalDocs: typeof populatedDocsTotal === 'number' ? populatedDocsTotal : 0,
-    docs: populatedDocs?.map(doc => doc.value) || selectedDocs?.map(doc => doc.value) || [],
+    docs:
+      (populatedDocs?.map(doc => doc.value) as Post[]) ||
+      (selectedDocs?.map(doc => doc.value) as Post[]) ||
+      [],
     page: 1,
     totalPages: 1,
     hasPrevPage: false,
@@ -103,7 +106,7 @@ export const CollectionArchive: React.FC<Props> = props => {
                     in:
                       typeof catsFromProps === 'string'
                         ? [catsFromProps]
-                        : catsFromProps.map(category => category.id).join(','),
+                        : catsFromProps.map(category => category).join(','),
                   },
                 }
               : {}),
