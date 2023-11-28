@@ -7,6 +7,7 @@ export const hero: Field = {
   name: 'hero',
   label: false,
   type: 'group',
+  interfaceName: 'HeroField',
   fields: [
     {
       type: 'select',
