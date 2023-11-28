@@ -30,20 +30,19 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
         <ul className="md:flex md:flex-row gap-4 text-2xl">
           {navItems.map(({ link }, i) => {
             return (
-              <li>
+              <li key={i}>
                 <div
                   className={` pl-10 pr-32 md:px-0 ${i === 0 && 'pt-6 md:pt-0'}`}
                   onClick={() => setMenuOpen(false)}
                 >
                   <CMSLink
-                    key={i}
                     {...link}
                     className={`border-none last:pr-0 last:mr-0 transition-all ${
                       title.toLowerCase() === link.label.toLowerCase()
                         ? 'underline dark:underline underline-offset-[14px] dark:text-white'
                         : ''
                     } hover:underline hover:underline-offset-[14px] dark:hover:text-white`}
-                    appearance="none"
+                    appearance="default"
                   />
                 </div>
               </li>
