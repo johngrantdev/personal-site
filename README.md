@@ -1,7 +1,7 @@
 # johngrant.dev personal site
 
 This is the repo for my personal site.
-This project is based on the [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website) which provided sensible defaults to build from. Payload is a headless CMS that provides a code first developer experience and is built with Node.js using Typescript. I chose it as it provided the functionality I was looking for out of the box while still allowing for easy extensibility.
+This project was initially based on the [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website) which provided sensible defaults to build from. Payload is a headless CMS that provides a code first developer experience and is built with Node.js using Typescript. I chose it as it provided the functionality I was looking for out of the box while still allowing for easy extensibility.
 The server is configured to use Express.js to serve both the Next.js frontend (src/app) and the Payload CMS (/src/payload) together.
 
 Stack:
@@ -28,7 +28,7 @@ Features
 - Redirects
 
 #### Changes to the base template include:
-- Migrated styling from Sass to TailwindCSS. T
+- Migrated styling from Sass to TailwindCSS.
 - Configured Postgres as the database
 - Removed unneccesery collection types such as. comments and projects
   - Posts are now used for both blog post and project content. Categories are used to filter which posts to show on each section of the site.
@@ -36,6 +36,7 @@ Features
 - Removed payload cloud and re-enabled the Next.js caching mechanism
 - Custom layout design and styling of the UI
   - React-Spring interaction animations
+- Improvements to payload generated types for consistant use across backend and frontend
 
 #### Todo (priority order):
 - Contact form
