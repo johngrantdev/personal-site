@@ -111,5 +111,5 @@ export const RestrictedContent: React.FC<{
   //   )
   // }
 
-  return <Blocks blocks={blocks} disableTopPadding={disableTopPadding} />
+  return <Blocks blocks={blocks} topPadding={disableTopPadding} />
 }
