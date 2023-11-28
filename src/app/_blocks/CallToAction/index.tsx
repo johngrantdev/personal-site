@@ -1,18 +1,16 @@
 import React from 'react'
 
-import { Page } from '../../../payload/payload-types'
+import { CallToActionBlock as CallToActionBlockType } from '../../../payload/payload-types'
 import { CMSLink } from '../../_components/Link'
 import RichText from '../../_components/RichText'
 
 // import classes from './index.module.scss'
 
-type Props = Extract<Page['layout'][0], { blockType: 'cta' }>
+type Props = CallToActionBlockType & {
+  id?: string
+}
 
-export const CallToActionBlock: React.FC<
-  Props & {
-    id?: string
-  }
-> = ({ links, richText, invertBackground }) => {
+export const CallToActionBlock: React.FC<Props> = ({ links, richText, invertBackground }) => {
   return (
     <div className="px-6 py-12 flex gap-14 items-center dark:bg-zinc-900 bg-zinc-600 text-zinc-100 rounded-lg drop-shadow-xl">
       <div className="flex-grow">
