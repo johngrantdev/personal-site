@@ -44,7 +44,7 @@ export async function Footer() {
           })}
         </nav>
         <div className="flex gap-10 items-center flex-wrap opacity-100 transition-opacity visible">
-          John Grant &copy; {currentYear}
+          {process.env.SITE_NAME} &copy; {currentYear}
           <div>
             Built with&nbsp;
             <Link
@@ -76,7 +76,7 @@ export async function Footer() {
           </div>
           <Link
             className="hover:underline hover:underline-offset-4"
-            href="https://github.com/jayelg/johngrant-dev"
+            href={process.env.SITE_SOURCE_LINK}
             target="_blank"
             rel="noopener noreferrer"
           >
