@@ -7,8 +7,6 @@ import Link from 'next/link'
 import { Post } from '../../../payload/payload-types'
 import { Media } from '../Media'
 
-// import classes from './index.module.scss'
-
 export const Card: React.FC<{
   alignItems?: 'center'
   className?: string
@@ -61,11 +59,11 @@ export const Card: React.FC<{
   const animationDuration = 400
   const [loaded, setLoaded] = useState(false)
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     setTimeout(() => {
       setLoaded(true)
     }, (animationDuration * (index + 1)) / 8)
-  }, [])
+  }, [index])
+
   useEffect(() => {
     let timeoutId
 
@@ -135,7 +133,17 @@ export const Card: React.FC<{
               {description && sanitizedDescription}
             </div>
             <div className="flex items-center justify-center h-full w-full content-center">
-              {hasKeywords ? keywords.map(keyword => keyword.title).join(', ') : null}
+              {hasKeywords
+                ? keywords
+                    // eslint-disable-next-line prettier/prettier
+                    .map(
+                      keyword =>
+                        // eslint-disable-next-line prettier/prettier
+                        typeof keyword === 'object' && 'title' in keyword ? keyword.title : keyword,
+                      // eslint-disable-next-line function-paren-newline
+                    )
+                    .join(', ')
+                : null}
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import escapeHTML from 'escape-html'
+import { LexicalNode } from 'lexical'
 
-import { RichTextNode } from '../../../payload/payload-types'
 import { CMSLink } from '../Link'
 import { Media } from '../Media'
 
@@ -36,7 +36,7 @@ function getTextFormats(formatNumber) {
   return { bold, italic, strikethrough, underline, code, subscript, superscript }
 }
 
-const serialize = (nodes?: RichTextNode[], i?: number): React.ReactNode => {
+const serialize = (nodes?: LexicalNode[], i?: number): React.ReactNode => {
   return nodes.map((node, i) => {
     if (!node) {
       return null

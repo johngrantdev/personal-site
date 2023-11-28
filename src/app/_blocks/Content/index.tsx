@@ -1,18 +1,16 @@
 import React from 'react'
 
-import { Page } from '../../../payload/payload-types'
+import { ContentBlock as ContentBlockType } from '../../../payload/payload-types'
 import { CMSLink } from '../../_components/Link'
 import RichText from '../../_components/RichText'
 
 // import classes from './index.module.scss'
 
-type Props = Extract<Page['layout'][0], { blockType: 'content' }>
+export type ContentProps = ContentBlockType & {
+  id?: string
+}
 
-export const ContentBlock: React.FC<
-  Props & {
-    id?: string
-  }
-> = props => {
+export const ContentBlock: React.FC<ContentProps> = props => {
   const { columns } = props
 
   const getColSpan = size => {
@@ -36,10 +34,8 @@ export const ContentBlock: React.FC<
           const { enableLink, richText, link, size } = col
           const colSpan = getColSpan(size)
           return (
-            // add column and column--${size} styling
             <div className={colSpan} key={index}>
               <RichText content={richText} />
-              {/* add link styling */}
               {enableLink && <CMSLink className="mt-6" {...link} />}
             </div>
           )

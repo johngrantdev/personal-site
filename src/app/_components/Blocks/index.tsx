@@ -19,7 +19,7 @@ const blockComponents = {
 }
 
 export const Blocks: React.FC<{
-  blocks: (Page['layout'][0] | RelatedPostsProps)[]
+  blocks: Page['layout'][0][]
   topPadding?: boolean
   bottomPadding?: boolean
 }> = props => {
@@ -48,7 +48,6 @@ export const Blocks: React.FC<{
             if (Block) {
               return (
                 <Padding key={index} top={topPadding} bottom={bottomPadding}>
-                  {/* @ts-expect-error */}
                   <Block id={toKebabCase(blockName)} {...block} />
                 </Padding>
               )

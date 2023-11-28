@@ -25,7 +25,7 @@ export const PostHero: React.FC<{
         <div className=" w-1/2 flex flex-col content-center items-start gap-6">
           <div className="flex gap-3">
             <div>
-              {categories.title}
+              {typeof categories === 'object' ? categories.title : null}
               {/* {categories?.map((category, index) => {
                 const { title: categoryTitle } = category
 
@@ -86,11 +86,11 @@ export const PostHero: React.FC<{
             {!metaImage && (
               <div className="w-full h-full flex items-center content-center">No image</div>
             )}
-            {metaImage && typeof metaImage !== 'string' && (
+            {metaImage && typeof metaImage === 'object' && (
               <Media imgClassName="object-cover" resource={metaImage} fill />
             )}
           </div>
-          {metaImage && typeof metaImage !== 'string' && metaImage?.caption && (
+          {metaImage && typeof metaImage === 'object' && metaImage?.caption && (
             <RichText content={metaImage.caption} />
           )}
         </div>

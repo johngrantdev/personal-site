@@ -1,22 +1,16 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { Page } from '../../../payload/payload-types'
+import { LinkField, Page } from '../../../payload/payload-types'
 import { Button, Props as ButtonProps } from '../Button'
 
-type CMSLinkType = {
-  type?: 'custom' | 'reference'
-  url?: string
-  newTab?: boolean
-  reference?: {
-    value: string | Page
-    relationTo: 'pages'
-  }
-  label?: string
-  appearance?: ButtonProps['appearance']
+type OptionalLinkField = Partial<LinkField>
+
+type CMSLinkType = OptionalLinkField & {
   children?: React.ReactNode
   className?: string
   invert?: ButtonProps['invert']
+  label?: string // overrides to be optional
 }
 
 export const CMSLink: React.FC<CMSLinkType> = ({
@@ -24,7 +18,7 @@ export const CMSLink: React.FC<CMSLinkType> = ({
   url,
   newTab,
   reference,
-  label,
+  label = 'default',
   appearance,
   children,
   className,
