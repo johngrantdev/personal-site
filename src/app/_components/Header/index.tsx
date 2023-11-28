@@ -27,7 +27,7 @@ export async function Header() {
     <header>
       {/* add wrap styles */}
       <Padding className="flex justify-between flex-wrap gap-x-3" bottom={false}>
-        <Title />
+        <Title siteName={process.env.SITE_NAME} />
         <HeaderNav header={header} />
       </Padding>
     </header>
