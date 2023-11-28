@@ -3,6 +3,7 @@
 import React from 'react'
 import NextImage, { StaticImageData } from 'next/image'
 
+import { Media } from '../../../../payload/payload-types'
 import cssVariables from '../../../cssVariables'
 import { Props as MediaProps } from '../types'
 
@@ -27,13 +28,13 @@ export const Image: React.FC<MediaProps> = props => {
   let alt = altFromProps
   let src: StaticImageData | string = srcFromProps || ''
 
-  if (!src && resource && typeof resource !== 'string') {
+  if (!src && resource && typeof resource === 'object') {
     const {
       width: fullWidth,
       height: fullHeight,
       filename: fullFilename,
       alt: altFromResource,
-    } = resource
+    } = resource as Media
 
     width = fullWidth
     height = fullHeight
