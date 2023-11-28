@@ -4,6 +4,7 @@ import { invertBackground } from '../../fields/invertBackground'
 
 export const MediaBlock: Block = {
   slug: 'mediaBlock',
+  interfaceName: 'MediaBlock',
   fields: [
     invertBackground,
     {
