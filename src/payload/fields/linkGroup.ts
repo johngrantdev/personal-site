@@ -14,6 +14,7 @@ const linkGroup: LinkGroupType = ({ overrides = {}, appearances } = {}) => {
   const generatedLinkGroup: Field = {
     name: 'links',
     type: 'array',
+    interfaceName: 'LinkGroupField',
     fields: [
       link({
         appearances,
