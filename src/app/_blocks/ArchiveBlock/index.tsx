@@ -1,16 +1,14 @@
 import React from 'react'
 
+import { ArchiveBlock as ArchiveBlockType } from '../../../payload/payload-types'
 import { CollectionArchive } from '../../_components/CollectionArchive'
 import RichText from '../../_components/RichText'
-import { ArchiveBlockProps } from './types'
 
-// import classes from './index.module.scss'
+export type ArchiveBlockProps = ArchiveBlockType & {
+  id?: string
+}
 
-export const ArchiveBlock: React.FC<
-  ArchiveBlockProps & {
-    id?: string
-  }
-> = props => {
+export const ArchiveBlock: React.FC<ArchiveBlockProps> = props => {
   const {
     introContent,
     id,

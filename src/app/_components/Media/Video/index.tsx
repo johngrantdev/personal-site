@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 
+import { Media } from '../../../../payload/payload-types'
 import { Props as MediaProps } from '../types'
 
 export const Video: React.FC<MediaProps> = props => {
@@ -20,8 +21,8 @@ export const Video: React.FC<MediaProps> = props => {
     }
   }, [])
 
-  if (resource && typeof resource !== 'string') {
-    const { filename } = resource
+  if (resource && typeof resource === 'object') {
+    const { filename } = resource as Media
 
     return (
       // add video styles

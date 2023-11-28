@@ -6,12 +6,15 @@ import { notFound } from 'next/navigation'
 import { Post } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
+import { RelatedPosts } from '../../../_blocks/RelatedPosts'
 import { Blocks } from '../../../_components/Blocks'
+import { Padding } from '../../../_components/Padding'
 import { RestrictedContent } from '../../../_components/RestrictedContent'
 import { PostHero } from '../../../_heros/PostHero'
 import { useAuth } from '../../../_providers/Auth'
 import { TitleState } from '../../../_providers/Context/Title/titleContext'
 import { generateMeta } from '../../../_utilities/generateMeta'
+import { toKebabCase } from '../../../_utilities/toKebabCase'
 
 export default async function Post({ params: { slug } }) {
   const { isEnabled: isDraftMode } = draftMode()
@@ -32,7 +35,10 @@ export default async function Post({ params: { slug } }) {
     notFound()
   }
 
-  const { layout, relatedPosts, enableRestrictedContent, restrictedContent, title } = post
+  const { layout, enableRestrictedContent, restrictedContent, title } = post
+
+  // relatedPosts at this depth is expected to be populated on Posts and therefore can be asserted as Post[]
+  const relatedPosts = post.relatedPosts as Post[]
 
   return (
     <React.Fragment>
@@ -40,34 +46,9 @@ export default async function Post({ params: { slug } }) {
       <PostHero post={post} />
       <Blocks blocks={layout} />
       {enableRestrictedContent && <RestrictedContent postSlug={slug as string} disableTopPadding />}
-      <Blocks
-        topPadding
-        bottomPadding
-        blocks={[
-          {
-            blockType: 'relatedPosts',
-            blockName: 'Related Posts',
-            relationTo: 'posts',
-            introContent: {
-              root: {
-                children: [
-                  {
-                    type: 'heading',
-                    tag: 'h4',
-                    children: [
-                      {
-                        type: 'text',
-                        text: 'More:',
-                      },
-                    ],
-                  },
-                ],
-              },
-            },
-            docs: relatedPosts,
-          },
-        ]}
-      />
+      <Padding key={1000}>
+        <RelatedPosts introContent="More:" docs={relatedPosts} />
+      </Padding>
     </React.Fragment>
   )
 }

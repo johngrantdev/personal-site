@@ -1,15 +1,13 @@
 import React from 'react'
 import { StaticImageData } from 'next/image'
 
-import { Page } from '../../../payload/payload-types'
+import { MediaBlock as MediaBlockType } from '../../../payload/payload-types'
 import { Media } from '../../_components/Media'
 import RichText from '../../_components/RichText'
 
-// import classes from './index.module.scss'
-
-type Props = Extract<Page['layout'][0], { blockType: 'mediaBlock' }> & {
+type Props = MediaBlockType & {
   staticImage?: StaticImageData
-  id?: string
+  id?: number
 }
 
 export const MediaBlock: React.FC<Props> = props => {

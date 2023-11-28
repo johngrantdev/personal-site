@@ -17,8 +17,6 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import Users from './collections/Users'
-import { SeedButton } from './components/BeforeDashboard/SeedButton'
-import { seed } from './endpoints/seed'
 import { Footer } from './globals/Footer'
 import { Header } from './globals/Header'
 
@@ -36,7 +34,7 @@ export default buildConfig({
     bundler: webpackBundler(),
     components: {
       // Seed Button
-      beforeDashboard: [SeedButton],
+      // beforeDashboard: [SeedButton],
     },
     webpack: config => ({
       ...config,
@@ -45,10 +43,10 @@ export default buildConfig({
         alias: {
           ...config.resolve.alias,
           dotenv: path.resolve(__dirname, './dotenv.js'),
-          [path.resolve(__dirname, './endpoints/seed')]: path.resolve(
-            __dirname,
-            './emptyModuleMock.js',
-          ),
+          // [path.resolve(__dirname, './endpoints/seed')]: path.resolve(
+          //   __dirname,
+          //   './emptyModuleMock.js',
+          // ),
         },
       },
     }),
@@ -77,15 +75,15 @@ export default buildConfig({
   },
   cors: [process.env.PAYLOAD_PUBLIC_SERVER_URL || ''].filter(Boolean),
   csrf: [process.env.PAYLOAD_PUBLIC_SERVER_URL || ''].filter(Boolean),
-  endpoints: [
-    // The seed endpoint is used to populate the database with some example data
-    // You should delete this endpoint before deploying your site to production
-    {
-      path: '/seed',
-      method: 'get',
-      handler: seed,
-    },
-  ],
+  // endpoints: [
+  //   // The seed endpoint is used to populate the database with some example data
+  //   // You should delete this endpoint before deploying your site to production
+  //   {
+  //     path: '/seed',
+  //     method: 'get',
+  //     handler: seed,
+  //   },
+  // ],
   plugins: [
     // formBuilder({}),
     redirects({

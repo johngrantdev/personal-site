@@ -9,7 +9,12 @@ import Link from 'next/link'
 
 import { useTitle } from '../../../_providers/Context/Title/titleContext'
 
-export function Title() {
+type TitleProps = {
+  siteName: string
+}
+
+export function Title(props: TitleProps) {
+  const { siteName } = props
   const titleContext = useTitle()
   const [title, setTitle] = useState('')
   const [fadeTitle, setFadeTitle] = useState(false)
@@ -46,7 +51,7 @@ export function Title() {
   return (
     <div className="flex h-full text-4xl select-none gap-2">
       <Link className=" justify-normal" href="/">
-        john grant
+        {siteName}
       </Link>{' '}
       <animated.div className="flex gap-2" style={fadeTitlePipe}>
         |<animated.div style={fadePageTitle}>{title}</animated.div>
