@@ -7,7 +7,7 @@ import RichText from '../../_components/RichText'
 // import classes from './index.module.scss'
 
 export type ContentProps = ContentBlockType & {
-  id?: string
+  id?: number
 }
 
 export const ContentBlock: React.FC<ContentProps> = props => {

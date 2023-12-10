@@ -5,7 +5,7 @@ import { CollectionArchive } from '../../_components/CollectionArchive'
 import RichText from '../../_components/RichText'
 
 export type ArchiveBlockProps = ArchiveBlockType & {
-  id?: string
+  id?: number
 }
 
 export const ArchiveBlock: React.FC<ArchiveBlockProps> = props => {
