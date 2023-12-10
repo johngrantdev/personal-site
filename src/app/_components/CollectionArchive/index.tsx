@@ -1,6 +1,5 @@
 'use client'
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
-import { animated, useTransition } from '@react-spring/web'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import qs from 'qs'
 
 import { Post } from '../../../payload/payload-types'
@@ -100,13 +99,12 @@ export const CollectionArchive: React.FC<Props> = props => {
         {
           sort,
           where: {
-            ...(catsFromProps && catsFromProps?.length > 0
+            ...(catsFromProps && catsFromProps.length > 0
               ? {
                   categories: {
-                    in:
-                      typeof catsFromProps === 'string'
-                        ? [catsFromProps]
-                        : catsFromProps.map(category => category).join(','),
+                    in: catsFromProps
+                      .map(category => (typeof category === 'number' ? category : category.id))
+                      .join(','),
                   },
                 }
               : {}),

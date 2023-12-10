@@ -7,7 +7,7 @@ import RichText from '../../_components/RichText'
 // import classes from './index.module.scss'
 
 type Props = CallToActionBlockType & {
-  id?: string
+  id?: number
 }
 
 export const CallToActionBlock: React.FC<Props> = ({ links, richText, invertBackground }) => {
