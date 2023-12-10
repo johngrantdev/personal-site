@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 
 interface TitleContextType {
   title: string
@@ -21,6 +21,11 @@ export const TitleProvider = ({ children }) => {
 export const useTitle = () => useContext(TitleContext)
 
 export const TitleState = ({ title = '' }) => {
-  useTitle().setTitle(title)
-  return <></>
+  const { setTitle } = useTitle()
+
+  useEffect(() => {
+    setTitle(title)
+  }, [title, setTitle])
+
+  return null
 }
