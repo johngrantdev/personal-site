@@ -19,7 +19,7 @@ const queryMap = {
 export const fetchDoc = async <T>(args: {
   collection: keyof Config['collections']
   slug?: string
-  id?: string
+  id?: number
   draft?: boolean
 }): Promise<T> => {
   const { collection, slug, draft } = args || {}
