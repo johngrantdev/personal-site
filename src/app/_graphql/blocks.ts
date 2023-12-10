@@ -3,8 +3,8 @@ import { LINK_FIELDS } from './link'
 import { MEDIA } from './media'
 import { META } from './meta'
 
-export const CALL_TO_ACTION = `
-...on Cta {
+export const CALL_TO_ACTION_BLOCK = `
+...on CallToActionBlock {
   blockType
   invertBackground
   richText
@@ -14,8 +14,8 @@ export const CALL_TO_ACTION = `
 }
 `
 
-export const CONTENT = `
-...on Content {
+export const CONTENT_BLOCK = `
+...on ContentBlock {
   blockType
   invertBackground
   columns {
@@ -37,7 +37,7 @@ export const MEDIA_BLOCK = `
 `
 
 export const ARCHIVE_BLOCK = `
-...on Archive {
+...on ArchiveBlock {
   blockType
   introContent
   populateBy
