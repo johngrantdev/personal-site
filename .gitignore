@@ -10,4 +10,8 @@ node_modules
 .vercel
 
 yarn.lock
+yarn-error.log
 /_trash
+
+docker-compose-dev*
+docker-compose-prod*
