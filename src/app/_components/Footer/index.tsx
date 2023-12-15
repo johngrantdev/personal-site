@@ -1,33 +1,25 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { Footer } from '../../../payload/payload-types'
-import { fetchFooter } from '../../_api/fetchGlobals'
+import { Site } from '../../../payload/payload-types'
 import { CMSLink } from '../Link'
 import { Padding } from '../Padding'
 import { ThemeSelector } from '../ThemeSelector'
 
 // import classes from './index.module.scss'
 
-export async function Footer() {
-  let footer: Footer | null = null
+type FooterProps = {
+  siteSettings: Site
+}
 
-  try {
-    footer = await fetchFooter()
-  } catch (error) {
-    // When deploying this template on Payload Cloud, this page needs to build before the APIs are live
-    // So swallow the error here and simply render the footer without nav items if one occurs
-    // in production you may want to redirect to a 404  page or at least log the error somewhere
-    // console.error(error)
-  }
-
-  const navItems = footer?.navItems || []
+export async function Footer({ siteSettings }: FooterProps) {
+  const navItems = siteSettings?.navItems || []
 
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="w-full">
-      <Padding className="flex items-center justify-center flex-wrap h-16 gap-x-3 gap-y-6">
+    <footer className="w-full bg-zinc-600 dark:bg-zinc-950 text-zinc-300 mt-10">
+      <Padding className="flex items-center justify-between flex-wrap gap-x-3 gap-y-6">
         {/* <Link href="/">
           <picture>
             <img
@@ -38,13 +30,15 @@ export async function Footer() {
           </picture>
         </Link> */}
         {/* this nav is for cms defined links */}
-        <nav>
+        <nav className="flex flex-col gap-y-3">
+          {siteSettings ? siteSettings.siteTitle : 'title'} &copy; {currentYear}
           {navItems.map(({ link }, i) => {
-            return <CMSLink key={i} {...link} />
+            return (
+              <CMSLink key={i} {...link} className="hover:underline hover:underline-offset-4" />
+            )
           })}
         </nav>
         <div className="flex gap-10 items-center flex-wrap opacity-100 transition-opacity visible">
-          {process.env.SITE_NAME} &copy; {currentYear}
           <div>
             Built with&nbsp;
             <Link
@@ -76,7 +70,9 @@ export async function Footer() {
           </div>
           <Link
             className="hover:underline hover:underline-offset-4"
-            href={process.env.SITE_SOURCE_LINK}
+            href={
+              siteSettings ? siteSettings.siteSourceLink : 'https://github.com/jayelg/personal-site'
+            }
             target="_blank"
             rel="noopener noreferrer"
           >
