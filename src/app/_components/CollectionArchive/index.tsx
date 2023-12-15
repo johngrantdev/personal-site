@@ -118,8 +118,9 @@ export const CollectionArchive: React.FC<Props> = props => {
 
       const makeRequest = async () => {
         try {
+          // Todo: Using NEXT_PUBLIC for payload api, check this needs to be client side
           const req = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/${relationTo}?${searchQuery}`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/payload/${relationTo}?${searchQuery}`,
           )
           const json = await req.json()
           clearTimeout(timer)
