@@ -2,7 +2,8 @@ import React from 'react'
 import { Metadata } from 'next'
 import { JetBrains_Mono, Poppins } from 'next/font/google'
 
-import { AdminBar } from './_components/AdminBar'
+import { Site } from '../payload/payload-types'
+import { fetchSiteSettings } from './_api/fetchGlobals'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
 import { Providers } from './_providers'
@@ -25,6 +26,12 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  let siteSettings: Site | null = null
+
+  try {
+    siteSettings = await fetchSiteSettings()
+  } catch (error) {}
+
   return (
     <html
       lang="en"
@@ -38,12 +45,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <Providers>
           <main className="flex flex-col min-h-screen font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 transition-all duration-200">
-            <AdminBar />
             {/* @ts-expect-error */}
-            <Header />
+            <Header siteSettings={siteSettings} />
             <div className="flex-grow">{children}</div>
             {/* @ts-expect-error */}
-            <Footer />
+            <Footer siteSettings={siteSettings} />
           </main>
         </Providers>
       </body>
