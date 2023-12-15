@@ -329,13 +329,7 @@ EXCEPTION
 END $$;
 
 DO $$ BEGIN
- CREATE TYPE "enum_header_nav_items_type" AS ENUM('reference', 'custom');
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
-
-DO $$ BEGIN
- CREATE TYPE "enum_footer_nav_items_type" AS ENUM('reference', 'custom');
+ CREATE TYPE "enum_site_nav_items_type" AS ENUM('reference', 'custom');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -854,27 +848,11 @@ CREATE TABLE IF NOT EXISTS "media" (
 	"height" numeric
 );
 
-CREATE TABLE IF NOT EXISTS "categories_breadcrumbs" (
-	"_order" integer NOT NULL,
-	"_parent_id" integer NOT NULL,
-	"id" varchar PRIMARY KEY NOT NULL,
-	"url" varchar,
-	"label" varchar
-);
-
 CREATE TABLE IF NOT EXISTS "categories" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar,
 	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
 	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS "categories_rels" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"order" integer,
-	"parent_id" integer NOT NULL,
-	"path" varchar NOT NULL,
-	"categories_id" integer
 );
 
 CREATE TABLE IF NOT EXISTS "keywords_breadcrumbs" (
@@ -963,51 +941,31 @@ CREATE TABLE IF NOT EXISTS "payload_migrations" (
 	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "header_nav_items" (
+CREATE TABLE IF NOT EXISTS "site_nav_items" (
 	"_order" integer NOT NULL,
 	"_parent_id" integer NOT NULL,
 	"id" varchar PRIMARY KEY NOT NULL,
-	"link_type" "enum_header_nav_items_type",
+	"link_type" "enum_site_nav_items_type",
 	"link_new_tab" boolean,
 	"link_url" varchar,
 	"link_label" varchar NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "header" (
+CREATE TABLE IF NOT EXISTS "site" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"site_title" varchar,
+	"site_description" varchar,
+	"site_source_link" varchar,
 	"updated_at" timestamp(3) with time zone,
 	"created_at" timestamp(3) with time zone
 );
 
-CREATE TABLE IF NOT EXISTS "header_rels" (
+CREATE TABLE IF NOT EXISTS "site_rels" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"order" integer,
 	"parent_id" integer NOT NULL,
 	"path" varchar NOT NULL,
-	"pages_id" integer
-);
-
-CREATE TABLE IF NOT EXISTS "footer_nav_items" (
-	"_order" integer NOT NULL,
-	"_parent_id" integer NOT NULL,
-	"id" varchar PRIMARY KEY NOT NULL,
-	"link_type" "enum_footer_nav_items_type",
-	"link_new_tab" boolean,
-	"link_url" varchar,
-	"link_label" varchar NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS "footer" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"updated_at" timestamp(3) with time zone,
-	"created_at" timestamp(3) with time zone
-);
-
-CREATE TABLE IF NOT EXISTS "footer_rels" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"order" integer,
-	"parent_id" integer NOT NULL,
-	"path" varchar NOT NULL,
+	"media_id" integer,
 	"pages_id" integer
 );
 
@@ -1125,12 +1083,7 @@ CREATE INDEX IF NOT EXISTS "parent_idx" ON "_posts_v_rels" ("parent_id");
 CREATE INDEX IF NOT EXISTS "path_idx" ON "_posts_v_rels" ("path");
 CREATE INDEX IF NOT EXISTS "created_at_idx" ON "media" ("created_at");
 CREATE UNIQUE INDEX IF NOT EXISTS "filename_idx" ON "media" ("filename");
-CREATE INDEX IF NOT EXISTS "_order_idx" ON "categories_breadcrumbs" ("_order");
-CREATE INDEX IF NOT EXISTS "_parent_id_idx" ON "categories_breadcrumbs" ("_parent_id");
 CREATE INDEX IF NOT EXISTS "created_at_idx" ON "categories" ("created_at");
-CREATE INDEX IF NOT EXISTS "order_idx" ON "categories_rels" ("order");
-CREATE INDEX IF NOT EXISTS "parent_idx" ON "categories_rels" ("parent_id");
-CREATE INDEX IF NOT EXISTS "path_idx" ON "categories_rels" ("path");
 CREATE INDEX IF NOT EXISTS "_order_idx" ON "keywords_breadcrumbs" ("_order");
 CREATE INDEX IF NOT EXISTS "_parent_id_idx" ON "keywords_breadcrumbs" ("_parent_id");
 CREATE INDEX IF NOT EXISTS "created_at_idx" ON "keywords" ("created_at");
@@ -1151,16 +1104,11 @@ CREATE INDEX IF NOT EXISTS "order_idx" ON "payload_preferences_rels" ("order");
 CREATE INDEX IF NOT EXISTS "parent_idx" ON "payload_preferences_rels" ("parent_id");
 CREATE INDEX IF NOT EXISTS "path_idx" ON "payload_preferences_rels" ("path");
 CREATE INDEX IF NOT EXISTS "created_at_idx" ON "payload_migrations" ("created_at");
-CREATE INDEX IF NOT EXISTS "_order_idx" ON "header_nav_items" ("_order");
-CREATE INDEX IF NOT EXISTS "_parent_id_idx" ON "header_nav_items" ("_parent_id");
-CREATE INDEX IF NOT EXISTS "order_idx" ON "header_rels" ("order");
-CREATE INDEX IF NOT EXISTS "parent_idx" ON "header_rels" ("parent_id");
-CREATE INDEX IF NOT EXISTS "path_idx" ON "header_rels" ("path");
-CREATE INDEX IF NOT EXISTS "_order_idx" ON "footer_nav_items" ("_order");
-CREATE INDEX IF NOT EXISTS "_parent_id_idx" ON "footer_nav_items" ("_parent_id");
-CREATE INDEX IF NOT EXISTS "order_idx" ON "footer_rels" ("order");
-CREATE INDEX IF NOT EXISTS "parent_idx" ON "footer_rels" ("parent_id");
-CREATE INDEX IF NOT EXISTS "path_idx" ON "footer_rels" ("path");
+CREATE INDEX IF NOT EXISTS "_order_idx" ON "site_nav_items" ("_order");
+CREATE INDEX IF NOT EXISTS "_parent_id_idx" ON "site_nav_items" ("_parent_id");
+CREATE INDEX IF NOT EXISTS "order_idx" ON "site_rels" ("order");
+CREATE INDEX IF NOT EXISTS "parent_idx" ON "site_rels" ("parent_id");
+CREATE INDEX IF NOT EXISTS "path_idx" ON "site_rels" ("path");
 DO $$ BEGIN
  ALTER TABLE "pages_hero_links" ADD CONSTRAINT "pages_hero_links__parent_id_pages_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
@@ -1510,24 +1458,6 @@ EXCEPTION
 END $$;
 
 DO $$ BEGIN
- ALTER TABLE "categories_breadcrumbs" ADD CONSTRAINT "categories_breadcrumbs__parent_id_categories_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "categories"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
-
-DO $$ BEGIN
- ALTER TABLE "categories_rels" ADD CONSTRAINT "categories_rels_parent_id_categories_id_fk" FOREIGN KEY ("parent_id") REFERENCES "categories"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
-
-DO $$ BEGIN
- ALTER TABLE "categories_rels" ADD CONSTRAINT "categories_rels_categories_id_categories_id_fk" FOREIGN KEY ("categories_id") REFERENCES "categories"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
-
-DO $$ BEGIN
  ALTER TABLE "keywords_breadcrumbs" ADD CONSTRAINT "keywords_breadcrumbs__parent_id_keywords_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "keywords"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -1582,37 +1512,25 @@ EXCEPTION
 END $$;
 
 DO $$ BEGIN
- ALTER TABLE "header_nav_items" ADD CONSTRAINT "header_nav_items__parent_id_header_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "header"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "site_nav_items" ADD CONSTRAINT "site_nav_items__parent_id_site_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "site"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 
 DO $$ BEGIN
- ALTER TABLE "header_rels" ADD CONSTRAINT "header_rels_parent_id_header_id_fk" FOREIGN KEY ("parent_id") REFERENCES "header"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "site_rels" ADD CONSTRAINT "site_rels_parent_id_site_id_fk" FOREIGN KEY ("parent_id") REFERENCES "site"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 
 DO $$ BEGIN
- ALTER TABLE "header_rels" ADD CONSTRAINT "header_rels_pages_id_pages_id_fk" FOREIGN KEY ("pages_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "site_rels" ADD CONSTRAINT "site_rels_media_id_media_id_fk" FOREIGN KEY ("media_id") REFERENCES "media"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 
 DO $$ BEGIN
- ALTER TABLE "footer_nav_items" ADD CONSTRAINT "footer_nav_items__parent_id_footer_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "footer"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
-
-DO $$ BEGIN
- ALTER TABLE "footer_rels" ADD CONSTRAINT "footer_rels_parent_id_footer_id_fk" FOREIGN KEY ("parent_id") REFERENCES "footer"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
-
-DO $$ BEGIN
- ALTER TABLE "footer_rels" ADD CONSTRAINT "footer_rels_pages_id_pages_id_fk" FOREIGN KEY ("pages_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "site_rels" ADD CONSTRAINT "site_rels_pages_id_pages_id_fk" FOREIGN KEY ("pages_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -1666,9 +1584,7 @@ DROP TABLE "_posts_v_blocks_code";
 DROP TABLE "_posts_v";
 DROP TABLE "_posts_v_rels";
 DROP TABLE "media";
-DROP TABLE "categories_breadcrumbs";
 DROP TABLE "categories";
-DROP TABLE "categories_rels";
 DROP TABLE "keywords_breadcrumbs";
 DROP TABLE "keywords";
 DROP TABLE "keywords_rels";
@@ -1679,11 +1595,8 @@ DROP TABLE "redirects_rels";
 DROP TABLE "payload_preferences";
 DROP TABLE "payload_preferences_rels";
 DROP TABLE "payload_migrations";
-DROP TABLE "header_nav_items";
-DROP TABLE "header";
-DROP TABLE "header_rels";
-DROP TABLE "footer_nav_items";
-DROP TABLE "footer";
-DROP TABLE "footer_rels";`);
+DROP TABLE "site_nav_items";
+DROP TABLE "site";
+DROP TABLE "site_rels";`);
 
 };
