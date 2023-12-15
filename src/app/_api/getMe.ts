@@ -15,7 +15,7 @@ export const getMe = async (args?: {
   const cookieStore = cookies()
   const token = cookieStore.get('payload-token')?.value
 
-  const meUserReq = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/graphql`, {
+  const meUserReq = await fetch(`${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/payload/graphql`, {
     method: 'POST',
     headers: {
       Authorization: `JWT ${token}`,
