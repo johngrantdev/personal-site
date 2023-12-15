@@ -29,8 +29,13 @@ COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/build ./build
 COPY --from=builder /home/node/app/migrations ./migrations
 COPY --from=builder /home/node/app/.next ./.next
-COPY --from=builder /home/node/app/media ./media
+
+# Copy next.config.js and its dependencies
+COPY --from=builder /home/node/app/next.config.js ./next.config.js
+COPY --from=builder /home/node/app/csp.js ./csp.js
+COPY --from=builder /home/node/app/redirects.js ./redirects.js
 
 EXPOSE 80
 
+# RUN npx next experimental-generate
 CMD ["node", "dist/server.js"]
