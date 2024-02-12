@@ -5,7 +5,6 @@ import React, { Fragment } from 'react'
 import { HiddenLayout } from '../../../payload/payload-types'
 import { ArchiveBlock } from '../../_blocks/ArchiveBlock'
 import { CallToActionBlock } from '../../_blocks/CallToAction'
-import { ColumnsBlock } from '../../_blocks/ColumnBlock'
 import { MediaBlock } from '../../_blocks/MediaBlock'
 import { RelatedPosts, type RelatedPostsProps } from '../../_blocks/RelatedPosts'
 import { toKebabCase } from '../../_utilities/toKebabCase'
@@ -15,7 +14,6 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   archive: ArchiveBlock,
   relatedPosts: RelatedPosts,
-  columnsBlock: ColumnsBlock,
 }
 
 export const Blocks: React.FC<{
