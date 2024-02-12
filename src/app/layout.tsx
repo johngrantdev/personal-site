@@ -44,13 +44,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <main className="flex flex-col min-h-screen font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 transition-all duration-200">
+          <div className="flex flex-col w-full min-h-screen font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 transition-all duration-200">
             {/* @ts-expect-error */}
             <Header siteSettings={siteSettings} />
-            <div className="flex-grow">{children}</div>
+            {children}
             {/* @ts-expect-error */}
             <Footer siteSettings={siteSettings} />
-          </main>
+          </div>
         </Providers>
       </body>
     </html>
