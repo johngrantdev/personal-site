@@ -27,10 +27,12 @@ const Users: CollectionConfig = {
   fields: [
     {
       name: 'name',
+      label: 'Name',
       type: 'text',
     },
     {
       name: 'roles',
+      label: 'Roles',
       type: 'select',
       hasMany: true,
       defaultValue: ['user'],
