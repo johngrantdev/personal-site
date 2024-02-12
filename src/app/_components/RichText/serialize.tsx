@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import escapeHTML from 'escape-html'
 import { LexicalNode } from 'lexical'
 
+import { Blocks } from '../Blocks'
 import { CMSLink } from '../Link'
 import { Media } from '../Media'
 
@@ -36,7 +37,7 @@ function getTextFormats(formatNumber) {
   return { bold, italic, strikethrough, underline, code, subscript, superscript }
 }
 
-const serialize = (nodes?: LexicalNode[], i?: number): React.ReactNode => {
+const serialize = (nodes?: LexicalNode[], i = 1): React.ReactNode => {
   return nodes.map((node, i) => {
     if (!node) {
       return null
@@ -70,16 +71,18 @@ const serialize = (nodes?: LexicalNode[], i?: number): React.ReactNode => {
         return (
           <CMSLink
             key={i}
+            className="underline underline-offset-[6px]"
             type={node.fields.linkType === 'internal' ? 'reference' : 'custom'}
             url={node.fields.url}
             reference={node.fields.doc as any}
             newTab={Boolean(node.fields.newTab)}
+            label=""
           >
             {serialize(node.children)}
           </CMSLink>
         )
       case 'text':
-        let text = <span dangerouslySetInnerHTML={{ __html: escapeHTML(node.text) }} />
+        let text = <span key={i} dangerouslySetInnerHTML={{ __html: escapeHTML(node.text) }} />
         if (typeof node.format === 'number') {
           const textFormat = getTextFormats(node.format)
           if (textFormat.bold) {
@@ -107,6 +110,8 @@ const serialize = (nodes?: LexicalNode[], i?: number): React.ReactNode => {
           }
         }
         return <Fragment key={i}>{text}</Fragment>
+      case 'linebreak':
+        return <br />
       case 'heading':
         switch (node.tag) {
           case 'h1':
@@ -171,7 +176,9 @@ const serialize = (nodes?: LexicalNode[], i?: number): React.ReactNode => {
           </p>
         )
       case 'upload':
-        return <Media resource={node.value} />
+        return <Media key={i} resource={node.value} fill />
+      case 'block':
+        return <Blocks blocks={[node.fields]} />
     }
   })
 }
