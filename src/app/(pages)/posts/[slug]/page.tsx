@@ -3,18 +3,14 @@ import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import { Post } from '../../../../payload/payload-types'
+import { Keyword, Post } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
 import { RelatedPosts } from '../../../_blocks/RelatedPosts'
-import { Blocks } from '../../../_components/Blocks'
+import { Layout } from '../../../_components/Layout'
 import { Padding } from '../../../_components/Padding'
-import { RestrictedContent } from '../../../_components/RestrictedContent'
-import { PostHero } from '../../../_heros/PostHero'
-import { useAuth } from '../../../_providers/Auth'
-import { TitleState } from '../../../_providers/Context/Title/titleContext'
+import { PageState } from '../../../_providers/Context/Page/pageContext'
 import { generateMeta } from '../../../_utilities/generateMeta'
-import { toKebabCase } from '../../../_utilities/toKebabCase'
 
 export default async function Post({ params: { slug } }) {
   const { isEnabled: isDraftMode } = draftMode()
@@ -35,21 +31,28 @@ export default async function Post({ params: { slug } }) {
     notFound()
   }
 
-  const { layout, enableRestrictedContent, restrictedContent, title } = post
-
-  // relatedPosts at this depth is expected to be populated on Posts and therefore can be asserted as Post[]
-  const relatedPosts = post.relatedPosts as Post[]
+  const { layout, title, description, category } = post
+  // Todo: implement a populate function and type guard instead for the below type assertions
+  const filteredKeywords = (post.keywords || []).filter(
+    keyword => typeof keyword !== 'number',
+  ) as Keyword[]
+  const relatedPosts = (post.relatedPosts || []).filter(
+    relatedPost => typeof relatedPost !== 'number',
+  ) as Post[]
 
   return (
-    <React.Fragment>
-      <TitleState title={title} />
-      <PostHero post={post} />
-      <Blocks blocks={layout} />
-      {enableRestrictedContent && <RestrictedContent postSlug={slug as string} disableTopPadding />}
-      <Padding key={1000}>
+    <main className="snap-y snap-mandatory grow flex flex-col">
+      <PageState
+        title={title}
+        description={description}
+        category={typeof category !== 'number' && category}
+        keywords={filteredKeywords}
+      />
+      <Layout layouts={layout} />
+      {relatedPosts && relatedPosts.length > 0 && (
         <RelatedPosts introContent="More:" docs={relatedPosts} />
-      </Padding>
-    </React.Fragment>
+      )}
+    </main>
   )
 }
 
