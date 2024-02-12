@@ -40,7 +40,7 @@ type Page {
   id: Int
   title: String
   publishedAt: DateTime
-  hero: Page_Hero
+  hero: HeroField
   layout: [Page_Layout!]!
   slug: String
   meta: Page_Meta
@@ -54,14 +54,14 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-type Page_Hero {
-  type: Page_Hero_type
+type HeroField {
+  type: HeroField_type
   richText(depth: Int): JSON
-  links: [Page_Hero_Links!]
-  media(where: Page_Hero_Media_where): Media
+  links: [LinkGroupField!]
+  media(where: HeroField_Media_where): Media
 }
 
-enum Page_Hero_type {
+enum HeroField_type {
   none
   highImpact
   mediumImpact
@@ -73,37 +73,37 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
-type Page_Hero_Links {
-  link: Page_Hero_Links_Link
+type LinkGroupField {
+  link: LinkField
   id: String
 }
 
-type Page_Hero_Links_Link {
-  type: Page_Hero_Links_Link_type
+type LinkField {
+  type: LinkField_type
   newTab: Boolean
-  reference: Page_Hero_Links_Link_Reference_Relationship
+  reference: LinkField_Reference_Relationship
   url: String
   label: String
-  appearance: Page_Hero_Links_Link_appearance
+  appearance: LinkField_appearance
 }
 
-enum Page_Hero_Links_Link_type {
+enum LinkField_type {
   reference
   custom
 }
 
-type Page_Hero_Links_Link_Reference_Relationship {
-  relationTo: Page_Hero_Links_Link_Reference_RelationTo
-  value: Page_Hero_Links_Link_Reference
+type LinkField_Reference_Relationship {
+  relationTo: LinkField_Reference_RelationTo
+  value: LinkField_Reference
 }
 
-enum Page_Hero_Links_Link_Reference_RelationTo {
+enum LinkField_Reference_RelationTo {
   pages
 }
 
-union Page_Hero_Links_Link_Reference = Page
+union LinkField_Reference = Page
 
-enum Page_Hero_Links_Link_appearance {
+enum LinkField_appearance {
   default
   primary
   secondary
@@ -124,24 +124,24 @@ type Media {
   height: Float
 }
 
-input Page_Hero_Media_where {
-  alt: Page_Hero_Media_alt_operator
-  caption: Page_Hero_Media_caption_operator
-  blurhash: Page_Hero_Media_blurhash_operator
-  updatedAt: Page_Hero_Media_updatedAt_operator
-  createdAt: Page_Hero_Media_createdAt_operator
-  url: Page_Hero_Media_url_operator
-  filename: Page_Hero_Media_filename_operator
-  mimeType: Page_Hero_Media_mimeType_operator
-  filesize: Page_Hero_Media_filesize_operator
-  width: Page_Hero_Media_width_operator
-  height: Page_Hero_Media_height_operator
-  id: Page_Hero_Media_id_operator
-  AND: [Page_Hero_Media_where_and]
-  OR: [Page_Hero_Media_where_or]
+input HeroField_Media_where {
+  alt: HeroField_Media_alt_operator
+  caption: HeroField_Media_caption_operator
+  blurhash: HeroField_Media_blurhash_operator
+  updatedAt: HeroField_Media_updatedAt_operator
+  createdAt: HeroField_Media_createdAt_operator
+  url: HeroField_Media_url_operator
+  filename: HeroField_Media_filename_operator
+  mimeType: HeroField_Media_mimeType_operator
+  filesize: HeroField_Media_filesize_operator
+  width: HeroField_Media_width_operator
+  height: HeroField_Media_height_operator
+  id: HeroField_Media_id_operator
+  AND: [HeroField_Media_where_and]
+  OR: [HeroField_Media_where_or]
 }
 
-input Page_Hero_Media_alt_operator {
+input HeroField_Media_alt_operator {
   equals: String
   not_equals: String
   like: String
@@ -151,7 +151,7 @@ input Page_Hero_Media_alt_operator {
   all: [String]
 }
 
-input Page_Hero_Media_caption_operator {
+input HeroField_Media_caption_operator {
   equals: JSON
   not_equals: JSON
   like: JSON
@@ -159,7 +159,7 @@ input Page_Hero_Media_caption_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_blurhash_operator {
+input HeroField_Media_blurhash_operator {
   equals: String
   not_equals: String
   like: String
@@ -170,7 +170,7 @@ input Page_Hero_Media_blurhash_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_updatedAt_operator {
+input HeroField_Media_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -181,7 +181,7 @@ input Page_Hero_Media_updatedAt_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_createdAt_operator {
+input HeroField_Media_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -192,7 +192,7 @@ input Page_Hero_Media_createdAt_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_url_operator {
+input HeroField_Media_url_operator {
   equals: String
   not_equals: String
   like: String
@@ -203,7 +203,7 @@ input Page_Hero_Media_url_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_filename_operator {
+input HeroField_Media_filename_operator {
   equals: String
   not_equals: String
   like: String
@@ -214,7 +214,7 @@ input Page_Hero_Media_filename_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_mimeType_operator {
+input HeroField_Media_mimeType_operator {
   equals: String
   not_equals: String
   like: String
@@ -225,7 +225,7 @@ input Page_Hero_Media_mimeType_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_filesize_operator {
+input HeroField_Media_filesize_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -235,7 +235,7 @@ input Page_Hero_Media_filesize_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_width_operator {
+input HeroField_Media_width_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -245,7 +245,7 @@ input Page_Hero_Media_width_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_height_operator {
+input HeroField_Media_height_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -255,7 +255,7 @@ input Page_Hero_Media_height_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_id_operator {
+input HeroField_Media_id_operator {
   equals: String
   not_equals: String
   like: String
@@ -266,138 +266,72 @@ input Page_Hero_Media_id_operator {
   exists: Boolean
 }
 
-input Page_Hero_Media_where_and {
-  alt: Page_Hero_Media_alt_operator
-  caption: Page_Hero_Media_caption_operator
-  blurhash: Page_Hero_Media_blurhash_operator
-  updatedAt: Page_Hero_Media_updatedAt_operator
-  createdAt: Page_Hero_Media_createdAt_operator
-  url: Page_Hero_Media_url_operator
-  filename: Page_Hero_Media_filename_operator
-  mimeType: Page_Hero_Media_mimeType_operator
-  filesize: Page_Hero_Media_filesize_operator
-  width: Page_Hero_Media_width_operator
-  height: Page_Hero_Media_height_operator
-  id: Page_Hero_Media_id_operator
-  AND: [Page_Hero_Media_where_and]
-  OR: [Page_Hero_Media_where_or]
+input HeroField_Media_where_and {
+  alt: HeroField_Media_alt_operator
+  caption: HeroField_Media_caption_operator
+  blurhash: HeroField_Media_blurhash_operator
+  updatedAt: HeroField_Media_updatedAt_operator
+  createdAt: HeroField_Media_createdAt_operator
+  url: HeroField_Media_url_operator
+  filename: HeroField_Media_filename_operator
+  mimeType: HeroField_Media_mimeType_operator
+  filesize: HeroField_Media_filesize_operator
+  width: HeroField_Media_width_operator
+  height: HeroField_Media_height_operator
+  id: HeroField_Media_id_operator
+  AND: [HeroField_Media_where_and]
+  OR: [HeroField_Media_where_or]
 }
 
-input Page_Hero_Media_where_or {
-  alt: Page_Hero_Media_alt_operator
-  caption: Page_Hero_Media_caption_operator
-  blurhash: Page_Hero_Media_blurhash_operator
-  updatedAt: Page_Hero_Media_updatedAt_operator
-  createdAt: Page_Hero_Media_createdAt_operator
-  url: Page_Hero_Media_url_operator
-  filename: Page_Hero_Media_filename_operator
-  mimeType: Page_Hero_Media_mimeType_operator
-  filesize: Page_Hero_Media_filesize_operator
-  width: Page_Hero_Media_width_operator
-  height: Page_Hero_Media_height_operator
-  id: Page_Hero_Media_id_operator
-  AND: [Page_Hero_Media_where_and]
-  OR: [Page_Hero_Media_where_or]
+input HeroField_Media_where_or {
+  alt: HeroField_Media_alt_operator
+  caption: HeroField_Media_caption_operator
+  blurhash: HeroField_Media_blurhash_operator
+  updatedAt: HeroField_Media_updatedAt_operator
+  createdAt: HeroField_Media_createdAt_operator
+  url: HeroField_Media_url_operator
+  filename: HeroField_Media_filename_operator
+  mimeType: HeroField_Media_mimeType_operator
+  filesize: HeroField_Media_filesize_operator
+  width: HeroField_Media_width_operator
+  height: HeroField_Media_height_operator
+  id: HeroField_Media_id_operator
+  AND: [HeroField_Media_where_and]
+  OR: [HeroField_Media_where_or]
 }
 
-union Page_Layout = Cta | Content | MediaBlock | Archive
+union Page_Layout = CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock
 
-type Cta {
+type CallToActionBlock {
   invertBackground: Boolean
   richText(depth: Int): JSON
-  links: [Cta_Links!]
+  links: [LinkGroupField!]
   id: String
   blockName: String
   blockType: String
 }
 
-type Cta_Links {
-  link: Cta_Links_Link
-  id: String
-}
-
-type Cta_Links_Link {
-  type: Cta_Links_Link_type
-  newTab: Boolean
-  reference: Cta_Links_Link_Reference_Relationship
-  url: String
-  label: String
-  appearance: Cta_Links_Link_appearance
-}
-
-enum Cta_Links_Link_type {
-  reference
-  custom
-}
-
-type Cta_Links_Link_Reference_Relationship {
-  relationTo: Cta_Links_Link_Reference_RelationTo
-  value: Cta_Links_Link_Reference
-}
-
-enum Cta_Links_Link_Reference_RelationTo {
-  pages
-}
-
-union Cta_Links_Link_Reference = Page
-
-enum Cta_Links_Link_appearance {
-  primary
-  secondary
-}
-
-type Content {
+type ContentBlock {
   invertBackground: Boolean
-  columns: [Content_Columns!]
+  columns: [ContentBlock_Columns!]
   id: String
   blockName: String
   blockType: String
 }
 
-type Content_Columns {
-  size: Content_Columns_size
+type ContentBlock_Columns {
+  size: ContentBlock_Columns_size
   richText(depth: Int): JSON
   enableLink: Boolean
-  link: Content_Columns_Link
+  link: LinkField
   id: String
 }
 
-enum Content_Columns_size {
+enum ContentBlock_Columns_size {
   oneThird
   half
   twoThirds
   full
-}
-
-type Content_Columns_Link {
-  type: Content_Columns_Link_type
-  newTab: Boolean
-  reference: Content_Columns_Link_Reference_Relationship
-  url: String
-  label: String
-  appearance: Content_Columns_Link_appearance
-}
-
-enum Content_Columns_Link_type {
-  reference
-  custom
-}
-
-type Content_Columns_Link_Reference_Relationship {
-  relationTo: Content_Columns_Link_Reference_RelationTo
-  value: Content_Columns_Link_Reference
-}
-
-enum Content_Columns_Link_Reference_RelationTo {
-  pages
-}
-
-union Content_Columns_Link_Reference = Page
-
-enum Content_Columns_Link_appearance {
-  default
-  primary
-  secondary
 }
 
 type MediaBlock {
@@ -590,27 +524,27 @@ input MediaBlock_Media_where_or {
   OR: [MediaBlock_Media_where_or]
 }
 
-type Archive {
+type ArchiveBlock {
   introContent(depth: Int): JSON
-  populateBy: Archive_populateBy
-  relationTo: Archive_relationTo
+  populateBy: ArchiveBlock_populateBy
+  relationTo: ArchiveBlock_relationTo
   categories: [Category!]
   limit: Float
   showPageRange: Boolean
-  selectedDocs: [Archive_SelectedDocs_Relationship!]
-  populatedDocs: [Archive_PopulatedDocs_Relationship!]
+  selectedDocs: [ArchiveBlock_SelectedDocs_Relationship!]
+  populatedDocs: [ArchiveBlock_PopulatedDocs_Relationship!]
   populatedDocsTotal: Float
   id: String
   blockName: String
   blockType: String
 }
 
-enum Archive_populateBy {
+enum ArchiveBlock_populateBy {
   collection
   selection
 }
 
-enum Archive_relationTo {
+enum ArchiveBlock_relationTo {
   posts
 }
 
@@ -630,16 +564,16 @@ type Category_Breadcrumbs {
   id: String
 }
 
-type Archive_SelectedDocs_Relationship {
-  relationTo: Archive_SelectedDocs_RelationTo
-  value: Archive_SelectedDocs
+type ArchiveBlock_SelectedDocs_Relationship {
+  relationTo: ArchiveBlock_SelectedDocs_RelationTo
+  value: ArchiveBlock_SelectedDocs
 }
 
-enum Archive_SelectedDocs_RelationTo {
+enum ArchiveBlock_SelectedDocs_RelationTo {
   posts
 }
 
-union Archive_SelectedDocs = Post
+union ArchiveBlock_SelectedDocs = Post
 
 type Post {
   id: Int
@@ -649,7 +583,7 @@ type Post {
   publishedAt: DateTime
   authors: [User!]
   populatedAuthors: [Post_PopulatedAuthors!]
-  hero: Post_Hero
+  hero: HeroField
   layout: [Post_Layout!]!
   enableRestrictedContent: Boolean
   restrictedContent: [Post_RestrictedContent!]
@@ -708,249 +642,23 @@ type Post_PopulatedAuthors {
   name: String
 }
 
-type Post_Hero {
-  type: Post_Hero_type
-  richText(depth: Int): JSON
-  links: [Post_Hero_Links!]
-  media(where: Post_Hero_Media_where): Media
-}
+union Post_Layout = CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock
 
-enum Post_Hero_type {
-  none
-  highImpact
-  mediumImpact
-  lowImpact
-}
-
-type Post_Hero_Links {
-  link: Post_Hero_Links_Link
-  id: String
-}
-
-type Post_Hero_Links_Link {
-  type: Post_Hero_Links_Link_type
-  newTab: Boolean
-  reference: Post_Hero_Links_Link_Reference_Relationship
-  url: String
-  label: String
-  appearance: Post_Hero_Links_Link_appearance
-}
-
-enum Post_Hero_Links_Link_type {
-  reference
-  custom
-}
-
-type Post_Hero_Links_Link_Reference_Relationship {
-  relationTo: Post_Hero_Links_Link_Reference_RelationTo
-  value: Post_Hero_Links_Link_Reference
-}
-
-enum Post_Hero_Links_Link_Reference_RelationTo {
-  pages
-}
-
-union Post_Hero_Links_Link_Reference = Page
-
-enum Post_Hero_Links_Link_appearance {
-  default
-  primary
-  secondary
-}
-
-input Post_Hero_Media_where {
-  alt: Post_Hero_Media_alt_operator
-  caption: Post_Hero_Media_caption_operator
-  blurhash: Post_Hero_Media_blurhash_operator
-  updatedAt: Post_Hero_Media_updatedAt_operator
-  createdAt: Post_Hero_Media_createdAt_operator
-  url: Post_Hero_Media_url_operator
-  filename: Post_Hero_Media_filename_operator
-  mimeType: Post_Hero_Media_mimeType_operator
-  filesize: Post_Hero_Media_filesize_operator
-  width: Post_Hero_Media_width_operator
-  height: Post_Hero_Media_height_operator
-  id: Post_Hero_Media_id_operator
-  AND: [Post_Hero_Media_where_and]
-  OR: [Post_Hero_Media_where_or]
-}
-
-input Post_Hero_Media_alt_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-}
-
-input Post_Hero_Media_caption_operator {
-  equals: JSON
-  not_equals: JSON
-  like: JSON
-  contains: JSON
-  exists: Boolean
-}
-
-input Post_Hero_Media_blurhash_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Hero_Media_updatedAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input Post_Hero_Media_createdAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input Post_Hero_Media_url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Hero_Media_filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Hero_Media_mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Hero_Media_filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Hero_Media_width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Hero_Media_height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Hero_Media_id_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Hero_Media_where_and {
-  alt: Post_Hero_Media_alt_operator
-  caption: Post_Hero_Media_caption_operator
-  blurhash: Post_Hero_Media_blurhash_operator
-  updatedAt: Post_Hero_Media_updatedAt_operator
-  createdAt: Post_Hero_Media_createdAt_operator
-  url: Post_Hero_Media_url_operator
-  filename: Post_Hero_Media_filename_operator
-  mimeType: Post_Hero_Media_mimeType_operator
-  filesize: Post_Hero_Media_filesize_operator
-  width: Post_Hero_Media_width_operator
-  height: Post_Hero_Media_height_operator
-  id: Post_Hero_Media_id_operator
-  AND: [Post_Hero_Media_where_and]
-  OR: [Post_Hero_Media_where_or]
-}
-
-input Post_Hero_Media_where_or {
-  alt: Post_Hero_Media_alt_operator
-  caption: Post_Hero_Media_caption_operator
-  blurhash: Post_Hero_Media_blurhash_operator
-  updatedAt: Post_Hero_Media_updatedAt_operator
-  createdAt: Post_Hero_Media_createdAt_operator
-  url: Post_Hero_Media_url_operator
-  filename: Post_Hero_Media_filename_operator
-  mimeType: Post_Hero_Media_mimeType_operator
-  filesize: Post_Hero_Media_filesize_operator
-  width: Post_Hero_Media_width_operator
-  height: Post_Hero_Media_height_operator
-  id: Post_Hero_Media_id_operator
-  AND: [Post_Hero_Media_where_and]
-  OR: [Post_Hero_Media_where_or]
-}
-
-union Post_Layout = Cta | Content | MediaBlock | Archive | Code
-
-type Code {
-  language: Code_language
+type CodeBlock {
+  language: CodeBlock_language
   code: String
   id: String
   blockName: String
   blockType: String
 }
 
-enum Code_language {
+enum CodeBlock_language {
   go
   javascript
   typescript
 }
 
-union Post_RestrictedContent = Cta | Content | MediaBlock | Archive | Code
+union Post_RestrictedContent = CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock
 
 type Post_Meta {
   title: String
@@ -1139,16 +847,16 @@ enum Post__status {
   published
 }
 
-type Archive_PopulatedDocs_Relationship {
-  relationTo: Archive_PopulatedDocs_RelationTo
-  value: Archive_PopulatedDocs
+type ArchiveBlock_PopulatedDocs_Relationship {
+  relationTo: ArchiveBlock_PopulatedDocs_RelationTo
+  value: ArchiveBlock_PopulatedDocs
 }
 
-enum Archive_PopulatedDocs_RelationTo {
+enum ArchiveBlock_PopulatedDocs_RelationTo {
   posts
 }
 
-union Archive_PopulatedDocs = Post
+union ArchiveBlock_PopulatedDocs = Post
 
 type Page_Meta {
   title: String
@@ -2325,7 +2033,7 @@ type PageVersion {
 type PageVersion_Version {
   title: String
   publishedAt: DateTime
-  hero: PageVersion_Version_Hero
+  hero: HeroField
   layout: [PageVersion_Version_Layout!]!
   slug: String
   meta: PageVersion_Version_Meta
@@ -2334,233 +2042,7 @@ type PageVersion_Version {
   _status: PageVersion_Version__status
 }
 
-type PageVersion_Version_Hero {
-  type: PageVersion_Version_Hero_type
-  richText(depth: Int): JSON
-  links: [PageVersion_Version_Hero_Links!]
-  media(where: PageVersion_Version_Hero_Media_where): Media
-}
-
-enum PageVersion_Version_Hero_type {
-  none
-  highImpact
-  mediumImpact
-  lowImpact
-}
-
-type PageVersion_Version_Hero_Links {
-  link: PageVersion_Version_Hero_Links_Link
-  id: String
-}
-
-type PageVersion_Version_Hero_Links_Link {
-  type: PageVersion_Version_Hero_Links_Link_type
-  newTab: Boolean
-  reference: PageVersion_Version_Hero_Links_Link_Reference_Relationship
-  url: String
-  label: String
-  appearance: PageVersion_Version_Hero_Links_Link_appearance
-}
-
-enum PageVersion_Version_Hero_Links_Link_type {
-  reference
-  custom
-}
-
-type PageVersion_Version_Hero_Links_Link_Reference_Relationship {
-  relationTo: PageVersion_Version_Hero_Links_Link_Reference_RelationTo
-  value: PageVersion_Version_Hero_Links_Link_Reference
-}
-
-enum PageVersion_Version_Hero_Links_Link_Reference_RelationTo {
-  pages
-}
-
-union PageVersion_Version_Hero_Links_Link_Reference = Page
-
-enum PageVersion_Version_Hero_Links_Link_appearance {
-  default
-  primary
-  secondary
-}
-
-input PageVersion_Version_Hero_Media_where {
-  alt: PageVersion_Version_Hero_Media_alt_operator
-  caption: PageVersion_Version_Hero_Media_caption_operator
-  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
-  updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: PageVersion_Version_Hero_Media_createdAt_operator
-  url: PageVersion_Version_Hero_Media_url_operator
-  filename: PageVersion_Version_Hero_Media_filename_operator
-  mimeType: PageVersion_Version_Hero_Media_mimeType_operator
-  filesize: PageVersion_Version_Hero_Media_filesize_operator
-  width: PageVersion_Version_Hero_Media_width_operator
-  height: PageVersion_Version_Hero_Media_height_operator
-  id: PageVersion_Version_Hero_Media_id_operator
-  AND: [PageVersion_Version_Hero_Media_where_and]
-  OR: [PageVersion_Version_Hero_Media_where_or]
-}
-
-input PageVersion_Version_Hero_Media_alt_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-}
-
-input PageVersion_Version_Hero_Media_caption_operator {
-  equals: JSON
-  not_equals: JSON
-  like: JSON
-  contains: JSON
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_blurhash_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_updatedAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_createdAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_id_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PageVersion_Version_Hero_Media_where_and {
-  alt: PageVersion_Version_Hero_Media_alt_operator
-  caption: PageVersion_Version_Hero_Media_caption_operator
-  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
-  updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: PageVersion_Version_Hero_Media_createdAt_operator
-  url: PageVersion_Version_Hero_Media_url_operator
-  filename: PageVersion_Version_Hero_Media_filename_operator
-  mimeType: PageVersion_Version_Hero_Media_mimeType_operator
-  filesize: PageVersion_Version_Hero_Media_filesize_operator
-  width: PageVersion_Version_Hero_Media_width_operator
-  height: PageVersion_Version_Hero_Media_height_operator
-  id: PageVersion_Version_Hero_Media_id_operator
-  AND: [PageVersion_Version_Hero_Media_where_and]
-  OR: [PageVersion_Version_Hero_Media_where_or]
-}
-
-input PageVersion_Version_Hero_Media_where_or {
-  alt: PageVersion_Version_Hero_Media_alt_operator
-  caption: PageVersion_Version_Hero_Media_caption_operator
-  blurhash: PageVersion_Version_Hero_Media_blurhash_operator
-  updatedAt: PageVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: PageVersion_Version_Hero_Media_createdAt_operator
-  url: PageVersion_Version_Hero_Media_url_operator
-  filename: PageVersion_Version_Hero_Media_filename_operator
-  mimeType: PageVersion_Version_Hero_Media_mimeType_operator
-  filesize: PageVersion_Version_Hero_Media_filesize_operator
-  width: PageVersion_Version_Hero_Media_width_operator
-  height: PageVersion_Version_Hero_Media_height_operator
-  id: PageVersion_Version_Hero_Media_id_operator
-  AND: [PageVersion_Version_Hero_Media_where_and]
-  OR: [PageVersion_Version_Hero_Media_where_or]
-}
-
-union PageVersion_Version_Layout = Cta | Content | MediaBlock | Archive
+union PageVersion_Version_Layout = CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock
 
 type PageVersion_Version_Meta {
   title: String
@@ -4383,7 +3865,7 @@ type PostVersion_Version {
   publishedAt: DateTime
   authors: [User!]
   populatedAuthors: [PostVersion_Version_PopulatedAuthors!]
-  hero: PostVersion_Version_Hero
+  hero: HeroField
   layout: [PostVersion_Version_Layout!]!
   enableRestrictedContent: Boolean
   restrictedContent: [PostVersion_Version_RestrictedContent!]
@@ -4400,235 +3882,9 @@ type PostVersion_Version_PopulatedAuthors {
   name: String
 }
 
-type PostVersion_Version_Hero {
-  type: PostVersion_Version_Hero_type
-  richText(depth: Int): JSON
-  links: [PostVersion_Version_Hero_Links!]
-  media(where: PostVersion_Version_Hero_Media_where): Media
-}
+union PostVersion_Version_Layout = CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock
 
-enum PostVersion_Version_Hero_type {
-  none
-  highImpact
-  mediumImpact
-  lowImpact
-}
-
-type PostVersion_Version_Hero_Links {
-  link: PostVersion_Version_Hero_Links_Link
-  id: String
-}
-
-type PostVersion_Version_Hero_Links_Link {
-  type: PostVersion_Version_Hero_Links_Link_type
-  newTab: Boolean
-  reference: PostVersion_Version_Hero_Links_Link_Reference_Relationship
-  url: String
-  label: String
-  appearance: PostVersion_Version_Hero_Links_Link_appearance
-}
-
-enum PostVersion_Version_Hero_Links_Link_type {
-  reference
-  custom
-}
-
-type PostVersion_Version_Hero_Links_Link_Reference_Relationship {
-  relationTo: PostVersion_Version_Hero_Links_Link_Reference_RelationTo
-  value: PostVersion_Version_Hero_Links_Link_Reference
-}
-
-enum PostVersion_Version_Hero_Links_Link_Reference_RelationTo {
-  pages
-}
-
-union PostVersion_Version_Hero_Links_Link_Reference = Page
-
-enum PostVersion_Version_Hero_Links_Link_appearance {
-  default
-  primary
-  secondary
-}
-
-input PostVersion_Version_Hero_Media_where {
-  alt: PostVersion_Version_Hero_Media_alt_operator
-  caption: PostVersion_Version_Hero_Media_caption_operator
-  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
-  updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: PostVersion_Version_Hero_Media_createdAt_operator
-  url: PostVersion_Version_Hero_Media_url_operator
-  filename: PostVersion_Version_Hero_Media_filename_operator
-  mimeType: PostVersion_Version_Hero_Media_mimeType_operator
-  filesize: PostVersion_Version_Hero_Media_filesize_operator
-  width: PostVersion_Version_Hero_Media_width_operator
-  height: PostVersion_Version_Hero_Media_height_operator
-  id: PostVersion_Version_Hero_Media_id_operator
-  AND: [PostVersion_Version_Hero_Media_where_and]
-  OR: [PostVersion_Version_Hero_Media_where_or]
-}
-
-input PostVersion_Version_Hero_Media_alt_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-}
-
-input PostVersion_Version_Hero_Media_caption_operator {
-  equals: JSON
-  not_equals: JSON
-  like: JSON
-  contains: JSON
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_blurhash_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_updatedAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_createdAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_id_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input PostVersion_Version_Hero_Media_where_and {
-  alt: PostVersion_Version_Hero_Media_alt_operator
-  caption: PostVersion_Version_Hero_Media_caption_operator
-  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
-  updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: PostVersion_Version_Hero_Media_createdAt_operator
-  url: PostVersion_Version_Hero_Media_url_operator
-  filename: PostVersion_Version_Hero_Media_filename_operator
-  mimeType: PostVersion_Version_Hero_Media_mimeType_operator
-  filesize: PostVersion_Version_Hero_Media_filesize_operator
-  width: PostVersion_Version_Hero_Media_width_operator
-  height: PostVersion_Version_Hero_Media_height_operator
-  id: PostVersion_Version_Hero_Media_id_operator
-  AND: [PostVersion_Version_Hero_Media_where_and]
-  OR: [PostVersion_Version_Hero_Media_where_or]
-}
-
-input PostVersion_Version_Hero_Media_where_or {
-  alt: PostVersion_Version_Hero_Media_alt_operator
-  caption: PostVersion_Version_Hero_Media_caption_operator
-  blurhash: PostVersion_Version_Hero_Media_blurhash_operator
-  updatedAt: PostVersion_Version_Hero_Media_updatedAt_operator
-  createdAt: PostVersion_Version_Hero_Media_createdAt_operator
-  url: PostVersion_Version_Hero_Media_url_operator
-  filename: PostVersion_Version_Hero_Media_filename_operator
-  mimeType: PostVersion_Version_Hero_Media_mimeType_operator
-  filesize: PostVersion_Version_Hero_Media_filesize_operator
-  width: PostVersion_Version_Hero_Media_width_operator
-  height: PostVersion_Version_Hero_Media_height_operator
-  id: PostVersion_Version_Hero_Media_id_operator
-  AND: [PostVersion_Version_Hero_Media_where_and]
-  OR: [PostVersion_Version_Hero_Media_where_or]
-}
-
-union PostVersion_Version_Layout = Cta | Content | MediaBlock | Archive | Code
-
-union PostVersion_Version_RestrictedContent = Cta | Content | MediaBlock | Archive | Code
+union PostVersion_Version_RestrictedContent = CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock
 
 type PostVersion_Version_Meta {
   title: String
@@ -7478,33 +6734,9 @@ type Header {
 }
 
 type Header_NavItems {
-  link: Header_NavItems_Link
+  link: LinkField
   id: String
 }
-
-type Header_NavItems_Link {
-  type: Header_NavItems_Link_type
-  newTab: Boolean
-  reference: Header_NavItems_Link_Reference_Relationship
-  url: String
-  label: String
-}
-
-enum Header_NavItems_Link_type {
-  reference
-  custom
-}
-
-type Header_NavItems_Link_Reference_Relationship {
-  relationTo: Header_NavItems_Link_Reference_RelationTo
-  value: Header_NavItems_Link_Reference
-}
-
-enum Header_NavItems_Link_Reference_RelationTo {
-  pages
-}
-
-union Header_NavItems_Link_Reference = Page
 
 type headerDocAccess {
   fields: HeaderDocAccessFields
@@ -7780,33 +7012,9 @@ type Footer {
 }
 
 type Footer_NavItems {
-  link: Footer_NavItems_Link
+  link: LinkField
   id: String
 }
-
-type Footer_NavItems_Link {
-  type: Footer_NavItems_Link_type
-  newTab: Boolean
-  reference: Footer_NavItems_Link_Reference_Relationship
-  url: String
-  label: String
-}
-
-enum Footer_NavItems_Link_type {
-  reference
-  custom
-}
-
-type Footer_NavItems_Link_Reference_Relationship {
-  relationTo: Footer_NavItems_Link_Reference_RelationTo
-  value: Footer_NavItems_Link_Reference
-}
-
-enum Footer_NavItems_Link_Reference_RelationTo {
-  pages
-}
-
-union Footer_NavItems_Link_Reference = Page
 
 type footerDocAccess {
   fields: FooterDocAccessFields

@@ -1,29 +1,18 @@
 import { LINK_FIELDS } from './link'
 
-export const HEADER = `
-  Header {
+export const SITE_SETTINGS = `
+  Site {
     navItems {
       link ${LINK_FIELDS({ disableAppearance: true })}
 		}
+    siteTitle
+    siteDescription
+    siteSourceLink
   }
 `
 
-export const HEADER_QUERY = `
-query Header {
-  ${HEADER}
-}
-`
-
-export const FOOTER = `
-  Footer {
-    navItems {
-      link ${LINK_FIELDS({ disableAppearance: true })}
-		}
-  }
-`
-
-export const FOOTER_QUERY = `
-query Footer {
-  ${FOOTER}
+export const SITE_SETTINGS_QUERY = `
+query Site {
+  ${SITE_SETTINGS}
 }
 `

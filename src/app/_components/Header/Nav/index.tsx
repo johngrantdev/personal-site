@@ -4,12 +4,16 @@ import React, { useEffect, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import { usePathname } from 'next/navigation'
 
-import { Header as HeaderType } from '../../../../payload/payload-types'
+import { Site } from '../../../../payload/payload-types'
 import { useTitle } from '../../../_providers/Context/Title/titleContext'
 import { CMSLink } from '../../Link'
 
-export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
-  const navItems = header?.navItems || []
+type headerNavProps = {
+  siteSettings: Site
+}
+
+export const HeaderNav = ({ siteSettings }: headerNavProps) => {
+  const navItems = siteSettings && siteSettings.navItems ? siteSettings.navItems : []
   const { title } = useTitle()
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -29,6 +33,7 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
       >
         <ul className="md:flex md:flex-row gap-4 text-2xl">
           {navItems.map(({ link }, i) => {
+            link.label = link.label.toLowerCase()
             return (
               <li key={i}>
                 <div

@@ -53,7 +53,9 @@ export const Image: React.FC<MediaProps> = props => {
   return (
     // add placeholder, image styles
     <NextImage
-      className={[isLoading && 'bg-zinc-600', imgClassName].filter(Boolean).join(' ')}
+      className={[isLoading && 'bg-zinc-600 dark:bg-zinc-300', imgClassName]
+        .filter(Boolean)
+        .join(' ')}
       src={src}
       alt={alt || ''}
       onClick={onClick}
