@@ -19,7 +19,7 @@ const queryMap = {
 export const fetchDoc = async <T>(args: {
   collection: keyof Config['collections']
   slug?: string
-  id?: string
+  id?: number
   draft?: boolean
 }): Promise<T> => {
   const { collection, slug, draft } = args || {}
@@ -33,7 +33,7 @@ export const fetchDoc = async <T>(args: {
     token = cookies().get(payloadToken)
   }
 
-  const doc: T = await fetch(`${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/graphql`, {
+  const doc: T = await fetch(`${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/payload/graphql`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

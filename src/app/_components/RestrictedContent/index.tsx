@@ -34,19 +34,22 @@ export const RestrictedContent: React.FC<{
       setIsLoading(true)
 
       try {
-        const restrictedContent = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/graphql`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: POST_RESTRICTED_CONTENT,
-            variables: {
-              slug: postSlug,
+        const restrictedContent = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/payload/graphql`,
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          }),
-        })
+            body: JSON.stringify({
+              query: POST_RESTRICTED_CONTENT,
+              variables: {
+                slug: postSlug,
+              },
+            }),
+          },
+        )
           ?.then(res => res.json())
           ?.then(res => res?.data?.posts.docs[0]?.restrictedContent)
 

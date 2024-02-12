@@ -1,6 +1,5 @@
 'use client'
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
-import { animated, useTransition } from '@react-spring/web'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import qs from 'qs'
 
 import { Post } from '../../../payload/payload-types'
@@ -100,13 +99,12 @@ export const CollectionArchive: React.FC<Props> = props => {
         {
           sort,
           where: {
-            ...(catsFromProps && catsFromProps?.length > 0
+            ...(catsFromProps && catsFromProps.length > 0
               ? {
                   categories: {
-                    in:
-                      typeof catsFromProps === 'string'
-                        ? [catsFromProps]
-                        : catsFromProps.map(category => category).join(','),
+                    in: catsFromProps
+                      .map(category => (typeof category === 'number' ? category : category.id))
+                      .join(','),
                   },
                 }
               : {}),
@@ -120,8 +118,9 @@ export const CollectionArchive: React.FC<Props> = props => {
 
       const makeRequest = async () => {
         try {
+          // Todo: Using NEXT_PUBLIC for payload api, check this needs to be client side
           const req = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/${relationTo}?${searchQuery}`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/payload/${relationTo}?${searchQuery}`,
           )
           const json = await req.json()
           clearTimeout(timer)
