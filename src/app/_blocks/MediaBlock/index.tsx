@@ -11,20 +11,14 @@ type Props = MediaBlockType & {
 }
 
 export const MediaBlock: React.FC<Props> = props => {
-  const { media, position = 'default', staticImage } = props
+  const { media, staticImage } = props
 
   let caption
   if (media && typeof media === 'object') caption = media.caption
 
   return (
     <div className="relative">
-      {position === 'fullscreen' && (
-        // add fullscreen styling
-        <div className="">
-          <Media resource={media} src={staticImage} />
-        </div>
-      )}
-      {position === 'default' && <Media resource={media} src={staticImage} />}
+      <Media resource={media} src={staticImage} />
       {caption && (
         // add caption styling
         <RichText content={caption} />
