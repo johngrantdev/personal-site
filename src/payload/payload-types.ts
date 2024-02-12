@@ -6,6 +6,24 @@
  * and re-run `payload generate:types` to regenerate this file.
  */
 
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Layout".
+ */
+export type Layout =
+  | {
+      sideContentPosition: 'scrollSideContent' | 'fixedSideContentWhenVisible' | 'fixedSideContentAlways';
+      scrollSnap?: boolean | null;
+      fullPageHeight?: boolean | null;
+      sideColumn: SideColumn;
+      mainColumn: MainColumn;
+      id?: string | null;
+    }[]
+  | null;
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkGroupField".
+ */
 export type LinkGroupField =
   | {
       link: LinkField;
@@ -20,23 +38,27 @@ export interface Config {
     media: Media;
     categories: Category;
     keywords: Keyword;
+    clients: Client;
     users: User;
     redirects: Redirect;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   globals: {
-    header: Header;
-    footer: Footer;
+    site: Site;
+    'hidden-layout': HiddenLayout;
   };
 }
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
 export interface Page {
   id: number;
   title: string;
   publishedAt?: string | null;
-  hero: HeroField;
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock)[];
   slug?: string | null;
+  layout?: Layout;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -46,9 +68,52 @@ export interface Page {
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
-export interface HeroField {
-  type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
-  richText?: {
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SideColumn".
+ */
+export interface SideColumn {
+  style: 'none' | 'hero' | 'postHero' | 'projectHero' | 'singleLayout' | 'twoRows';
+  hero?: Hero;
+  projectHero?: ProjectHero;
+  sideContent1?: {
+    root: {
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      type: string;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  sideContent2?: {
+    root: {
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      type: string;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Hero".
+ */
+export interface Hero {
+  media?: number | Media | null;
+  description?: {
     root: {
       children: {
         type: string;
@@ -64,19 +129,11 @@ export interface HeroField {
     [k: string]: unknown;
   } | null;
   links?: LinkGroupField;
-  media?: number | Media | null;
 }
-export interface LinkField {
-  type?: ('reference' | 'custom') | null;
-  newTab?: boolean | null;
-  reference?: {
-    relationTo: 'pages';
-    value: number | Page;
-  } | null;
-  url?: string | null;
-  label: string;
-  appearance?: ('default' | 'primary' | 'secondary') | null;
-}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
 export interface Media {
   id: number;
   alt: string;
@@ -105,6 +162,282 @@ export interface Media {
   width?: number | null;
   height?: number | null;
 }
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkField".
+ */
+export interface LinkField {
+  type?: ('reference' | 'custom') | null;
+  newTab?: boolean | null;
+  reference?: {
+    relationTo: 'pages';
+    value: number | Page;
+  } | null;
+  url?: string | null;
+  label: string;
+  appearance?: ('default' | 'primary' | 'secondary') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectHero".
+ */
+export interface ProjectHero {
+  year?: number | null;
+  client?: (number | null) | Client;
+  links?: LinkGroupField;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  title?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MainColumn".
+ */
+export interface MainColumn {
+  style: 'singleLayout' | 'twoRows' | 'twoColumns' | 'threeSectionGrid';
+  row1column1?: {
+    root: {
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      type: string;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  row1column2?: {
+    root: {
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      type: string;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  row2column1?: {
+    root: {
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      type: string;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  row2column2?: {
+    root: {
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      type: string;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  description: string;
+  category: number | Category;
+  keywords?: (number | Keyword)[] | null;
+  slug?: string | null;
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  card?: {
+    media?: number | Media | null;
+    backgroundColour?: string | null;
+    overlayImage?: boolean | null;
+    showDate?: boolean | null;
+  };
+  layout?: Layout;
+  relatedPosts?: (number | Post)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: number | Media | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "keywords".
+ */
+export interface Keyword {
+  id: number;
+  title?: string | null;
+  parent?: (number | null) | Keyword;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Keyword;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name?: string | null;
+  roles?: ('admin' | 'user')[] | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: number;
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-preferences".
+ */
+export interface PayloadPreference {
+  id: number;
+  user: {
+    relationTo: 'users';
+    value: number | User;
+  };
+  key?: string | null;
+  value?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-migrations".
+ */
+export interface PayloadMigration {
+  id: number;
+  name?: string | null;
+  batch?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site".
+ */
+export interface Site {
+  id: number;
+  siteTitle?: string | null;
+  siteDescription?: string | null;
+  siteSourceLink?: string | null;
+  faviconSVG?: number | Media | null;
+  faviconICO?: number | Media | null;
+  navItems?:
+    | {
+        link: LinkField;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hidden-layout".
+ */
+export interface HiddenLayout {
+  id: number;
+  layout?: (CallToActionBlock | MediaBlock | ArchiveBlock | CodeBlock)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock".
+ */
 export interface CallToActionBlock {
   invertBackground?: boolean | null;
   richText?: {
@@ -127,43 +460,22 @@ export interface CallToActionBlock {
   blockName?: string | null;
   blockType: 'cta';
 }
-export interface ContentBlock {
-  invertBackground?: boolean | null;
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            children: {
-              type: string;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            type: string;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: LinkField;
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'content';
-}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlock".
+ */
 export interface MediaBlock {
   invertBackground?: boolean | null;
-  position?: ('default' | 'fullscreen') | null;
+  aspectRatio?: ('default' | 'square' | 'video') | null;
   media: number | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
 }
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock".
+ */
 export interface ArchiveBlock {
   introContent?: {
     root: {
@@ -202,152 +514,16 @@ export interface ArchiveBlock {
   blockName?: string | null;
   blockType: 'archive';
 }
-export interface Category {
-  id: number;
-  title?: string | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-export interface Post {
-  id: number;
-  title: string;
-  categories: number | Category;
-  keywords?: (number | Keyword)[] | null;
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  hero: HeroField;
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock)[];
-  enableRestrictedContent?: boolean | null;
-  restrictedContent?: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | CodeBlock)[] | null;
-  relatedPosts?: (number | Post)[] | null;
-  slug?: string | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: number | Media | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-export interface Keyword {
-  id: number;
-  title?: string | null;
-  parent?: (number | null) | Keyword;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Keyword;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-export interface User {
-  id: number;
-  name?: string | null;
-  roles?: ('admin' | 'user')[] | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password: string | null;
-}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
 export interface CodeBlock {
   language: 'go' | 'javascript' | 'typescript';
   code: string;
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
-}
-export interface Redirect {
-  id: number;
-  from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
-    url?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-export interface PayloadPreference {
-  id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  key?: string | null;
-  value?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-export interface PayloadMigration {
-  id: number;
-  name?: string | null;
-  batch?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-export interface Header {
-  id: number;
-  navItems?:
-    | {
-        link: LinkField;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-export interface Footer {
-  id: number;
-  navItems?:
-    | {
-        link: LinkField;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
 }
 
 
