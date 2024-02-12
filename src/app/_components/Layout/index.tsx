@@ -4,18 +4,7 @@ import React, { Fragment } from 'react'
 import { Layout as LayoutType } from '../../../payload/payload-types'
 import { Padding } from '../Padding'
 import RichText from '../RichText'
-import { SingleLayout } from './layouts/SingleLayout'
-import { ThreeSectionGrid } from './layouts/ThreeSectionGrid'
-import { TwoColumns } from './layouts/TwoColumns'
-import { TwoRows } from './layouts/TwoRows'
 import { SideColumn } from './SideColumn'
-
-const layoutComponents = {
-  singleLayout: SingleLayout,
-  twoRows: TwoRows,
-  twoColumns: TwoColumns,
-  threeSectionGrid: ThreeSectionGrid,
-}
 
 export type LayoutProps = {
   layouts: LayoutType
