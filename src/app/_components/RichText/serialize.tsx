@@ -111,7 +111,7 @@ const serialize = (nodes?: LexicalNode[], i = 1): React.ReactNode => {
         }
         return <Fragment key={i}>{text}</Fragment>
       case 'linebreak':
-        return <br />
+        return <br key={i} />
       case 'heading':
         switch (node.tag) {
           case 'h1':
@@ -178,7 +178,7 @@ const serialize = (nodes?: LexicalNode[], i = 1): React.ReactNode => {
       case 'upload':
         return <Media key={i} resource={node.value} fill />
       case 'block':
-        return <Blocks blocks={[node.fields]} />
+        return <Blocks key={i} blocks={[node.fields]} />
     }
   })
 }
