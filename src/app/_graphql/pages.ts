@@ -1,4 +1,3 @@
-import { ARCHIVE_BLOCK, CALL_TO_ACTION_BLOCK, CONTENT_BLOCK, MEDIA_BLOCK } from './blocks'
 import { LINK_FIELDS } from './link'
 import { MEDIA } from './media'
 import { META } from './meta'
@@ -19,19 +18,30 @@ export const PAGE = `
       docs {
         id
         title
-        hero {
-          type
-          richText
-          links {
-            link ${LINK_FIELDS()}
-          }
-          ${MEDIA}
-        }
         layout {
-          ${CONTENT_BLOCK}
-          ${CALL_TO_ACTION_BLOCK}
-          ${MEDIA_BLOCK}
-          ${ARCHIVE_BLOCK}
+          id
+          scrollSnap
+          sideContentPosition
+          fullPageHeight
+          sideColumn {
+            style
+            hero {
+              ${MEDIA}
+              description
+              links {
+                link ${LINK_FIELDS()}
+              }
+            }
+            sideContent1
+            sideContent2
+          }
+          mainColumn {
+            style
+            row1column1
+            row1column2
+            row2column1
+            row2column2
+          }
         }
         ${META}
       }

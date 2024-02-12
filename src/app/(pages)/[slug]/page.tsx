@@ -6,9 +6,8 @@ import { notFound } from 'next/navigation'
 import { Page } from '../../../payload/payload-types'
 import { fetchDoc } from '../../_api/fetchDoc'
 import { fetchDocs } from '../../_api/fetchDocs'
-import { Blocks } from '../../_components/Blocks'
-import { Hero } from '../../_components/Hero'
-import { TitleState } from '../../_providers/Context/Title/titleContext'
+import { Layout } from '../../_components/Layout'
+import { PageState } from '../../_providers/Context/Page/pageContext'
 import { generateMeta } from '../../_utilities/generateMeta'
 
 export default async function Page({ params: { slug = 'home' } }) {
@@ -22,23 +21,22 @@ export default async function Page({ params: { slug = 'home' } }) {
       slug,
       draft: isDraftMode,
     })
-  } catch (error) {}
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error)
+  }
 
   if (!page) {
     return notFound()
   }
 
-  const { hero, layout, title } = page
+  const { layout, title } = page
 
   return (
-    <React.Fragment>
-      <TitleState title={title} />
-      <Hero {...hero} />
-      <Blocks
-        blocks={layout}
-        topPadding={!hero || hero?.type === 'none' || hero?.type === 'lowImpact'}
-      />
-    </React.Fragment>
+    <main className="snap-y snap-mandatory grow flex flex-col">
+      <PageState title={title} />
+      <Layout layouts={layout} />
+    </main>
   )
 }
 

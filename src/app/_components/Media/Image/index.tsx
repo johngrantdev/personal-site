@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import NextImage, { StaticImageData } from 'next/image'
 
 import { Media } from '../../../../payload/payload-types'
@@ -20,6 +20,9 @@ export const Image: React.FC<MediaProps> = props => {
     src: srcFromProps,
     alt: altFromProps,
   } = props
+
+  const isSVG =
+    typeof resource === 'object' && resource?.mimeType && resource.mimeType === 'image/svg+xml'
 
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -51,25 +54,30 @@ export const Image: React.FC<MediaProps> = props => {
     .join(', ')
 
   return (
-    // add placeholder, image styles
-    <NextImage
-      className={[isLoading && 'bg-zinc-600 dark:bg-zinc-300', imgClassName]
-        .filter(Boolean)
-        .join(' ')}
-      src={src}
-      alt={alt || ''}
-      onClick={onClick}
-      onLoad={() => {
-        setIsLoading(false)
-        if (typeof onLoadFromProps === 'function') {
-          onLoadFromProps()
-        }
-      }}
-      fill={fill}
-      width={!fill ? width : undefined}
-      height={!fill ? height : undefined}
-      sizes={sizes}
-      priority={priority}
-    />
+    <Fragment>
+      {isSVG ? (
+        <object type="image/svg+xml" data={typeof src === 'string' ? src : ''} />
+      ) : (
+        <NextImage
+          className={[isLoading && 'bg-zinc-600 dark:bg-zinc-300', imgClassName]
+            .filter(Boolean)
+            .join(' ')}
+          src={src}
+          alt={alt || ''}
+          onClick={onClick}
+          onLoad={() => {
+            setIsLoading(false)
+            if (typeof onLoadFromProps === 'function') {
+              onLoadFromProps()
+            }
+          }}
+          fill={fill}
+          width={!fill ? width : undefined}
+          height={!fill ? height : undefined}
+          sizes={sizes}
+          priority={priority}
+        />
+      )}
+    </Fragment>
   )
 }

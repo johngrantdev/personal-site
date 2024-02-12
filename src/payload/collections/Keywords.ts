@@ -11,6 +11,7 @@ const Keywords: CollectionConfig = {
   fields: [
     {
       name: 'title',
+      label: 'Title',
       type: 'text',
     },
   ],

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import Link from 'next/link'
 
-import { useTitle } from '../../../_providers/Context/Title/titleContext'
+import { usePage } from '../../../_providers/Context/Page/pageContext'
 
 type TitleProps = {
   siteTitle: string
@@ -15,29 +15,29 @@ type TitleProps = {
 
 export function Title(props: TitleProps) {
   const { siteTitle } = props
-  const titleContext = useTitle()
+  const pageContext = usePage()
   const [title, setTitle] = useState('')
   const [fadeTitle, setFadeTitle] = useState(false)
   const [fadeTitleAndPipe, setFadeTitleAndPipe] = useState(true)
   const animationDuration = 150
 
   useEffect(() => {
-    if (titleContext.title === 'Home') {
+    if (pageContext.title === 'Home') {
       setFadeTitleAndPipe(true)
     } else {
       setFadeTitle(true)
     }
     setTimeout(() => {
-      if (titleContext.title === 'Home') {
+      if (pageContext.title === 'Home') {
         setTitle('')
         setFadeTitleAndPipe(true)
       } else {
-        setTitle(titleContext.title.toLowerCase())
+        setTitle(pageContext.title.toLowerCase())
         setFadeTitleAndPipe(false)
         setFadeTitle(false)
       }
     }, animationDuration)
-  }, [titleContext.title])
+  }, [pageContext.title])
 
   const fadePageTitle = useSpring({
     opacity: fadeTitle ? 0 : 1,
@@ -50,12 +50,18 @@ export function Title(props: TitleProps) {
   })
 
   return (
-    <div className="flex h-full text-4xl select-none gap-2">
-      <Link className=" justify-normal" href="/">
+    <div className="flex gap-0 sm:gap-2 h-12 text-2xl select-none">
+      <Link
+        className={`my-auto items-center justify-normal ${
+          title !== '' && 'sm:w-auto w-0 invisible sm:visible'
+        } `}
+        href="/"
+      >
         {siteTitle.toLowerCase()}
       </Link>{' '}
-      <animated.div className="flex gap-2" style={fadeTitlePipe}>
-        |<animated.div style={fadePageTitle}>{title}</animated.div>
+      <animated.div className="my-auto flex gap-0 sm:gap-2" style={fadeTitlePipe}>
+        <div className="sm:visible sm:w-auto w-0 invisible">|</div>
+        <animated.div style={fadePageTitle}>{title}</animated.div>
       </animated.div>
     </div>
   )

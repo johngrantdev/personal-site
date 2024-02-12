@@ -1,4 +1,4 @@
-import { ARCHIVE_BLOCK, CALL_TO_ACTION_BLOCK, CONTENT_BLOCK, MEDIA_BLOCK } from './blocks'
+import { ARCHIVE_BLOCK, CALL_TO_ACTION_BLOCK, MEDIA_BLOCK } from './blocks'
 import { LINK_FIELDS } from './link'
 import { MEDIA } from './media'
 import { META } from './meta'
@@ -19,7 +19,11 @@ export const POST = `
       docs {
         id
         title
-        categories {
+        description
+        category {
+          title
+        }
+        keywords {
           title
         }
         createdAt
@@ -28,26 +32,58 @@ export const POST = `
           id
           name
         }
-        hero {
-          type
-          richText
-          links {
-            link ${LINK_FIELDS()}
-          }
-          ${MEDIA}
-        }
         layout {
-          ${CONTENT_BLOCK}
-          ${CALL_TO_ACTION_BLOCK}
-          ${MEDIA_BLOCK}
-          ${ARCHIVE_BLOCK}
+          id
+          scrollSnap
+          sideContentPosition
+          fullPageHeight
+          sideColumn {
+            style
+            hero {
+              ${MEDIA}
+              description
+              links {
+                link ${LINK_FIELDS()}
+              }
+            }
+            projectHero {
+              year
+              client {
+                title
+              }
+              links {
+                link ${LINK_FIELDS()}
+              }
+            }
+            sideContent1
+            sideContent2
+          }
+          mainColumn {
+            style
+            row1column1
+            row1column2
+            row2column1
+            row2column2
+          }
         }
-        enableRestrictedContent
         relatedPosts {
           id
           slug
           title
+          description
+          publishedAt
+          card {
+            backgroundColour
+            overlayImage
+            showDate
+          }
           ${META}
+        }
+        card {
+          ${MEDIA}
+          backgroundColour
+          overlayImage
+          showDate
         }
         ${META}
       }
@@ -61,7 +97,6 @@ export const POST_RESTRICTED_CONTENT = `
       docs {
         restrictedContent {
           ${CALL_TO_ACTION_BLOCK}
-          ${CONTENT_BLOCK}
           ${MEDIA_BLOCK}
           ${ARCHIVE_BLOCK}
         }

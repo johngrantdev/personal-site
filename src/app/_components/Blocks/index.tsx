@@ -1,25 +1,23 @@
+/* eslint-disable import/no-cycle */
 'use client'
 import React, { Fragment } from 'react'
 
-import { Page } from '../../../payload/payload-types.js'
+import { HiddenLayout } from '../../../payload/payload-types'
 import { ArchiveBlock } from '../../_blocks/ArchiveBlock'
 import { CallToActionBlock } from '../../_blocks/CallToAction'
-import { ContentBlock } from '../../_blocks/Content'
 import { MediaBlock } from '../../_blocks/MediaBlock'
 import { RelatedPosts, type RelatedPostsProps } from '../../_blocks/RelatedPosts'
 import { toKebabCase } from '../../_utilities/toKebabCase'
-import { Padding } from '../Padding'
 
 const blockComponents = {
   cta: CallToActionBlock,
-  content: ContentBlock,
   mediaBlock: MediaBlock,
   archive: ArchiveBlock,
   relatedPosts: RelatedPosts,
 }
 
 export const Blocks: React.FC<{
-  blocks: Page['layout'][0][]
+  blocks: HiddenLayout['layout'][0][]
   topPadding?: boolean
   bottomPadding?: boolean
 }> = props => {
@@ -46,11 +44,7 @@ export const Blocks: React.FC<{
             }
 
             if (Block) {
-              return (
-                <Padding key={index} top={topPadding} bottom={bottomPadding}>
-                  <Block id={toKebabCase(blockName)} {...block} />
-                </Padding>
-              )
+              return <Block key={index} id={toKebabCase(blockName)} {...block} />
             }
           }
           return null

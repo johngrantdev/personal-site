@@ -1,7 +1,7 @@
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { payloadToken } from '../../_api/token'
+import { payloadToken } from '../../../_api/token'
 
 export async function GET(
   req: Request & {
@@ -26,7 +26,7 @@ export async function GET(
   }
 
   // validate the Payload token
-  const userReq = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/me`, {
+  const userReq = await fetch(`${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/payload/users/me`, {
     headers: {
       Authorization: `JWT ${token}`,
     },
