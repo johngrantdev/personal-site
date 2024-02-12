@@ -21,10 +21,10 @@ export const populateArchiveBlock: AfterReadHook = async ({ doc, req: { payload 
             collection: archiveBlock.relationTo,
             limit: archiveBlock.limit || 10,
             where: {
-              ...(archiveBlock?.categories?.length > 0
+              ...(archiveBlock?.category?.length > 0
                 ? {
-                    categories: {
-                      in: archiveBlock.categories
+                    category: {
+                      in: archiveBlock.category
                         .map(cat => {
                           if (typeof cat === 'string' || typeof cat === 'number') return cat
                           return cat.id

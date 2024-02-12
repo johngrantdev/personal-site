@@ -30,7 +30,7 @@ export type Props = {
   populatedDocs?: ArchiveBlockProps['populatedDocs']
   selectedDocs?: ArchiveBlockProps['selectedDocs']
   populatedDocsTotal?: ArchiveBlockProps['populatedDocsTotal']
-  categories?: ArchiveBlockProps['categories']
+  category?: ArchiveBlockProps['category']
 }
 
 export const CollectionArchive: React.FC<Props> = props => {
@@ -44,7 +44,7 @@ export const CollectionArchive: React.FC<Props> = props => {
     populatedDocs,
     populatedDocsTotal,
     selectedDocs,
-    categories: catsFromProps,
+    category: catFromProps,
     populateBy,
   } = props
 
@@ -99,10 +99,10 @@ export const CollectionArchive: React.FC<Props> = props => {
         {
           sort,
           where: {
-            ...(catsFromProps && catsFromProps.length > 0
+            ...(catFromProps && catFromProps.length > 0
               ? {
-                  categories: {
-                    in: catsFromProps
+                  category: {
+                    in: catFromProps
                       .map(category => (typeof category === 'number' ? category : category.id))
                       .join(','),
                   },
@@ -148,7 +148,7 @@ export const CollectionArchive: React.FC<Props> = props => {
     return () => {
       if (timer) clearTimeout(timer)
     }
-  }, [page, catsFromProps, relationTo, onResultChange, sort, limit, populateBy])
+  }, [page, catFromProps, relationTo, onResultChange, sort, limit, populateBy])
 
   const [currentResult, setCurrentResult] = useState<Result>()
   useEffect(() => {
@@ -166,7 +166,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           currentResult.docs?.map((result, index) => {
             return (
               <div key={index}>
-                <Card index={index} relationTo={relationTo} doc={result} showCategories />
+                <Card index={index} relationTo={relationTo} doc={result} showCategory />
               </div>
             )
           })}

@@ -17,7 +17,7 @@ export const ArchiveBlock: React.FC<ArchiveBlockProps> = props => {
     showPageRange,
     populatedDocs,
     populatedDocsTotal,
-    categories,
+    category,
   } = props
 
   return (
@@ -30,7 +30,7 @@ export const ArchiveBlock: React.FC<ArchiveBlockProps> = props => {
         relationTo={relationTo}
         populatedDocs={populatedDocs}
         populatedDocsTotal={populatedDocsTotal}
-        categories={categories}
+        category={category}
         limit={limit}
         showPageRange={showPageRange}
         sort="-publishedAt"
