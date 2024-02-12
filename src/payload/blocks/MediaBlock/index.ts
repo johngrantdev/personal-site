@@ -8,8 +8,9 @@ export const MediaBlock: Block = {
   fields: [
     invertBackground,
     {
-      name: 'position',
+      name: 'aspectRatio',
       type: 'select',
+      label: 'Aspect Ratio',
       defaultValue: 'default',
       options: [
         {
@@ -17,8 +18,12 @@ export const MediaBlock: Block = {
           value: 'default',
         },
         {
-          label: 'Fullscreen',
-          value: 'fullscreen',
+          label: 'Square',
+          value: 'square',
+        },
+        {
+          label: '16:9',
+          value: 'video',
         },
       ],
     },
