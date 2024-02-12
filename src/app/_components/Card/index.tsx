@@ -13,7 +13,7 @@ import { Media } from '../Media'
 export const Card: React.FC<{
   alignItems?: 'center'
   className?: string
-  showCategories?: boolean
+  showCategory?: boolean
   hideImagesOnMobile?: boolean
   title?: string
   relationTo?: 'posts'
