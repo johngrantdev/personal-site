@@ -52,20 +52,20 @@ export async function Footer({ siteSettings }: FooterProps) {
             ,&nbsp;
             <Link
               className="hover:underline hover:underline-offset-4"
+              href="https://payloadcms.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              PayloadCMS
+            </Link>
+            &nbsp;and&nbsp;
+            <Link
+              className="hover:underline hover:underline-offset-4"
               href="https://tailwindcss.com/"
               target="_blank"
               rel="noopener noreferrer"
             >
               TailwindCSS
-            </Link>
-            &nbsp;and&nbsp;
-            <Link
-              className="hover:underline hover:underline-offset-4"
-              href="https://payloadcms.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Payload
             </Link>
           </div>
           <Link

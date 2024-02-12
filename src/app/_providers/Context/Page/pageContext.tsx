@@ -7,7 +7,7 @@ import { Category, Keyword } from '../../../../payload/payload-types'
 // The page context handles both page and post scenarios
 // Settings states are optional covering both contexts
 // eg. Pages and Posts share some common values such as title and description
-// but not categories or keywords
+// but category or keywords
 interface PageContextType {
   title: string
   description: string

@@ -6,9 +6,8 @@ import { notFound } from 'next/navigation'
 import { Keyword, Post } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
-import { RelatedPosts } from '../../../_blocks/RelatedPosts'
 import { Layout } from '../../../_components/Layout'
-import { Padding } from '../../../_components/Padding'
+import { RelatedPosts } from '../../../_components/RelatedPosts'
 import { PageState } from '../../../_providers/Context/Page/pageContext'
 import { generateMeta } from '../../../_utilities/generateMeta'
 
@@ -50,7 +49,7 @@ export default async function Post({ params: { slug } }) {
       />
       <Layout layouts={layout} />
       {relatedPosts && relatedPosts.length > 0 && (
-        <RelatedPosts introContent="More:" docs={relatedPosts} />
+        <RelatedPosts introContent="More" docs={relatedPosts} />
       )}
     </main>
   )

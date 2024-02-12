@@ -6,8 +6,8 @@ import { HiddenLayout } from '../../../payload/payload-types'
 import { ArchiveBlock } from '../../_blocks/ArchiveBlock'
 import { CallToActionBlock } from '../../_blocks/CallToAction'
 import { MediaBlock } from '../../_blocks/MediaBlock'
-import { RelatedPosts, type RelatedPostsProps } from '../../_blocks/RelatedPosts'
 import { toKebabCase } from '../../_utilities/toKebabCase'
+import { RelatedPosts, type RelatedPostsProps } from '../RelatedPosts'
 
 const blockComponents = {
   cta: CallToActionBlock,

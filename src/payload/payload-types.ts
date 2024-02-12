@@ -36,7 +36,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     media: Media;
-    categories: Category;
+    category: Category;
     keywords: Keyword;
     clients: Client;
     users: User;
@@ -301,7 +301,7 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "category".
  */
 export interface Category {
   id: number;
@@ -494,7 +494,7 @@ export interface ArchiveBlock {
   } | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'posts' | null;
-  categories?: (number | Category)[] | null;
+  category?: (number | Category)[] | null;
   limit?: number | null;
   showPageRange?: boolean | null;
   selectedDocs?:

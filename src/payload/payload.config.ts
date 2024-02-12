@@ -15,7 +15,7 @@ import { Archive } from './blocks/ArchiveBlock'
 import { CallToAction } from './blocks/CallToAction'
 import { Code } from './blocks/Code'
 import { MediaBlock } from './blocks/MediaBlock'
-import Categories from './collections/Categories'
+import Category from './collections/Category'
 import Clients from './collections/Clients'
 import Keywords from './collections/Keywords'
 import { Media } from './collections/Media'
@@ -68,7 +68,7 @@ export default buildConfig({
     },
   }),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
-  collections: [Pages, Posts, Media, Categories, Keywords, Clients, Users],
+  collections: [Pages, Posts, Media, Category, Keywords, Clients, Users],
   globals: [Site, HiddenLayout],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
