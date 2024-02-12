@@ -1,5 +1,6 @@
 import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { cloudStorage } from '@payloadcms/plugin-cloud-storage'
 import nestedDocs from '@payloadcms/plugin-nested-docs'
 import redirects from '@payloadcms/plugin-redirects'
 import seo from '@payloadcms/plugin-seo'
@@ -10,15 +11,20 @@ import path from 'path'
 import { buildConfig } from 'payload/config'
 import computeBlurhash from 'payload-blurhash-plugin'
 
+import { Archive } from './blocks/ArchiveBlock'
+import { CallToAction } from './blocks/CallToAction'
 import { Code } from './blocks/Code'
+import { MediaBlock } from './blocks/MediaBlock'
 import Categories from './collections/Categories'
+import Clients from './collections/Clients'
 import Keywords from './collections/Keywords'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import Users from './collections/Users'
-import { Footer } from './globals/Footer'
-import { Header } from './globals/Header'
+import { HiddenLayout } from './globals/Hidden'
+import { Site } from './globals/Site'
+import { adapter } from './utilities/s3adapter'
 
 const generateTitle: GenerateTitle = () => {
   return process.env.SITE_TITLE
@@ -29,13 +35,11 @@ dotenv.config({
 })
 
 export default buildConfig({
+  debug: true,
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
-    components: {
-      // Seed Button
-      // beforeDashboard: [SeedButton],
-    },
+    components: {},
     webpack: config => ({
       ...config,
       resolve: {
@@ -43,19 +47,18 @@ export default buildConfig({
         alias: {
           ...config.resolve.alias,
           dotenv: path.resolve(__dirname, './dotenv.js'),
-          // [path.resolve(__dirname, './endpoints/seed')]: path.resolve(
-          //   __dirname,
-          //   './emptyModuleMock.js',
-          // ),
         },
       },
     }),
+  },
+  routes: {
+    api: '/api/payload',
   },
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       BlocksFeature({
-        blocks: [Code],
+        blocks: [Archive, CallToAction, Code, MediaBlock],
       }),
     ],
   }),
@@ -65,16 +68,20 @@ export default buildConfig({
     },
   }),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
-  collections: [Pages, Posts, Media, Categories, Keywords, Users],
-  globals: [Header, Footer],
+  collections: [Pages, Posts, Media, Categories, Keywords, Clients, Users],
+  globals: [Site, HiddenLayout],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  cors: [process.env.PAYLOAD_PUBLIC_SERVER_URL || ''].filter(Boolean),
-  csrf: [process.env.PAYLOAD_PUBLIC_SERVER_URL || ''].filter(Boolean),
+  cors: [process.env.PAYLOAD_PUBLIC_SERVER_URL],
+  csrf: [process.env.PAYLOAD_PUBLIC_SERVER_URL],
+  rateLimit: {
+    max: 5000,
+    trustProxy: true,
+  },
   // endpoints: [
   //   // The seed endpoint is used to populate the database with some example data
   //   // You should delete this endpoint before deploying your site to production
@@ -90,12 +97,19 @@ export default buildConfig({
       collections: ['pages', 'posts'],
     }),
     nestedDocs({
-      collections: ['categories', 'keywords'],
+      collections: ['keywords'],
     }),
     seo({
       collections: ['pages', 'posts'],
       generateTitle,
       uploadsCollection: 'media',
+    }),
+    cloudStorage({
+      collections: {
+        media: {
+          adapter: adapter,
+        },
+      },
     }),
     computeBlurhash(),
   ],
