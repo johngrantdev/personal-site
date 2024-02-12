@@ -161,7 +161,7 @@ export const CollectionArchive: React.FC<Props> = props => {
     <div className={[className].filter(Boolean).join(' ')}>
       <div className="absolute left-0 top-[-24]" ref={scrollRef} />
       {!isLoading && error && <>{error}</>}
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl-grid-cols-5 w-full gap-3">
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full gap-3">
         {currentResult &&
           currentResult.docs?.map((result, index) => {
             return (
