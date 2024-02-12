@@ -12,11 +12,13 @@ export const Media: CollectionConfig = {
   fields: [
     {
       name: 'alt',
+      label: 'Alt Text',
       type: 'text',
       required: true,
     },
     {
       name: 'caption',
+      label: 'Caption',
       type: 'richText',
     },
   ],

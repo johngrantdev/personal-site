@@ -4,7 +4,8 @@ import React from 'react'
 import { ThemeProvider } from 'next-themes'
 
 import { AuthProvider } from '../_providers/Auth'
-import { TitleProvider } from './Context/Title/titleContext'
+import { MouseProvider } from './Context/Page/mouseContext'
+import { PageProvider } from './Context/Page/pageContext'
 
 export const Providers: React.FC<{
   children: React.ReactNode
@@ -12,7 +13,9 @@ export const Providers: React.FC<{
   return (
     <ThemeProvider attribute="class">
       <AuthProvider>
-        <TitleProvider>{children}</TitleProvider>
+        <PageProvider>
+          <MouseProvider>{children}</MouseProvider>
+        </PageProvider>
       </AuthProvider>
     </ThemeProvider>
   )
