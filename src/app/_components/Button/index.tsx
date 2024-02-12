@@ -39,7 +39,8 @@ export const Button: React.FC<Props> = ({
   // need to add inverse appearances types to tailwind
   switch (appearance) {
     case 'primary':
-      appearanceStyle = 'bg-zinc-300 text-zinc-950 border-zinc-950'
+      appearanceStyle =
+        'bg-transparent hover:bg-zinc-700 text-zinc-950 dark:text-zinc-50 dark:border-zinc-50 border-zinc-950'
       break
     case 'secondary':
       appearanceStyle = 'bg-green-400 border-zinc-950'
@@ -52,7 +53,7 @@ export const Button: React.FC<Props> = ({
   }
 
   const className = [
-    'border rounded-md cursor-pointer inline-flex justify-center bg-transparent no-underline underline-offset-5 mr-4 px-3 py-2 transition-colors',
+    'border rounded-xl cursor-pointer inline-flex justify-center bg-transparent no-underline underline-offset-5 px-3 py-2 transition-colors',
     classNameFromProps,
     appearanceStyle,
   ]
@@ -60,7 +61,7 @@ export const Button: React.FC<Props> = ({
     .join(' ')
 
   const content = (
-    <div className=" flex items-center justify-around">
+    <div className="flex items-center justify-around">
       <span className="text-center flex items-center">{label}</span>
     </div>
   )
