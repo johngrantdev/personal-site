@@ -1,13 +1,9 @@
+import { colorPickerField } from '@innovixx/payload-color-picker-field'
 import type { CollectionConfig } from 'payload/types'
 
 import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
-import { Archive } from '../../blocks/ArchiveBlock'
-import { CallToAction } from '../../blocks/CallToAction'
-import { Code } from '../../blocks/Code'
-import { Content } from '../../blocks/Content'
-import { MediaBlock } from '../../blocks/MediaBlock'
-import { hero } from '../../fields/hero'
+import { layout } from '../../fields/layout'
 import { slugField } from '../../fields/slug'
 import { populateArchiveBlock } from '../../hooks/populateArchiveBlock'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -20,8 +16,8 @@ export const Posts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
     preview: doc => {
-      return `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/preview?url=${encodeURIComponent(
-        `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/notes/${doc?.slug}`,
+      return `${process.env.NEXT_PUBLIC_SERVER_URL}/api/next/preview?url=${encodeURIComponent(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/posts/${doc?.slug}`,
       )}&secret=${process.env.PAYLOAD_PUBLIC_DRAFT_SECRET}`
     },
   },
@@ -41,63 +37,84 @@ export const Posts: CollectionConfig = {
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
-      hasMany: false,
-      required: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'keywords',
-      type: 'relationship',
-      relationTo: 'keywords',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'publishedAt',
-      type: 'date',
-      admin: {
-        position: 'sidebar',
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
-      },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
-              return new Date()
-            }
-            return value
+      type: 'row',
+      fields: [
+        {
+          name: 'title',
+          label: 'Title',
+          type: 'text',
+          required: true,
+          admin: {
+            width: '30%',
           },
-        ],
-      },
+        },
+        {
+          name: 'description',
+          label: 'Description',
+          type: 'text',
+          required: true,
+        },
+      ],
     },
     {
-      name: 'authors',
-      type: 'relationship',
-      relationTo: 'users',
-      hasMany: true,
-      admin: {
-        position: 'sidebar',
-      },
+      type: 'row',
+      fields: [
+        {
+          name: 'category',
+          label: 'Category',
+          type: 'relationship',
+          relationTo: 'categories',
+          hasMany: false,
+          required: true,
+        },
+        {
+          name: 'keywords',
+          label: 'Keywords',
+          type: 'relationship',
+          relationTo: 'keywords',
+          hasMany: true,
+        },
+        slugField(),
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'publishedAt',
+          label: 'Published At',
+          type: 'date',
+          admin: {
+            date: {
+              pickerAppearance: 'dayAndTime',
+            },
+          },
+          hooks: {
+            beforeChange: [
+              ({ siblingData, value }) => {
+                if (siblingData._status === 'published' && !value) {
+                  return new Date()
+                }
+                return value
+              },
+            ],
+          },
+        },
+        {
+          name: 'authors',
+          label: 'Authors',
+          type: 'relationship',
+          relationTo: 'users',
+          hasMany: true,
+        },
+      ],
     },
     // This field is only used to populate the user data via the `populateAuthors` hook
     // This is because the `user` collection has access control locked to protect user privacy
     // GraphQL will also not return mutated user data that differs from the underlying schema
     {
       name: 'populatedAuthors',
+      label: 'Populated Authors',
       type: 'array',
       admin: {
         readOnly: true,
@@ -118,40 +135,49 @@ export const Posts: CollectionConfig = {
       ],
     },
     {
-      type: 'tabs',
-      tabs: [
+      name: 'card',
+      type: 'group',
+      label: 'Card',
+      fields: [
         {
-          label: 'Hero',
-          fields: [hero],
+          name: 'media',
+          type: 'upload',
+          label: 'Image/Video',
+          relationTo: 'media',
+          required: false,
         },
+        colorPickerField({
+          name: 'backgroundColour',
+          label: '',
+          required: false,
+          admin: {
+            description: 'Choose a colour for this page',
+            width: '20%',
+          },
+        }),
         {
-          label: 'Content',
+          type: 'row',
           fields: [
             {
-              name: 'layout',
-              type: 'blocks',
-              required: true,
-              blocks: [CallToAction, Content, MediaBlock, Archive, Code],
-            },
-            {
-              name: 'enableRestrictedContent',
-              label: 'Enable Restricted Content',
+              name: 'overlayImage',
+              label: 'Overlay colour on background?',
               type: 'checkbox',
+              defaultValue: false,
             },
             {
-              name: 'restrictedContent',
-              type: 'blocks',
-              access: {
-                read: ({ req }) => req.user,
-              },
-              blocks: [CallToAction, Content, MediaBlock, Archive, Code],
+              name: 'showDate',
+              label: 'Show published Date?',
+              type: 'checkbox',
+              defaultValue: false,
             },
           ],
         },
       ],
     },
+    layout,
     {
       name: 'relatedPosts',
+      label: 'Related Posts',
       type: 'relationship',
       relationTo: 'posts',
       hasMany: true,
@@ -163,6 +189,5 @@ export const Posts: CollectionConfig = {
         }
       },
     },
-    slugField(),
   ],
 }
