@@ -14,24 +14,10 @@ export const CALL_TO_ACTION_BLOCK = `
 }
 `
 
-export const CONTENT_BLOCK = `
-...on ContentBlock {
-  blockType
-  invertBackground
-  columns {
-    size
-    richText
-    enableLink
-    link ${LINK_FIELDS()}
-  }
-}
-`
-
 export const MEDIA_BLOCK = `
 ...on MediaBlock {
   blockType
   invertBackground
-  position
   ${MEDIA}
 }
 `
