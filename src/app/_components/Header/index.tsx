@@ -16,9 +16,8 @@ type HeaderProps = {
 
 export async function Header({ siteSettings }: HeaderProps) {
   return (
-    <header>
-      {/* add wrap styles */}
-      <Padding className="flex justify-between flex-wrap gap-x-3" bottom={false}>
+    <header className="fixed z-30 w-full mix-blend-difference text-zinc-200">
+      <Padding className="my-6 flex justify-between flex-wrap gap-x-3" top={false} bottom={false}>
         <Title siteTitle={siteSettings ? siteSettings.siteTitle : 'Title'} />
         <HeaderNav siteSettings={siteSettings} />
       </Padding>
