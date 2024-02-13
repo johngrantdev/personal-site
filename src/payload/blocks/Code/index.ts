@@ -8,31 +8,31 @@ export const Code: Block = {
     plural: 'Code',
   },
   fields: [
-    {
-      name: 'language',
-      required: true,
-      type: 'select',
-      options: [
-        {
-          label: 'Go',
-          value: 'go',
-        },
-        {
-          label: 'Javascript',
-          value: 'javascript',
-        },
-        {
-          label: 'Typescript',
-          value: 'typescript',
-        },
-      ],
-    },
+    // {
+    //   name: 'language',
+    //   required: true,
+    //   type: 'select',
+    //   options: [
+    //     {
+    //       label: 'Go',
+    //       value: 'go',
+    //     },
+    //     {
+    //       label: 'Javascript',
+    //       value: 'javascript',
+    //     },
+    //     {
+    //       label: 'Typescript',
+    //       value: 'typescript',
+    //     },
+    //   ],
+    // },
     {
       name: 'code',
       type: 'code',
       required: true,
       admin: {
-        language: 'javascript',
+        language: 'typescript',
       },
     },
   ],
