@@ -519,7 +519,6 @@ export interface ArchiveBlock {
  * via the `definition` "CodeBlock".
  */
 export interface CodeBlock {
-  language: 'go' | 'javascript' | 'typescript';
   code: string;
   id?: string | null;
   blockName?: string | null;
