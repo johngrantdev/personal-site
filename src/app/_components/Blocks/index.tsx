@@ -5,15 +5,15 @@ import React, { Fragment } from 'react'
 import { HiddenLayout } from '../../../payload/payload-types'
 import { ArchiveBlock } from '../../_blocks/ArchiveBlock'
 import { CallToActionBlock } from '../../_blocks/CallToAction'
+import { CodeBlock } from '../../_blocks/CodeBlock'
 import { MediaBlock } from '../../_blocks/MediaBlock'
 import { toKebabCase } from '../../_utilities/toKebabCase'
-import { RelatedPosts, type RelatedPostsProps } from '../RelatedPosts'
 
 const blockComponents = {
   cta: CallToActionBlock,
   mediaBlock: MediaBlock,
   archive: ArchiveBlock,
-  relatedPosts: RelatedPosts,
+  code: CodeBlock,
 }
 
 export const Blocks: React.FC<{
@@ -44,7 +44,11 @@ export const Blocks: React.FC<{
             }
 
             if (Block) {
-              return <Block key={index} id={toKebabCase(blockName)} {...block} />
+              return (
+                <div key={index} id={toKebabCase(blockName)}>
+                  <Block {...block} />
+                </div>
+              )
             }
           }
           return null
