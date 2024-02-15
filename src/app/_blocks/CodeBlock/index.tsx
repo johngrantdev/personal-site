@@ -6,12 +6,12 @@ import theme from './codeStyle'
 // import classes from './index.module.scss'
 
 type Props = CodeBlockType & {
-  id?: number
+  id?: number | string
 }
 
-export const CodeBlock: React.FC<Props> = ({ code }) => {
+export const CodeBlock: React.FC<Props> = ({ id, code }) => {
   return (
-    <div className="my-4 pl-4 border-zinc-800 border-l-4">
+    <div id={id} className="my-4 pl-4 border-zinc-800 border-l-4">
       <Highlight theme={theme} code={code} language="tsx">
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre style={style}>
