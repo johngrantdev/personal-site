@@ -1,4 +1,4 @@
-import type { PrismTheme } from '../types'
+import type { PrismTheme } from 'prism-react-renderer'
 const theme: PrismTheme = {
   plain: {
     // backgroundColor: 'linear-gradient(to bottom, #2a2139 75%, #34294f)',
