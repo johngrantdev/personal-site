@@ -4,7 +4,7 @@ import { ArchiveBlock as ArchiveBlockType } from '../../../payload/payload-types
 import { CollectionArchive } from '../../_components/CollectionArchive'
 
 export type ArchiveBlockProps = ArchiveBlockType & {
-  id?: number
+  id?: number | string
 }
 
 export const ArchiveBlock: React.FC<ArchiveBlockProps> = props => {
@@ -21,7 +21,7 @@ export const ArchiveBlock: React.FC<ArchiveBlockProps> = props => {
   } = props
 
   return (
-    <div id={`block-${id}`} className="relative">
+    <div id={id} className="relative">
       {/* {introContent && introContent.root.children[0].children[0].text !== '' && (
         <RichText content={introContent} />
       )} */}
