@@ -99,11 +99,8 @@ export const layout: Field = {
               label: false,
               interfaceName: 'Hero',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return doc.layout[0].sideColumn.style === 'hero'
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'hero'
                 },
               },
               fields: [
@@ -126,11 +123,8 @@ export const layout: Field = {
               label: false,
               interfaceName: 'ProjectHero',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return doc.layout[0].sideColumn.style === 'projectHero'
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'projectHero'
                 },
               },
               fields: [
@@ -155,14 +149,8 @@ export const layout: Field = {
               label: false,
               type: 'richText',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return (
-                      doc.layout[0].sideColumn.style === 'singleLayout' ||
-                      doc.layout[0].sideColumn.style === 'twoRows'
-                    )
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'singleLayout' || siblingData.style === 'twoRows'
                 },
               },
             },
@@ -171,11 +159,8 @@ export const layout: Field = {
               label: false,
               type: 'richText',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return doc.layout[0].sideColumn.style === 'twoRows'
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'twoRows'
                 },
               },
             },
@@ -227,14 +212,11 @@ export const layout: Field = {
                   label: false,
                   type: 'richText',
                   admin: {
-                    condition: (doc = {}) => {
-                      if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                        return (
-                          doc.layout[0].mainColumn.style === 'twoColumns' ||
-                          doc.layout[0].mainColumn.style === 'threeSectionGrid'
-                        )
-                      }
-                      return false
+                    condition: (_, siblingData) => {
+                      return (
+                        siblingData.style === 'twoColumns' ||
+                        siblingData.style === 'threeSectionGrid'
+                      )
                     },
                   },
                 },
@@ -248,11 +230,8 @@ export const layout: Field = {
                   label: false,
                   type: 'richText',
                   admin: {
-                    condition: (doc = {}) => {
-                      if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                        return doc.layout[0].mainColumn.style === 'twoRows'
-                      }
-                      return false
+                    condition: (_, siblingData) => {
+                      return siblingData.style === 'twoRows'
                     },
                   },
                 },
@@ -270,11 +249,8 @@ export const layout: Field = {
                   label: false,
                   type: 'richText',
                   admin: {
-                    condition: (doc = {}) => {
-                      if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                        return doc.layout[0].mainColumn.style === 'threeSectionGrid'
-                      }
-                      return false
+                    condition: (_, siblingData) => {
+                      return siblingData.style === 'threeSectionGrid'
                     },
                   },
                 },
