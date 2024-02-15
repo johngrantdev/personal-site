@@ -141,8 +141,11 @@ If you are migrating an existing site or moving content to a new URL, you can us
 
 ### Docker
 
-Todo: write steps to create docker image
-
+To build the docker package run
+`docker build -t personal-site .`
+The payload build process requires a postgres database connection.
+If the postgres database is running locally provide the container a network flag with the host network `--network=host`.
+eg. `docker build -t personal-site . --network=host`
 1. Next run `docker-compose up`
 
 That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
