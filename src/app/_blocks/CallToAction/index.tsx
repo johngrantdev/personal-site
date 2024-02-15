@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React from 'react'
 
 import { CallToActionBlock as CallToActionBlockType } from '../../../payload/payload-types'
@@ -7,12 +8,15 @@ import RichText from '../../_components/RichText'
 // import classes from './index.module.scss'
 
 type Props = CallToActionBlockType & {
-  id?: number
+  id?: number | string
 }
 
-export const CallToActionBlock: React.FC<Props> = ({ links, richText, invertBackground }) => {
+export const CallToActionBlock: React.FC<Props> = ({ id, links, richText, invertBackground }) => {
   return (
-    <div className="px-6 py-12 flex gap-14 items-center dark:bg-zinc-900 bg-zinc-600 text-zinc-100 rounded-lg drop-shadow-xl">
+    <div
+      id={id}
+      className="px-6 py-12 flex gap-14 items-center dark:bg-zinc-900 bg-zinc-600 text-zinc-100 rounded-lg drop-shadow-xl"
+    >
       <div className="flex-grow">
         <RichText content={richText} />
       </div>
