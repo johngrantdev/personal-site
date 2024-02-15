@@ -1,6 +1,6 @@
+/* eslint-disable import/no-cycle */
 import React, { Fragment } from 'react'
 import escapeHTML from 'escape-html'
-import { LexicalNode } from 'lexical'
 
 import { Blocks } from '../Blocks'
 import { CMSLink } from '../Link'
@@ -37,7 +37,7 @@ function getTextFormats(formatNumber) {
   return { bold, italic, strikethrough, underline, code, subscript, superscript }
 }
 
-const serialize = (nodes?: LexicalNode[], i = 1): React.ReactNode => {
+const serialize = (nodes?: any[], i = 1): React.ReactNode => {
   return nodes.map((node, i) => {
     if (!node) {
       return null
