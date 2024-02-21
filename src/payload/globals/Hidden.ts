@@ -4,6 +4,7 @@ import { Archive } from '../blocks/ArchiveBlock'
 import { CallToAction } from '../blocks/CallToAction'
 import { Code } from '../blocks/Code'
 import { MediaBlock } from '../blocks/MediaBlock'
+import { VimeoBlock } from '../blocks/VimeoBlock'
 
 /**
  * Temporary Fix to ensure blocks are picked up on type generation
@@ -21,7 +22,7 @@ export const HiddenLayout: GlobalConfig = {
     {
       name: 'layout',
       type: 'blocks',
-      blocks: [CallToAction, MediaBlock, Archive, Code],
+      blocks: [CallToAction, MediaBlock, Archive, Code, VimeoBlock],
     },
   ],
 }
