@@ -37,10 +37,8 @@ export const PAGE = `
           }
           mainColumn {
             style
-            row1column1
-            row1column2
-            row2column1
-            row2column2
+            column1
+            column2
           }
         }
         ${META}
