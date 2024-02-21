@@ -51,6 +51,8 @@ export const POST = `
               client {
                 title
               }
+              usePostDescription
+              customDescription
               links {
                 link ${LINK_FIELDS()}
               }
@@ -60,10 +62,8 @@ export const POST = `
           }
           mainColumn {
             style
-            row1column1
-            row1column2
-            row2column1
-            row2column2
+            column1
+            column2
           }
         }
         relatedPosts {
