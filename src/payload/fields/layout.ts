@@ -1,6 +1,5 @@
 import type { Field } from 'payload/types'
 
-import { BlankFiller } from '../components/BlankFiller'
 import linkGroup from './linkGroup'
 
 // import { LayoutFillerComponent } from '../components/Layout'
@@ -141,6 +140,22 @@ export const layout: Field = {
                   type: 'relationship',
                   relationTo: 'clients',
                 },
+                {
+                  name: 'usePostDescription',
+                  label: 'Use Post Description?',
+                  type: 'checkbox',
+                  defaultValue: true,
+                },
+                {
+                  name: 'customDescription',
+                  label: 'Description',
+                  type: 'richText',
+                  admin: {
+                    condition: (_, siblingData) => {
+                      return !siblingData.usePostDescription
+                    },
+                  },
+                },
                 linkGroup(),
               ],
             },
@@ -186,71 +201,26 @@ export const layout: Field = {
                   value: 'singleLayout',
                 },
                 {
-                  label: 'Two Rows',
-                  value: 'twoRows',
-                },
-                {
                   label: 'Two Columns',
                   value: 'twoColumns',
                 },
-                {
-                  label: 'Three Section Grid',
-                  value: 'threeSectionGrid',
-                },
               ],
             },
             {
               type: 'row',
               fields: [
                 {
-                  name: 'row1column1',
+                  name: 'column1',
                   label: false,
                   type: 'richText',
                 },
                 {
-                  name: 'row1column2',
-                  label: false,
-                  type: 'richText',
-                  admin: {
-                    condition: (_, siblingData) => {
-                      return (
-                        siblingData.style === 'twoColumns' ||
-                        siblingData.style === 'threeSectionGrid'
-                      )
-                    },
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'row2column1',
+                  name: 'column2',
                   label: false,
                   type: 'richText',
                   admin: {
                     condition: (_, siblingData) => {
-                      return siblingData.style === 'twoRows'
-                    },
-                  },
-                },
-                {
-                  name: 'blankFiller',
-                  type: 'ui',
-                  admin: {
-                    components: {
-                      Field: BlankFiller,
-                    },
-                  },
-                },
-                {
-                  name: 'row2column2',
-                  label: false,
-                  type: 'richText',
-                  admin: {
-                    condition: (_, siblingData) => {
-                      return siblingData.style === 'threeSectionGrid'
+                      return siblingData.style === 'twoColumns'
                     },
                   },
                 },
