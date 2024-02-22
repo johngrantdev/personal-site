@@ -199,14 +199,3 @@ const serialize = (nodes?: any[], i = 1): React.ReactNode => {
 }
 
 export default serialize
-
-// stuff from slate that may need to be implemented in lexical
-// case 'label':
-//   return <Label key={i}>{serializeChildren(node.children)}</Label>
-
-// case 'large-body': {
-//   return <LargeBody key={i}>{serializeChildren(node.children)}</LargeBody>
-// }
-
-// default:
-//   return <p key={i}>{serializeChildren(node.children)}</p>
