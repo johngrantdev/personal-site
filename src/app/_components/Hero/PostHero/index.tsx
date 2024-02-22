@@ -31,7 +31,7 @@ export const PostHero: React.FC<PostHeroProps> = props => {
       <h3 className="my-3 text-md">
         {pageContext.description ? pageContext.description : 'nulls'}
       </h3>
-      <p>{pageContext.keywords.map(keyword => keyword.title).join(', ')}</p>
+      <p>{(pageContext.keywords || []).map(keyword => keyword.title).join(', ')}</p>
     </div>
   )
 }
