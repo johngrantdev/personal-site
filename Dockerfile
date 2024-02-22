@@ -10,6 +10,7 @@ COPY package*.json ./
 # COPY yarn.lock ./
 
 COPY . .
+COPY .env.prod ./.env
 RUN yarn install
 RUN yarn build
 
