@@ -15,6 +15,7 @@ import { Archive } from './blocks/ArchiveBlock'
 import { CallToAction } from './blocks/CallToAction'
 import { Code } from './blocks/Code'
 import { MediaBlock } from './blocks/MediaBlock'
+import { VimeoBlock } from './blocks/VimeoBlock'
 import Category from './collections/Category'
 import Clients from './collections/Clients'
 import Keywords from './collections/Keywords'
@@ -58,7 +59,7 @@ export default buildConfig({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       BlocksFeature({
-        blocks: [Archive, CallToAction, Code, MediaBlock],
+        blocks: [Archive, CallToAction, Code, MediaBlock, VimeoBlock],
       }),
     ],
   }),

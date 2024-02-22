@@ -150,6 +150,7 @@ export const Posts: CollectionConfig = {
           name: 'backgroundColour',
           label: '',
           required: false,
+          defaultValue: '#000000',
           admin: {
             description: 'Choose a colour for this page',
             width: '20%',

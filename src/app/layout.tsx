@@ -6,6 +6,7 @@ import { Site } from '../payload/payload-types'
 import { fetchSiteSettings } from './_api/fetchGlobals'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
+import { TailwindBreakpoints } from './_components/TailwindBreakpoints'
 import { Providers } from './_providers'
 import { mergeOpenGraph } from './_utilities/mergeOpenGraph'
 
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {children}
             {/* @ts-expect-error */}
             <Footer siteSettings={siteSettings} />
+            {/* <TailwindBreakpoints /> */}
           </div>
         </Providers>
       </body>

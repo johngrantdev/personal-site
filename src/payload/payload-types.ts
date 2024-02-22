@@ -161,6 +161,56 @@ export interface Media {
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
+  sizes?: {
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    desktop?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    desktopHalf?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    tablet?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    tabletHalf?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    mobile?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -184,6 +234,22 @@ export interface LinkField {
 export interface ProjectHero {
   year?: number | null;
   client?: (number | null) | Client;
+  usePostDescription?: boolean | null;
+  customDescription?: {
+    root: {
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      type: string;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   links?: LinkGroupField;
 }
 /**
@@ -201,8 +267,8 @@ export interface Client {
  * via the `definition` "MainColumn".
  */
 export interface MainColumn {
-  style: 'singleLayout' | 'twoRows' | 'twoColumns' | 'threeSectionGrid';
-  row1column1?: {
+  style: 'singleLayout' | 'twoColumns';
+  column1?: {
     root: {
       children: {
         type: string;
@@ -217,37 +283,7 @@ export interface MainColumn {
     };
     [k: string]: unknown;
   } | null;
-  row1column2?: {
-    root: {
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      type: string;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  row2column1?: {
-    root: {
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      type: string;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  row2column2?: {
+  column2?: {
     root: {
       children: {
         type: string;
@@ -430,7 +466,7 @@ export interface Site {
  */
 export interface HiddenLayout {
   id: number;
-  layout?: (CallToActionBlock | MediaBlock | ArchiveBlock | CodeBlock)[] | null;
+  layout?: (CallToActionBlock | MediaBlock | ArchiveBlock | CodeBlock | VimeoBlock)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -465,9 +501,12 @@ export interface CallToActionBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  invertBackground?: boolean | null;
   aspectRatio?: ('default' | 'square' | 'video') | null;
-  media: number | Media;
+  sideCaption?: boolean | null;
+  layout?: ('default' | 'twoColumn' | 'heroGrid') | null;
+  media1: number | Media;
+  media2?: number | Media | null;
+  media3?: number | Media | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -519,10 +558,39 @@ export interface ArchiveBlock {
  * via the `definition` "CodeBlock".
  */
 export interface CodeBlock {
+  language:
+    | 'css'
+    | 'dockerfile'
+    | 'go'
+    | 'graphql'
+    | 'handlebars'
+    | 'html'
+    | 'java'
+    | 'javascript'
+    | 'kotlin'
+    | 'markdown'
+    | 'pgsql'
+    | 'python'
+    | 'rust'
+    | 'scss'
+    | 'swift'
+    | 'typescript'
+    | 'xml'
+    | 'yaml';
   code: string;
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VimeoBlock".
+ */
+export interface VimeoBlock {
+  videoId?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'vimeoBlock';
 }
 
 

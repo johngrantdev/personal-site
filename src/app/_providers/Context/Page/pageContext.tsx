@@ -11,10 +11,12 @@ import { Category, Keyword } from '../../../../payload/payload-types'
 interface PageContextType {
   title: string
   description: string
+  publishedAt: Date
   category: Category
   keywords: Keyword[]
   setTitle: React.Dispatch<React.SetStateAction<string>>
   setDescription: React.Dispatch<React.SetStateAction<string>>
+  setPublishedAt: React.Dispatch<React.SetStateAction<Date>>
   setCategory: React.Dispatch<React.SetStateAction<Category>>
   setKeywords: React.Dispatch<React.SetStateAction<Keyword[]>>
 }
@@ -22,10 +24,12 @@ interface PageContextType {
 export const PageContext = createContext<PageContextType>({
   title: '',
   description: '',
-  category: null,
+  publishedAt: undefined,
+  category: undefined,
   keywords: [],
   setTitle: () => {},
   setDescription: () => {},
+  setPublishedAt: () => {},
   setCategory: () => {},
   setKeywords: () => {},
 })
@@ -33,7 +37,8 @@ export const PageContext = createContext<PageContextType>({
 export const PageProvider = ({ children }) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState<Category | null>(null)
+  const [publishedAt, setPublishedAt] = useState<Date>(undefined)
+  const [category, setCategory] = useState<Category | null>(undefined)
   const [keywords, setKeywords] = useState<Keyword[]>([])
 
   return (
@@ -43,6 +48,8 @@ export const PageProvider = ({ children }) => {
         setTitle,
         description,
         setDescription,
+        publishedAt,
+        setPublishedAt,
         category,
         setCategory,
         keywords,
@@ -59,17 +66,43 @@ export const usePage = () => useContext(PageContext)
 export const PageState: React.FC<{
   title?: string
   description?: string
+  publishedAt?: string
   category?: Category | null
   keywords?: Keyword[]
-}> = ({ title = '', description = '', category = null, keywords = null }) => {
-  const { setTitle, setDescription, setCategory, setKeywords } = usePage()
+}> = ({
+  title = '',
+  description = '',
+  publishedAt = undefined,
+  category = undefined,
+  keywords = undefined,
+}) => {
+  const { setTitle, setDescription, setPublishedAt, setCategory, setKeywords } = usePage()
 
   useEffect(() => {
     setTitle(title)
     setDescription(description)
+    if (publishedAt) {
+      try {
+        setPublishedAt(new Date(publishedAt))
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(`publishedAt is not a date string: ${error}`)
+      }
+    }
     setCategory(category)
     setKeywords(keywords)
-  }, [title, setTitle, description, setDescription, category, setCategory, keywords, setKeywords])
+  }, [
+    title,
+    setTitle,
+    description,
+    setDescription,
+    category,
+    setCategory,
+    keywords,
+    setKeywords,
+    publishedAt,
+    setPublishedAt,
+  ])
 
   return null
 }

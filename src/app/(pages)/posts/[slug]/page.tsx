@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { Keyword, Post } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
-import { Layout } from '../../../_components/Layout'
+import { Layouts } from '../../../_components/Layouts'
 import { RelatedPosts } from '../../../_components/RelatedPosts'
 import { PageState } from '../../../_providers/Context/Page/pageContext'
 import { generateMeta } from '../../../_utilities/generateMeta'
@@ -30,7 +30,7 @@ export default async function Post({ params: { slug } }) {
     notFound()
   }
 
-  const { layout, title, description, category } = post
+  const { layout, title, publishedAt, description, category } = post
   // Todo: implement a populate function and type guard instead for the below type assertions
   const filteredKeywords = (post.keywords || []).filter(
     keyword => typeof keyword !== 'number',
@@ -46,8 +46,9 @@ export default async function Post({ params: { slug } }) {
         description={description}
         category={typeof category !== 'number' && category}
         keywords={filteredKeywords}
+        publishedAt={publishedAt}
       />
-      <Layout layouts={layout} />
+      <Layouts layouts={layout} />
       {relatedPosts && relatedPosts.length > 0 && (
         <RelatedPosts introContent="More" docs={relatedPosts} />
       )}

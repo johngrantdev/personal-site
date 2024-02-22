@@ -32,7 +32,9 @@ export const Video: React.FC<MediaProps> = props => {
         muted
         loop
         controls={false}
-        className={['max-w-full w-full bg-zinc-600', videoClassName].filter(Boolean).join(' ')}
+        className={['max-w-full w-full bg-zinc-600 rounded-sm sm:rounded-md', videoClassName]
+          .filter(Boolean)
+          .join(' ')}
         onClick={onClick}
         ref={videoRef}
       >

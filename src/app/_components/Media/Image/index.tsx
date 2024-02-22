@@ -6,6 +6,7 @@ import NextImage, { StaticImageData } from 'next/image'
 import { Media } from '../../../../payload/payload-types'
 import cssVariables from '../../../cssVariables'
 import { Props as MediaProps } from '../types'
+import { SVG } from './SVG'
 
 const { breakpoints } = cssVariables
 
@@ -19,10 +20,10 @@ export const Image: React.FC<MediaProps> = props => {
     fill,
     src: srcFromProps,
     alt: altFromProps,
+    targetSize,
   } = props
 
-  const isSVG =
-    typeof resource === 'object' && resource?.mimeType && resource.mimeType === 'image/svg+xml'
+  const isSVG = typeof resource === 'object' && resource?.mimeType?.includes('svg')
 
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -32,18 +33,27 @@ export const Image: React.FC<MediaProps> = props => {
   let src: StaticImageData | string = srcFromProps || ''
 
   if (!src && resource && typeof resource === 'object') {
-    const {
-      width: fullWidth,
-      height: fullHeight,
-      filename: fullFilename,
-      alt: altFromResource,
-    } = resource as Media
+    const { alt: altFromResource } = resource as Media
+    let updateFilename
+    if (targetSize && resource.sizes[targetSize]) {
+      const {
+        width: targetWidth,
+        height: targetHeight,
+        filename: targetFilename,
+      } = resource.sizes[targetSize] as Media
+      width = targetWidth
+      height = targetHeight
+      updateFilename = targetFilename
+    } else {
+      const { width: fullWidth, height: fullHeight, filename: fullFilename } = resource as Media
+      width = fullWidth
+      height = fullHeight
+      updateFilename = fullFilename
+    }
 
-    width = fullWidth
-    height = fullHeight
     alt = altFromResource
 
-    const filename = fullFilename
+    const filename = updateFilename
 
     src = `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${filename}`
   }
@@ -56,10 +66,14 @@ export const Image: React.FC<MediaProps> = props => {
   return (
     <Fragment>
       {isSVG ? (
-        <object type="image/svg+xml" data={typeof src === 'string' ? src : ''} />
+        <SVG {...props} />
       ) : (
         <NextImage
-          className={[isLoading && 'bg-zinc-600 dark:bg-zinc-300', imgClassName]
+          className={[
+            isLoading && 'bg-zinc-600 dark:bg-zinc-300',
+            imgClassName,
+            'rounded-sm sm:rounded-md',
+          ]
             .filter(Boolean)
             .join(' ')}
           src={src}

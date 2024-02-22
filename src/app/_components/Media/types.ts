@@ -10,6 +10,7 @@ export interface Props {
   size?: string // for NextImage only
   priority?: boolean // for NextImage only
   fill?: boolean // for NextImage only
+  targetSize?: string // for payload size request
   className?: string
   imgClassName?: string
   videoClassName?: string

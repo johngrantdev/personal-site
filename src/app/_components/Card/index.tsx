@@ -135,7 +135,7 @@ export const Card: React.FC<{
               hover ? 'blur-sm scale-110' : 'scale-105'
             }`}
             resource={card.media}
-            fill
+            targetSize="card"
           />
           <div
             style={{
@@ -161,7 +161,11 @@ export const Card: React.FC<{
             {card.showDate && publishedDate}
           </div>
           {titleToUse && (
-            <div className="flex-none w-full h-fit items-center justify-center">
+            <div
+              className={`flex-none w-full h-fit items-center justify-center ${
+                hover || card.overlayImage ? 'mix-blend-normal' : ' mix-blend-exclusion'
+              }`}
+            >
               <h1 className=" text-2xl">{titleToUse}</h1>
             </div>
           )}

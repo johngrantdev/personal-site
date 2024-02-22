@@ -154,12 +154,20 @@ const serialize = (nodes?: any[], i = 1): React.ReactNode => {
       case 'list':
         switch (node.tag) {
           case 'ul':
-            return <ul key={i}>{serialize(node.children)}</ul>
+            return (
+              <div className="w-full flex justify-center xl:justify-start">
+                <ul className="list-disc pl-5 text-left" key={i}>
+                  {serialize(node.children)}
+                </ul>
+              </div>
+            )
           case 'ol':
             return <ol key={i}>{serialize(node.children)}</ol>
-          case 'li':
+          case 'li': // is this in lexical or is it 'listitem'?
             return <li key={i}>{serialize(node.children)}</li>
         }
+      case 'listitem': // to do properly value, format, indent
+        return <li key={i}>{serialize(node.children)}</li>
       case 'quote':
         return (
           <blockquote
@@ -176,7 +184,14 @@ const serialize = (nodes?: any[], i = 1): React.ReactNode => {
           </p>
         )
       case 'upload':
-        return <Media key={i} resource={node.value} fill />
+        return (
+          <Media
+            className="w-full h-full"
+            imgClassName="h-full w-full object-cover rounded-md relative"
+            key={i}
+            resource={node.value}
+          />
+        )
       case 'block':
         return <Blocks key={i} blocks={[node.fields]} />
     }
