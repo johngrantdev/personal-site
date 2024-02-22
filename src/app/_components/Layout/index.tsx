@@ -1,67 +1,71 @@
 'use client'
-import React, { Fragment } from 'react'
+import React, { forwardRef, ReactElement, ReactNode, Ref } from 'react'
 
-import { Layout as LayoutType } from '../../../payload/payload-types'
 import { Padding } from '../Padding'
-import RichText from '../RichText'
-import { SideColumn } from './SideColumn'
+
+export type ColumnProps = {
+  className?: string
+  children: ReactNode
+  position: 'side' | 'main'
+}
+
+export const Column: React.FC<ColumnProps> = ({ children, className = '' }) => (
+  <div className={`${className} w-full`}>{children}</div>
+)
 
 export type LayoutProps = {
-  layouts: LayoutType
+  ref?: Ref<HTMLDivElement>
+  children: ReactNode
+  className?: string
+  index?: number
+  top?: boolean
+  bottom?: boolean
+  right?: boolean
+  left?: boolean
+  sideColumn?: boolean
+  fullheight?: boolean
 }
 
-export const Layout: React.FC<LayoutProps> = props => {
-  const { layouts } = props
+export const Layout: React.FC<LayoutProps> = forwardRef<HTMLDivElement, LayoutProps>(
+  (props, ref) => {
+    const {
+      children,
+      className = '',
+      index = 0,
+      top = false,
+      bottom = false,
+      right = true,
+      left = true,
+      sideColumn = true,
+      fullheight = false,
+    } = props
 
-  const hasLayouts = layouts && Array.isArray(layouts) && layouts.length > 0
-
-  if (hasLayouts) {
-    return (
-      <div>
-        {layouts.map((layout, index) => {
-          const layoutStyle = layout.mainColumn.style
-          const LayoutComponent: React.FC = () => {
-            switch (layout.mainColumn.style) {
-              case 'singleLayout':
-                return <RichText className="w-full" content={layout.mainColumn.row1column1} />
-              case 'twoColumns':
-                return (
-                  <div className="flex w-full gap-4">
-                    <RichText className="w-1/2" content={layout.mainColumn.row1column1} />
-                    <RichText className="w-1/2" content={layout.mainColumn.row1column2} />
-                  </div>
-                )
-              case 'threeSectionGrid':
-                return (
-                  <div className="flex w-full gap-4">
-                    <RichText className="w-1/2" content={layout.mainColumn.row1column1} />
-                    <div className="flex flex-col w-1/2">
-                      <RichText className="w-full h-1/2" content={layout.mainColumn.row1column2} />
-                      <RichText className="w-full h-1/2" content={layout.mainColumn.row2column2} />
-                    </div>
-                  </div>
-                )
-            }
-          }
-          return (
-            <Padding
-              key={index}
-              fullHeight={layout.fullPageHeight}
-              className="snap-start flex flex-col lg:flex-row grow"
-            >
-              {layout.sideColumn.style !== 'none' && (
-                <SideColumn
-                  className="flex-none w-full text-center item lg:text-left lg:w-80 overflow-hidden"
-                  {...layout.sideColumn}
-                />
-              )}
-              {layoutStyle && <LayoutComponent />}
-            </Padding>
-          )
-        })}
-      </div>
+    const sideColumnChildren = React.Children.toArray(children).filter(
+      (child): child is ReactElement =>
+        React.isValidElement(child) && child.props.position === 'side',
     )
-  }
+    const mainColumnChildren = React.Children.toArray(children).filter(
+      (child): child is ReactElement =>
+        React.isValidElement(child) && child.props.position === 'main',
+    )
 
-  return null
-}
+    return (
+      <Padding
+        ref={ref}
+        index={index}
+        top={top}
+        bottom={bottom}
+        right={right}
+        left={left}
+        className={`${className} snap-start flex flex-col xl:flex-row grow`}
+      >
+        {sideColumn && (
+          <div className="flex-none w-full text-center item xl:text-left xl:w-80">
+            {sideColumnChildren}
+          </div>
+        )}
+        <div className="flex w-full gap-4">{mainColumnChildren}</div>
+      </Padding>
+    )
+  },
+)

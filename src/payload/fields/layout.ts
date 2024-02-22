@@ -1,6 +1,5 @@
 import type { Field } from 'payload/types'
 
-import { BlankFiller } from '../components/BlankFiller'
 import linkGroup from './linkGroup'
 
 // import { LayoutFillerComponent } from '../components/Layout'
@@ -99,11 +98,8 @@ export const layout: Field = {
               label: false,
               interfaceName: 'Hero',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return doc.layout[0].sideColumn.style === 'hero'
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'hero'
                 },
               },
               fields: [
@@ -126,11 +122,8 @@ export const layout: Field = {
               label: false,
               interfaceName: 'ProjectHero',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return doc.layout[0].sideColumn.style === 'projectHero'
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'projectHero'
                 },
               },
               fields: [
@@ -147,6 +140,22 @@ export const layout: Field = {
                   type: 'relationship',
                   relationTo: 'clients',
                 },
+                {
+                  name: 'usePostDescription',
+                  label: 'Use Post Description?',
+                  type: 'checkbox',
+                  defaultValue: true,
+                },
+                {
+                  name: 'customDescription',
+                  label: 'Description',
+                  type: 'richText',
+                  admin: {
+                    condition: (_, siblingData) => {
+                      return !siblingData.usePostDescription
+                    },
+                  },
+                },
                 linkGroup(),
               ],
             },
@@ -155,14 +164,8 @@ export const layout: Field = {
               label: false,
               type: 'richText',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return (
-                      doc.layout[0].sideColumn.style === 'singleLayout' ||
-                      doc.layout[0].sideColumn.style === 'twoRows'
-                    )
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'singleLayout' || siblingData.style === 'twoRows'
                 },
               },
             },
@@ -171,11 +174,8 @@ export const layout: Field = {
               label: false,
               type: 'richText',
               admin: {
-                condition: (doc = {}) => {
-                  if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                    return doc.layout[0].sideColumn.style === 'twoRows'
-                  }
-                  return false
+                condition: (_, siblingData) => {
+                  return siblingData.style === 'twoRows'
                 },
               },
             },
@@ -201,80 +201,26 @@ export const layout: Field = {
                   value: 'singleLayout',
                 },
                 {
-                  label: 'Two Rows',
-                  value: 'twoRows',
-                },
-                {
                   label: 'Two Columns',
                   value: 'twoColumns',
                 },
-                {
-                  label: 'Three Section Grid',
-                  value: 'threeSectionGrid',
-                },
               ],
             },
             {
               type: 'row',
               fields: [
                 {
-                  name: 'row1column1',
+                  name: 'column1',
                   label: false,
                   type: 'richText',
                 },
                 {
-                  name: 'row1column2',
+                  name: 'column2',
                   label: false,
                   type: 'richText',
                   admin: {
-                    condition: (doc = {}) => {
-                      if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                        return (
-                          doc.layout[0].mainColumn.style === 'twoColumns' ||
-                          doc.layout[0].mainColumn.style === 'threeSectionGrid'
-                        )
-                      }
-                      return false
-                    },
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'row2column1',
-                  label: false,
-                  type: 'richText',
-                  admin: {
-                    condition: (doc = {}) => {
-                      if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                        return doc.layout[0].mainColumn.style === 'twoRows'
-                      }
-                      return false
-                    },
-                  },
-                },
-                {
-                  name: 'blankFiller',
-                  type: 'ui',
-                  admin: {
-                    components: {
-                      Field: BlankFiller,
-                    },
-                  },
-                },
-                {
-                  name: 'row2column2',
-                  label: false,
-                  type: 'richText',
-                  admin: {
-                    condition: (doc = {}) => {
-                      if (Array.isArray(doc.layout) && doc.layout.length > 0) {
-                        return doc.layout[0].mainColumn.style === 'threeSectionGrid'
-                      }
-                      return false
+                    condition: (_, siblingData) => {
+                      return siblingData.style === 'twoColumns'
                     },
                   },
                 },

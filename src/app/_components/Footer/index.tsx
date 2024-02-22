@@ -19,7 +19,11 @@ export async function Footer({ siteSettings }: FooterProps) {
 
   return (
     <footer className="w-full bg-zinc-600 dark:bg-zinc-950 text-zinc-300 mt-10">
-      <Padding className="flex items-center justify-between flex-wrap gap-x-3 gap-y-6">
+      <Padding
+        top={true}
+        bottom={true}
+        className="flex items-center justify-between flex-wrap gap-x-3 gap-y-6"
+      >
         {/* <Link href="/">
           <picture>
             <img
