@@ -53,14 +53,14 @@ export const MediaBlock: Block = {
     {
       name: 'media1',
       label: 'Media 1',
-      type: 'upload',
+      type: 'relationship',
       relationTo: 'media',
       required: true,
     },
     {
       name: 'media2',
       label: 'Media 2',
-      type: 'upload',
+      type: 'relationship',
       relationTo: 'media',
       required: true,
       admin: {
@@ -72,7 +72,7 @@ export const MediaBlock: Block = {
     {
       name: 'media3',
       label: 'Media 3',
-      type: 'upload',
+      type: 'relationship',
       relationTo: 'media',
       required: true,
       admin: {
