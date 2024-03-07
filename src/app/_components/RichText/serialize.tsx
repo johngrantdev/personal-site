@@ -2,6 +2,7 @@
 import React, { Fragment } from 'react'
 import escapeHTML from 'escape-html'
 
+import { TOCItem } from '../../_providers/Context/Page/pageContext'
 import { Blocks } from '../Blocks'
 import { CMSLink } from '../Link'
 import { Media } from '../Media'
@@ -37,13 +38,17 @@ function getTextFormats(formatNumber) {
   return { bold, italic, strikethrough, underline, code, subscript, superscript }
 }
 
-const serialize = (nodes?: any[], i = 1): React.ReactNode => {
+const serialize = (
+  nodes?: any[],
+  collectTOCItem?: (item: TOCItem) => void,
+  i = 1,
+): React.ReactNode => {
   return nodes.map((node, i) => {
     if (!node) {
       return null
     }
     // text styles
-    const paddingTop = ' pt-3'
+    const paddingTop = 'pb-6'
     // set alignment styles
     let textAlignment = ''
     if (typeof node.format === 'string') {
@@ -113,50 +118,66 @@ const serialize = (nodes?: any[], i = 1): React.ReactNode => {
       case 'linebreak':
         return <br key={i} />
       case 'heading':
+        // build table of contents item
+        const id = node.children[0].text.replace(/\s+/g, '-').toLowerCase()
+        const title = node.children[0].text
+        const tocItem: TOCItem = { title, url: `#${id}`, type: node.tag }
+        if (collectTOCItem) {
+          collectTOCItem(tocItem)
+        }
+
+        let heading
         switch (node.tag) {
           case 'h1':
-            return (
-              <h1 className={`text-5xl ${textStyles}`} key={i}>
+            heading = (
+              <h1 key={i} id={id} className={`text-6xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h1>
             )
+            break
           case 'h2':
-            return (
-              <h2 className={`text-4xl ${textStyles}`} key={i}>
+            heading = (
+              <h2 key={i} id={id} className={`text-5xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h2>
             )
+            break
           case 'h3':
-            return (
-              <h3 className={`text-3xl ${textStyles}`} key={i}>
+            heading = (
+              <h3 key={i} id={id} className={`text-4xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h3>
             )
+            break
           case 'h4':
-            return (
-              <h4 className={`text-2xl ${textStyles}`} key={i}>
+            heading = (
+              <h4 key={i} id={id} className={`text-3xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h4>
             )
+            break
           case 'h5':
-            return (
-              <h5 className={`text-xl ${textStyles}`} key={i}>
+            heading = (
+              <h5 key={i} id={id} className={`text-2xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h5>
             )
+            break
           case 'h6':
-            return (
-              <h6 className={`text-lg ${textStyles}`} key={i}>
+            heading = (
+              <h6 key={i} id={id} className={`text-xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h6>
             )
+            break
         }
+        return <div>{heading}</div>
       case 'list':
         switch (node.tag) {
           case 'ul':
             return (
               <div className="w-full flex justify-center xl:justify-start">
-                <ul className="list-disc pl-5 text-left" key={i}>
+                <ul className="list-disc pl-5 pb-6 text-left" key={i}>
                   {serialize(node.children)}
                 </ul>
               </div>
@@ -193,7 +214,11 @@ const serialize = (nodes?: any[], i = 1): React.ReactNode => {
           />
         )
       case 'block':
-        return <Blocks key={i} blocks={[node.fields]} />
+        return (
+          <div className="pb-6">
+            <Blocks key={i} blocks={[node.fields]} />
+          </div>
+        )
     }
   })
 }
