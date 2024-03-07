@@ -32,7 +32,7 @@ export const Site: GlobalConfig = {
               name: 'siteSourceLink',
               label: 'Source Link',
               type: 'text',
-              defaultValue: 'https://github.com/jayelg/personal-site',
+              defaultValue: 'https://github.com/johngrantdev/personal-site',
             },
             {
               name: 'faviconSVG',
