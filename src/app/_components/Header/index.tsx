@@ -6,7 +6,7 @@ import React, { useEffect } from 'react'
 import Link from 'next/link'
 
 import { Site } from '../../../payload/payload-types'
-import { Padding } from '../Padding'
+import { PageMargin } from '../PageMargin'
 import { HeaderNav } from './Nav'
 import { Title } from './Title'
 
@@ -16,11 +16,11 @@ type HeaderProps = {
 
 export async function Header({ siteSettings }: HeaderProps) {
   return (
-    <header className="fixed z-30 w-full mix-blend-difference text-zinc-200">
-      <Padding className="my-6 flex justify-between flex-wrap gap-x-3" top={false} bottom={false}>
+    <header className="fixed top-0 left-1/2 -translate-x-1/2 z-30 text-zinc-200 mix-blend-difference">
+      <PageMargin className="my-6 flex justify-between flex-wrap gap-x-3">
         <Title siteTitle={siteSettings ? siteSettings.siteTitle : 'Title'} />
         <HeaderNav siteSettings={siteSettings} />
-      </Padding>
+      </PageMargin>
     </header>
   )
 }
