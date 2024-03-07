@@ -22,6 +22,7 @@ export const Layouts: React.FC<LayoutsProps> = props => {
           const top = index === 0 ? true : false
           const bottom = index === layouts.length - 1 ? true : false
           const sideColumn = layout.sideColumn.style !== 'none'
+          const hasTOC = layout.sideColumn.style === 'postHero'
           return (
             <div key={index}>
               <Layout
@@ -34,7 +35,7 @@ export const Layouts: React.FC<LayoutsProps> = props => {
                   <SideColumn {...layout.sideColumn} position={layout.sideContentPosition} />
                 </Column>
                 <Column position="main">
-                  <MainColumn {...layout.mainColumn} />
+                  <MainColumn {...layout.mainColumn} hasTOC />
                 </Column>
               </Layout>
             </div>
