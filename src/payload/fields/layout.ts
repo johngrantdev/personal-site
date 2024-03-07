@@ -105,7 +105,7 @@ export const layout: Field = {
               fields: [
                 {
                   name: 'media',
-                  type: 'upload',
+                  type: 'relationship',
                   relationTo: 'media',
                   required: false,
                 },
