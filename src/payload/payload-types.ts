@@ -40,6 +40,7 @@ export interface Config {
     keywords: Keyword;
     clients: Client;
     users: User;
+    uploads: Upload;
     redirects: Redirect;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -62,7 +63,7 @@ export interface Page {
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: number | Media | null;
+    image?: number | Upload | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -112,7 +113,7 @@ export interface SideColumn {
  * via the `definition` "Hero".
  */
 export interface Hero {
-  media?: number | Media | null;
+  media?: (number | null) | Media;
   description?: {
     root: {
       children: {
@@ -152,6 +153,19 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  media: number | Upload;
+  mediaDark?: number | Upload | null;
+  mediaMobile?: number | Upload | null;
+  mediaMobileDark?: number | Upload | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "uploads".
+ */
+export interface Upload {
+  id: number;
   blurhash?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -319,7 +333,7 @@ export interface Post {
       }[]
     | null;
   card?: {
-    media?: number | Media | null;
+    media?: (number | null) | Media;
     backgroundColour?: string | null;
     overlayImage?: boolean | null;
     showDate?: boolean | null;
@@ -329,7 +343,7 @@ export interface Post {
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: number | Media | null;
+    image?: number | Upload | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -505,8 +519,8 @@ export interface MediaBlock {
   sideCaption?: boolean | null;
   layout?: ('default' | 'twoColumn' | 'heroGrid') | null;
   media1: number | Media;
-  media2?: number | Media | null;
-  media3?: number | Media | null;
+  media2?: (number | null) | Media;
+  media3?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -588,6 +602,7 @@ export interface CodeBlock {
  */
 export interface VimeoBlock {
   videoId?: string | null;
+  previewImage?: number | Media | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'vimeoBlock';
