@@ -1,10 +1,9 @@
-import path from 'path'
 import type { CollectionConfig } from 'payload/types'
 
-export const Media: CollectionConfig = {
-  slug: 'media',
+export const Uploads: CollectionConfig = {
+  slug: 'uploads',
   upload: {
-    staticDir: path.resolve(__dirname, '../../../media'),
+    staticURL: '/media',
     imageSizes: [
       {
         name: 'card',
@@ -47,17 +46,8 @@ export const Media: CollectionConfig = {
   access: {
     read: () => true,
   },
-  fields: [
-    {
-      name: 'alt',
-      label: 'Alt Text',
-      type: 'text',
-      required: true,
-    },
-    {
-      name: 'caption',
-      label: 'Caption',
-      type: 'richText',
-    },
-  ],
+  fields: [],
+  admin: {
+    group: 'Media',
+  },
 }
