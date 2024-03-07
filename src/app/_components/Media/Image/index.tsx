@@ -1,9 +1,10 @@
 'use client'
 
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import NextImage, { StaticImageData } from 'next/image'
+import { useTheme } from 'next-themes' // Import useTheme from next-theme
 
-import { Media } from '../../../../payload/payload-types'
+import { Media, Upload } from '../../../../payload/payload-types'
 import cssVariables from '../../../cssVariables'
 import { Props as MediaProps } from '../types'
 import { SVG } from './SVG'
@@ -23,42 +24,77 @@ export const Image: React.FC<MediaProps> = props => {
     targetSize,
   } = props
 
-  const isSVG = typeof resource === 'object' && resource?.mimeType?.includes('svg')
+  const media = typeof resource === 'object' && (resource as Media)
 
-  const [isLoading, setIsLoading] = React.useState(true)
+  const { theme } = useTheme() // Use the useTheme hook
+  const isDarkTheme = theme === 'dark'
 
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Detect screen size
+  useEffect(() => {
+    const updateScreenSize = () => {
+      setIsMobile(window.innerWidth <= breakpoints.s)
+    }
+
+    updateScreenSize()
+
+    window.addEventListener('resize', updateScreenSize)
+    return () => window.removeEventListener('resize', updateScreenSize)
+  }, [])
+
+  const [upload, setUpload] = useState<Upload | undefined>(media.media as Upload)
+
+  useEffect(() => {
+    let selectedUpload: Upload | undefined = media.media as Upload
+    if (isMobile && isDarkTheme && media.mediaMobileDark) {
+      selectedUpload = media.mediaMobileDark as Upload
+    } else if (isMobile && media.mediaMobile) {
+      selectedUpload = media.mediaMobile as Upload
+    } else if (isDarkTheme && media.mediaDark) {
+      selectedUpload = media.mediaDark as Upload
+    }
+    setUpload(selectedUpload)
+  }, [isMobile, isDarkTheme, media])
+
+  const isSVG = upload?.mimeType?.includes('svg')
+  const [isLoading, setIsLoading] = useState(true)
   let width: number | undefined
   let height: number | undefined
   let alt = altFromProps
   let src: StaticImageData | string = srcFromProps || ''
 
-  if (!src && resource && typeof resource === 'object') {
-    const { alt: altFromResource } = resource as Media
+  if (!src && upload && typeof upload === 'object') {
+    const { alt: altFromResource } = media as Media
     let updateFilename
-    if (targetSize && resource.sizes[targetSize]) {
+
+    if (targetSize && upload.sizes[targetSize]) {
       const {
         width: targetWidth,
         height: targetHeight,
         filename: targetFilename,
-      } = resource.sizes[targetSize] as Media
+      } = upload.sizes[targetSize] as Upload
       width = targetWidth
       height = targetHeight
       updateFilename = targetFilename
     } else {
-      const { width: fullWidth, height: fullHeight, filename: fullFilename } = resource as Media
-      width = fullWidth
-      height = fullHeight
-      updateFilename = fullFilename
+      const {
+        width: desktopWidth,
+        height: desktopHeight,
+        filename: desktopFileName,
+      } = upload.sizes['desktop']
+      width = desktopWidth
+      height = desktopHeight
+      updateFilename = desktopFileName
+    }
+    if (isSVG) {
+      updateFilename = upload.filename
     }
 
     alt = altFromResource
-
-    const filename = updateFilename
-
-    src = `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${filename}`
+    src = `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${updateFilename}`
   }
 
-  // NOTE: this is used by the browser to determine which image to download at different screen sizes
   const sizes = Object.entries(breakpoints)
     .map(([, value]) => `(max-width: ${value}px) ${value}px`)
     .join(', ')
@@ -66,7 +102,7 @@ export const Image: React.FC<MediaProps> = props => {
   return (
     <Fragment>
       {isSVG ? (
-        <SVG {...props} />
+        <SVG imgClassName={imgClassName} upload={upload} src={src as string} alt={alt} />
       ) : (
         <NextImage
           className={[
