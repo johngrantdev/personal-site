@@ -6,6 +6,7 @@ import { Site } from '../payload/payload-types'
 import { fetchSiteSettings } from './_api/fetchGlobals'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
+import { PageContainer } from './_components/PageContainer'
 import { TailwindBreakpoints } from './_components/TailwindBreakpoints'
 import { Providers } from './_providers'
 import { mergeOpenGraph } from './_utilities/mergeOpenGraph'
@@ -45,14 +46,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <div className="flex flex-col w-full min-h-screen font-sans text-zinc-600 bg-zinc-300 dark:bg-zinc-900 dark:text-zinc-300 transition-all duration-200">
-            {/* @ts-expect-error */}
-            <Header siteSettings={siteSettings} />
-            {children}
-            {/* @ts-expect-error */}
-            <Footer siteSettings={siteSettings} />
-            {/* <TailwindBreakpoints /> */}
-          </div>
+          {/* @ts-expect-error */}
+          <Header siteSettings={siteSettings} />
+          <PageContainer>
+            <div className="flex flex-col h-full">
+              {/* <SwipeMenu className="" navItems={siteSettings.navItems} /> */}
+              {children}
+              {/* @ts-expect-error */}
+              <Footer siteSettings={siteSettings} />
+              {/* <TailwindBreakpoints /> */}
+            </div>
+          </PageContainer>
+          <div className="fixed w-full h-full top-0 left-0 bg-gradient-to-tr from-zinc-950 to-zinc-700 -z-10" />
         </Providers>
       </body>
     </html>
