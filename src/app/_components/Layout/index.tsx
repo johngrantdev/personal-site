@@ -57,14 +57,15 @@ export const Layout: React.FC<LayoutProps> = forwardRef<HTMLDivElement, LayoutPr
         bottom={bottom}
         right={right}
         left={left}
-        className={`${className} snap-start flex flex-col xl:flex-row grow`}
+        className={`${className} flex flex-col xl:flex-row grow`}
+        fullHeight={fullheight}
       >
         {sideColumn && (
           <div className="flex-none w-full text-center item xl:text-left xl:w-80">
             {sideColumnChildren}
           </div>
         )}
-        <div className="flex w-full gap-4">{mainColumnChildren}</div>
+        <div className="flex gap-4 w-full">{mainColumnChildren}</div>
       </Padding>
     )
   },

@@ -39,7 +39,7 @@ export const CodeBlock: React.FC<Props> = props => {
   return (
     <div
       id={id}
-      className="my-4 pl-4 border-zinc-400 dark:border-zinc-800 border-l-4 overflow-x-auto"
+      className="my-4 pl-4 border-zinc-400 dark:border-zinc-800 border-l-4 max-w-main overflow-x-auto"
     >
       <Highlight theme={activeTheme} code={code} language={language ? LANGUAGES[language] : 'tsx'}>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (

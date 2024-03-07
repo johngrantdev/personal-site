@@ -2,7 +2,12 @@
 import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 
-export const ThemeSelector = () => {
+interface Props {
+  className?: string
+}
+
+export const ThemeSelector = (props: Props) => {
+  const { className = '' } = props
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
@@ -23,7 +28,7 @@ export const ThemeSelector = () => {
   }
   return (
     <div
-      className="cursor-pointer hover:underline hover:underline-offset-4 select-none"
+      className={`${className} cursor-pointer hover:underline hover:underline-offset-4 select-none`}
       onClick={toggleTheme}
     >
       {`Change to ${theme === 'light' ? 'dark mode' : 'light mode'}`}
