@@ -163,7 +163,9 @@ export const Card: React.FC<{
           {titleToUse && (
             <div
               className={`flex-none w-full h-fit items-center justify-center ${
-                hover || card.overlayImage ? 'mix-blend-normal' : ' mix-blend-exclusion'
+                hover || card.overlayImage || !card.media
+                  ? 'mix-blend-normal'
+                  : ' mix-blend-exclusion'
               }`}
             >
               <h1 className=" text-2xl">{titleToUse}</h1>
