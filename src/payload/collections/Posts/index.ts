@@ -141,7 +141,7 @@ export const Posts: CollectionConfig = {
       fields: [
         {
           name: 'media',
-          type: 'upload',
+          type: 'relationship',
           label: 'Image/Video',
           relationTo: 'media',
           required: false,

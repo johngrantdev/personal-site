@@ -1,43 +1,40 @@
 'use client'
 
-import React, { Fragment, useEffect, useState } from 'react'
-import NextImage, { StaticImageData } from 'next/image'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 
-import { Media } from '../../../../../payload/payload-types'
-import { Props as MediaProps } from '../../types'
+import { Media, Upload } from '../../../../../payload/payload-types'
+import {
+  adjustImageHrefs,
+  applyThemeAdjustments,
+  createForeignObject,
+  parseTransform,
+} from './utilities'
 
-export const SVG: React.FC<MediaProps> = props => {
-  const {
-    imgClassName,
-    onClick,
-    onLoad: onLoadFromProps,
-    resource,
-    priority,
-    fill,
-    src: srcFromProps,
-    alt: altFromProps,
-    targetSize = 'desktop',
-  } = props
+interface SVGProps {
+  imgClassName: string
+  upload: Upload
+  src?: string
+  alt: string
+}
+
+export const SVG: React.FC<SVGProps> = props => {
+  const { imgClassName, upload, src: srcFromProps, alt: altFromProps } = props
+
+  const media = typeof upload === 'object' && (upload as Upload)
 
   const [isLoading, setIsLoading] = React.useState(true)
 
   let width: number | undefined
   let height: number | undefined
   let alt = altFromProps
-  let src: StaticImageData | string = srcFromProps || ''
+  let src: string = srcFromProps || ''
 
-  if (!src && resource && typeof resource === 'object') {
-    const {
-      width: fullWidth,
-      height: fullHeight,
-      filename: fullFilename,
-      alt: altFromResource,
-    } = resource as Media
+  if (!src && media && typeof media === 'object') {
+    const { width: fullWidth, height: fullHeight, filename: fullFilename } = media as Upload
 
     width = fullWidth
     height = fullHeight
-    alt = altFromResource
 
     const filename = fullFilename
 
@@ -46,50 +43,90 @@ export const SVG: React.FC<MediaProps> = props => {
 
   const { theme } = useTheme()
   const [svgContent, setSvgContent] = useState('')
+  const [uniqueId] = useState(`svg-${Math.random().toString(36).substr(2, 9)}`)
 
   useEffect(() => {
-    fetch(src.toString())
-      .then(response => response.text())
-      .then(svg => {
-        const parser = new DOMParser()
-        const svgDoc = parser.parseFromString(svg, 'image/svg+xml')
+    const fetchAndProcessSVG = async () => {
+      const response = await fetch(src.toString())
+      const svgText = await response.text()
+      const parser = new DOMParser()
+      const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
+      const svgElement = svgDoc.documentElement
 
-        // Modify <image> elements
-        const images = svgDoc.querySelectorAll('image')
-        images.forEach(img => {
-          const href = img.getAttribute('xlink:href')
-          if (href) {
-            const modifiedHref = `${process.env.NEXT_PUBLIC_SERVER_URL}/media/${href}`
-            img.setAttribute('xlink:href', modifiedHref)
-          }
-        })
+      svgElement.setAttribute('id', uniqueId)
 
-        // Check if the page is in dark mode
-        if (theme === 'dark') {
-          // Find and modify <style> elements only if in dark mode
-          const styles = svgDoc.querySelectorAll('style')
-          styles.forEach(style => {
-            let cssText = style.textContent
-            // Replace all instances of black with white in dark mode
-            cssText = cssText
-              .replace(/#000000/g, '#ffffff')
-              .replace(/#000/g, '#ffffff')
-              .replace(/black/g, 'white')
-              .replace(/rgb\(0,\s*0,\s*0\)/g, 'rgb(255, 255, 255)')
-            style.textContent = cssText
-          })
-        }
+      // Adjust <image> elements' hrefs, apply theme adjustments, and set main SVG styles
+      adjustImageHrefs(svgDoc.querySelectorAll('image'))
+      applyThemeAdjustments(svgDoc.querySelectorAll('style'), theme)
+      svgElement.setAttribute('style', 'width: 100%; height: auto; max-width: 100%;')
 
-        // Get the SVG element and apply styles for responsiveness
-        const svgElement = svgDoc.documentElement
-        svgElement.setAttribute('style', 'width: 100%; height: auto; max-width: 100%;')
+      // Serialize and set SVG content
+      const serializer = new XMLSerializer()
+      const serializedSvg = serializer.serializeToString(svgElement)
 
-        // Serialize SVG back to string
-        const serializer = new XMLSerializer()
-        const serializedSvg = serializer.serializeToString(svgElement)
-        setSvgContent(serializedSvg)
-      })
+      setSvgContent(serializedSvg)
+    }
+
+    fetchAndProcessSVG()
   }, [src, theme])
 
-  return <div className={`block w-full h-auto`} dangerouslySetInnerHTML={{ __html: svgContent }} />
+  // useEffect(() => {
+  //   // Ensure SVG content is loaded in the DOM
+  //   if (!svgContent) return
+
+  //   let scaledFontSize = 18
+  //   // Perform a DOM query to find the SVG element by a unique identifier, e.g., an id or class
+  //   const svgElement = document.getElementById(uniqueId)
+  //   if (!svgElement) {
+  //     return
+  //   } else {
+  //     {
+  //       const clientRects = svgElement.getClientRects()
+  //       if (clientRects.length > 0) {
+  //         const svgRenderedWidth = clientRects.item(0).width
+  //         const svgInitial
+  //   }
+
+  //   const textElements = svgElement.querySelectorAll('text')
+  //   textElements.forEach(text => {
+  //     // Assuming the createForeignObject function is adapted to take an object of props
+  //     const bbox = text.getBBox()
+
+  //     // If you kept the transform parsing and application logic
+  //     let transformX = 0,
+  //       transformY = 0
+  //     const transform = text.getAttribute('transform')
+  //     if (transform && transform.includes('translate')) {
+  //       const match = transform.match(/translate\(([^,]+),\s*([^)]+)\)/)
+  //       if (match) {
+  //         transformX = parseFloat(match[1])
+  //         transformY = parseFloat(match[2])
+  //       }
+  //     }
+
+  //     // Calculate final positions including transformations
+  //     let x = bbox.x + transformX
+  //     let y = bbox.y + transformY
+  //     let width = bbox.width
+  //     let height = 500
+  //     const fontSize = scaledFontSize
+
+  //     // Create and insert foreignObject
+  //     createForeignObject({
+  //       text,
+  //       x: x,
+  //       y: y,
+  //       width: width,
+  //       height: height,
+  //       fontSize: fontSize,
+  //     })
+  //   })
+  // }, [svgContent, uniqueId])
+
+  return (
+    <div
+      className={`svg-container block w-full h-auto ${imgClassName}`}
+      dangerouslySetInnerHTML={{ __html: svgContent }}
+    />
+  )
 }

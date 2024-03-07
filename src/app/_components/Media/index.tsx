@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react'
 
+import { Upload } from '../../../payload/payload-types'
+import { fetchUpload } from '../../_api/fetchUpload'
 import { Image } from './Image'
 import { Props } from './types'
 import { Video } from './Video'
@@ -7,7 +9,14 @@ import { Video } from './Video'
 export const Media: React.FC<Props> = props => {
   const { className, resource, htmlElement = 'div' } = props
 
-  const isVideo = typeof resource === 'object' && resource?.mimeType?.includes('video')
+  if (typeof resource === 'object' && !resource.media) {
+    return null
+  }
+
+  const isVideo =
+    typeof resource === 'object' &&
+    typeof resource.media !== 'number' &&
+    resource.media?.mimeType?.includes('video')
   const Tag = (htmlElement as any) || Fragment
 
   return (
