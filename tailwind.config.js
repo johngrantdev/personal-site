@@ -91,6 +91,7 @@ module.exports = {
       },
       minHeight: {
         16: '4rem',
+        container: '70rem',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -101,7 +102,11 @@ module.exports = {
         thumbColor: 'rgba(156, 163, 175, 0.5)',
         thumbBorderRadius: '3px',
       },
+      maxWidth: {
+        container: '80rem',
+        main: '48rem',
+      },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-3d')({ legacy: true })],
 }
