@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 
-import { Media } from '../../../../payload/payload-types'
+import { Media, Upload } from '../../../../payload/payload-types'
 import { Props as MediaProps } from '../types'
 
 export const Video: React.FC<MediaProps> = props => {
@@ -21,8 +21,13 @@ export const Video: React.FC<MediaProps> = props => {
     }
   }, [])
 
-  if (resource && typeof resource === 'object') {
-    const { filename } = resource as Media
+  if (
+    resource &&
+    typeof resource === 'object' &&
+    resource.media &&
+    typeof resource.media === 'object'
+  ) {
+    const { filename } = resource.media as Upload
 
     return (
       // add video styles
