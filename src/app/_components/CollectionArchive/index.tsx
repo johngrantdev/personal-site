@@ -111,14 +111,13 @@ export const CollectionArchive: React.FC<Props> = props => {
           },
           limit,
           page,
-          depth: 1,
+          depth: 2,
         },
         { encode: false },
       )
 
       const makeRequest = async () => {
         try {
-          // Todo: Using NEXT_PUBLIC for payload api, check this needs to be client side
           const req = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_URL}/api/payload/${relationTo}?${searchQuery}`,
           )
@@ -161,7 +160,7 @@ export const CollectionArchive: React.FC<Props> = props => {
     <div className={[className].filter(Boolean).join(' ')}>
       <div className="absolute left-0 top-[-24]" ref={scrollRef} />
       {!isLoading && error && <>{error}</>}
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 w-full gap-3">
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-3">
         {currentResult &&
           currentResult.docs?.map((result, index) => {
             return (
