@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { Site } from '../../../payload/payload-types'
 import { CMSLink } from '../Link'
-import { Padding } from '../Padding'
+import { PageMargin } from '../PageMargin'
 import { ThemeSelector } from '../ThemeSelector'
 
 // import classes from './index.module.scss'
@@ -18,12 +18,8 @@ export async function Footer({ siteSettings }: FooterProps) {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="w-full bg-zinc-600 dark:bg-zinc-950 text-zinc-300 mt-10">
-      <Padding
-        top={true}
-        bottom={true}
-        className="flex items-center justify-between flex-wrap gap-x-3 gap-y-6"
-      >
+    <footer className="w-full bg-zinc-600 dark:bg-zinc-950 transition-colors duration-500 text-zinc-300 mt-10">
+      <PageMargin className="flex items-center justify-between flex-wrap gap-x-3 gap-y-6 py-12">
         {/* <Link href="/">
           <picture>
             <img
@@ -43,7 +39,7 @@ export async function Footer({ siteSettings }: FooterProps) {
           })}
         </nav>
         <div className="flex gap-10 items-center flex-wrap opacity-100 transition-opacity visible">
-          <div>
+          <div className="flex flex-wrap">
             Built with&nbsp;
             <Link
               className="hover:underline hover:underline-offset-4"
@@ -75,7 +71,9 @@ export async function Footer({ siteSettings }: FooterProps) {
           <Link
             className="hover:underline hover:underline-offset-4"
             href={
-              siteSettings ? siteSettings.siteSourceLink : 'https://github.com/jayelg/personal-site'
+              siteSettings
+                ? siteSettings.siteSourceLink
+                : 'https://github.com/johngrantdev/personal-site'
             }
             target="_blank"
             rel="noopener noreferrer"
@@ -84,7 +82,7 @@ export async function Footer({ siteSettings }: FooterProps) {
           </Link>
           <ThemeSelector />
         </div>
-      </Padding>
+      </PageMargin>
     </footer>
   )
 }
