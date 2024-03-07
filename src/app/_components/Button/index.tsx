@@ -53,9 +53,9 @@ export const Button: React.FC<Props> = ({
   }
 
   const className = [
-    'border rounded-xl cursor-pointer inline-flex justify-center bg-transparent no-underline underline-offset-5 px-3 py-2 transition-colors',
-    classNameFromProps,
     appearanceStyle,
+    classNameFromProps,
+    'border rounded-xl cursor-pointer inline-flex justify-center bg-transparent px-3 py-2 transition-colors',
   ]
     .filter(Boolean)
     .join(' ')

@@ -7,6 +7,7 @@ import { Keyword, Post } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
 import { Layouts } from '../../../_components/Layouts'
+import { PageMargin } from '../../../_components/PageMargin'
 import { RelatedPosts } from '../../../_components/RelatedPosts'
 import { PageState } from '../../../_providers/Context/Page/pageContext'
 import { generateMeta } from '../../../_utilities/generateMeta'
@@ -40,19 +41,21 @@ export default async function Post({ params: { slug } }) {
   ) as Post[]
 
   return (
-    <main className="snap-y snap-mandatory grow flex flex-col">
-      <PageState
-        title={title}
-        description={description}
-        category={typeof category !== 'number' && category}
-        keywords={filteredKeywords}
-        publishedAt={publishedAt}
-      />
-      <Layouts layouts={layout} />
-      {relatedPosts && relatedPosts.length > 0 && (
-        <RelatedPosts introContent="More" docs={relatedPosts} />
-      )}
-    </main>
+    <PageMargin className="grow">
+      <main className="flex flex-col">
+        <PageState
+          title={title}
+          description={description}
+          category={typeof category !== 'number' && category}
+          keywords={filteredKeywords}
+          publishedAt={publishedAt}
+        />
+        <Layouts layouts={layout} />
+        {relatedPosts && relatedPosts.length > 0 && (
+          <RelatedPosts introContent="More" docs={relatedPosts} />
+        )}
+      </main>
+    </PageMargin>
   )
 }
 

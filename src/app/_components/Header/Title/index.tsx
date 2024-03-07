@@ -50,17 +50,15 @@ export function Title(props: TitleProps) {
   })
 
   return (
-    <div className="flex gap-0 sm:gap-2 h-12 text-2xl select-none">
-      <Link
-        className={`my-auto items-center justify-normal ${
-          title !== '' && 'sm:w-auto w-0 invisible sm:visible'
-        } `}
-        href="/"
-      >
+    <div className="flex gap-0 md:gap-2 h-12 text-2xl select-none">
+      <Link className={`my-auto items-center justify-normal ${title !== '' && 'w-auto'} `} href="/">
         {siteTitle.toLowerCase()}
       </Link>{' '}
-      <animated.div className="my-auto flex gap-0 sm:gap-2" style={fadeTitlePipe}>
-        <div className="sm:visible sm:w-auto w-0 invisible">|</div>
+      <animated.div
+        className="my-auto flex gap-0 md:gap-2 invisible w-0 md:visible md:w-auto"
+        style={fadeTitlePipe}
+      >
+        <div>|</div>
         <animated.div style={fadePageTitle}>{title}</animated.div>
       </animated.div>
     </div>

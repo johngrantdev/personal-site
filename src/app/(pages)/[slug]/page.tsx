@@ -7,6 +7,7 @@ import { Page } from '../../../payload/payload-types'
 import { fetchDoc } from '../../_api/fetchDoc'
 import { fetchDocs } from '../../_api/fetchDocs'
 import { Layouts } from '../../_components/Layouts'
+import { PageMargin } from '../../_components/PageMargin'
 import { PageState } from '../../_providers/Context/Page/pageContext'
 import { generateMeta } from '../../_utilities/generateMeta'
 
@@ -33,10 +34,12 @@ export default async function Page({ params: { slug = 'home' } }) {
   const { layout, title } = page
 
   return (
-    <main className="snap-y snap-mandatory grow flex flex-col">
-      <PageState title={title} />
-      <Layouts layouts={layout} />
-    </main>
+    <PageMargin className="grow">
+      <main className="flex flex-col">
+        <PageState title={title} />
+        <Layouts layouts={layout} />
+      </main>
+    </PageMargin>
   )
 }
 
