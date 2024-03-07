@@ -1,14 +1,21 @@
-/* eslint-disable import/no-cycle */
-'use client'
-
 import React, { useEffect, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 
+import { TOCItem, usePage } from '../../_providers/Context/Page/pageContext'
+// eslint-disable-next-line import/no-cycle
 import serialize from './serialize'
 
-const RichText: React.FC<{ className?: string; content: any }> = ({ className, content }) => {
+interface RichTextProps {
+  content: any
+  className?: string
+  hasTOC?: boolean
+}
+
+const RichText: React.FC<RichTextProps> = ({ className, content, hasTOC = false }) => {
   const [isMounted, setIsMounted] = useState(false)
   const [displayContent, setDisplayContent] = useState(true)
+  const [serializedContent, setSerializedContent] = useState<React.ReactNode>(null)
+  const { setTableOfContents } = usePage()
 
   const fade = useSpring({
     opacity: displayContent ? 1 : 0,
@@ -23,10 +30,23 @@ const RichText: React.FC<{ className?: string; content: any }> = ({ className, c
     setIsMounted(true)
     setDisplayContent(true)
 
+    let tocItems: TOCItem[] = []
+    const collectTOCItem = (item: TOCItem) => {
+      tocItems.push(item)
+    }
+
+    if (content && content.root) {
+      const serializedResult = serialize(content.root.children, collectTOCItem)
+      setSerializedContent(serializedResult)
+      if (hasTOC) {
+        setTableOfContents(tocItems)
+      }
+    }
+
     return () => {
       setDisplayContent(false)
     }
-  }, [content])
+  }, [content, hasTOC, setTableOfContents])
 
   if (!isMounted) {
     return null
@@ -37,7 +57,7 @@ const RichText: React.FC<{ className?: string; content: any }> = ({ className, c
       style={fade}
       className={['first:mt-0 last:mb-0', className].filter(Boolean).join(' ')}
     >
-      {content && content.root ? serialize(content.root.children) : null}
+      {serializedContent}
     </animated.div>
   )
 }
