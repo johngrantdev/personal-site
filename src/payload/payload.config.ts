@@ -22,6 +22,7 @@ import Keywords from './collections/Keywords'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Uploads } from './collections/Uploads'
 import Users from './collections/Users'
 import { HiddenLayout } from './globals/Hidden'
 import { Site } from './globals/Site'
@@ -69,7 +70,7 @@ export default buildConfig({
     },
   }),
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
-  collections: [Pages, Posts, Media, Category, Keywords, Clients, Users],
+  collections: [Pages, Posts, Media, Category, Keywords, Clients, Users, Uploads],
   globals: [Site, HiddenLayout],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
@@ -103,11 +104,11 @@ export default buildConfig({
     seo({
       collections: ['pages', 'posts'],
       generateTitle,
-      uploadsCollection: 'media',
+      uploadsCollection: 'uploads',
     }),
     cloudStorage({
       collections: {
-        media: {
+        uploads: {
           adapter: adapter,
         },
       },
