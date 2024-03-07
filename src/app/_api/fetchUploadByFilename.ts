@@ -1,13 +1,13 @@
-import { MEDIA_BY_FILENAME } from '../_graphql/media'
+import { UPLOAD_BY_FILENAME } from '../_graphql/uploads'
 
-export const fetchMediaByFilename = async <T>(filename: string): Promise<T> => {
+export const fetchUploadByFilename = async <T>(filename: string): Promise<T> => {
   const response = await fetch(`${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/payload/graphql`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      query: MEDIA_BY_FILENAME,
+      query: UPLOAD_BY_FILENAME,
       variables: { filename },
     }),
   })
