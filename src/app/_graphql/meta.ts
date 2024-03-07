@@ -1,9 +1,9 @@
-import { MEDIA_FIELDS } from './media'
+import { UPLOAD_FIELDS } from './uploads'
 
 export const META = `meta {
   title
   image {
-    ${MEDIA_FIELDS}
+    ${UPLOAD_FIELDS}
   }
   description
 }`
