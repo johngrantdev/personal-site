@@ -1,14 +1,13 @@
 'use client'
 
-import React, { useState } from 'react'
-import { animated, useSpring } from '@react-spring/web'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 import { Site } from '../../../../payload/payload-types'
+import { useMenuOpen } from '../../../_providers/Context/Page/menuOpenContext'
 import { usePage } from '../../../_providers/Context/Page/pageContext'
 import { Button } from '../../Button'
 import { CMSLink } from '../../Link'
+import { ThemeSelector } from '../../ThemeSelector'
 
 type headerNavProps = {
   siteSettings: Site
@@ -17,56 +16,37 @@ type headerNavProps = {
 export const HeaderNav = ({ siteSettings }: headerNavProps) => {
   const navItems = siteSettings && siteSettings.navItems ? siteSettings.navItems : []
   const { title, category } = usePage()
-  const [menuOpen, setMenuOpen] = useState(false)
+  const { menuOpen, setMenuOpen } = useMenuOpen()
 
-  const navAnimation = useSpring({
-    right: menuOpen ? '0%' : '-100%',
-    config: { tension: 170, friction: 26 },
-  })
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen)
+  }
 
   return (
     <nav role="navigation" aria-label="Main menu" className="flex static">
-      <button
-        onClick={() => setMenuOpen(true)}
-        className={`lg:hidden text-2xl ${menuOpen && 'hidden'}`}
-      >
+      <button onClick={toggleMenu} className={`visible xl:invisible xl:w-0 text-2xl`}>
         menu
       </button>
-      <animated.div
-        style={navAnimation}
-        className="fixed w-fit top-0 h-screen lg:h-auto right-0 z-20 bg-zinc-800 lg:relative lg:left-0 lg:bg-transparent"
+      <div
+        className={`${
+          menuOpen ? 'opacity-100 right-0' : 'opacity-0 -right-full xl:opacity-100 xl:right-auto'
+        } absolute w-60 xl:w-auto top-32 xl:top-0 sm:top-40 h-screen xl:h-auto xl:relative xl:left-0 xl:bg-transparent transition-all duration-500`}
       >
-        <ul className="lg:flex lg:flex-row gap-4 text-2xl">
-          <li key={0}>
-            <div
-              className={`lg:hidden pl-10 pr-32 lg:px-0 pt-6 lg:pt-0`}
-              onClick={() => setMenuOpen(false)}
-            >
-              <Button
-                className={`border-none last:pr-0 last:mr-0 transition-all ${
-                  title.toLowerCase() === 'home'
-                    ? 'underline dark:underline underline-offset-[14px] dark:text-white'
-                    : ''
-                } hover:underline hover:underline-offset-[14px] dark:hover:text-white `}
-                href="/"
-                appearance="default"
-                label="home"
-              />
-            </div>
-          </li>
+        <ul className="xl:flex xl:flex-row text-2xl">
           {navItems.map(({ link }, i) => {
             link.label = link.label.toLowerCase()
+
             return (
-              <li key={i + 1}>
-                <div className={`pl-10 pr-32 lg:px-0`} onClick={() => setMenuOpen(false)}>
+              <li key={i + 1} style={{ transitionDelay: `${(i + 1) * 300}ms` }}>
+                <div onClick={() => setMenuOpen(false)}>
                   <CMSLink
                     {...link}
-                    className={`border-none last:pr-0 last:mr-0 transition-all ${
-                      title.toLowerCase() === link.label.toLowerCase() ||
-                      (category && category.title.toLowerCase() === link.label.toLowerCase())
-                        ? 'underline dark:underline underline-offset-[14px] dark:text-white'
+                    className={`border-none pl-0 xl:pl-4 last:pr-0 last:mr-0 transition-all ${
+                      title.toLowerCase() === link.label ||
+                      (category && category.title.toLowerCase() === link.label)
+                        ? 'dark:underline underline underline-offset-[14px] text-white'
                         : ''
-                    } hover:underline hover:underline-offset-[14px] dark:hover:text-white `}
+                    } hover:underline hover:underline-offset-[14px] dark:hover:text-white`}
                     appearance="default"
                   />
                 </div>
@@ -74,15 +54,8 @@ export const HeaderNav = ({ siteSettings }: headerNavProps) => {
             )
           })}
         </ul>
-      </animated.div>
-      <div
-        className={`${
-          menuOpen
-            ? 'fixed w-screen h-screen top-0 left-0 z-100 bg-transparent blur-lg'
-            : 'invisible'
-        }`}
-        onClick={() => setMenuOpen(false)}
-      ></div>
+        <ThemeSelector className="xl:hidden  pt-6" />
+      </div>
     </nav>
   )
 }
