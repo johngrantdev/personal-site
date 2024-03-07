@@ -11,9 +11,10 @@ type SideColumnProps = SideColumnType & {
 }
 
 export const SideColumn: React.FC<SideColumnProps> = (props: SideColumnProps) => {
-  const { style, hero, projectHero, sideContent1, sideContent2 } = props
+  const { style, hero, projectHero, sideContent1, sideContent2, position } = props
+  const className = position === 'fixedSideContentAlways' ? 'xl:absolute xl:w-80' : ''
   return (
-    <>
+    <div className={className}>
       {style === 'hero' && <PageHero {...hero} />}
       {style === 'postHero' && <PostHero />}
       {style === 'projectHero' && <ProjectHero {...projectHero} />}
@@ -26,6 +27,6 @@ export const SideColumn: React.FC<SideColumnProps> = (props: SideColumnProps) =>
           <RichText className="flex-1" content={sideContent2} />
         </div>
       )}
-    </>
+    </div>
   )
 }
