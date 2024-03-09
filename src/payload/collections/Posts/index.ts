@@ -171,6 +171,12 @@ export const Posts: CollectionConfig = {
               type: 'checkbox',
               defaultValue: false,
             },
+            {
+              name: 'hideTitle',
+              label: 'Hide Title?',
+              type: 'checkbox',
+              defaultValue: false,
+            },
           ],
         },
       ],
