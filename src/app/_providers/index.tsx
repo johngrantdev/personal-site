@@ -4,9 +4,10 @@ import React from 'react'
 import { ThemeProvider } from 'next-themes'
 
 import { AuthProvider } from '../_providers/Auth'
-import { MenuOpenProvider } from './Context/Page/menuOpenContext'
-import { MouseProvider } from './Context/Page/mouseContext'
-import { PageProvider } from './Context/Page/pageContext'
+import { MenuOpenProvider } from './Context/menuOpenContext'
+import { MouseProvider } from './Context/mouseContext'
+import { PageProvider } from './Context/pageContext'
+import { ScreenProvider } from './Context/screensContext'
 
 export const Providers: React.FC<{
   children: React.ReactNode
@@ -14,11 +15,13 @@ export const Providers: React.FC<{
   return (
     <ThemeProvider attribute="class">
       <AuthProvider>
-        <PageProvider>
-          <MenuOpenProvider>
-            <MouseProvider>{children}</MouseProvider>
-          </MenuOpenProvider>
-        </PageProvider>
+        <ScreenProvider>
+          <PageProvider>
+            <MenuOpenProvider>
+              <MouseProvider>{children}</MouseProvider>
+            </MenuOpenProvider>
+          </PageProvider>
+        </ScreenProvider>
       </AuthProvider>
     </ThemeProvider>
   )

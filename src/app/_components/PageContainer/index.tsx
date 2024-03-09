@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 
-import { useMenuOpen } from '../../_providers/Context/Page/menuOpenContext'
+import { useMenuOpen } from '../../_providers/Context/menuOpenContext'
 
 interface Props {
   children: ReactNode

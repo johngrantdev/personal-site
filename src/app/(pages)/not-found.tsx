@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { Button } from '../_components/Button'
 import { Padding } from '../_components/Padding'
 import { PageMargin } from '../_components/PageMargin'
-import { PageState } from '../_providers/Context/Page/pageContext'
+import { PageState } from '../_providers/Context/pageContext'
 
 export default function NotFound() {
   return (
