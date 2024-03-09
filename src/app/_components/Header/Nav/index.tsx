@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react'
 
 import { Site } from '../../../../payload/payload-types'
-import { useMenuOpen } from '../../../_providers/Context/Page/menuOpenContext'
-import { usePage } from '../../../_providers/Context/Page/pageContext'
+import { useMenuOpen } from '../../../_providers/Context/menuOpenContext'
+import { usePage } from '../../../_providers/Context/pageContext'
 import { Button } from '../../Button'
 import { CMSLink } from '../../Link'
 import { ThemeSelector } from '../../ThemeSelector'

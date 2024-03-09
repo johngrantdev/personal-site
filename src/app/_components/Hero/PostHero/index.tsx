@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
 import { Hero as HeroType } from '../../../../payload/payload-types'
-import { usePage } from '../../../_providers/Context/Page/pageContext'
+import { usePage } from '../../../_providers/Context/pageContext'
 import TableOfContents from '../../TableOfContents'
 
 type PostHeroProps = HeroType & {

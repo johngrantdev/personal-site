@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react'
 import escapeHTML from 'escape-html'
 
-import { TOCItem } from '../../_providers/Context/Page/pageContext'
+import { TOCItem } from '../../_providers/Context/pageContext'
 import { Blocks } from '../Blocks'
 import { CMSLink } from '../Link'
 import { Media } from '../Media'

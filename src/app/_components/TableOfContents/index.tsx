@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { usePage } from '../../_providers/Context/Page/pageContext'
+import { usePage } from '../../_providers/Context/pageContext'
 
 const TableOfContents: React.FC = () => {
   const { tableOfContents } = usePage()

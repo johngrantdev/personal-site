@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 
-import { TOCItem, usePage } from '../../_providers/Context/Page/pageContext'
+import { TOCItem, usePage } from '../../_providers/Context/pageContext'
 // eslint-disable-next-line import/no-cycle
 import serialize from './serialize'
 
