@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-import { Category, Keyword } from '../../../../payload/payload-types'
+import { Category, Keyword } from '../../../payload/payload-types'
 
 // The page context handles both page and post scenarios
 // Settings states are optional covering both contexts

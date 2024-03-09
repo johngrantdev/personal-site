@@ -337,6 +337,7 @@ export interface Post {
     backgroundColour?: string | null;
     overlayImage?: boolean | null;
     showDate?: boolean | null;
+    hideTitle?: boolean | null;
   };
   layout?: Layout;
   relatedPosts?: (number | Post)[] | null;

@@ -68,7 +68,7 @@ export const SVG: React.FC<SVGProps> = props => {
     }
 
     fetchAndProcessSVG()
-  }, [src, theme])
+  }, [src, theme, uniqueId])
 
   // useEffect(() => {
   //   // Ensure SVG content is loaded in the DOM

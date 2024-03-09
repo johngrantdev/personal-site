@@ -7,7 +7,8 @@ import React, { useEffect, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import Link from 'next/link'
 
-import { usePage } from '../../../_providers/Context/Page/pageContext'
+import { useMenuOpen } from '../../../_providers/Context/menuOpenContext'
+import { usePage } from '../../../_providers/Context/pageContext'
 
 type TitleProps = {
   siteTitle: string
@@ -16,6 +17,7 @@ type TitleProps = {
 export function Title(props: TitleProps) {
   const { siteTitle } = props
   const pageContext = usePage()
+  const { setMenuOpen } = useMenuOpen()
   const [title, setTitle] = useState('')
   const [fadeTitle, setFadeTitle] = useState(false)
   const [fadeTitleAndPipe, setFadeTitleAndPipe] = useState(true)
@@ -51,7 +53,11 @@ export function Title(props: TitleProps) {
 
   return (
     <div className="flex gap-0 md:gap-2 h-12 text-2xl select-none">
-      <Link className={`my-auto items-center justify-normal ${title !== '' && 'w-auto'} `} href="/">
+      <Link
+        onClick={() => setMenuOpen(false)}
+        className={`my-auto items-center justify-normal ${title !== '' && 'w-auto'} `}
+        href="/"
+      >
         {siteTitle.toLowerCase()}
       </Link>{' '}
       <animated.div
