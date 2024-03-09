@@ -5,7 +5,8 @@ import { animated, useSpring } from '@react-spring/web'
 import Link from 'next/link'
 
 import { Post } from '../../../payload/payload-types'
-import MouseContext from '../../_providers/Context/Page/mouseContext'
+import MouseContext from '../../_providers/Context/mouseContext'
+import { useScreen } from '../../_providers/Context/screensContext'
 import { formatDateTime } from '../../_utilities/formatDateTime'
 import { generateColourGradient } from '../../_utilities/generateColourGradient'
 import { Media } from '../Media'
@@ -31,6 +32,8 @@ export const Card: React.FC<{
   } = props
 
   const { slug, title, description, publishedAt, keywords = [], card } = doc || {}
+
+  const { screen } = useScreen()
 
   const hasKeywords = keywords && Array.isArray(keywords) && keywords.length > 0
   const titleToUse = titleFromProps || title
@@ -111,6 +114,11 @@ export const Card: React.FC<{
     }%, ${Object.values(gradientStops).join(', ')})`,
   }
 
+  let imageTargetSize = 'card' // default targetSize
+  if (screen.size < screen.breakpoints.md) {
+    imageTargetSize = 'tablet'
+  }
+
   return (
     <animated.div
       ref={cardRef}
@@ -131,11 +139,11 @@ export const Card: React.FC<{
       {card.media && typeof card.media !== 'string' && typeof card.media !== 'number' && (
         <>
           <Media
-            imgClassName={`absolute inset-0 z-[-2] object-cover transition-all duration-300 ${
-              hover ? 'blur-sm scale-110' : 'scale-105'
+            imgClassName={`absolute inset-0 -z-10 object-cover transition-all duration-300 ${
+              hover ? 'blur-sm scale-[1.15]' : 'scale-105'
             }`}
             resource={card.media}
-            targetSize="card"
+            targetSize={imageTargetSize}
           />
           <div
             style={{
@@ -149,12 +157,12 @@ export const Card: React.FC<{
       )}
       <Link href={href}>
         <div
-          className={`px-2 py-6 h-full flex flex-col text-center text-zinc-300`}
+          className={`px-2 py-6 h-full flex flex-col text-center text-sm text-zinc-300`}
           onMouseOver={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           <div
-            className={`flex-1 flex w-full py-3 items-center justify-center transition-opacity duration-500 ${
+            className={`flex-1 flex w-full py-2 items-center justify-center transition-opacity duration-500 ${
               hoverDelayed ? 'opacity-100' : 'opacity-0'
             } ${hover ? 'h-full' : 'h-12'}`}
           >
@@ -168,11 +176,17 @@ export const Card: React.FC<{
                   : ' mix-blend-exclusion'
               }`}
             >
-              <h1 className=" text-2xl">{titleToUse}</h1>
+              <h1
+                className={`${
+                  card.hideTitle && !hover ? 'opacity-0' : 'opacity-100'
+                } transition-opacity duration-500 text-xl`}
+              >
+                {titleToUse}
+              </h1>
             </div>
           )}
           <div
-            className={`flex-1 flex py-3 flex-col items-center justify-center transition-all duration-700 ${
+            className={`flex-1 flex py-2 flex-col items-center justify-center transition-all duration-700 ${
               hoverDelayed ? 'opacity-100' : 'opacity-0'
             } ${hover ? 'h-full' : 'h-12'}`}
           >
