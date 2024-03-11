@@ -281,7 +281,8 @@ export interface Client {
  * via the `definition` "MainColumn".
  */
 export interface MainColumn {
-  style: 'singleLayout' | 'twoColumns';
+  style: 'postArchive' | 'singleLayout' | 'twoColumns';
+  postArchive?: PostArchive
   column1?: {
     root: {
       children: {
@@ -481,7 +482,7 @@ export interface Site {
  */
 export interface HiddenLayout {
   id: number;
-  layout?: (CallToActionBlock | MediaBlock | ArchiveBlock | CodeBlock | VimeoBlock)[] | null;
+  layout?: (CallToActionBlock | MediaBlock | CodeBlock | VimeoBlock)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -528,48 +529,6 @@ export interface MediaBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
- */
-export interface ArchiveBlock {
-  introContent?: {
-    root: {
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      type: string;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  category?: (number | Category)[] | null;
-  limit?: number | null;
-  showPageRange?: boolean | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
-  populatedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
-  populatedDocsTotal?: number | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'archive';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CodeBlock".
  */
 export interface CodeBlock {
@@ -612,4 +571,18 @@ export interface VimeoBlock {
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
+}
+
+export interface PostArchive {
+  category?: (number | Category)[] | null;
+  limit?: number | null;
+  showPageRange?: boolean | null;
+  populatedDocs?:
+    | {
+        relationTo: 'posts';
+        value: number | Post;
+      }[]
+    | null;
+  populatedDocsTotal?: number | null;
+  id?: string | null;
 }
