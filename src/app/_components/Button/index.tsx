@@ -1,5 +1,3 @@
-'use client'
-
 import React, { ElementType } from 'react'
 import Link from 'next/link'
 

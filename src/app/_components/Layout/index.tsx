@@ -1,4 +1,3 @@
-'use client'
 import React, { forwardRef, ReactElement, ReactNode, Ref } from 'react'
 
 import { Padding } from '../Padding'
