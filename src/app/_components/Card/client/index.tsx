@@ -1,59 +1,40 @@
 'use client'
 
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { animated, useSpring } from '@react-spring/web'
 import Link from 'next/link'
 
-import { Post } from '../../../payload/payload-types'
-import MouseContext from '../../_providers/Context/mouseContext'
-import { useScreen } from '../../_providers/Context/screensContext'
-import { formatDateTime } from '../../_utilities/formatDateTime'
-import { generateColourGradient } from '../../_utilities/generateColourGradient'
-import { Media } from '../Media'
+import { Post } from '../../../../payload/payload-types'
+import MouseContext from '../../../_providers/Context/mouseContext'
+import { useScreen } from '../../../_providers/Context/screensContext'
+import { Media } from '../../Media'
 
-export const Card: React.FC<{
-  alignItems?: 'center'
+export const CardClient: React.FC<{
   className?: string
-  showCategory?: boolean
-  hideImagesOnMobile?: boolean
   title?: string
-  relationTo?: 'posts'
-  doc?: Post
-  orientation?: 'horizontal' | 'vertical'
+  description?: string
+  publishedDate?: string
+  keywords?: string
   index?: number
+  loadDelay?: number
+  card?: Post['card']
+  href?: string
+  gradientStops?: Record<number, string>
 }> = props => {
   const {
-    relationTo,
-    title: titleFromProps,
-    doc,
     className,
-    orientation = 'vertical',
+    title,
+    description,
+    publishedDate,
+    keywords,
     index = 0,
+    loadDelay,
+    card,
+    href,
+    gradientStops,
   } = props
 
-  const { slug, title, description, publishedAt, keywords = [], card } = doc || {}
-
   const { screen } = useScreen()
-
-  const hasKeywords = keywords && Array.isArray(keywords) && keywords.length > 0
-  const titleToUse = titleFromProps || title
-  const href = `/${relationTo}/${slug}`
-  const publishedDate = formatDateTime(publishedAt)
-
-  let appearanceStyle
-  const orientationStyle = (orientation: string) => {
-    switch (orientation) {
-      case 'vertical':
-        appearanceStyle = 'flex-col'
-        break
-      case 'horizontal':
-        appearanceStyle = 'flex-row'
-        break
-      default:
-        appearanceStyle = 'flex-col'
-    }
-  }
-  orientationStyle(orientation)
 
   const [hover, setHover] = useState(false)
   const [hoverDelayed, setHoverDelayed] = useState(false)
@@ -72,16 +53,16 @@ export const Card: React.FC<{
     }
   }, [mousePosition])
 
-  const handleMouseEnter = () => setHover(true)
-  const handleMouseLeave = () => setHover(false)
+  const handleMouseEnter = useCallback(() => setHover(true), [])
+  const handleMouseLeave = useCallback(() => setHover(false), [])
 
   const animationDuration = 400
   const [loaded, setLoaded] = useState(false)
+
   useEffect(() => {
-    setTimeout(() => {
-      setLoaded(true)
-    }, (animationDuration * (index + 1)) / 8)
-  }, [index])
+    const timer = setTimeout(() => setLoaded(true), loadDelay)
+    return () => clearTimeout(timer)
+  }, [loadDelay])
 
   useEffect(() => {
     let timeoutId
@@ -106,18 +87,16 @@ export const Card: React.FC<{
     config: { duration: animationDuration },
   })
 
-  const gradientStops = generateColourGradient(card.backgroundColour, 5, 10)
-
   const backgroundStyle = {
     backgroundImage: `radial-gradient(circle 1000px at ${localMousePosition.x}% ${
       localMousePosition.y
     }%, ${Object.values(gradientStops).join(', ')})`,
   }
 
-  let imageTargetSize = 'card' // default targetSize
-  if (screen.size < screen.breakpoints.md) {
-    imageTargetSize = 'tablet'
-  }
+  const imageTargetSize = useMemo(
+    () => (screen.size < screen.breakpoints.md ? 'tablet' : 'card'),
+    [screen.size, screen.breakpoints.md],
+  )
 
   return (
     <animated.div
@@ -126,17 +105,9 @@ export const Card: React.FC<{
         ...fadeIn,
         ...backgroundStyle,
       }}
-      className={[
-        `relative rounded-xl overflow-hidden drop-shadow-md h-full aspect-video md:aspect-square transition-transform ${
-          hover ? 'scale-[1.02]' : 'scale-100'
-        }`,
-        className,
-        orientation && appearanceStyle,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={className}
     >
-      {card.media && typeof card.media !== 'string' && typeof card.media !== 'number' && (
+      {card.media && (
         <>
           <Media
             imgClassName={`absolute inset-0 -z-10 object-cover transition-all duration-300 ${
@@ -144,6 +115,7 @@ export const Card: React.FC<{
             }`}
             resource={card.media}
             targetSize={imageTargetSize}
+            priority
           />
           <div
             style={{
@@ -168,7 +140,7 @@ export const Card: React.FC<{
           >
             {card.showDate && publishedDate}
           </div>
-          {titleToUse && (
+          {title && (
             <div
               className={`flex-none w-full h-fit items-center justify-center ${
                 hover || card.overlayImage || !card.media
@@ -181,7 +153,7 @@ export const Card: React.FC<{
                   card.hideTitle && !hover ? 'opacity-0' : 'opacity-100'
                 } transition-opacity duration-500 text-xl`}
               >
-                {titleToUse}
+                {title}
               </h1>
             </div>
           )}
@@ -193,17 +165,9 @@ export const Card: React.FC<{
             <div className="flex h-full w-full items-center justify-center content-center">
               {description}
             </div>
-            {hasKeywords && (
+            {keywords && (
               <div className="flex items-center justify-center h-min w-full content-center text-xs pt-3">
-                {keywords
-                  // eslint-disable-next-line prettier/prettier
-                    .map(
-                    keyword =>
-                      // eslint-disable-next-line prettier/prettier
-                        typeof keyword === 'object' && 'title' in keyword ? keyword.title : keyword,
-                    // eslint-disable-next-line function-paren-newline
-                  )
-                  .join(', ')}
+                {keywords}
               </div>
             )}
           </div>

@@ -1,6 +1,7 @@
 import type { Field } from 'payload/types'
 
 import linkGroup from './linkGroup'
+import { postArchive } from './postArchive'
 
 // import { LayoutFillerComponent } from '../components/Layout'
 
@@ -197,6 +198,10 @@ export const layout: Field = {
               defaultValue: 'singleLayout',
               options: [
                 {
+                  label: 'Post Archive',
+                  value: 'postArchive',
+                },
+                {
                   label: 'Single Layout',
                   value: 'singleLayout',
                 },
@@ -210,9 +215,24 @@ export const layout: Field = {
               type: 'row',
               fields: [
                 {
+                  ...postArchive,
+                  admin: {
+                    condition: (_, siblingData) => {
+                      return siblingData.style === 'postArchive'
+                    },
+                  },
+                },
+                {
                   name: 'column1',
                   label: false,
                   type: 'richText',
+                  admin: {
+                    condition: (_, siblingData) => {
+                      return (
+                        siblingData.style === 'singleLayout' || siblingData.style === 'twoColumns'
+                      )
+                    },
+                  },
                 },
                 {
                   name: 'column2',

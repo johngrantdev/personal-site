@@ -4,7 +4,7 @@ import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
 import { layout } from '../../fields/layout'
 import { slugField } from '../../fields/slug'
-import { populateArchiveBlock } from '../../hooks/populateArchiveBlock'
+import { populateArchiveField } from '../../hooks/populateArchiveField'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { revalidatePage } from './hooks/revalidatePage'
 
@@ -22,7 +22,7 @@ export const Pages: CollectionConfig = {
   hooks: {
     beforeChange: [populatePublishedAt],
     afterChange: [revalidatePage],
-    afterRead: [populateArchiveBlock],
+    beforeRead: [populateArchiveField],
   },
   versions: {
     drafts: true,

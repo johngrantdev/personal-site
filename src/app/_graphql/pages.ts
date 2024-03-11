@@ -1,6 +1,7 @@
 import { LINK_FIELDS } from './link'
 import { MEDIA } from './media'
 import { META } from './meta'
+import { POST_ARCHIVE } from './postArchive'
 
 export const PAGES = `
   query Pages {
@@ -37,6 +38,9 @@ export const PAGE = `
           }
           mainColumn {
             style
+            postArchive {
+              ${POST_ARCHIVE}
+            }
             column1
             column2
           }

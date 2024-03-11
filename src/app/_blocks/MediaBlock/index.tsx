@@ -6,7 +6,7 @@ import { StaticImageData } from 'next/image'
 import { MediaBlock as MediaBlockType } from '../../../payload/payload-types'
 import { Column, Layout } from '../../_components/Layout'
 import { Media } from '../../_components/Media'
-import RichText from '../../_components/RichText'
+import RichText from '../../_components/RichText/static'
 
 type Props = MediaBlockType & {
   staticImage?: StaticImageData

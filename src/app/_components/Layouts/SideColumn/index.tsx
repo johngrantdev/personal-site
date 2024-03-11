@@ -2,7 +2,7 @@ import { Layout, SideColumn as SideColumnType } from '../../../../payload/payloa
 import { PageHero } from '../../Hero/PageHero'
 import { PostHero } from '../../Hero/PostHero'
 import { ProjectHero } from '../../Hero/ProjectHero'
-import RichText from '../../RichText'
+import RichText from '../../RichText/static'
 
 type LayoutType = NonNullable<Layout>[0]
 

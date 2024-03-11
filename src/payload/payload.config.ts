@@ -11,7 +11,6 @@ import path from 'path'
 import { buildConfig } from 'payload/config'
 import computeBlurhash from 'payload-blurhash-plugin'
 
-import { Archive } from './blocks/ArchiveBlock'
 import { CallToAction } from './blocks/CallToAction'
 import { Code } from './blocks/Code'
 import { MediaBlock } from './blocks/MediaBlock'
@@ -60,7 +59,7 @@ export default buildConfig({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       BlocksFeature({
-        blocks: [Archive, CallToAction, Code, MediaBlock, VimeoBlock],
+        blocks: [CallToAction, Code, MediaBlock, VimeoBlock],
       }),
     ],
   }),
