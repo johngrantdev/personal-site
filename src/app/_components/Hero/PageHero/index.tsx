@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import { Hero as HeroType } from '../../../../payload/payload-types'
 import { CMSLink } from '../../Link'
 import { Media } from '../../Media'
-import RichText from '../../RichText'
+import RichText from '../../RichText/static'
 
 type PageHeroProps = HeroType & {
   className?: string
