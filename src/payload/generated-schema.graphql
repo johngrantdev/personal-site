@@ -99,12 +99,20 @@ type Hero {
 
 type Media {
   id: Int
-  media(where: Media_Media_where): Upload!
   alt: String!
   caption(depth: Int): JSON
+  media(where: Media_Media_where): Upload!
+  mediaDark(where: Media_MediaDark_where): Upload
+  mediaMobile(where: Media_MediaMobile_where): Upload
+  mediaMobileDark(where: Media_MediaMobileDark_where): Upload
   updatedAt: DateTime
   createdAt: DateTime
 }
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
 
 type Upload {
   id: Int
@@ -821,10 +829,1919 @@ input Media_Media_where_or {
   OR: [Media_Media_where_or]
 }
 
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
+input Media_MediaDark_where {
+  blurhash: Media_MediaDark_blurhash_operator
+  updatedAt: Media_MediaDark_updatedAt_operator
+  createdAt: Media_MediaDark_createdAt_operator
+  url: Media_MediaDark_url_operator
+  filename: Media_MediaDark_filename_operator
+  mimeType: Media_MediaDark_mimeType_operator
+  filesize: Media_MediaDark_filesize_operator
+  width: Media_MediaDark_width_operator
+  height: Media_MediaDark_height_operator
+  sizes__card__url: Media_MediaDark_sizes__card__url_operator
+  sizes__card__width: Media_MediaDark_sizes__card__width_operator
+  sizes__card__height: Media_MediaDark_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaDark_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaDark_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaDark_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaDark_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaDark_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaDark_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaDark_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaDark_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaDark_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaDark_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaDark_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaDark_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaDark_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaDark_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaDark_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaDark_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaDark_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaDark_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaDark_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaDark_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaDark_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaDark_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaDark_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaDark_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaDark_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaDark_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaDark_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaDark_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaDark_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaDark_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaDark_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaDark_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaDark_sizes__mobile__filename_operator
+  id: Media_MediaDark_id_operator
+  AND: [Media_MediaDark_where_and]
+  OR: [Media_MediaDark_where_or]
+}
+
+input Media_MediaDark_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_MediaDark_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_MediaDark_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__card__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__card__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__card__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__card__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__card__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__card__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktop__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktop__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktop__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktop__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktop__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktop__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktopHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktopHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktopHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktopHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktopHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__desktopHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tablet__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tablet__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tablet__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tablet__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tablet__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tablet__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tabletHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tabletHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tabletHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tabletHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tabletHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__tabletHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__mobile__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__mobile__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__mobile__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__mobile__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__mobile__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaDark_sizes__mobile__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaDark_where_and {
+  blurhash: Media_MediaDark_blurhash_operator
+  updatedAt: Media_MediaDark_updatedAt_operator
+  createdAt: Media_MediaDark_createdAt_operator
+  url: Media_MediaDark_url_operator
+  filename: Media_MediaDark_filename_operator
+  mimeType: Media_MediaDark_mimeType_operator
+  filesize: Media_MediaDark_filesize_operator
+  width: Media_MediaDark_width_operator
+  height: Media_MediaDark_height_operator
+  sizes__card__url: Media_MediaDark_sizes__card__url_operator
+  sizes__card__width: Media_MediaDark_sizes__card__width_operator
+  sizes__card__height: Media_MediaDark_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaDark_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaDark_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaDark_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaDark_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaDark_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaDark_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaDark_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaDark_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaDark_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaDark_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaDark_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaDark_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaDark_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaDark_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaDark_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaDark_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaDark_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaDark_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaDark_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaDark_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaDark_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaDark_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaDark_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaDark_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaDark_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaDark_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaDark_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaDark_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaDark_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaDark_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaDark_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaDark_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaDark_sizes__mobile__filename_operator
+  id: Media_MediaDark_id_operator
+  AND: [Media_MediaDark_where_and]
+  OR: [Media_MediaDark_where_or]
+}
+
+input Media_MediaDark_where_or {
+  blurhash: Media_MediaDark_blurhash_operator
+  updatedAt: Media_MediaDark_updatedAt_operator
+  createdAt: Media_MediaDark_createdAt_operator
+  url: Media_MediaDark_url_operator
+  filename: Media_MediaDark_filename_operator
+  mimeType: Media_MediaDark_mimeType_operator
+  filesize: Media_MediaDark_filesize_operator
+  width: Media_MediaDark_width_operator
+  height: Media_MediaDark_height_operator
+  sizes__card__url: Media_MediaDark_sizes__card__url_operator
+  sizes__card__width: Media_MediaDark_sizes__card__width_operator
+  sizes__card__height: Media_MediaDark_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaDark_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaDark_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaDark_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaDark_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaDark_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaDark_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaDark_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaDark_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaDark_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaDark_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaDark_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaDark_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaDark_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaDark_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaDark_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaDark_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaDark_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaDark_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaDark_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaDark_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaDark_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaDark_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaDark_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaDark_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaDark_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaDark_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaDark_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaDark_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaDark_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaDark_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaDark_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaDark_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaDark_sizes__mobile__filename_operator
+  id: Media_MediaDark_id_operator
+  AND: [Media_MediaDark_where_and]
+  OR: [Media_MediaDark_where_or]
+}
+
+input Media_MediaMobile_where {
+  blurhash: Media_MediaMobile_blurhash_operator
+  updatedAt: Media_MediaMobile_updatedAt_operator
+  createdAt: Media_MediaMobile_createdAt_operator
+  url: Media_MediaMobile_url_operator
+  filename: Media_MediaMobile_filename_operator
+  mimeType: Media_MediaMobile_mimeType_operator
+  filesize: Media_MediaMobile_filesize_operator
+  width: Media_MediaMobile_width_operator
+  height: Media_MediaMobile_height_operator
+  sizes__card__url: Media_MediaMobile_sizes__card__url_operator
+  sizes__card__width: Media_MediaMobile_sizes__card__width_operator
+  sizes__card__height: Media_MediaMobile_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaMobile_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaMobile_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaMobile_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaMobile_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaMobile_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaMobile_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaMobile_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaMobile_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaMobile_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaMobile_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaMobile_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaMobile_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaMobile_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaMobile_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaMobile_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaMobile_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaMobile_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaMobile_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaMobile_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaMobile_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaMobile_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaMobile_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaMobile_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaMobile_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaMobile_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaMobile_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaMobile_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaMobile_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaMobile_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaMobile_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaMobile_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaMobile_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaMobile_sizes__mobile__filename_operator
+  id: Media_MediaMobile_id_operator
+  AND: [Media_MediaMobile_where_and]
+  OR: [Media_MediaMobile_where_or]
+}
+
+input Media_MediaMobile_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_MediaMobile_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_MediaMobile_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__card__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__card__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__card__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__card__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__card__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__card__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktop__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktop__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktop__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktop__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktop__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktop__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktopHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktopHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktopHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktopHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktopHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__desktopHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tablet__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tablet__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tablet__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tablet__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tablet__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tablet__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tabletHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tabletHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tabletHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tabletHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tabletHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__tabletHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__mobile__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__mobile__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__mobile__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__mobile__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__mobile__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobile_sizes__mobile__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobile_where_and {
+  blurhash: Media_MediaMobile_blurhash_operator
+  updatedAt: Media_MediaMobile_updatedAt_operator
+  createdAt: Media_MediaMobile_createdAt_operator
+  url: Media_MediaMobile_url_operator
+  filename: Media_MediaMobile_filename_operator
+  mimeType: Media_MediaMobile_mimeType_operator
+  filesize: Media_MediaMobile_filesize_operator
+  width: Media_MediaMobile_width_operator
+  height: Media_MediaMobile_height_operator
+  sizes__card__url: Media_MediaMobile_sizes__card__url_operator
+  sizes__card__width: Media_MediaMobile_sizes__card__width_operator
+  sizes__card__height: Media_MediaMobile_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaMobile_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaMobile_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaMobile_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaMobile_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaMobile_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaMobile_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaMobile_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaMobile_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaMobile_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaMobile_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaMobile_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaMobile_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaMobile_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaMobile_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaMobile_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaMobile_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaMobile_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaMobile_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaMobile_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaMobile_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaMobile_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaMobile_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaMobile_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaMobile_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaMobile_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaMobile_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaMobile_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaMobile_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaMobile_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaMobile_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaMobile_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaMobile_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaMobile_sizes__mobile__filename_operator
+  id: Media_MediaMobile_id_operator
+  AND: [Media_MediaMobile_where_and]
+  OR: [Media_MediaMobile_where_or]
+}
+
+input Media_MediaMobile_where_or {
+  blurhash: Media_MediaMobile_blurhash_operator
+  updatedAt: Media_MediaMobile_updatedAt_operator
+  createdAt: Media_MediaMobile_createdAt_operator
+  url: Media_MediaMobile_url_operator
+  filename: Media_MediaMobile_filename_operator
+  mimeType: Media_MediaMobile_mimeType_operator
+  filesize: Media_MediaMobile_filesize_operator
+  width: Media_MediaMobile_width_operator
+  height: Media_MediaMobile_height_operator
+  sizes__card__url: Media_MediaMobile_sizes__card__url_operator
+  sizes__card__width: Media_MediaMobile_sizes__card__width_operator
+  sizes__card__height: Media_MediaMobile_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaMobile_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaMobile_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaMobile_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaMobile_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaMobile_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaMobile_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaMobile_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaMobile_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaMobile_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaMobile_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaMobile_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaMobile_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaMobile_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaMobile_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaMobile_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaMobile_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaMobile_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaMobile_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaMobile_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaMobile_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaMobile_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaMobile_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaMobile_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaMobile_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaMobile_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaMobile_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaMobile_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaMobile_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaMobile_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaMobile_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaMobile_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaMobile_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaMobile_sizes__mobile__filename_operator
+  id: Media_MediaMobile_id_operator
+  AND: [Media_MediaMobile_where_and]
+  OR: [Media_MediaMobile_where_or]
+}
+
+input Media_MediaMobileDark_where {
+  blurhash: Media_MediaMobileDark_blurhash_operator
+  updatedAt: Media_MediaMobileDark_updatedAt_operator
+  createdAt: Media_MediaMobileDark_createdAt_operator
+  url: Media_MediaMobileDark_url_operator
+  filename: Media_MediaMobileDark_filename_operator
+  mimeType: Media_MediaMobileDark_mimeType_operator
+  filesize: Media_MediaMobileDark_filesize_operator
+  width: Media_MediaMobileDark_width_operator
+  height: Media_MediaMobileDark_height_operator
+  sizes__card__url: Media_MediaMobileDark_sizes__card__url_operator
+  sizes__card__width: Media_MediaMobileDark_sizes__card__width_operator
+  sizes__card__height: Media_MediaMobileDark_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaMobileDark_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaMobileDark_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaMobileDark_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaMobileDark_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaMobileDark_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaMobileDark_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaMobileDark_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaMobileDark_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaMobileDark_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaMobileDark_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaMobileDark_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaMobileDark_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaMobileDark_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaMobileDark_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaMobileDark_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaMobileDark_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaMobileDark_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaMobileDark_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaMobileDark_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaMobileDark_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaMobileDark_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaMobileDark_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaMobileDark_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaMobileDark_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaMobileDark_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaMobileDark_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaMobileDark_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaMobileDark_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaMobileDark_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaMobileDark_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaMobileDark_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaMobileDark_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaMobileDark_sizes__mobile__filename_operator
+  id: Media_MediaMobileDark_id_operator
+  AND: [Media_MediaMobileDark_where_and]
+  OR: [Media_MediaMobileDark_where_or]
+}
+
+input Media_MediaMobileDark_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__card__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__card__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__card__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__card__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__card__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__card__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktop__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktop__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktop__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktop__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktop__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktop__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktopHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktopHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktopHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktopHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktopHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__desktopHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tablet__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tablet__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tablet__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tablet__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tablet__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tablet__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tabletHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tabletHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tabletHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tabletHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tabletHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__tabletHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__mobile__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__mobile__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__mobile__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__mobile__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__mobile__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_sizes__mobile__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Media_MediaMobileDark_where_and {
+  blurhash: Media_MediaMobileDark_blurhash_operator
+  updatedAt: Media_MediaMobileDark_updatedAt_operator
+  createdAt: Media_MediaMobileDark_createdAt_operator
+  url: Media_MediaMobileDark_url_operator
+  filename: Media_MediaMobileDark_filename_operator
+  mimeType: Media_MediaMobileDark_mimeType_operator
+  filesize: Media_MediaMobileDark_filesize_operator
+  width: Media_MediaMobileDark_width_operator
+  height: Media_MediaMobileDark_height_operator
+  sizes__card__url: Media_MediaMobileDark_sizes__card__url_operator
+  sizes__card__width: Media_MediaMobileDark_sizes__card__width_operator
+  sizes__card__height: Media_MediaMobileDark_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaMobileDark_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaMobileDark_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaMobileDark_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaMobileDark_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaMobileDark_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaMobileDark_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaMobileDark_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaMobileDark_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaMobileDark_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaMobileDark_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaMobileDark_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaMobileDark_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaMobileDark_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaMobileDark_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaMobileDark_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaMobileDark_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaMobileDark_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaMobileDark_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaMobileDark_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaMobileDark_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaMobileDark_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaMobileDark_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaMobileDark_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaMobileDark_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaMobileDark_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaMobileDark_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaMobileDark_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaMobileDark_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaMobileDark_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaMobileDark_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaMobileDark_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaMobileDark_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaMobileDark_sizes__mobile__filename_operator
+  id: Media_MediaMobileDark_id_operator
+  AND: [Media_MediaMobileDark_where_and]
+  OR: [Media_MediaMobileDark_where_or]
+}
+
+input Media_MediaMobileDark_where_or {
+  blurhash: Media_MediaMobileDark_blurhash_operator
+  updatedAt: Media_MediaMobileDark_updatedAt_operator
+  createdAt: Media_MediaMobileDark_createdAt_operator
+  url: Media_MediaMobileDark_url_operator
+  filename: Media_MediaMobileDark_filename_operator
+  mimeType: Media_MediaMobileDark_mimeType_operator
+  filesize: Media_MediaMobileDark_filesize_operator
+  width: Media_MediaMobileDark_width_operator
+  height: Media_MediaMobileDark_height_operator
+  sizes__card__url: Media_MediaMobileDark_sizes__card__url_operator
+  sizes__card__width: Media_MediaMobileDark_sizes__card__width_operator
+  sizes__card__height: Media_MediaMobileDark_sizes__card__height_operator
+  sizes__card__mimeType: Media_MediaMobileDark_sizes__card__mimeType_operator
+  sizes__card__filesize: Media_MediaMobileDark_sizes__card__filesize_operator
+  sizes__card__filename: Media_MediaMobileDark_sizes__card__filename_operator
+  sizes__desktop__url: Media_MediaMobileDark_sizes__desktop__url_operator
+  sizes__desktop__width: Media_MediaMobileDark_sizes__desktop__width_operator
+  sizes__desktop__height: Media_MediaMobileDark_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Media_MediaMobileDark_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Media_MediaMobileDark_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Media_MediaMobileDark_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Media_MediaMobileDark_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Media_MediaMobileDark_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Media_MediaMobileDark_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Media_MediaMobileDark_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Media_MediaMobileDark_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Media_MediaMobileDark_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Media_MediaMobileDark_sizes__tablet__url_operator
+  sizes__tablet__width: Media_MediaMobileDark_sizes__tablet__width_operator
+  sizes__tablet__height: Media_MediaMobileDark_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Media_MediaMobileDark_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Media_MediaMobileDark_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Media_MediaMobileDark_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Media_MediaMobileDark_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Media_MediaMobileDark_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Media_MediaMobileDark_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Media_MediaMobileDark_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Media_MediaMobileDark_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Media_MediaMobileDark_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Media_MediaMobileDark_sizes__mobile__url_operator
+  sizes__mobile__width: Media_MediaMobileDark_sizes__mobile__width_operator
+  sizes__mobile__height: Media_MediaMobileDark_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Media_MediaMobileDark_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Media_MediaMobileDark_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Media_MediaMobileDark_sizes__mobile__filename_operator
+  id: Media_MediaMobileDark_id_operator
+  AND: [Media_MediaMobileDark_where_and]
+  OR: [Media_MediaMobileDark_where_or]
+}
 
 type LinkGroupField {
   link: LinkField
@@ -879,13 +2796,764 @@ type Client {
 
 type MainColumn {
   style: MainColumn_style
+  postArchive: PostArchive
   column1(depth: Int): JSON
   column2(depth: Int): JSON
 }
 
 enum MainColumn_style {
+  postArchive
   singleLayout
   twoColumns
+}
+
+type PostArchive {
+  category: [Category!]
+  limit: Float
+  showPageRange: Boolean
+  populatedDocs: [PostArchive_PopulatedDocs_Relationship!]
+  populatedDocsTotal: Float
+}
+
+type Category {
+  id: Int
+  title: String
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+type PostArchive_PopulatedDocs_Relationship {
+  relationTo: PostArchive_PopulatedDocs_RelationTo
+  value: PostArchive_PopulatedDocs
+}
+
+enum PostArchive_PopulatedDocs_RelationTo {
+  posts
+}
+
+union PostArchive_PopulatedDocs = Post
+
+type Post {
+  id: Int
+  title: String
+  description: String
+  category: Category
+  keywords: [Keyword!]
+  slug: String
+  publishedAt: DateTime
+  authors: [User!]
+  populatedAuthors: [Post_PopulatedAuthors!]
+  card: Post_Card
+  layout: [Layout!]
+  relatedPosts: [Post!]
+  meta: Post_Meta
+  updatedAt: DateTime
+  createdAt: DateTime
+  _status: Post__status
+}
+
+type Keyword {
+  id: Int
+  title: String
+  parent: Keyword
+  breadcrumbs: [Keyword_Breadcrumbs!]
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+type Keyword_Breadcrumbs {
+  doc: Keyword
+  url: String
+  label: String
+  id: String
+}
+
+type User {
+  id: Int
+  name: String
+  roles: [User_roles!]
+  updatedAt: DateTime
+  createdAt: DateTime
+  email: EmailAddress!
+  resetPasswordToken: String
+  resetPasswordExpiration: DateTime
+  salt: String
+  hash: String
+  loginAttempts: Float
+  lockUntil: DateTime
+  password: String!
+}
+
+enum User_roles {
+  admin
+  user
+}
+
+"""
+A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
+"""
+scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
+
+type Post_PopulatedAuthors {
+  id: String
+  name: String
+}
+
+type Post_Card {
+  media: Media
+  backgroundColour: String
+  overlayImage: Boolean
+  showDate: Boolean
+  hideTitle: Boolean
+}
+
+type Post_Meta {
+  title: String
+  description: String
+  image(where: Post_Meta_Image_where): Upload
+}
+
+input Post_Meta_Image_where {
+  blurhash: Post_Meta_Image_blurhash_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
+  url: Post_Meta_Image_url_operator
+  filename: Post_Meta_Image_filename_operator
+  mimeType: Post_Meta_Image_mimeType_operator
+  filesize: Post_Meta_Image_filesize_operator
+  width: Post_Meta_Image_width_operator
+  height: Post_Meta_Image_height_operator
+  sizes__card__url: Post_Meta_Image_sizes__card__url_operator
+  sizes__card__width: Post_Meta_Image_sizes__card__width_operator
+  sizes__card__height: Post_Meta_Image_sizes__card__height_operator
+  sizes__card__mimeType: Post_Meta_Image_sizes__card__mimeType_operator
+  sizes__card__filesize: Post_Meta_Image_sizes__card__filesize_operator
+  sizes__card__filename: Post_Meta_Image_sizes__card__filename_operator
+  sizes__desktop__url: Post_Meta_Image_sizes__desktop__url_operator
+  sizes__desktop__width: Post_Meta_Image_sizes__desktop__width_operator
+  sizes__desktop__height: Post_Meta_Image_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Post_Meta_Image_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Post_Meta_Image_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Post_Meta_Image_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Post_Meta_Image_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Post_Meta_Image_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Post_Meta_Image_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Post_Meta_Image_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Post_Meta_Image_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Post_Meta_Image_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Post_Meta_Image_sizes__tablet__url_operator
+  sizes__tablet__width: Post_Meta_Image_sizes__tablet__width_operator
+  sizes__tablet__height: Post_Meta_Image_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Post_Meta_Image_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Post_Meta_Image_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Post_Meta_Image_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Post_Meta_Image_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Post_Meta_Image_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Post_Meta_Image_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Post_Meta_Image_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Post_Meta_Image_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Post_Meta_Image_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Post_Meta_Image_sizes__mobile__url_operator
+  sizes__mobile__width: Post_Meta_Image_sizes__mobile__width_operator
+  sizes__mobile__height: Post_Meta_Image_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Post_Meta_Image_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Post_Meta_Image_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Post_Meta_Image_sizes__mobile__filename_operator
+  id: Post_Meta_Image_id_operator
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
+}
+
+input Post_Meta_Image_blurhash_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_updatedAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Post_Meta_Image_createdAt_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Post_Meta_Image_url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__card__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__card__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__card__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__card__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__card__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__card__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktop__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktop__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktop__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktop__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktop__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktop__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktopHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktopHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktopHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktopHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktopHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__desktopHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tablet__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tablet__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tablet__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tablet__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tablet__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tablet__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tabletHalf__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tabletHalf__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tabletHalf__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tabletHalf__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tabletHalf__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__tabletHalf__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__mobile__url_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__mobile__width_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__mobile__height_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__mobile__mimeType_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__mobile__filesize_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_Meta_Image_sizes__mobile__filename_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_id_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Post_Meta_Image_where_and {
+  blurhash: Post_Meta_Image_blurhash_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
+  url: Post_Meta_Image_url_operator
+  filename: Post_Meta_Image_filename_operator
+  mimeType: Post_Meta_Image_mimeType_operator
+  filesize: Post_Meta_Image_filesize_operator
+  width: Post_Meta_Image_width_operator
+  height: Post_Meta_Image_height_operator
+  sizes__card__url: Post_Meta_Image_sizes__card__url_operator
+  sizes__card__width: Post_Meta_Image_sizes__card__width_operator
+  sizes__card__height: Post_Meta_Image_sizes__card__height_operator
+  sizes__card__mimeType: Post_Meta_Image_sizes__card__mimeType_operator
+  sizes__card__filesize: Post_Meta_Image_sizes__card__filesize_operator
+  sizes__card__filename: Post_Meta_Image_sizes__card__filename_operator
+  sizes__desktop__url: Post_Meta_Image_sizes__desktop__url_operator
+  sizes__desktop__width: Post_Meta_Image_sizes__desktop__width_operator
+  sizes__desktop__height: Post_Meta_Image_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Post_Meta_Image_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Post_Meta_Image_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Post_Meta_Image_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Post_Meta_Image_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Post_Meta_Image_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Post_Meta_Image_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Post_Meta_Image_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Post_Meta_Image_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Post_Meta_Image_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Post_Meta_Image_sizes__tablet__url_operator
+  sizes__tablet__width: Post_Meta_Image_sizes__tablet__width_operator
+  sizes__tablet__height: Post_Meta_Image_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Post_Meta_Image_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Post_Meta_Image_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Post_Meta_Image_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Post_Meta_Image_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Post_Meta_Image_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Post_Meta_Image_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Post_Meta_Image_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Post_Meta_Image_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Post_Meta_Image_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Post_Meta_Image_sizes__mobile__url_operator
+  sizes__mobile__width: Post_Meta_Image_sizes__mobile__width_operator
+  sizes__mobile__height: Post_Meta_Image_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Post_Meta_Image_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Post_Meta_Image_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Post_Meta_Image_sizes__mobile__filename_operator
+  id: Post_Meta_Image_id_operator
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
+}
+
+input Post_Meta_Image_where_or {
+  blurhash: Post_Meta_Image_blurhash_operator
+  updatedAt: Post_Meta_Image_updatedAt_operator
+  createdAt: Post_Meta_Image_createdAt_operator
+  url: Post_Meta_Image_url_operator
+  filename: Post_Meta_Image_filename_operator
+  mimeType: Post_Meta_Image_mimeType_operator
+  filesize: Post_Meta_Image_filesize_operator
+  width: Post_Meta_Image_width_operator
+  height: Post_Meta_Image_height_operator
+  sizes__card__url: Post_Meta_Image_sizes__card__url_operator
+  sizes__card__width: Post_Meta_Image_sizes__card__width_operator
+  sizes__card__height: Post_Meta_Image_sizes__card__height_operator
+  sizes__card__mimeType: Post_Meta_Image_sizes__card__mimeType_operator
+  sizes__card__filesize: Post_Meta_Image_sizes__card__filesize_operator
+  sizes__card__filename: Post_Meta_Image_sizes__card__filename_operator
+  sizes__desktop__url: Post_Meta_Image_sizes__desktop__url_operator
+  sizes__desktop__width: Post_Meta_Image_sizes__desktop__width_operator
+  sizes__desktop__height: Post_Meta_Image_sizes__desktop__height_operator
+  sizes__desktop__mimeType: Post_Meta_Image_sizes__desktop__mimeType_operator
+  sizes__desktop__filesize: Post_Meta_Image_sizes__desktop__filesize_operator
+  sizes__desktop__filename: Post_Meta_Image_sizes__desktop__filename_operator
+  sizes__desktopHalf__url: Post_Meta_Image_sizes__desktopHalf__url_operator
+  sizes__desktopHalf__width: Post_Meta_Image_sizes__desktopHalf__width_operator
+  sizes__desktopHalf__height: Post_Meta_Image_sizes__desktopHalf__height_operator
+  sizes__desktopHalf__mimeType: Post_Meta_Image_sizes__desktopHalf__mimeType_operator
+  sizes__desktopHalf__filesize: Post_Meta_Image_sizes__desktopHalf__filesize_operator
+  sizes__desktopHalf__filename: Post_Meta_Image_sizes__desktopHalf__filename_operator
+  sizes__tablet__url: Post_Meta_Image_sizes__tablet__url_operator
+  sizes__tablet__width: Post_Meta_Image_sizes__tablet__width_operator
+  sizes__tablet__height: Post_Meta_Image_sizes__tablet__height_operator
+  sizes__tablet__mimeType: Post_Meta_Image_sizes__tablet__mimeType_operator
+  sizes__tablet__filesize: Post_Meta_Image_sizes__tablet__filesize_operator
+  sizes__tablet__filename: Post_Meta_Image_sizes__tablet__filename_operator
+  sizes__tabletHalf__url: Post_Meta_Image_sizes__tabletHalf__url_operator
+  sizes__tabletHalf__width: Post_Meta_Image_sizes__tabletHalf__width_operator
+  sizes__tabletHalf__height: Post_Meta_Image_sizes__tabletHalf__height_operator
+  sizes__tabletHalf__mimeType: Post_Meta_Image_sizes__tabletHalf__mimeType_operator
+  sizes__tabletHalf__filesize: Post_Meta_Image_sizes__tabletHalf__filesize_operator
+  sizes__tabletHalf__filename: Post_Meta_Image_sizes__tabletHalf__filename_operator
+  sizes__mobile__url: Post_Meta_Image_sizes__mobile__url_operator
+  sizes__mobile__width: Post_Meta_Image_sizes__mobile__width_operator
+  sizes__mobile__height: Post_Meta_Image_sizes__mobile__height_operator
+  sizes__mobile__mimeType: Post_Meta_Image_sizes__mobile__mimeType_operator
+  sizes__mobile__filesize: Post_Meta_Image_sizes__mobile__filesize_operator
+  sizes__mobile__filename: Post_Meta_Image_sizes__mobile__filename_operator
+  id: Post_Meta_Image_id_operator
+  AND: [Post_Meta_Image_where_and]
+  OR: [Post_Meta_Image_where_or]
+}
+
+enum Post__status {
+  draft
+  published
 }
 
 type Page_Meta {
@@ -1582,6 +4250,11 @@ input Page_where {
   layout__sideColumn__sideContent1: Page_layout__sideColumn__sideContent1_operator
   layout__sideColumn__sideContent2: Page_layout__sideColumn__sideContent2_operator
   layout__mainColumn__style: Page_layout__mainColumn__style_operator
+  layout__mainColumn__postArchive__category: Page_layout__mainColumn__postArchive__category_operator
+  layout__mainColumn__postArchive__limit: Page_layout__mainColumn__postArchive__limit_operator
+  layout__mainColumn__postArchive__showPageRange: Page_layout__mainColumn__postArchive__showPageRange_operator
+  layout__mainColumn__postArchive__populatedDocs: Page_layout__mainColumn__postArchive__populatedDocs_Relation
+  layout__mainColumn__postArchive__populatedDocsTotal: Page_layout__mainColumn__postArchive__populatedDocsTotal_operator
   layout__mainColumn__column1: Page_layout__mainColumn__column1_operator
   layout__mainColumn__column2: Page_layout__mainColumn__column2_operator
   layout__id: Page_layout__id_operator
@@ -1894,8 +4567,53 @@ input Page_layout__mainColumn__style_operator {
 }
 
 enum Page_layout__mainColumn__style_Input {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input Page_layout__mainColumn__postArchive__category_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Page_layout__mainColumn__postArchive__limit_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Page_layout__mainColumn__postArchive__showPageRange_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Page_layout__mainColumn__postArchive__populatedDocs_Relation {
+  relationTo: Page_layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo
+  value: JSON
+}
+
+enum Page_layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo {
+  posts
+}
+
+input Page_layout__mainColumn__postArchive__populatedDocsTotal_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
 }
 
 input Page_layout__mainColumn__column1_operator {
@@ -2027,6 +4745,11 @@ input Page_where_and {
   layout__sideColumn__sideContent1: Page_layout__sideColumn__sideContent1_operator
   layout__sideColumn__sideContent2: Page_layout__sideColumn__sideContent2_operator
   layout__mainColumn__style: Page_layout__mainColumn__style_operator
+  layout__mainColumn__postArchive__category: Page_layout__mainColumn__postArchive__category_operator
+  layout__mainColumn__postArchive__limit: Page_layout__mainColumn__postArchive__limit_operator
+  layout__mainColumn__postArchive__showPageRange: Page_layout__mainColumn__postArchive__showPageRange_operator
+  layout__mainColumn__postArchive__populatedDocs: Page_layout__mainColumn__postArchive__populatedDocs_Relation
+  layout__mainColumn__postArchive__populatedDocsTotal: Page_layout__mainColumn__postArchive__populatedDocsTotal_operator
   layout__mainColumn__column1: Page_layout__mainColumn__column1_operator
   layout__mainColumn__column2: Page_layout__mainColumn__column2_operator
   layout__id: Page_layout__id_operator
@@ -2072,6 +4795,11 @@ input Page_where_or {
   layout__sideColumn__sideContent1: Page_layout__sideColumn__sideContent1_operator
   layout__sideColumn__sideContent2: Page_layout__sideColumn__sideContent2_operator
   layout__mainColumn__style: Page_layout__mainColumn__style_operator
+  layout__mainColumn__postArchive__category: Page_layout__mainColumn__postArchive__category_operator
+  layout__mainColumn__postArchive__limit: Page_layout__mainColumn__postArchive__limit_operator
+  layout__mainColumn__postArchive__showPageRange: Page_layout__mainColumn__postArchive__showPageRange_operator
+  layout__mainColumn__postArchive__populatedDocs: Page_layout__mainColumn__postArchive__populatedDocs_Relation
+  layout__mainColumn__postArchive__populatedDocsTotal: Page_layout__mainColumn__postArchive__populatedDocsTotal_operator
   layout__mainColumn__column1: Page_layout__mainColumn__column1_operator
   layout__mainColumn__column2: Page_layout__mainColumn__column2_operator
   layout__id: Page_layout__id_operator
@@ -3050,6 +5778,7 @@ type PagesDocAccessFields_layout_mainColumn_Delete {
 
 type PagesDocAccessFields_layout_mainColumn_Fields {
   style: PagesDocAccessFields_layout_mainColumn_style
+  postArchive: PagesDocAccessFields_layout_mainColumn_postArchive
   column1: PagesDocAccessFields_layout_mainColumn_column1
   column2: PagesDocAccessFields_layout_mainColumn_column2
 }
@@ -3074,6 +5803,153 @@ type PagesDocAccessFields_layout_mainColumn_style_Update {
 }
 
 type PagesDocAccessFields_layout_mainColumn_style_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive {
+  create: PagesDocAccessFields_layout_mainColumn_postArchive_Create
+  read: PagesDocAccessFields_layout_mainColumn_postArchive_Read
+  update: PagesDocAccessFields_layout_mainColumn_postArchive_Update
+  delete: PagesDocAccessFields_layout_mainColumn_postArchive_Delete
+  fields: PagesDocAccessFields_layout_mainColumn_postArchive_Fields
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_Fields {
+  category: PagesDocAccessFields_layout_mainColumn_postArchive_category
+  limit: PagesDocAccessFields_layout_mainColumn_postArchive_limit
+  showPageRange: PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange
+  populatedDocs: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs
+  populatedDocsTotal: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_category {
+  create: PagesDocAccessFields_layout_mainColumn_postArchive_category_Create
+  read: PagesDocAccessFields_layout_mainColumn_postArchive_category_Read
+  update: PagesDocAccessFields_layout_mainColumn_postArchive_category_Update
+  delete: PagesDocAccessFields_layout_mainColumn_postArchive_category_Delete
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_category_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_category_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_category_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_category_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_limit {
+  create: PagesDocAccessFields_layout_mainColumn_postArchive_limit_Create
+  read: PagesDocAccessFields_layout_mainColumn_postArchive_limit_Read
+  update: PagesDocAccessFields_layout_mainColumn_postArchive_limit_Update
+  delete: PagesDocAccessFields_layout_mainColumn_postArchive_limit_Delete
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_limit_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_limit_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_limit_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_limit_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange {
+  create: PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Create
+  read: PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Read
+  update: PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Update
+  delete: PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Delete
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_showPageRange_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs {
+  create: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Create
+  read: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Read
+  update: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Update
+  delete: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Delete
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Delete {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal {
+  create: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Create
+  read: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Read
+  update: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Update
+  delete: PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Create {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Read {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Update {
+  permission: Boolean!
+}
+
+type PagesDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete {
   permission: Boolean!
 }
 
@@ -4059,6 +6935,11 @@ input versionsPage_where {
   version__layout__sideColumn__sideContent1: versionsPage_version__layout__sideColumn__sideContent1_operator
   version__layout__sideColumn__sideContent2: versionsPage_version__layout__sideColumn__sideContent2_operator
   version__layout__mainColumn__style: versionsPage_version__layout__mainColumn__style_operator
+  version__layout__mainColumn__postArchive__category: versionsPage_version__layout__mainColumn__postArchive__category_operator
+  version__layout__mainColumn__postArchive__limit: versionsPage_version__layout__mainColumn__postArchive__limit_operator
+  version__layout__mainColumn__postArchive__showPageRange: versionsPage_version__layout__mainColumn__postArchive__showPageRange_operator
+  version__layout__mainColumn__postArchive__populatedDocs: versionsPage_version__layout__mainColumn__postArchive__populatedDocs_Relation
+  version__layout__mainColumn__postArchive__populatedDocsTotal: versionsPage_version__layout__mainColumn__postArchive__populatedDocsTotal_operator
   version__layout__mainColumn__column1: versionsPage_version__layout__mainColumn__column1_operator
   version__layout__mainColumn__column2: versionsPage_version__layout__mainColumn__column2_operator
   version__layout__id: versionsPage_version__layout__id_operator
@@ -4383,8 +7264,53 @@ input versionsPage_version__layout__mainColumn__style_operator {
 }
 
 enum versionsPage_version__layout__mainColumn__style_Input {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input versionsPage_version__layout__mainColumn__postArchive__category_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input versionsPage_version__layout__mainColumn__postArchive__limit_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsPage_version__layout__mainColumn__postArchive__showPageRange_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsPage_version__layout__mainColumn__postArchive__populatedDocs_Relation {
+  relationTo: versionsPage_version__layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo
+  value: JSON
+}
+
+enum versionsPage_version__layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo {
+  posts
+}
+
+input versionsPage_version__layout__mainColumn__postArchive__populatedDocsTotal_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
 }
 
 input versionsPage_version__layout__mainColumn__column1_operator {
@@ -4545,6 +7471,11 @@ input versionsPage_where_and {
   version__layout__sideColumn__sideContent1: versionsPage_version__layout__sideColumn__sideContent1_operator
   version__layout__sideColumn__sideContent2: versionsPage_version__layout__sideColumn__sideContent2_operator
   version__layout__mainColumn__style: versionsPage_version__layout__mainColumn__style_operator
+  version__layout__mainColumn__postArchive__category: versionsPage_version__layout__mainColumn__postArchive__category_operator
+  version__layout__mainColumn__postArchive__limit: versionsPage_version__layout__mainColumn__postArchive__limit_operator
+  version__layout__mainColumn__postArchive__showPageRange: versionsPage_version__layout__mainColumn__postArchive__showPageRange_operator
+  version__layout__mainColumn__postArchive__populatedDocs: versionsPage_version__layout__mainColumn__postArchive__populatedDocs_Relation
+  version__layout__mainColumn__postArchive__populatedDocsTotal: versionsPage_version__layout__mainColumn__postArchive__populatedDocsTotal_operator
   version__layout__mainColumn__column1: versionsPage_version__layout__mainColumn__column1_operator
   version__layout__mainColumn__column2: versionsPage_version__layout__mainColumn__column2_operator
   version__layout__id: versionsPage_version__layout__id_operator
@@ -4594,6 +7525,11 @@ input versionsPage_where_or {
   version__layout__sideColumn__sideContent1: versionsPage_version__layout__sideColumn__sideContent1_operator
   version__layout__sideColumn__sideContent2: versionsPage_version__layout__sideColumn__sideContent2_operator
   version__layout__mainColumn__style: versionsPage_version__layout__mainColumn__style_operator
+  version__layout__mainColumn__postArchive__category: versionsPage_version__layout__mainColumn__postArchive__category_operator
+  version__layout__mainColumn__postArchive__limit: versionsPage_version__layout__mainColumn__postArchive__limit_operator
+  version__layout__mainColumn__postArchive__showPageRange: versionsPage_version__layout__mainColumn__postArchive__showPageRange_operator
+  version__layout__mainColumn__postArchive__populatedDocs: versionsPage_version__layout__mainColumn__postArchive__populatedDocs_Relation
+  version__layout__mainColumn__postArchive__populatedDocsTotal: versionsPage_version__layout__mainColumn__postArchive__populatedDocsTotal_operator
   version__layout__mainColumn__column1: versionsPage_version__layout__mainColumn__column1_operator
   version__layout__mainColumn__column2: versionsPage_version__layout__mainColumn__column2_operator
   version__layout__id: versionsPage_version__layout__id_operator
@@ -4609,735 +7545,6 @@ input versionsPage_where_or {
   id: versionsPage_id_operator
   AND: [versionsPage_where_and]
   OR: [versionsPage_where_or]
-}
-
-type Post {
-  id: Int
-  title: String
-  description: String
-  category: Category
-  keywords: [Keyword!]
-  slug: String
-  publishedAt: DateTime
-  authors: [User!]
-  populatedAuthors: [Post_PopulatedAuthors!]
-  card: Post_Card
-  layout: [Layout!]
-  relatedPosts: [Post!]
-  meta: Post_Meta
-  updatedAt: DateTime
-  createdAt: DateTime
-  _status: Post__status
-}
-
-type Category {
-  id: Int
-  title: String
-  updatedAt: DateTime
-  createdAt: DateTime
-}
-
-type Keyword {
-  id: Int
-  title: String
-  parent: Keyword
-  breadcrumbs: [Keyword_Breadcrumbs!]
-  updatedAt: DateTime
-  createdAt: DateTime
-}
-
-type Keyword_Breadcrumbs {
-  doc: Keyword
-  url: String
-  label: String
-  id: String
-}
-
-type User {
-  id: Int
-  name: String
-  roles: [User_roles!]
-  updatedAt: DateTime
-  createdAt: DateTime
-  email: EmailAddress!
-  resetPasswordToken: String
-  resetPasswordExpiration: DateTime
-  salt: String
-  hash: String
-  loginAttempts: Float
-  lockUntil: DateTime
-  password: String!
-}
-
-enum User_roles {
-  admin
-  user
-}
-
-"""
-A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
-"""
-scalar EmailAddress @specifiedBy(url: "https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address")
-
-type Post_PopulatedAuthors {
-  id: String
-  name: String
-}
-
-type Post_Card {
-  media: Media
-  backgroundColour: String
-  overlayImage: Boolean
-  showDate: Boolean
-}
-
-type Post_Meta {
-  title: String
-  description: String
-  image(where: Post_Meta_Image_where): Upload
-}
-
-input Post_Meta_Image_where {
-  blurhash: Post_Meta_Image_blurhash_operator
-  updatedAt: Post_Meta_Image_updatedAt_operator
-  createdAt: Post_Meta_Image_createdAt_operator
-  url: Post_Meta_Image_url_operator
-  filename: Post_Meta_Image_filename_operator
-  mimeType: Post_Meta_Image_mimeType_operator
-  filesize: Post_Meta_Image_filesize_operator
-  width: Post_Meta_Image_width_operator
-  height: Post_Meta_Image_height_operator
-  sizes__card__url: Post_Meta_Image_sizes__card__url_operator
-  sizes__card__width: Post_Meta_Image_sizes__card__width_operator
-  sizes__card__height: Post_Meta_Image_sizes__card__height_operator
-  sizes__card__mimeType: Post_Meta_Image_sizes__card__mimeType_operator
-  sizes__card__filesize: Post_Meta_Image_sizes__card__filesize_operator
-  sizes__card__filename: Post_Meta_Image_sizes__card__filename_operator
-  sizes__desktop__url: Post_Meta_Image_sizes__desktop__url_operator
-  sizes__desktop__width: Post_Meta_Image_sizes__desktop__width_operator
-  sizes__desktop__height: Post_Meta_Image_sizes__desktop__height_operator
-  sizes__desktop__mimeType: Post_Meta_Image_sizes__desktop__mimeType_operator
-  sizes__desktop__filesize: Post_Meta_Image_sizes__desktop__filesize_operator
-  sizes__desktop__filename: Post_Meta_Image_sizes__desktop__filename_operator
-  sizes__desktopHalf__url: Post_Meta_Image_sizes__desktopHalf__url_operator
-  sizes__desktopHalf__width: Post_Meta_Image_sizes__desktopHalf__width_operator
-  sizes__desktopHalf__height: Post_Meta_Image_sizes__desktopHalf__height_operator
-  sizes__desktopHalf__mimeType: Post_Meta_Image_sizes__desktopHalf__mimeType_operator
-  sizes__desktopHalf__filesize: Post_Meta_Image_sizes__desktopHalf__filesize_operator
-  sizes__desktopHalf__filename: Post_Meta_Image_sizes__desktopHalf__filename_operator
-  sizes__tablet__url: Post_Meta_Image_sizes__tablet__url_operator
-  sizes__tablet__width: Post_Meta_Image_sizes__tablet__width_operator
-  sizes__tablet__height: Post_Meta_Image_sizes__tablet__height_operator
-  sizes__tablet__mimeType: Post_Meta_Image_sizes__tablet__mimeType_operator
-  sizes__tablet__filesize: Post_Meta_Image_sizes__tablet__filesize_operator
-  sizes__tablet__filename: Post_Meta_Image_sizes__tablet__filename_operator
-  sizes__tabletHalf__url: Post_Meta_Image_sizes__tabletHalf__url_operator
-  sizes__tabletHalf__width: Post_Meta_Image_sizes__tabletHalf__width_operator
-  sizes__tabletHalf__height: Post_Meta_Image_sizes__tabletHalf__height_operator
-  sizes__tabletHalf__mimeType: Post_Meta_Image_sizes__tabletHalf__mimeType_operator
-  sizes__tabletHalf__filesize: Post_Meta_Image_sizes__tabletHalf__filesize_operator
-  sizes__tabletHalf__filename: Post_Meta_Image_sizes__tabletHalf__filename_operator
-  sizes__mobile__url: Post_Meta_Image_sizes__mobile__url_operator
-  sizes__mobile__width: Post_Meta_Image_sizes__mobile__width_operator
-  sizes__mobile__height: Post_Meta_Image_sizes__mobile__height_operator
-  sizes__mobile__mimeType: Post_Meta_Image_sizes__mobile__mimeType_operator
-  sizes__mobile__filesize: Post_Meta_Image_sizes__mobile__filesize_operator
-  sizes__mobile__filename: Post_Meta_Image_sizes__mobile__filename_operator
-  id: Post_Meta_Image_id_operator
-  AND: [Post_Meta_Image_where_and]
-  OR: [Post_Meta_Image_where_or]
-}
-
-input Post_Meta_Image_blurhash_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_updatedAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input Post_Meta_Image_createdAt_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
-  exists: Boolean
-}
-
-input Post_Meta_Image_url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__card__url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__card__width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__card__height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__card__mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__card__filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__card__filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktop__url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktop__width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktop__height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktop__mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktop__filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktop__filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktopHalf__url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktopHalf__width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktopHalf__height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktopHalf__mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktopHalf__filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__desktopHalf__filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tablet__url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tablet__width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tablet__height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tablet__mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tablet__filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tablet__filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tabletHalf__url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tabletHalf__width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tabletHalf__height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tabletHalf__mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tabletHalf__filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__tabletHalf__filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__mobile__url_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__mobile__width_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__mobile__height_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__mobile__mimeType_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__mobile__filesize_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
-  exists: Boolean
-}
-
-input Post_Meta_Image_sizes__mobile__filename_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_id_operator {
-  equals: String
-  not_equals: String
-  like: String
-  contains: String
-  in: [String]
-  not_in: [String]
-  all: [String]
-  exists: Boolean
-}
-
-input Post_Meta_Image_where_and {
-  blurhash: Post_Meta_Image_blurhash_operator
-  updatedAt: Post_Meta_Image_updatedAt_operator
-  createdAt: Post_Meta_Image_createdAt_operator
-  url: Post_Meta_Image_url_operator
-  filename: Post_Meta_Image_filename_operator
-  mimeType: Post_Meta_Image_mimeType_operator
-  filesize: Post_Meta_Image_filesize_operator
-  width: Post_Meta_Image_width_operator
-  height: Post_Meta_Image_height_operator
-  sizes__card__url: Post_Meta_Image_sizes__card__url_operator
-  sizes__card__width: Post_Meta_Image_sizes__card__width_operator
-  sizes__card__height: Post_Meta_Image_sizes__card__height_operator
-  sizes__card__mimeType: Post_Meta_Image_sizes__card__mimeType_operator
-  sizes__card__filesize: Post_Meta_Image_sizes__card__filesize_operator
-  sizes__card__filename: Post_Meta_Image_sizes__card__filename_operator
-  sizes__desktop__url: Post_Meta_Image_sizes__desktop__url_operator
-  sizes__desktop__width: Post_Meta_Image_sizes__desktop__width_operator
-  sizes__desktop__height: Post_Meta_Image_sizes__desktop__height_operator
-  sizes__desktop__mimeType: Post_Meta_Image_sizes__desktop__mimeType_operator
-  sizes__desktop__filesize: Post_Meta_Image_sizes__desktop__filesize_operator
-  sizes__desktop__filename: Post_Meta_Image_sizes__desktop__filename_operator
-  sizes__desktopHalf__url: Post_Meta_Image_sizes__desktopHalf__url_operator
-  sizes__desktopHalf__width: Post_Meta_Image_sizes__desktopHalf__width_operator
-  sizes__desktopHalf__height: Post_Meta_Image_sizes__desktopHalf__height_operator
-  sizes__desktopHalf__mimeType: Post_Meta_Image_sizes__desktopHalf__mimeType_operator
-  sizes__desktopHalf__filesize: Post_Meta_Image_sizes__desktopHalf__filesize_operator
-  sizes__desktopHalf__filename: Post_Meta_Image_sizes__desktopHalf__filename_operator
-  sizes__tablet__url: Post_Meta_Image_sizes__tablet__url_operator
-  sizes__tablet__width: Post_Meta_Image_sizes__tablet__width_operator
-  sizes__tablet__height: Post_Meta_Image_sizes__tablet__height_operator
-  sizes__tablet__mimeType: Post_Meta_Image_sizes__tablet__mimeType_operator
-  sizes__tablet__filesize: Post_Meta_Image_sizes__tablet__filesize_operator
-  sizes__tablet__filename: Post_Meta_Image_sizes__tablet__filename_operator
-  sizes__tabletHalf__url: Post_Meta_Image_sizes__tabletHalf__url_operator
-  sizes__tabletHalf__width: Post_Meta_Image_sizes__tabletHalf__width_operator
-  sizes__tabletHalf__height: Post_Meta_Image_sizes__tabletHalf__height_operator
-  sizes__tabletHalf__mimeType: Post_Meta_Image_sizes__tabletHalf__mimeType_operator
-  sizes__tabletHalf__filesize: Post_Meta_Image_sizes__tabletHalf__filesize_operator
-  sizes__tabletHalf__filename: Post_Meta_Image_sizes__tabletHalf__filename_operator
-  sizes__mobile__url: Post_Meta_Image_sizes__mobile__url_operator
-  sizes__mobile__width: Post_Meta_Image_sizes__mobile__width_operator
-  sizes__mobile__height: Post_Meta_Image_sizes__mobile__height_operator
-  sizes__mobile__mimeType: Post_Meta_Image_sizes__mobile__mimeType_operator
-  sizes__mobile__filesize: Post_Meta_Image_sizes__mobile__filesize_operator
-  sizes__mobile__filename: Post_Meta_Image_sizes__mobile__filename_operator
-  id: Post_Meta_Image_id_operator
-  AND: [Post_Meta_Image_where_and]
-  OR: [Post_Meta_Image_where_or]
-}
-
-input Post_Meta_Image_where_or {
-  blurhash: Post_Meta_Image_blurhash_operator
-  updatedAt: Post_Meta_Image_updatedAt_operator
-  createdAt: Post_Meta_Image_createdAt_operator
-  url: Post_Meta_Image_url_operator
-  filename: Post_Meta_Image_filename_operator
-  mimeType: Post_Meta_Image_mimeType_operator
-  filesize: Post_Meta_Image_filesize_operator
-  width: Post_Meta_Image_width_operator
-  height: Post_Meta_Image_height_operator
-  sizes__card__url: Post_Meta_Image_sizes__card__url_operator
-  sizes__card__width: Post_Meta_Image_sizes__card__width_operator
-  sizes__card__height: Post_Meta_Image_sizes__card__height_operator
-  sizes__card__mimeType: Post_Meta_Image_sizes__card__mimeType_operator
-  sizes__card__filesize: Post_Meta_Image_sizes__card__filesize_operator
-  sizes__card__filename: Post_Meta_Image_sizes__card__filename_operator
-  sizes__desktop__url: Post_Meta_Image_sizes__desktop__url_operator
-  sizes__desktop__width: Post_Meta_Image_sizes__desktop__width_operator
-  sizes__desktop__height: Post_Meta_Image_sizes__desktop__height_operator
-  sizes__desktop__mimeType: Post_Meta_Image_sizes__desktop__mimeType_operator
-  sizes__desktop__filesize: Post_Meta_Image_sizes__desktop__filesize_operator
-  sizes__desktop__filename: Post_Meta_Image_sizes__desktop__filename_operator
-  sizes__desktopHalf__url: Post_Meta_Image_sizes__desktopHalf__url_operator
-  sizes__desktopHalf__width: Post_Meta_Image_sizes__desktopHalf__width_operator
-  sizes__desktopHalf__height: Post_Meta_Image_sizes__desktopHalf__height_operator
-  sizes__desktopHalf__mimeType: Post_Meta_Image_sizes__desktopHalf__mimeType_operator
-  sizes__desktopHalf__filesize: Post_Meta_Image_sizes__desktopHalf__filesize_operator
-  sizes__desktopHalf__filename: Post_Meta_Image_sizes__desktopHalf__filename_operator
-  sizes__tablet__url: Post_Meta_Image_sizes__tablet__url_operator
-  sizes__tablet__width: Post_Meta_Image_sizes__tablet__width_operator
-  sizes__tablet__height: Post_Meta_Image_sizes__tablet__height_operator
-  sizes__tablet__mimeType: Post_Meta_Image_sizes__tablet__mimeType_operator
-  sizes__tablet__filesize: Post_Meta_Image_sizes__tablet__filesize_operator
-  sizes__tablet__filename: Post_Meta_Image_sizes__tablet__filename_operator
-  sizes__tabletHalf__url: Post_Meta_Image_sizes__tabletHalf__url_operator
-  sizes__tabletHalf__width: Post_Meta_Image_sizes__tabletHalf__width_operator
-  sizes__tabletHalf__height: Post_Meta_Image_sizes__tabletHalf__height_operator
-  sizes__tabletHalf__mimeType: Post_Meta_Image_sizes__tabletHalf__mimeType_operator
-  sizes__tabletHalf__filesize: Post_Meta_Image_sizes__tabletHalf__filesize_operator
-  sizes__tabletHalf__filename: Post_Meta_Image_sizes__tabletHalf__filename_operator
-  sizes__mobile__url: Post_Meta_Image_sizes__mobile__url_operator
-  sizes__mobile__width: Post_Meta_Image_sizes__mobile__width_operator
-  sizes__mobile__height: Post_Meta_Image_sizes__mobile__height_operator
-  sizes__mobile__mimeType: Post_Meta_Image_sizes__mobile__mimeType_operator
-  sizes__mobile__filesize: Post_Meta_Image_sizes__mobile__filesize_operator
-  sizes__mobile__filename: Post_Meta_Image_sizes__mobile__filename_operator
-  id: Post_Meta_Image_id_operator
-  AND: [Post_Meta_Image_where_and]
-  OR: [Post_Meta_Image_where_or]
-}
-
-enum Post__status {
-  draft
-  published
 }
 
 type Posts {
@@ -5368,6 +7575,7 @@ input Post_where {
   card__backgroundColour: Post_card__backgroundColour_operator
   card__overlayImage: Post_card__overlayImage_operator
   card__showDate: Post_card__showDate_operator
+  card__hideTitle: Post_card__hideTitle_operator
   layout__sideContentPosition: Post_layout__sideContentPosition_operator
   layout__scrollSnap: Post_layout__scrollSnap_operator
   layout__fullPageHeight: Post_layout__fullPageHeight_operator
@@ -5395,6 +7603,11 @@ input Post_where {
   layout__sideColumn__sideContent1: Post_layout__sideColumn__sideContent1_operator
   layout__sideColumn__sideContent2: Post_layout__sideColumn__sideContent2_operator
   layout__mainColumn__style: Post_layout__mainColumn__style_operator
+  layout__mainColumn__postArchive__category: Post_layout__mainColumn__postArchive__category_operator
+  layout__mainColumn__postArchive__limit: Post_layout__mainColumn__postArchive__limit_operator
+  layout__mainColumn__postArchive__showPageRange: Post_layout__mainColumn__postArchive__showPageRange_operator
+  layout__mainColumn__postArchive__populatedDocs: Post_layout__mainColumn__postArchive__populatedDocs_Relation
+  layout__mainColumn__postArchive__populatedDocsTotal: Post_layout__mainColumn__postArchive__populatedDocsTotal_operator
   layout__mainColumn__column1: Post_layout__mainColumn__column1_operator
   layout__mainColumn__column2: Post_layout__mainColumn__column2_operator
   layout__id: Post_layout__id_operator
@@ -5527,6 +7740,12 @@ input Post_card__overlayImage_operator {
 }
 
 input Post_card__showDate_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Post_card__hideTitle_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
@@ -5798,8 +8017,53 @@ input Post_layout__mainColumn__style_operator {
 }
 
 enum Post_layout__mainColumn__style_Input {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input Post_layout__mainColumn__postArchive__category_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Post_layout__mainColumn__postArchive__limit_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Post_layout__mainColumn__postArchive__showPageRange_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input Post_layout__mainColumn__postArchive__populatedDocs_Relation {
+  relationTo: Post_layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo
+  value: JSON
+}
+
+enum Post_layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo {
+  posts
+}
+
+input Post_layout__mainColumn__postArchive__populatedDocsTotal_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
 }
 
 input Post_layout__mainColumn__column1_operator {
@@ -5923,6 +8187,7 @@ input Post_where_and {
   card__backgroundColour: Post_card__backgroundColour_operator
   card__overlayImage: Post_card__overlayImage_operator
   card__showDate: Post_card__showDate_operator
+  card__hideTitle: Post_card__hideTitle_operator
   layout__sideContentPosition: Post_layout__sideContentPosition_operator
   layout__scrollSnap: Post_layout__scrollSnap_operator
   layout__fullPageHeight: Post_layout__fullPageHeight_operator
@@ -5950,6 +8215,11 @@ input Post_where_and {
   layout__sideColumn__sideContent1: Post_layout__sideColumn__sideContent1_operator
   layout__sideColumn__sideContent2: Post_layout__sideColumn__sideContent2_operator
   layout__mainColumn__style: Post_layout__mainColumn__style_operator
+  layout__mainColumn__postArchive__category: Post_layout__mainColumn__postArchive__category_operator
+  layout__mainColumn__postArchive__limit: Post_layout__mainColumn__postArchive__limit_operator
+  layout__mainColumn__postArchive__showPageRange: Post_layout__mainColumn__postArchive__showPageRange_operator
+  layout__mainColumn__postArchive__populatedDocs: Post_layout__mainColumn__postArchive__populatedDocs_Relation
+  layout__mainColumn__postArchive__populatedDocsTotal: Post_layout__mainColumn__postArchive__populatedDocsTotal_operator
   layout__mainColumn__column1: Post_layout__mainColumn__column1_operator
   layout__mainColumn__column2: Post_layout__mainColumn__column2_operator
   layout__id: Post_layout__id_operator
@@ -5979,6 +8249,7 @@ input Post_where_or {
   card__backgroundColour: Post_card__backgroundColour_operator
   card__overlayImage: Post_card__overlayImage_operator
   card__showDate: Post_card__showDate_operator
+  card__hideTitle: Post_card__hideTitle_operator
   layout__sideContentPosition: Post_layout__sideContentPosition_operator
   layout__scrollSnap: Post_layout__scrollSnap_operator
   layout__fullPageHeight: Post_layout__fullPageHeight_operator
@@ -6006,6 +8277,11 @@ input Post_where_or {
   layout__sideColumn__sideContent1: Post_layout__sideColumn__sideContent1_operator
   layout__sideColumn__sideContent2: Post_layout__sideColumn__sideContent2_operator
   layout__mainColumn__style: Post_layout__mainColumn__style_operator
+  layout__mainColumn__postArchive__category: Post_layout__mainColumn__postArchive__category_operator
+  layout__mainColumn__postArchive__limit: Post_layout__mainColumn__postArchive__limit_operator
+  layout__mainColumn__postArchive__showPageRange: Post_layout__mainColumn__postArchive__showPageRange_operator
+  layout__mainColumn__postArchive__populatedDocs: Post_layout__mainColumn__postArchive__populatedDocs_Relation
+  layout__mainColumn__postArchive__populatedDocsTotal: Post_layout__mainColumn__postArchive__populatedDocsTotal_operator
   layout__mainColumn__column1: Post_layout__mainColumn__column1_operator
   layout__mainColumn__column2: Post_layout__mainColumn__column2_operator
   layout__id: Post_layout__id_operator
@@ -6313,6 +8589,7 @@ type PostsDocAccessFields_card_Fields {
   backgroundColour: PostsDocAccessFields_card_backgroundColour
   overlayImage: PostsDocAccessFields_card_overlayImage
   showDate: PostsDocAccessFields_card_showDate
+  hideTitle: PostsDocAccessFields_card_hideTitle
 }
 
 type PostsDocAccessFields_card_media {
@@ -6404,6 +8681,29 @@ type PostsDocAccessFields_card_showDate_Update {
 }
 
 type PostsDocAccessFields_card_showDate_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_card_hideTitle {
+  create: PostsDocAccessFields_card_hideTitle_Create
+  read: PostsDocAccessFields_card_hideTitle_Read
+  update: PostsDocAccessFields_card_hideTitle_Update
+  delete: PostsDocAccessFields_card_hideTitle_Delete
+}
+
+type PostsDocAccessFields_card_hideTitle_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_card_hideTitle_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_card_hideTitle_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_card_hideTitle_Delete {
   permission: Boolean!
 }
 
@@ -7282,6 +9582,7 @@ type PostsDocAccessFields_layout_mainColumn_Delete {
 
 type PostsDocAccessFields_layout_mainColumn_Fields {
   style: PostsDocAccessFields_layout_mainColumn_style
+  postArchive: PostsDocAccessFields_layout_mainColumn_postArchive
   column1: PostsDocAccessFields_layout_mainColumn_column1
   column2: PostsDocAccessFields_layout_mainColumn_column2
 }
@@ -7306,6 +9607,153 @@ type PostsDocAccessFields_layout_mainColumn_style_Update {
 }
 
 type PostsDocAccessFields_layout_mainColumn_style_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive {
+  create: PostsDocAccessFields_layout_mainColumn_postArchive_Create
+  read: PostsDocAccessFields_layout_mainColumn_postArchive_Read
+  update: PostsDocAccessFields_layout_mainColumn_postArchive_Update
+  delete: PostsDocAccessFields_layout_mainColumn_postArchive_Delete
+  fields: PostsDocAccessFields_layout_mainColumn_postArchive_Fields
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_Fields {
+  category: PostsDocAccessFields_layout_mainColumn_postArchive_category
+  limit: PostsDocAccessFields_layout_mainColumn_postArchive_limit
+  showPageRange: PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange
+  populatedDocs: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs
+  populatedDocsTotal: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_category {
+  create: PostsDocAccessFields_layout_mainColumn_postArchive_category_Create
+  read: PostsDocAccessFields_layout_mainColumn_postArchive_category_Read
+  update: PostsDocAccessFields_layout_mainColumn_postArchive_category_Update
+  delete: PostsDocAccessFields_layout_mainColumn_postArchive_category_Delete
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_category_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_category_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_category_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_category_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_limit {
+  create: PostsDocAccessFields_layout_mainColumn_postArchive_limit_Create
+  read: PostsDocAccessFields_layout_mainColumn_postArchive_limit_Read
+  update: PostsDocAccessFields_layout_mainColumn_postArchive_limit_Update
+  delete: PostsDocAccessFields_layout_mainColumn_postArchive_limit_Delete
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_limit_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_limit_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_limit_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_limit_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange {
+  create: PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Create
+  read: PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Read
+  update: PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Update
+  delete: PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Delete
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_showPageRange_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs {
+  create: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Create
+  read: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Read
+  update: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Update
+  delete: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Delete
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocs_Delete {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal {
+  create: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Create
+  read: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Read
+  update: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Update
+  delete: PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Create {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Read {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Update {
+  permission: Boolean!
+}
+
+type PostsDocAccessFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete {
   permission: Boolean!
 }
 
@@ -7631,6 +10079,7 @@ type PostVersion_Version_Card {
   backgroundColour: String
   overlayImage: Boolean
   showDate: Boolean
+  hideTitle: Boolean
 }
 
 type PostVersion_Version_Meta {
@@ -8311,6 +10760,7 @@ input versionsPost_where {
   version__card__backgroundColour: versionsPost_version__card__backgroundColour_operator
   version__card__overlayImage: versionsPost_version__card__overlayImage_operator
   version__card__showDate: versionsPost_version__card__showDate_operator
+  version__card__hideTitle: versionsPost_version__card__hideTitle_operator
   version__layout__sideContentPosition: versionsPost_version__layout__sideContentPosition_operator
   version__layout__scrollSnap: versionsPost_version__layout__scrollSnap_operator
   version__layout__fullPageHeight: versionsPost_version__layout__fullPageHeight_operator
@@ -8338,6 +10788,11 @@ input versionsPost_where {
   version__layout__sideColumn__sideContent1: versionsPost_version__layout__sideColumn__sideContent1_operator
   version__layout__sideColumn__sideContent2: versionsPost_version__layout__sideColumn__sideContent2_operator
   version__layout__mainColumn__style: versionsPost_version__layout__mainColumn__style_operator
+  version__layout__mainColumn__postArchive__category: versionsPost_version__layout__mainColumn__postArchive__category_operator
+  version__layout__mainColumn__postArchive__limit: versionsPost_version__layout__mainColumn__postArchive__limit_operator
+  version__layout__mainColumn__postArchive__showPageRange: versionsPost_version__layout__mainColumn__postArchive__showPageRange_operator
+  version__layout__mainColumn__postArchive__populatedDocs: versionsPost_version__layout__mainColumn__postArchive__populatedDocs_Relation
+  version__layout__mainColumn__postArchive__populatedDocsTotal: versionsPost_version__layout__mainColumn__postArchive__populatedDocsTotal_operator
   version__layout__mainColumn__column1: versionsPost_version__layout__mainColumn__column1_operator
   version__layout__mainColumn__column2: versionsPost_version__layout__mainColumn__column2_operator
   version__layout__id: versionsPost_version__layout__id_operator
@@ -8482,6 +10937,12 @@ input versionsPost_version__card__overlayImage_operator {
 }
 
 input versionsPost_version__card__showDate_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsPost_version__card__hideTitle_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
@@ -8753,8 +11214,53 @@ input versionsPost_version__layout__mainColumn__style_operator {
 }
 
 enum versionsPost_version__layout__mainColumn__style_Input {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input versionsPost_version__layout__mainColumn__postArchive__category_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input versionsPost_version__layout__mainColumn__postArchive__limit_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input versionsPost_version__layout__mainColumn__postArchive__showPageRange_operator {
+  equals: Boolean
+  not_equals: Boolean
+  exists: Boolean
+}
+
+input versionsPost_version__layout__mainColumn__postArchive__populatedDocs_Relation {
+  relationTo: versionsPost_version__layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo
+  value: JSON
+}
+
+enum versionsPost_version__layout__mainColumn__postArchive__populatedDocs_Relation_RelationTo {
+  posts
+}
+
+input versionsPost_version__layout__mainColumn__postArchive__populatedDocsTotal_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
 }
 
 input versionsPost_version__layout__mainColumn__column1_operator {
@@ -8907,6 +11413,7 @@ input versionsPost_where_and {
   version__card__backgroundColour: versionsPost_version__card__backgroundColour_operator
   version__card__overlayImage: versionsPost_version__card__overlayImage_operator
   version__card__showDate: versionsPost_version__card__showDate_operator
+  version__card__hideTitle: versionsPost_version__card__hideTitle_operator
   version__layout__sideContentPosition: versionsPost_version__layout__sideContentPosition_operator
   version__layout__scrollSnap: versionsPost_version__layout__scrollSnap_operator
   version__layout__fullPageHeight: versionsPost_version__layout__fullPageHeight_operator
@@ -8934,6 +11441,11 @@ input versionsPost_where_and {
   version__layout__sideColumn__sideContent1: versionsPost_version__layout__sideColumn__sideContent1_operator
   version__layout__sideColumn__sideContent2: versionsPost_version__layout__sideColumn__sideContent2_operator
   version__layout__mainColumn__style: versionsPost_version__layout__mainColumn__style_operator
+  version__layout__mainColumn__postArchive__category: versionsPost_version__layout__mainColumn__postArchive__category_operator
+  version__layout__mainColumn__postArchive__limit: versionsPost_version__layout__mainColumn__postArchive__limit_operator
+  version__layout__mainColumn__postArchive__showPageRange: versionsPost_version__layout__mainColumn__postArchive__showPageRange_operator
+  version__layout__mainColumn__postArchive__populatedDocs: versionsPost_version__layout__mainColumn__postArchive__populatedDocs_Relation
+  version__layout__mainColumn__postArchive__populatedDocsTotal: versionsPost_version__layout__mainColumn__postArchive__populatedDocsTotal_operator
   version__layout__mainColumn__column1: versionsPost_version__layout__mainColumn__column1_operator
   version__layout__mainColumn__column2: versionsPost_version__layout__mainColumn__column2_operator
   version__layout__id: versionsPost_version__layout__id_operator
@@ -8967,6 +11479,7 @@ input versionsPost_where_or {
   version__card__backgroundColour: versionsPost_version__card__backgroundColour_operator
   version__card__overlayImage: versionsPost_version__card__overlayImage_operator
   version__card__showDate: versionsPost_version__card__showDate_operator
+  version__card__hideTitle: versionsPost_version__card__hideTitle_operator
   version__layout__sideContentPosition: versionsPost_version__layout__sideContentPosition_operator
   version__layout__scrollSnap: versionsPost_version__layout__scrollSnap_operator
   version__layout__fullPageHeight: versionsPost_version__layout__fullPageHeight_operator
@@ -8994,6 +11507,11 @@ input versionsPost_where_or {
   version__layout__sideColumn__sideContent1: versionsPost_version__layout__sideColumn__sideContent1_operator
   version__layout__sideColumn__sideContent2: versionsPost_version__layout__sideColumn__sideContent2_operator
   version__layout__mainColumn__style: versionsPost_version__layout__mainColumn__style_operator
+  version__layout__mainColumn__postArchive__category: versionsPost_version__layout__mainColumn__postArchive__category_operator
+  version__layout__mainColumn__postArchive__limit: versionsPost_version__layout__mainColumn__postArchive__limit_operator
+  version__layout__mainColumn__postArchive__showPageRange: versionsPost_version__layout__mainColumn__postArchive__showPageRange_operator
+  version__layout__mainColumn__postArchive__populatedDocs: versionsPost_version__layout__mainColumn__postArchive__populatedDocs_Relation
+  version__layout__mainColumn__postArchive__populatedDocsTotal: versionsPost_version__layout__mainColumn__postArchive__populatedDocsTotal_operator
   version__layout__mainColumn__column1: versionsPost_version__layout__mainColumn__column1_operator
   version__layout__mainColumn__column2: versionsPost_version__layout__mainColumn__column2_operator
   version__layout__id: versionsPost_version__layout__id_operator
@@ -9027,19 +11545,17 @@ type allMedia {
 }
 
 input Media_where {
-  media: Media_media_operator
   alt: Media_alt_operator
   caption: Media_caption_operator
+  media: Media_media_operator
+  mediaDark: Media_mediaDark_operator
+  mediaMobile: Media_mediaMobile_operator
+  mediaMobileDark: Media_mediaMobileDark_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   id: Media_id_operator
   AND: [Media_where_and]
   OR: [Media_where_or]
-}
-
-input Media_media_operator {
-  equals: String
-  not_equals: String
 }
 
 input Media_alt_operator {
@@ -9057,6 +11573,29 @@ input Media_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Media_media_operator {
+  equals: String
+  not_equals: String
+}
+
+input Media_mediaDark_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input Media_mediaMobile_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input Media_mediaMobileDark_operator {
+  equals: String
+  not_equals: String
   exists: Boolean
 }
 
@@ -9093,9 +11632,12 @@ input Media_id_operator {
 }
 
 input Media_where_and {
-  media: Media_media_operator
   alt: Media_alt_operator
   caption: Media_caption_operator
+  media: Media_media_operator
+  mediaDark: Media_mediaDark_operator
+  mediaMobile: Media_mediaMobile_operator
+  mediaMobileDark: Media_mediaMobileDark_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   id: Media_id_operator
@@ -9104,9 +11646,12 @@ input Media_where_and {
 }
 
 input Media_where_or {
-  media: Media_media_operator
   alt: Media_alt_operator
   caption: Media_caption_operator
+  media: Media_media_operator
+  mediaDark: Media_mediaDark_operator
+  mediaMobile: Media_mediaMobile_operator
+  mediaMobileDark: Media_mediaMobileDark_operator
   updatedAt: Media_updatedAt_operator
   createdAt: Media_createdAt_operator
   id: Media_id_operator
@@ -9123,34 +11668,14 @@ type mediaDocAccess {
 }
 
 type MediaDocAccessFields {
-  media: MediaDocAccessFields_media
   alt: MediaDocAccessFields_alt
   caption: MediaDocAccessFields_caption
+  media: MediaDocAccessFields_media
+  mediaDark: MediaDocAccessFields_mediaDark
+  mediaMobile: MediaDocAccessFields_mediaMobile
+  mediaMobileDark: MediaDocAccessFields_mediaMobileDark
   updatedAt: MediaDocAccessFields_updatedAt
   createdAt: MediaDocAccessFields_createdAt
-}
-
-type MediaDocAccessFields_media {
-  create: MediaDocAccessFields_media_Create
-  read: MediaDocAccessFields_media_Read
-  update: MediaDocAccessFields_media_Update
-  delete: MediaDocAccessFields_media_Delete
-}
-
-type MediaDocAccessFields_media_Create {
-  permission: Boolean!
-}
-
-type MediaDocAccessFields_media_Read {
-  permission: Boolean!
-}
-
-type MediaDocAccessFields_media_Update {
-  permission: Boolean!
-}
-
-type MediaDocAccessFields_media_Delete {
-  permission: Boolean!
 }
 
 type MediaDocAccessFields_alt {
@@ -9196,6 +11721,98 @@ type MediaDocAccessFields_caption_Update {
 }
 
 type MediaDocAccessFields_caption_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_media {
+  create: MediaDocAccessFields_media_Create
+  read: MediaDocAccessFields_media_Read
+  update: MediaDocAccessFields_media_Update
+  delete: MediaDocAccessFields_media_Delete
+}
+
+type MediaDocAccessFields_media_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_media_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_media_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_media_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaDark {
+  create: MediaDocAccessFields_mediaDark_Create
+  read: MediaDocAccessFields_mediaDark_Read
+  update: MediaDocAccessFields_mediaDark_Update
+  delete: MediaDocAccessFields_mediaDark_Delete
+}
+
+type MediaDocAccessFields_mediaDark_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaDark_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaDark_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaDark_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobile {
+  create: MediaDocAccessFields_mediaMobile_Create
+  read: MediaDocAccessFields_mediaMobile_Read
+  update: MediaDocAccessFields_mediaMobile_Update
+  delete: MediaDocAccessFields_mediaMobile_Delete
+}
+
+type MediaDocAccessFields_mediaMobile_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobile_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobile_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobile_Delete {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobileDark {
+  create: MediaDocAccessFields_mediaMobileDark_Create
+  read: MediaDocAccessFields_mediaMobileDark_Read
+  update: MediaDocAccessFields_mediaMobileDark_Update
+  delete: MediaDocAccessFields_mediaMobileDark_Delete
+}
+
+type MediaDocAccessFields_mediaMobileDark_Create {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobileDark_Read {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobileDark_Update {
+  permission: Boolean!
+}
+
+type MediaDocAccessFields_mediaMobileDark_Delete {
   permission: Boolean!
 }
 
@@ -12951,19 +15568,17 @@ type Site {
 }
 
 input Site_FaviconSVG_where {
-  media: Site_FaviconSVG_media_operator
   alt: Site_FaviconSVG_alt_operator
   caption: Site_FaviconSVG_caption_operator
+  media: Site_FaviconSVG_media_operator
+  mediaDark: Site_FaviconSVG_mediaDark_operator
+  mediaMobile: Site_FaviconSVG_mediaMobile_operator
+  mediaMobileDark: Site_FaviconSVG_mediaMobileDark_operator
   updatedAt: Site_FaviconSVG_updatedAt_operator
   createdAt: Site_FaviconSVG_createdAt_operator
   id: Site_FaviconSVG_id_operator
   AND: [Site_FaviconSVG_where_and]
   OR: [Site_FaviconSVG_where_or]
-}
-
-input Site_FaviconSVG_media_operator {
-  equals: String
-  not_equals: String
 }
 
 input Site_FaviconSVG_alt_operator {
@@ -12981,6 +15596,29 @@ input Site_FaviconSVG_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Site_FaviconSVG_media_operator {
+  equals: String
+  not_equals: String
+}
+
+input Site_FaviconSVG_mediaDark_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input Site_FaviconSVG_mediaMobile_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input Site_FaviconSVG_mediaMobileDark_operator {
+  equals: String
+  not_equals: String
   exists: Boolean
 }
 
@@ -13018,9 +15656,12 @@ input Site_FaviconSVG_id_operator {
 }
 
 input Site_FaviconSVG_where_and {
-  media: Site_FaviconSVG_media_operator
   alt: Site_FaviconSVG_alt_operator
   caption: Site_FaviconSVG_caption_operator
+  media: Site_FaviconSVG_media_operator
+  mediaDark: Site_FaviconSVG_mediaDark_operator
+  mediaMobile: Site_FaviconSVG_mediaMobile_operator
+  mediaMobileDark: Site_FaviconSVG_mediaMobileDark_operator
   updatedAt: Site_FaviconSVG_updatedAt_operator
   createdAt: Site_FaviconSVG_createdAt_operator
   id: Site_FaviconSVG_id_operator
@@ -13029,9 +15670,12 @@ input Site_FaviconSVG_where_and {
 }
 
 input Site_FaviconSVG_where_or {
-  media: Site_FaviconSVG_media_operator
   alt: Site_FaviconSVG_alt_operator
   caption: Site_FaviconSVG_caption_operator
+  media: Site_FaviconSVG_media_operator
+  mediaDark: Site_FaviconSVG_mediaDark_operator
+  mediaMobile: Site_FaviconSVG_mediaMobile_operator
+  mediaMobileDark: Site_FaviconSVG_mediaMobileDark_operator
   updatedAt: Site_FaviconSVG_updatedAt_operator
   createdAt: Site_FaviconSVG_createdAt_operator
   id: Site_FaviconSVG_id_operator
@@ -13040,19 +15684,17 @@ input Site_FaviconSVG_where_or {
 }
 
 input Site_FaviconICO_where {
-  media: Site_FaviconICO_media_operator
   alt: Site_FaviconICO_alt_operator
   caption: Site_FaviconICO_caption_operator
+  media: Site_FaviconICO_media_operator
+  mediaDark: Site_FaviconICO_mediaDark_operator
+  mediaMobile: Site_FaviconICO_mediaMobile_operator
+  mediaMobileDark: Site_FaviconICO_mediaMobileDark_operator
   updatedAt: Site_FaviconICO_updatedAt_operator
   createdAt: Site_FaviconICO_createdAt_operator
   id: Site_FaviconICO_id_operator
   AND: [Site_FaviconICO_where_and]
   OR: [Site_FaviconICO_where_or]
-}
-
-input Site_FaviconICO_media_operator {
-  equals: String
-  not_equals: String
 }
 
 input Site_FaviconICO_alt_operator {
@@ -13070,6 +15712,29 @@ input Site_FaviconICO_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input Site_FaviconICO_media_operator {
+  equals: String
+  not_equals: String
+}
+
+input Site_FaviconICO_mediaDark_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input Site_FaviconICO_mediaMobile_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input Site_FaviconICO_mediaMobileDark_operator {
+  equals: String
+  not_equals: String
   exists: Boolean
 }
 
@@ -13107,9 +15772,12 @@ input Site_FaviconICO_id_operator {
 }
 
 input Site_FaviconICO_where_and {
-  media: Site_FaviconICO_media_operator
   alt: Site_FaviconICO_alt_operator
   caption: Site_FaviconICO_caption_operator
+  media: Site_FaviconICO_media_operator
+  mediaDark: Site_FaviconICO_mediaDark_operator
+  mediaMobile: Site_FaviconICO_mediaMobile_operator
+  mediaMobileDark: Site_FaviconICO_mediaMobileDark_operator
   updatedAt: Site_FaviconICO_updatedAt_operator
   createdAt: Site_FaviconICO_createdAt_operator
   id: Site_FaviconICO_id_operator
@@ -13118,9 +15786,12 @@ input Site_FaviconICO_where_and {
 }
 
 input Site_FaviconICO_where_or {
-  media: Site_FaviconICO_media_operator
   alt: Site_FaviconICO_alt_operator
   caption: Site_FaviconICO_caption_operator
+  media: Site_FaviconICO_media_operator
+  mediaDark: Site_FaviconICO_mediaDark_operator
+  mediaMobile: Site_FaviconICO_mediaMobile_operator
+  mediaMobileDark: Site_FaviconICO_mediaMobileDark_operator
   updatedAt: Site_FaviconICO_updatedAt_operator
   createdAt: Site_FaviconICO_createdAt_operator
   id: Site_FaviconICO_id_operator
@@ -13526,7 +16197,7 @@ type HiddenLayout {
   createdAt: DateTime
 }
 
-union HiddenLayout_Layout = CallToActionBlock | MediaBlock | ArchiveBlock | CodeBlock | VimeoBlock
+union HiddenLayout_Layout = CallToActionBlock | MediaBlock | CodeBlock | VimeoBlock
 
 type CallToActionBlock {
   invertBackground: Boolean
@@ -13560,52 +16231,6 @@ enum MediaBlock_layout {
   twoColumn
   heroGrid
 }
-
-type ArchiveBlock {
-  introContent(depth: Int): JSON
-  populateBy: ArchiveBlock_populateBy
-  relationTo: ArchiveBlock_relationTo
-  category: [Category!]
-  limit: Float
-  showPageRange: Boolean
-  selectedDocs: [ArchiveBlock_SelectedDocs_Relationship!]
-  populatedDocs: [ArchiveBlock_PopulatedDocs_Relationship!]
-  populatedDocsTotal: Float
-  id: String
-  blockName: String
-  blockType: String
-}
-
-enum ArchiveBlock_populateBy {
-  collection
-  selection
-}
-
-enum ArchiveBlock_relationTo {
-  posts
-}
-
-type ArchiveBlock_SelectedDocs_Relationship {
-  relationTo: ArchiveBlock_SelectedDocs_RelationTo
-  value: ArchiveBlock_SelectedDocs
-}
-
-enum ArchiveBlock_SelectedDocs_RelationTo {
-  posts
-}
-
-union ArchiveBlock_SelectedDocs = Post
-
-type ArchiveBlock_PopulatedDocs_Relationship {
-  relationTo: ArchiveBlock_PopulatedDocs_RelationTo
-  value: ArchiveBlock_PopulatedDocs
-}
-
-enum ArchiveBlock_PopulatedDocs_RelationTo {
-  posts
-}
-
-union ArchiveBlock_PopulatedDocs = Post
 
 type CodeBlock {
   language: CodeBlock_language!
@@ -13645,19 +16270,17 @@ type VimeoBlock {
 }
 
 input VimeoBlock_PreviewImage_where {
-  media: VimeoBlock_PreviewImage_media_operator
   alt: VimeoBlock_PreviewImage_alt_operator
   caption: VimeoBlock_PreviewImage_caption_operator
+  media: VimeoBlock_PreviewImage_media_operator
+  mediaDark: VimeoBlock_PreviewImage_mediaDark_operator
+  mediaMobile: VimeoBlock_PreviewImage_mediaMobile_operator
+  mediaMobileDark: VimeoBlock_PreviewImage_mediaMobileDark_operator
   updatedAt: VimeoBlock_PreviewImage_updatedAt_operator
   createdAt: VimeoBlock_PreviewImage_createdAt_operator
   id: VimeoBlock_PreviewImage_id_operator
   AND: [VimeoBlock_PreviewImage_where_and]
   OR: [VimeoBlock_PreviewImage_where_or]
-}
-
-input VimeoBlock_PreviewImage_media_operator {
-  equals: String
-  not_equals: String
 }
 
 input VimeoBlock_PreviewImage_alt_operator {
@@ -13675,6 +16298,29 @@ input VimeoBlock_PreviewImage_caption_operator {
   not_equals: JSON
   like: JSON
   contains: JSON
+  exists: Boolean
+}
+
+input VimeoBlock_PreviewImage_media_operator {
+  equals: String
+  not_equals: String
+}
+
+input VimeoBlock_PreviewImage_mediaDark_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input VimeoBlock_PreviewImage_mediaMobile_operator {
+  equals: String
+  not_equals: String
+  exists: Boolean
+}
+
+input VimeoBlock_PreviewImage_mediaMobileDark_operator {
+  equals: String
+  not_equals: String
   exists: Boolean
 }
 
@@ -13712,9 +16358,12 @@ input VimeoBlock_PreviewImage_id_operator {
 }
 
 input VimeoBlock_PreviewImage_where_and {
-  media: VimeoBlock_PreviewImage_media_operator
   alt: VimeoBlock_PreviewImage_alt_operator
   caption: VimeoBlock_PreviewImage_caption_operator
+  media: VimeoBlock_PreviewImage_media_operator
+  mediaDark: VimeoBlock_PreviewImage_mediaDark_operator
+  mediaMobile: VimeoBlock_PreviewImage_mediaMobile_operator
+  mediaMobileDark: VimeoBlock_PreviewImage_mediaMobileDark_operator
   updatedAt: VimeoBlock_PreviewImage_updatedAt_operator
   createdAt: VimeoBlock_PreviewImage_createdAt_operator
   id: VimeoBlock_PreviewImage_id_operator
@@ -13723,9 +16372,12 @@ input VimeoBlock_PreviewImage_where_and {
 }
 
 input VimeoBlock_PreviewImage_where_or {
-  media: VimeoBlock_PreviewImage_media_operator
   alt: VimeoBlock_PreviewImage_alt_operator
   caption: VimeoBlock_PreviewImage_caption_operator
+  media: VimeoBlock_PreviewImage_media_operator
+  mediaDark: VimeoBlock_PreviewImage_mediaDark_operator
+  mediaMobile: VimeoBlock_PreviewImage_mediaMobile_operator
+  mediaMobileDark: VimeoBlock_PreviewImage_mediaMobileDark_operator
   updatedAt: VimeoBlock_PreviewImage_updatedAt_operator
   createdAt: VimeoBlock_PreviewImage_createdAt_operator
   id: VimeoBlock_PreviewImage_id_operator
@@ -14804,6 +17456,7 @@ type PagesFields_layout_mainColumn_Delete {
 
 type PagesFields_layout_mainColumn_Fields {
   style: PagesFields_layout_mainColumn_style
+  postArchive: PagesFields_layout_mainColumn_postArchive
   column1: PagesFields_layout_mainColumn_column1
   column2: PagesFields_layout_mainColumn_column2
 }
@@ -14828,6 +17481,153 @@ type PagesFields_layout_mainColumn_style_Update {
 }
 
 type PagesFields_layout_mainColumn_style_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive {
+  create: PagesFields_layout_mainColumn_postArchive_Create
+  read: PagesFields_layout_mainColumn_postArchive_Read
+  update: PagesFields_layout_mainColumn_postArchive_Update
+  delete: PagesFields_layout_mainColumn_postArchive_Delete
+  fields: PagesFields_layout_mainColumn_postArchive_Fields
+}
+
+type PagesFields_layout_mainColumn_postArchive_Create {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_Read {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_Update {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_Fields {
+  category: PagesFields_layout_mainColumn_postArchive_category
+  limit: PagesFields_layout_mainColumn_postArchive_limit
+  showPageRange: PagesFields_layout_mainColumn_postArchive_showPageRange
+  populatedDocs: PagesFields_layout_mainColumn_postArchive_populatedDocs
+  populatedDocsTotal: PagesFields_layout_mainColumn_postArchive_populatedDocsTotal
+}
+
+type PagesFields_layout_mainColumn_postArchive_category {
+  create: PagesFields_layout_mainColumn_postArchive_category_Create
+  read: PagesFields_layout_mainColumn_postArchive_category_Read
+  update: PagesFields_layout_mainColumn_postArchive_category_Update
+  delete: PagesFields_layout_mainColumn_postArchive_category_Delete
+}
+
+type PagesFields_layout_mainColumn_postArchive_category_Create {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_category_Read {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_category_Update {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_category_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_limit {
+  create: PagesFields_layout_mainColumn_postArchive_limit_Create
+  read: PagesFields_layout_mainColumn_postArchive_limit_Read
+  update: PagesFields_layout_mainColumn_postArchive_limit_Update
+  delete: PagesFields_layout_mainColumn_postArchive_limit_Delete
+}
+
+type PagesFields_layout_mainColumn_postArchive_limit_Create {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_limit_Read {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_limit_Update {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_limit_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_showPageRange {
+  create: PagesFields_layout_mainColumn_postArchive_showPageRange_Create
+  read: PagesFields_layout_mainColumn_postArchive_showPageRange_Read
+  update: PagesFields_layout_mainColumn_postArchive_showPageRange_Update
+  delete: PagesFields_layout_mainColumn_postArchive_showPageRange_Delete
+}
+
+type PagesFields_layout_mainColumn_postArchive_showPageRange_Create {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_showPageRange_Read {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_showPageRange_Update {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_showPageRange_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocs {
+  create: PagesFields_layout_mainColumn_postArchive_populatedDocs_Create
+  read: PagesFields_layout_mainColumn_postArchive_populatedDocs_Read
+  update: PagesFields_layout_mainColumn_postArchive_populatedDocs_Update
+  delete: PagesFields_layout_mainColumn_postArchive_populatedDocs_Delete
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocs_Create {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocs_Read {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocs_Update {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocs_Delete {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocsTotal {
+  create: PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Create
+  read: PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Read
+  update: PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Update
+  delete: PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Create {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Read {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Update {
+  permission: Boolean!
+}
+
+type PagesFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete {
   permission: Boolean!
 }
 
@@ -15385,6 +18185,7 @@ type PostsFields_card_Fields {
   backgroundColour: PostsFields_card_backgroundColour
   overlayImage: PostsFields_card_overlayImage
   showDate: PostsFields_card_showDate
+  hideTitle: PostsFields_card_hideTitle
 }
 
 type PostsFields_card_media {
@@ -15476,6 +18277,29 @@ type PostsFields_card_showDate_Update {
 }
 
 type PostsFields_card_showDate_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_card_hideTitle {
+  create: PostsFields_card_hideTitle_Create
+  read: PostsFields_card_hideTitle_Read
+  update: PostsFields_card_hideTitle_Update
+  delete: PostsFields_card_hideTitle_Delete
+}
+
+type PostsFields_card_hideTitle_Create {
+  permission: Boolean!
+}
+
+type PostsFields_card_hideTitle_Read {
+  permission: Boolean!
+}
+
+type PostsFields_card_hideTitle_Update {
+  permission: Boolean!
+}
+
+type PostsFields_card_hideTitle_Delete {
   permission: Boolean!
 }
 
@@ -16354,6 +19178,7 @@ type PostsFields_layout_mainColumn_Delete {
 
 type PostsFields_layout_mainColumn_Fields {
   style: PostsFields_layout_mainColumn_style
+  postArchive: PostsFields_layout_mainColumn_postArchive
   column1: PostsFields_layout_mainColumn_column1
   column2: PostsFields_layout_mainColumn_column2
 }
@@ -16378,6 +19203,153 @@ type PostsFields_layout_mainColumn_style_Update {
 }
 
 type PostsFields_layout_mainColumn_style_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive {
+  create: PostsFields_layout_mainColumn_postArchive_Create
+  read: PostsFields_layout_mainColumn_postArchive_Read
+  update: PostsFields_layout_mainColumn_postArchive_Update
+  delete: PostsFields_layout_mainColumn_postArchive_Delete
+  fields: PostsFields_layout_mainColumn_postArchive_Fields
+}
+
+type PostsFields_layout_mainColumn_postArchive_Create {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_Read {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_Update {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_Fields {
+  category: PostsFields_layout_mainColumn_postArchive_category
+  limit: PostsFields_layout_mainColumn_postArchive_limit
+  showPageRange: PostsFields_layout_mainColumn_postArchive_showPageRange
+  populatedDocs: PostsFields_layout_mainColumn_postArchive_populatedDocs
+  populatedDocsTotal: PostsFields_layout_mainColumn_postArchive_populatedDocsTotal
+}
+
+type PostsFields_layout_mainColumn_postArchive_category {
+  create: PostsFields_layout_mainColumn_postArchive_category_Create
+  read: PostsFields_layout_mainColumn_postArchive_category_Read
+  update: PostsFields_layout_mainColumn_postArchive_category_Update
+  delete: PostsFields_layout_mainColumn_postArchive_category_Delete
+}
+
+type PostsFields_layout_mainColumn_postArchive_category_Create {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_category_Read {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_category_Update {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_category_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_limit {
+  create: PostsFields_layout_mainColumn_postArchive_limit_Create
+  read: PostsFields_layout_mainColumn_postArchive_limit_Read
+  update: PostsFields_layout_mainColumn_postArchive_limit_Update
+  delete: PostsFields_layout_mainColumn_postArchive_limit_Delete
+}
+
+type PostsFields_layout_mainColumn_postArchive_limit_Create {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_limit_Read {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_limit_Update {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_limit_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_showPageRange {
+  create: PostsFields_layout_mainColumn_postArchive_showPageRange_Create
+  read: PostsFields_layout_mainColumn_postArchive_showPageRange_Read
+  update: PostsFields_layout_mainColumn_postArchive_showPageRange_Update
+  delete: PostsFields_layout_mainColumn_postArchive_showPageRange_Delete
+}
+
+type PostsFields_layout_mainColumn_postArchive_showPageRange_Create {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_showPageRange_Read {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_showPageRange_Update {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_showPageRange_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocs {
+  create: PostsFields_layout_mainColumn_postArchive_populatedDocs_Create
+  read: PostsFields_layout_mainColumn_postArchive_populatedDocs_Read
+  update: PostsFields_layout_mainColumn_postArchive_populatedDocs_Update
+  delete: PostsFields_layout_mainColumn_postArchive_populatedDocs_Delete
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocs_Create {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocs_Read {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocs_Update {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocs_Delete {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocsTotal {
+  create: PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Create
+  read: PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Read
+  update: PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Update
+  delete: PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Create {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Read {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Update {
+  permission: Boolean!
+}
+
+type PostsFields_layout_mainColumn_postArchive_populatedDocsTotal_Delete {
   permission: Boolean!
 }
 
@@ -16675,34 +19647,14 @@ type mediaAccess {
 }
 
 type MediaFields {
-  media: MediaFields_media
   alt: MediaFields_alt
   caption: MediaFields_caption
+  media: MediaFields_media
+  mediaDark: MediaFields_mediaDark
+  mediaMobile: MediaFields_mediaMobile
+  mediaMobileDark: MediaFields_mediaMobileDark
   updatedAt: MediaFields_updatedAt
   createdAt: MediaFields_createdAt
-}
-
-type MediaFields_media {
-  create: MediaFields_media_Create
-  read: MediaFields_media_Read
-  update: MediaFields_media_Update
-  delete: MediaFields_media_Delete
-}
-
-type MediaFields_media_Create {
-  permission: Boolean!
-}
-
-type MediaFields_media_Read {
-  permission: Boolean!
-}
-
-type MediaFields_media_Update {
-  permission: Boolean!
-}
-
-type MediaFields_media_Delete {
-  permission: Boolean!
 }
 
 type MediaFields_alt {
@@ -16748,6 +19700,98 @@ type MediaFields_caption_Update {
 }
 
 type MediaFields_caption_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_media {
+  create: MediaFields_media_Create
+  read: MediaFields_media_Read
+  update: MediaFields_media_Update
+  delete: MediaFields_media_Delete
+}
+
+type MediaFields_media_Create {
+  permission: Boolean!
+}
+
+type MediaFields_media_Read {
+  permission: Boolean!
+}
+
+type MediaFields_media_Update {
+  permission: Boolean!
+}
+
+type MediaFields_media_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_mediaDark {
+  create: MediaFields_mediaDark_Create
+  read: MediaFields_mediaDark_Read
+  update: MediaFields_mediaDark_Update
+  delete: MediaFields_mediaDark_Delete
+}
+
+type MediaFields_mediaDark_Create {
+  permission: Boolean!
+}
+
+type MediaFields_mediaDark_Read {
+  permission: Boolean!
+}
+
+type MediaFields_mediaDark_Update {
+  permission: Boolean!
+}
+
+type MediaFields_mediaDark_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobile {
+  create: MediaFields_mediaMobile_Create
+  read: MediaFields_mediaMobile_Read
+  update: MediaFields_mediaMobile_Update
+  delete: MediaFields_mediaMobile_Delete
+}
+
+type MediaFields_mediaMobile_Create {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobile_Read {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobile_Update {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobile_Delete {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobileDark {
+  create: MediaFields_mediaMobileDark_Create
+  read: MediaFields_mediaMobileDark_Read
+  update: MediaFields_mediaMobileDark_Update
+  delete: MediaFields_mediaMobileDark_Delete
+}
+
+type MediaFields_mediaMobileDark_Create {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobileDark_Read {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobileDark_Update {
+  permission: Boolean!
+}
+
+type MediaFields_mediaMobileDark_Delete {
   permission: Boolean!
 }
 
@@ -19755,13 +22799,32 @@ enum Page_Layout_SideColumn_ProjectHero_Links_Link_appearance_MutationInput {
 
 input mutationPage_Layout_MainColumnInput {
   style: Page_Layout_MainColumn_style_MutationInput!
+  postArchive: mutationPage_Layout_MainColumn_PostArchiveInput
   column1: JSON
   column2: JSON
 }
 
 enum Page_Layout_MainColumn_style_MutationInput {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input mutationPage_Layout_MainColumn_PostArchiveInput {
+  category: [Int]
+  limit: Float
+  showPageRange: Boolean
+  populatedDocs: [Page_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput]
+  populatedDocsTotal: Float
+}
+
+input Page_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput {
+  relationTo: Page_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo
+  value: JSON
+}
+
+enum Page_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo {
+  posts
 }
 
 input mutationPage_MetaInput {
@@ -19892,13 +22955,32 @@ enum PageUpdate_Layout_SideColumn_ProjectHero_Links_Link_appearance_MutationInpu
 
 input mutationPageUpdate_Layout_MainColumnInput {
   style: PageUpdate_Layout_MainColumn_style_MutationInput!
+  postArchive: mutationPageUpdate_Layout_MainColumn_PostArchiveInput
   column1: JSON
   column2: JSON
 }
 
 enum PageUpdate_Layout_MainColumn_style_MutationInput {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input mutationPageUpdate_Layout_MainColumn_PostArchiveInput {
+  category: [Int]
+  limit: Float
+  showPageRange: Boolean
+  populatedDocs: [PageUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput]
+  populatedDocsTotal: Float
+}
+
+input PageUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput {
+  relationTo: PageUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo
+  value: JSON
+}
+
+enum PageUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo {
+  posts
 }
 
 input mutationPageUpdate_MetaInput {
@@ -19940,6 +23022,7 @@ input mutationPost_CardInput {
   backgroundColour: String
   overlayImage: Boolean
   showDate: Boolean
+  hideTitle: Boolean
 }
 
 input mutationPost_LayoutInput {
@@ -20048,13 +23131,32 @@ enum Post_Layout_SideColumn_ProjectHero_Links_Link_appearance_MutationInput {
 
 input mutationPost_Layout_MainColumnInput {
   style: Post_Layout_MainColumn_style_MutationInput!
+  postArchive: mutationPost_Layout_MainColumn_PostArchiveInput
   column1: JSON
   column2: JSON
 }
 
 enum Post_Layout_MainColumn_style_MutationInput {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input mutationPost_Layout_MainColumn_PostArchiveInput {
+  category: [Int]
+  limit: Float
+  showPageRange: Boolean
+  populatedDocs: [Post_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput]
+  populatedDocsTotal: Float
+}
+
+input Post_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput {
+  relationTo: Post_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo
+  value: JSON
+}
+
+enum Post_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo {
+  posts
 }
 
 input mutationPost_MetaInput {
@@ -20096,6 +23198,7 @@ input mutationPostUpdate_CardInput {
   backgroundColour: String
   overlayImage: Boolean
   showDate: Boolean
+  hideTitle: Boolean
 }
 
 input mutationPostUpdate_LayoutInput {
@@ -20204,13 +23307,32 @@ enum PostUpdate_Layout_SideColumn_ProjectHero_Links_Link_appearance_MutationInpu
 
 input mutationPostUpdate_Layout_MainColumnInput {
   style: PostUpdate_Layout_MainColumn_style_MutationInput!
+  postArchive: mutationPostUpdate_Layout_MainColumn_PostArchiveInput
   column1: JSON
   column2: JSON
 }
 
 enum PostUpdate_Layout_MainColumn_style_MutationInput {
+  postArchive
   singleLayout
   twoColumns
+}
+
+input mutationPostUpdate_Layout_MainColumn_PostArchiveInput {
+  category: [Int]
+  limit: Float
+  showPageRange: Boolean
+  populatedDocs: [PostUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput]
+  populatedDocsTotal: Float
+}
+
+input PostUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInput {
+  relationTo: PostUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo
+  value: JSON
+}
+
+enum PostUpdate_Layout_MainColumn_PostArchive_PopulatedDocsRelationshipInputRelationTo {
+  posts
 }
 
 input mutationPostUpdate_MetaInput {
@@ -20225,17 +23347,23 @@ enum PostUpdate__status_MutationInput {
 }
 
 input mutationMediaInput {
-  media: String!
   alt: String!
   caption: JSON
+  media: String!
+  mediaDark: String
+  mediaMobile: String
+  mediaMobileDark: String
   updatedAt: String
   createdAt: String
 }
 
 input mutationMediaUpdateInput {
-  media: String
   alt: String
   caption: JSON
+  media: String
+  mediaDark: String
+  mediaMobile: String
+  mediaMobileDark: String
   updatedAt: String
   createdAt: String
 }
