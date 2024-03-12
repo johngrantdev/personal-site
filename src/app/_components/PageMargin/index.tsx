@@ -7,7 +7,7 @@ type Props = {
   ref?: Ref<HTMLDivElement>
 }
 
-export const PageMargin: React.FC<Props> = forwardRef<HTMLDivElement, Props>((props, ref) => {
+export const PageMargin = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { index = 0, children, className } = props
 
   return (

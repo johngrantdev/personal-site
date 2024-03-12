@@ -12,7 +12,7 @@ type Props = {
   ref?: Ref<HTMLDivElement>
 }
 
-export const Padding: React.FC<Props> = forwardRef<HTMLDivElement, Props>((props, ref) => {
+export const Padding = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { index = 0, top = false, bottom = false, fullHeight = false, children, className } = props
 
   return (
