@@ -68,6 +68,7 @@ export const ScreenProvider: React.FC<ScreenProviderProps> = ({ children }) => {
     updateScreenSize() // Set initial size
     window.addEventListener('resize', updateScreenSize)
     return () => window.removeEventListener('resize', updateScreenSize)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Empty dependency array to run only once on mount
 
   return <ScreenContext.Provider value={{ screen, setScreen }}>{children}</ScreenContext.Provider>
