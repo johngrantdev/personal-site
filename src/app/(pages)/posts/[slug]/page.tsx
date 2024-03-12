@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
-import { Keyword, Post } from '../../../../payload/payload-types'
+import { Keyword, Post as PostType } from '../../../../payload/payload-types'
 import { fetchDoc } from '../../../_api/fetchDoc'
 import { fetchDocs } from '../../../_api/fetchDocs'
 import { Layouts } from '../../../_components/Layouts'
@@ -15,10 +15,10 @@ import { generateMeta } from '../../../_utilities/generateMeta'
 export default async function Post({ params: { slug } }) {
   const { isEnabled: isDraftMode } = draftMode()
 
-  let post: Post | null = null
+  let post: PostType | null = null
 
   try {
-    post = await fetchDoc<Post>({
+    post = await fetchDoc<PostType>({
       collection: 'posts',
       slug,
       draft: isDraftMode,
@@ -38,7 +38,7 @@ export default async function Post({ params: { slug } }) {
   ) as Keyword[]
   const relatedPosts = (post.relatedPosts || []).filter(
     relatedPost => typeof relatedPost !== 'number',
-  ) as Post[]
+  ) as PostType[]
 
   return (
     <PageMargin className="grow">
@@ -61,7 +61,7 @@ export default async function Post({ params: { slug } }) {
 
 export async function generateStaticParams() {
   try {
-    const posts = await fetchDocs<Post>('posts')
+    const posts = await fetchDocs<PostType>('posts')
     return posts?.map(({ slug }) => slug)
   } catch (error) {
     return []
@@ -71,10 +71,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params: { slug } }): Promise<Metadata> {
   const { isEnabled: isDraftMode } = draftMode()
 
-  let post: Post | null = null
+  let post: PostType | null = null
 
   try {
-    post = await fetchDoc<Post>({
+    post = await fetchDoc<PostType>({
       collection: 'posts',
       slug,
       draft: isDraftMode,

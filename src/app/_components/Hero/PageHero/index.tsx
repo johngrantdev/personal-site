@@ -14,7 +14,7 @@ export const PageHero: React.FC<PageHeroProps> = props => {
 
   return (
     <div className={className}>
-      {media && <Media className="pb-4" />}
+      {media && typeof media === 'object' && <Media className="pb-4" resource={media} />}
       <RichText className="py-0 mt-0" content={description} />
       <div className="w-full justify-center mt-5 flex xl:flex-col items-center xl:items-start">
         {Array.isArray(links) &&

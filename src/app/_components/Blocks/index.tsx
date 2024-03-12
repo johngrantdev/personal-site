@@ -7,7 +7,6 @@ import {
   MediaBlock as MediaBlockType,
   VimeoBlock as VimeoBlockType,
 } from '../../../payload/payload-types'
-import { ArchiveBlock } from '../../_blocks/ArchiveBlock'
 import { CallToActionBlock } from '../../_blocks/CallToAction'
 import { CodeBlock } from '../../_blocks/CodeBlock'
 import { MediaBlock } from '../../_blocks/MediaBlock'

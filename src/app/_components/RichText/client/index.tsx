@@ -5,17 +5,19 @@ import { animated, useSpring } from '@react-spring/web'
 import { TOCItem, usePage } from '../../../_providers/Context/pageContext'
 
 interface RichTextProps {
-  children: React.ReactNode
+  content: React.ReactNode
   className?: string
   tableOfContents: TOCItem[]
 }
 
 export const RichTextClient: React.FC<RichTextProps> = ({
-  children,
+  content,
   className = '',
   tableOfContents,
 }) => {
+  const [clientContent, setClientContent] = useState<React.ReactNode>(content)
   const { setTableOfContents } = usePage()
+
   useEffect(() => {
     setTableOfContents(tableOfContents)
   }, [tableOfContents, setTableOfContents])
@@ -23,8 +25,11 @@ export const RichTextClient: React.FC<RichTextProps> = ({
   const [load, setLoad] = useState(false)
 
   useEffect(() => {
-    setLoad(true)
-  }, [])
+    setClientContent(content)
+    if (content) {
+      setLoad(true)
+    }
+  }, [content]) // Ensure content is a dependency
 
   const fade = useSpring({
     opacity: load ? 1 : 0,
@@ -34,7 +39,7 @@ export const RichTextClient: React.FC<RichTextProps> = ({
 
   return (
     <animated.div style={fade} className={className}>
-      {children}
+      {clientContent}
     </animated.div>
   )
 }

@@ -1,3 +1,4 @@
+'use client'
 import React, { Fragment } from 'react'
 
 import { Hero as HeroType } from '../../../../payload/payload-types'

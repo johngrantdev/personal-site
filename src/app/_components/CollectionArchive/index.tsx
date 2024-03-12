@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { Post } from '../../../payload/payload-types'
-import type { ArchiveBlockProps } from '../../_blocks/ArchiveBlock'
+import { Post, PostArchive } from '../../../payload/payload-types'
 import { CardStatic } from '../Card/static'
 import { PageRange } from '../PageRange'
 import { Pagination } from '../Pagination'
@@ -25,10 +24,9 @@ export type Props = {
   onResultChange?: (result: Result) => void // eslint-disable-line no-unused-vars
   sort?: string
   limit?: number
-  populatedDocs?: ArchiveBlockProps['populatedDocs']
-  selectedDocs?: ArchiveBlockProps['selectedDocs']
-  populatedDocsTotal?: ArchiveBlockProps['populatedDocsTotal']
-  category?: ArchiveBlockProps['category']
+  populatedDocs?: PostArchive['populatedDocs']
+  populatedDocsTotal?: PostArchive['populatedDocsTotal']
+  category?: PostArchive['category']
 }
 
 export const CollectionArchive: React.FC<Props> = props => {
@@ -41,15 +39,11 @@ export const CollectionArchive: React.FC<Props> = props => {
     limit = 12,
     populatedDocs,
     populatedDocsTotal,
-    selectedDocs,
     category: catFromProps,
     populateBy,
   } = props
 
-  const docs =
-    (populatedDocs?.map(doc => doc.value) as Post[]) ||
-    (selectedDocs?.map(doc => doc.value) as Post[]) ||
-    []
+  const docs = (populatedDocs?.map(doc => doc.value) as Post[]) || []
 
   return (
     <div className={[className].filter(Boolean).join(' ')}>
@@ -59,7 +53,7 @@ export const CollectionArchive: React.FC<Props> = props => {
           docs?.map((doc, index) => {
             return (
               <div key={index}>
-                <CardStatic index={index} relationTo={relationTo} doc={doc} showCategory />
+                <CardStatic index={index} relationTo="posts" doc={doc} showCategory />
               </div>
             )
           })}

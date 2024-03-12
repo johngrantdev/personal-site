@@ -1,4 +1,5 @@
 import { ARCHIVE_BLOCK, CALL_TO_ACTION_BLOCK, MEDIA_BLOCK } from './blocks'
+import { CARD } from './card'
 import { LINK_FIELDS } from './link'
 import { MEDIA } from './media'
 import { META } from './meta'
@@ -73,6 +74,7 @@ export const POST = `
           description
           publishedAt
           card {
+            ${CARD}
             backgroundColour
             overlayImage
             showDate

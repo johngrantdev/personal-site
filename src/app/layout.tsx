@@ -46,13 +46,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          {/* @ts-expect-error */}
           <Header siteSettings={siteSettings} />
           <PageContainer>
             <div className="flex flex-col h-full">
-              {/* <SwipeMenu className="" navItems={siteSettings.navItems} /> */}
               {children}
-              {/* @ts-expect-error */}
               <Footer siteSettings={siteSettings} />
               {/* <TailwindBreakpoints /> */}
             </div>

@@ -130,54 +130,54 @@ const serialize = (
         switch (node.tag) {
           case 'h1':
             heading = (
-              <h1 key={i} id={id} className={`text-6xl scroll-mt-24 ${textStyles}`}>
+              <h1 id={id} className={`text-6xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h1>
             )
             break
           case 'h2':
             heading = (
-              <h2 key={i} id={id} className={`text-5xl scroll-mt-24 ${textStyles}`}>
+              <h2 id={id} className={`text-5xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h2>
             )
             break
           case 'h3':
             heading = (
-              <h3 key={i} id={id} className={`text-4xl scroll-mt-24 ${textStyles}`}>
+              <h3 id={id} className={`text-4xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h3>
             )
             break
           case 'h4':
             heading = (
-              <h4 key={i} id={id} className={`text-3xl scroll-mt-24 ${textStyles}`}>
+              <h4 id={id} className={`text-3xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h4>
             )
             break
           case 'h5':
             heading = (
-              <h5 key={i} id={id} className={`text-2xl scroll-mt-24 ${textStyles}`}>
+              <h5 id={id} className={`text-2xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h5>
             )
             break
           case 'h6':
             heading = (
-              <h6 key={i} id={id} className={`text-xl scroll-mt-24 ${textStyles}`}>
+              <h6 id={id} className={`text-xl scroll-mt-24 ${textStyles}`}>
                 {serialize(node.children)}
               </h6>
             )
             break
         }
-        return <div>{heading}</div>
+        return <div key={i}>{heading}</div>
       case 'list':
         switch (node.tag) {
           case 'ul':
             return (
-              <div className="w-full flex justify-center xl:justify-start">
-                <ul className="list-disc pl-5 pb-6 text-left" key={i}>
+              <div key={i} className="w-full flex justify-center xl:justify-start">
+                <ul className="list-disc pl-5 pb-6 text-left">
                   {serialize(node.children)}
                 </ul>
               </div>
@@ -215,8 +215,8 @@ const serialize = (
         )
       case 'block':
         return (
-          <div className="pb-6">
-            <Blocks key={i} blocks={[node.fields]} />
+          <div key={i} className="pb-6">
+            <Blocks blocks={[node.fields]} />
           </div>
         )
     }

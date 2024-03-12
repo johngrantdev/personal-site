@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Post } from '../../../payload/payload-types'
-import { Card } from '../../_components/Card'
+import { CardStatic } from '../../_components/Card/static'
 import { Padding } from '../../_components/Padding'
 
 export type RelatedPostsProps = {
@@ -21,11 +21,11 @@ export const RelatedPosts: React.FC<RelatedPostsProps> = props => {
           {introContent}
         </h3>
       )}
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full gap-3">
-        {docs?.map((doc, index) => {
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-3">
+        {docs && docs?.map((doc, index) => {
           if (typeof doc === 'string') return null
 
-          return <Card key={index} doc={doc} relationTo="posts" showCategory />
+          return <CardStatic key={index} doc={doc} relationTo="posts" showCategory />
         })}
       </div>
     </Padding>

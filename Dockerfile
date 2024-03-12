@@ -1,33 +1,35 @@
-FROM node:18.8-alpine as base
+FROM node:18.19-alpine as base
 
 FROM base as builder
 
 WORKDIR /home/node/app
 
-RUN apk add --no-cache make gcc g++ python3
-
 COPY package*.json ./
-# COPY yarn.lock ./
+
+RUN npm install -g pnpm
+
+# RUN apk add --no-cache make gcc g++ python3
 
 COPY . .
 COPY .env.prod ./.env
-RUN yarn install
-RUN yarn build
+RUN pnpm install
+RUN pnpm build
 
 FROM base as runtime
 
 ENV NODE_ENV=production
 ENV PAYLOAD_CONFIG_PATH=dist/payload/payload.config.js
 
-WORKDIR /home/node/app
+# WORKDIR /home/node/app
 COPY package*.json  ./
-COPY yarn.lock ./
+COPY pnpm-lock.yaml ./
 
-RUN yarn install --production
+RUN npm install -g pnpm
+
+RUN pnpm install --production
 
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/build ./build
-# COPY --from=builder /home/node/app/migrations ./migrations
 COPY --from=builder /home/node/app/.next ./.next
 
 # Copy next.config.js and its dependencies

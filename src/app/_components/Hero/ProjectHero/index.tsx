@@ -1,3 +1,4 @@
+'use client'
 import React, { Fragment } from 'react'
 
 import { ProjectHero as ProjectHeroType } from '../../../../payload/payload-types'
