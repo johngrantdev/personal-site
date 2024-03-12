@@ -6,9 +6,20 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   images: {
-    domains: ['localhost', process.env.NEXT_PUBLIC_SERVER_URL]
-      .filter(Boolean)
-      .map(url => url.replace(/https?:\/\//, '')),
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: process.env.PORT || '3000',
+      },
+      {
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_SERVER_URL ? new URL(process.env.NEXT_PUBLIC_SERVER_URL).hostname : undefined,
+      }
+    ].filter(pattern => pattern.hostname),
+    // domains: ['localhost', process.env.NEXT_PUBLIC_SERVER_URL]
+    //   .filter(Boolean)
+    //   .map(url => url.replace(/https?:\/\//, '')),
   },
   redirects,
   async headers() {
