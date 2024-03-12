@@ -27,9 +27,8 @@ const RichText: React.FC<RichTextProps> = ({ className = '', content, hasTOC = f
     <RichTextClient
       className={`first:mt-0 last:mb-0 ${className}`}
       tableOfContents={hasTOC && tocItems}
-    >
-      {serializedRichText}
-    </RichTextClient>
+      content={serializedRichText}
+    />
   )
 }
 
