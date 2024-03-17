@@ -1,33 +1,34 @@
 import React from 'react'
 
 import { Post } from '../../../payload/payload-types'
-import { CardStatic } from '../../_components/Card/static'
-import { Padding } from '../../_components/Padding'
+import { CollectionArchive } from '../CollectionArchive'
+import { Column, Layout } from '../Layout'
 
 export type RelatedPostsProps = {
-  introContent?: string
+  index: number
   docs?: Post[]
 }
 
 export const RelatedPosts: React.FC<RelatedPostsProps> = props => {
-  const { introContent, docs } = props
+  const { index, docs } = props
 
   return (
-    <Padding className="w-full snap-start flex flex-col lg:flex-row grow">
-      {introContent && (
-        <h3
-          className={`text-2xl flex-none w-full text-center item lg:text-left lg:w-80 overflow-hidden`}
+    <div key={index}>
+        <Layout
+          sideColumn={true}
+          bottom={true}
         >
-          {introContent}
-        </h3>
-      )}
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-3">
-        {docs && docs?.map((doc, index) => {
-          if (typeof doc === 'string') return null
-
-          return <CardStatic key={index} doc={doc} relationTo="posts" showCategory />
-        })}
-      </div>
-    </Padding>
+          <Column position="side">
+            <h3
+              className={`text-2xl flex-none w-full text-center item lg:text-left lg:w-80 overflow-hidden`}
+            >
+              More
+            </h3>
+          </Column>
+          <Column position="main">
+            <CollectionArchive className='w-full' docs={docs} />
+          </Column>
+        </Layout>
+    </div> 
   )
 }
