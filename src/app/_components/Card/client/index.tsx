@@ -44,7 +44,7 @@ export const CardClient: React.FC<{
   const [localMousePosition, setLocalMousePosition] = useState({ x: 50, y: 50 })
 
   useEffect(() => {
-    if (cardRef.current) {
+    if (cardRef.current && screen.size > screen.breakpoints.md) {
       const rect = cardRef.current.getBoundingClientRect()
       // Calculate mouse position relative to the card
       const x = ((mousePosition.x - rect.left) / rect.width) * 100
@@ -65,19 +65,21 @@ export const CardClient: React.FC<{
   }, [loadDelay])
 
   useEffect(() => {
-    let timeoutId
-
-    if (hover) {
-      timeoutId = setTimeout(() => {
-        setHoverDelayed(true)
-      }, 300)
-    } else {
-      setHoverDelayed(false)
-    }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
+    if (screen.size > screen.breakpoints.md) {
+      let timeoutId
+  
+      if (hover) {
+        timeoutId = setTimeout(() => {
+          setHoverDelayed(true)
+        }, 300)
+      } else {
+        setHoverDelayed(false)
+      }
+  
+      return () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+        }
       }
     }
   }, [hover])
