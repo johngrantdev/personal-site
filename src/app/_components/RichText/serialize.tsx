@@ -48,7 +48,7 @@ const serialize = (
       return null
     }
     // text styles
-    const paddingTop = 'pb-6'
+    const paddingBottom = 'pb-6 last:pb-0'
     // set alignment styles
     let textAlignment = ''
     if (typeof node.format === 'string') {
@@ -67,7 +67,7 @@ const serialize = (
     if (node.indent) {
       textIndent = ` indent-${node.indent * 6}`
     }
-    const textStyles = `${paddingTop}${textAlignment}${textIndent}`
+    const textStyles = `${paddingBottom}${textAlignment}${textIndent}`
 
     switch (node.type) {
       case 'root':
@@ -130,7 +130,7 @@ const serialize = (
         switch (node.tag) {
           case 'h1':
             heading = (
-              <h1 id={id} className={`text-6xl scroll-mt-24 ${textStyles}`}>
+              <h1 id={id} className={`text-6xl scroll-mt-24 mt-6 ${textStyles}`}>
                 {serialize(node.children)}
               </h1>
             )
@@ -199,11 +199,13 @@ const serialize = (
           </blockquote>
         )
       case 'paragraph':
-        return (
-          <p className={`${textStyles}`} key={i}>
-            {serialize(node.children)}
-          </p>
-        )
+        if (node.children.length > 0) {
+          return (
+            <p className={`${textStyles}`} key={i}>
+              {serialize(node.children)}
+            </p>
+          )
+        } else return <></>
       case 'upload':
         return (
           <Media
@@ -215,7 +217,7 @@ const serialize = (
         )
       case 'block':
         return (
-          <div key={i} className="pb-6">
+          <div key={i} className="pb-6 last:pb-0">
             <Blocks blocks={[node.fields]} />
           </div>
         )
