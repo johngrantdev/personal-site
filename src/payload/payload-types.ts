@@ -521,8 +521,11 @@ export interface MediaBlock {
   sideCaption?: boolean | null;
   layout?: ('default' | 'twoColumn' | 'heroGrid') | null;
   media1: number | Media;
+  media1ShowCaption: boolean | null;
   media2?: (number | null) | Media;
+  media2ShowCaption: boolean | null;
   media3?: (number | null) | Media;
+  media3ShowCaption: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
