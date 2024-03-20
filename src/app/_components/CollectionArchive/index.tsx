@@ -41,7 +41,6 @@ export const CollectionArchive: React.FC<Props> = props => {
 
   return (
     <div className={className}>
-      <div className="absolute left-0 top-[-24]" />
       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-3">
         {docs &&
           docs?.map((doc, index) => {
