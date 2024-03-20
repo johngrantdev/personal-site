@@ -5,7 +5,6 @@ import { Column, Layout } from '../Layout'
 import { MainColumn } from './MainColumn'
 import { SideColumn } from './SideColumn'
 import { RelatedPosts } from '../RelatedPosts'
-import { CollectionArchive } from '../CollectionArchive'
 
 export type LayoutsProps = {
   layouts: LayoutType
@@ -22,7 +21,6 @@ export const Layouts: React.FC<LayoutsProps> = props => {
       <div className="flex flex-col gap-y-4">
         {layouts.map((layout, index) => {
           const top = index === 0 ? true : false
-          const bottom = index === layouts.length - 1 ? true : false
           const sideColumn = layout.sideColumn.style !== 'none'
           const hasTOC = layout.sideColumn.style === 'postHero'
           return (
@@ -30,7 +28,7 @@ export const Layouts: React.FC<LayoutsProps> = props => {
               <Layout
                 sideColumn={sideColumn}
                 top={top}
-                bottom={bottom}
+                bottom={false}
                 fullheight={layout.fullPageHeight}
               >
                 <Column position="side">

@@ -51,35 +51,88 @@ export const MediaBlock: Block = {
       ],
     },
     {
-      name: 'media1',
-      label: 'Media 1',
-      type: 'relationship',
-      relationTo: 'media',
-      required: true,
+      type: 'row',
+      fields: [
+        {
+          name: 'media1',
+          label: 'Media 1',
+          type: 'relationship',
+          relationTo: 'media',
+          required: true,
+          admin: {
+            width: '70%',
+          },
+        },
+        {
+          name: 'media1ShowCaption',
+          label: 'Show Caption?',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            width: '30%',
+          },
+        },
+      ],
     },
     {
-      name: 'media2',
-      label: 'Media 2',
-      type: 'relationship',
-      relationTo: 'media',
-      required: true,
-      admin: {
-        condition: (_, siblingData) => {
-          return siblingData.layout === 'twoColumn' || siblingData.layout === 'heroGrid'
+      type: 'row',
+      fields: [
+        {
+          name: 'media2',
+          label: 'Media 2',
+          type: 'relationship',
+          relationTo: 'media',
+          required: true,
+          admin: {
+            width: '70%',
+            condition: (_, siblingData) => {
+              return siblingData.layout === 'twoColumn' || siblingData.layout === 'heroGrid'
+            },
+          },
         },
-      },
+        {
+          name: 'media2ShowCaption',
+          label: 'Show Caption?',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            width: '30%',
+            condition: (_, siblingData) => {
+              return siblingData.layout === 'twoColumn' || siblingData.layout === 'heroGrid'
+            },
+          },
+        },
+      ],
     },
     {
-      name: 'media3',
-      label: 'Media 3',
-      type: 'relationship',
-      relationTo: 'media',
-      required: true,
-      admin: {
-        condition: (_, siblingData) => {
-          return siblingData.layout === 'heroGrid'
+      type: 'row',
+      fields: [
+        {
+          name: 'media3',
+          label: 'Media 3',
+          type: 'relationship',
+          relationTo: 'media',
+          required: true,
+          admin: {
+            width: '70%',
+            condition: (_, siblingData) => {
+              return siblingData.layout === 'heroGrid'
+            },
+          },
         },
-      },
+        {
+          name: 'media3ShowCaption',
+          label: 'Show Caption?',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            width: '30%',
+            condition: (_, siblingData) => {
+              return siblingData.layout === 'heroGrid'
+            },
+          },
+        },
+      ],
     },
   ],
 }
