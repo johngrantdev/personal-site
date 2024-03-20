@@ -107,12 +107,17 @@ export const CardClient: React.FC<{
         ...fadeIn,
         ...backgroundStyle,
       }}
-      className={className}
+      className={[
+        `relative rounded-xl overflow-hidden drop-shadow-md h-full aspect-video md:aspect-square transition-transform safari-fix`,
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       {card.media && (
         <>
           <Media
-            imgClassName={`absolute inset-0 -z-10 object-cover transition-all duration-300 ${
+            imgClassName={`absolute inset-0 -z-20 object-cover transition-all duration-300 ${
               hover ? 'blur-sm scale-[1.15]' : 'scale-105'
             }`}
             resource={card.media}
@@ -124,7 +129,7 @@ export const CardClient: React.FC<{
               ...backgroundStyle,
               backgroundBlendMode: 'difference',
             }}
-            className={`absolute inset-0 z-[-1] transition-all duration-300 opacity-0
+            className={`absolute inset-0 -z-10 transition-all duration-300 opacity-0
             ${card.overlayImage && 'opacity-80'} ${hover && 'opacity-60'}`}
           />
         </>

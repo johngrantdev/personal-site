@@ -35,12 +35,6 @@ export const CardStatic: React.FC<{
   } = doc || {}
 
   const publishedDate = cardProps.showDate && formatDateTime(publishedAt)
-  const clientClassName = [
-    `relative rounded-xl overflow-hidden drop-shadow-md h-full aspect-video md:aspect-square transition-transform`,
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ')
   const titleToUse = titleFromProps || title
   const keywords =
     keywordsProps &&
@@ -68,7 +62,7 @@ export const CardStatic: React.FC<{
 
   return (
     <CardClient
-      className={clientClassName}
+      className={className}
       title={titleToUse}
       description={description}
       publishedDate={publishedDate}
