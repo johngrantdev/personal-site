@@ -5,12 +5,14 @@ import { animated, useSpring } from '@react-spring/web'
 import { TOCItem, usePage } from '../../../_providers/Context/pageContext'
 
 interface RichTextProps {
+  id?: string
   content: React.ReactNode
   className?: string
   tableOfContents: TOCItem[]
 }
 
 export const RichTextClient: React.FC<RichTextProps> = ({
+  id = '0',
   content,
   className = '',
   tableOfContents,
@@ -38,7 +40,7 @@ export const RichTextClient: React.FC<RichTextProps> = ({
   })
 
   return (
-    <animated.div style={fade} className={className}>
+    <animated.div key={id} style={fade} className={className}>
       {clientContent}
     </animated.div>
   )
