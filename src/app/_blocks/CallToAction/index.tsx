@@ -15,7 +15,7 @@ export const CallToActionBlock: React.FC<Props> = ({ id, links, richText, invert
   return (
     <div
       id={id}
-      className="px-6 pt-6 flex gap-14 items-center dark:bg-zinc-800 bg-zinc-600 text-zinc-100 rounded-lg drop-shadow-xl"
+      className="px-6 py-6 flex gap-14 items-center dark:bg-zinc-800 bg-zinc-600 text-zinc-100 rounded-lg drop-shadow-xl"
     >
       <div className="flex-grow">
         <RichText content={richText} />
