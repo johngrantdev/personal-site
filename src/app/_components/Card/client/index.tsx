@@ -44,7 +44,7 @@ export const CardClient: React.FC<{
   const [localMousePosition, setLocalMousePosition] = useState({ x: 50, y: 50 })
 
   useEffect(() => {
-    if (cardRef.current) {
+    if (cardRef.current && screen.size > screen.breakpoints.md) {
       const rect = cardRef.current.getBoundingClientRect()
       // Calculate mouse position relative to the card
       const x = ((mousePosition.x - rect.left) / rect.width) * 100
@@ -65,19 +65,21 @@ export const CardClient: React.FC<{
   }, [loadDelay])
 
   useEffect(() => {
-    let timeoutId
-
-    if (hover) {
-      timeoutId = setTimeout(() => {
-        setHoverDelayed(true)
-      }, 300)
-    } else {
-      setHoverDelayed(false)
-    }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
+    if (screen.size > screen.breakpoints.md) {
+      let timeoutId
+  
+      if (hover) {
+        timeoutId = setTimeout(() => {
+          setHoverDelayed(true)
+        }, 300)
+      } else {
+        setHoverDelayed(false)
+      }
+  
+      return () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+        }
       }
     }
   }, [hover])
@@ -105,12 +107,17 @@ export const CardClient: React.FC<{
         ...fadeIn,
         ...backgroundStyle,
       }}
-      className={className}
+      className={[
+        `relative rounded-xl overflow-hidden drop-shadow-md h-full aspect-video md:aspect-square transition-transform safari-fix`,
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       {card.media && (
         <>
           <Media
-            imgClassName={`absolute inset-0 -z-10 object-cover transition-all duration-300 ${
+            imgClassName={`absolute inset-0 -z-20 object-cover transition-all duration-300 ${
               hover ? 'blur-sm scale-[1.15]' : 'scale-105'
             }`}
             resource={card.media}
@@ -122,7 +129,7 @@ export const CardClient: React.FC<{
               ...backgroundStyle,
               backgroundBlendMode: 'difference',
             }}
-            className={`absolute inset-0 z-[-1] transition-all duration-300 opacity-0
+            className={`absolute inset-0 -z-10 transition-all duration-300 opacity-0
             ${card.overlayImage && 'opacity-80'} ${hover && 'opacity-60'}`}
           />
         </>

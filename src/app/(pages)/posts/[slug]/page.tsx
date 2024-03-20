@@ -50,10 +50,7 @@ export default async function Post({ params: { slug } }) {
           keywords={filteredKeywords}
           publishedAt={publishedAt}
         />
-        <Layouts layouts={layout} />
-        {relatedPosts && relatedPosts.length > 0 && (
-          <RelatedPosts introContent="More" docs={relatedPosts} />
-        )}
+        <Layouts layouts={layout} relatedPosts={relatedPosts} />
       </main>
     </PageMargin>
   )

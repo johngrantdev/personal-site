@@ -1,16 +1,19 @@
 import React from 'react'
 
-import { Layout as LayoutType } from '../../../payload/payload-types'
+import { Layout as LayoutType, Post } from '../../../payload/payload-types'
 import { Column, Layout } from '../Layout'
 import { MainColumn } from './MainColumn'
 import { SideColumn } from './SideColumn'
+import { RelatedPosts } from '../RelatedPosts'
+import { CollectionArchive } from '../CollectionArchive'
 
 export type LayoutsProps = {
   layouts: LayoutType
+  relatedPosts?: Post[]
 }
 
 export const Layouts: React.FC<LayoutsProps> = props => {
-  const { layouts } = props
+  const { layouts, relatedPosts } = props
 
   const hasLayouts = layouts && Array.isArray(layouts) && layouts.length > 0
 
@@ -40,6 +43,9 @@ export const Layouts: React.FC<LayoutsProps> = props => {
             </div>
           )
         })}
+        {
+          RelatedPosts && <RelatedPosts index={layouts.length + 1} docs={relatedPosts} />
+        }
       </div>
     )
   }

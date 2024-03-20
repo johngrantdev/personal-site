@@ -8,11 +8,12 @@ COPY package*.json ./
 
 RUN npm install -g pnpm
 
-# RUN apk add --no-cache make gcc g++ python3
+RUN apk add --no-cache make gcc g++ python3
 
 COPY . .
 COPY .env.prod ./.env
 RUN pnpm install
+RUN pnpm add @swc/core
 RUN pnpm build
 
 FROM base as runtime
