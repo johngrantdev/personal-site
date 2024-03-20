@@ -25,3 +25,13 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/*  fixes for safari/webkit bugs (the new internet explorer?)
+    bug 1: where elements are not rendered correctly off screen
+           this forces the element to use hw acceleration
+    bug 2: where rounded corners don't work on background images 
+*/
+.safari-fix {
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+} 
