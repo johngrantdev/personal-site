@@ -12,23 +12,27 @@ export type RelatedPostsProps = {
 export const RelatedPosts: React.FC<RelatedPostsProps> = props => {
   const { index, docs } = props
 
-  return (
-    <div key={index}>
-        <Layout
-          sideColumn={true}
-          bottom={true}
-        >
-          <Column position="side">
-            <h3
-              className={`text-2xl flex-none w-full text-center item lg:text-left lg:w-80 overflow-hidden`}
-            >
-              More
-            </h3>
-          </Column>
-          <Column position="main">
-            <CollectionArchive className='w-full' docs={docs} />
-          </Column>
-        </Layout>
-    </div> 
-  )
+  if (docs && docs.length > 0) {
+    return (
+      <div key={index}>
+          <Layout
+            sideColumn={true}
+            bottom={true}
+          >
+            <Column position="side">
+              <h3
+                className={`text-2xl flex-none w-full text-center item lg:text-left lg:w-80 overflow-hidden`}
+              >
+                More
+              </h3>
+            </Column>
+            <Column position="main">
+              <CollectionArchive className='w-full' docs={docs} />
+            </Column>
+          </Layout>
+      </div> 
+    )
+  } else {
+    return null
+  }
 }
