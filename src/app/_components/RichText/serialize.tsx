@@ -41,7 +41,6 @@ function getTextFormats(formatNumber) {
 const serialize = (
   nodes?: any[],
   collectTOCItem?: (item: TOCItem) => void,
-  i = 1,
 ): React.ReactNode => {
   return nodes.map((node, i) => {
     if (!node) {
