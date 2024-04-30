@@ -14,7 +14,7 @@ type Props = MediaBlockType & {
 }
 
 export const MediaBlock: React.FC<Props> = props => {
-  const { id, sideCaption, layout, media1, media1ShowCaption, media2, media2ShowCaption, media3, media3ShowCaption, aspectRatio = 'default', staticImage } = props
+  const { id, sideCaption, layout, media1, media1ShowCaption, media2, media2ShowCaption, media3, media3ShowCaption, staticImage } = props
 
   let caption1
   if (media1ShowCaption && media1 && typeof media1 === 'object') caption1 = media1.caption
@@ -42,7 +42,6 @@ export const MediaBlock: React.FC<Props> = props => {
           <Media
             className="w-full h-full"
             imgClassName="h-full w-full object-cover rounded-md"
-            aspectRatio={aspectRatio}
             resource={media1}
             src={staticImage}
           />
@@ -70,7 +69,6 @@ export const MediaBlock: React.FC<Props> = props => {
               <Media
                 className="lg:row-span-2 w-full h-full"
                 imgClassName="h-full w-full object-cover"
-                aspectRatio={aspectRatio}
                 resource={media1}
                 src={staticImage}
               />
@@ -79,7 +77,6 @@ export const MediaBlock: React.FC<Props> = props => {
               <Media
                 className="lg:row-span-2 w-full h-full"
                 imgClassName="h-full w-full object-cover"
-                aspectRatio={aspectRatio}
                 resource={media2}
                 src={staticImage}
               />
