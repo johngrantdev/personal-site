@@ -1,8 +1,10 @@
-import { createElement } from 'react'
-import { useFormFields } from 'payload/components/forms'
-import CodeField from 'payload/dist/admin/components/forms/field-types/Code'
-import type { Block, SelectField } from 'payload/types'
+import type { LexicalBlock } from '@payloadcms/richtext-lexical'
+import type { SelectField } from 'payload/types'
 import type { Entries } from 'type-fest'
+
+import { useFormFields } from '@payloadcms/ui/forms/Form'
+import { Code as CodeField } from '@payloadcms/ui/fields//Code'
+import { createElement } from 'react'
 
 const LANGUAGES = {
   css: 'CSS',
@@ -25,33 +27,28 @@ const LANGUAGES = {
   yaml: 'YAML',
 }
 
-export const Code: Block = {
+export const Code: LexicalBlock = {
   slug: 'code',
-  interfaceName: 'CodeBlock',
-  labels: {
-    singular: 'Code Block',
-    plural: 'Code Blockss',
-  },
   fields: [
     {
       name: 'language',
+      type: 'select',
+      defaultValue: 'typescript',
       options: (Object.entries(LANGUAGES) as Entries<typeof LANGUAGES>).map(([key, value]) => ({
         label: value,
         value: key,
       })),
       required: true,
-      type: 'select',
-      defaultValue: 'typescript',
     },
     {
       name: 'code',
-      required: true,
       type: 'code',
       admin: {
         components: {
           Field(field: SelectField & { path?: string }) {
             // get the relative path of this field and replace with sibling 'language'
             const language = useFormFields(
+              // eslint-disable-next-line react/destructuring-assignment
               ([fields]) => fields[`${field.path?.replace('.code', '.language')}`],
             )
             const key = language.value as keyof typeof LANGUAGES
@@ -60,17 +57,21 @@ export const Code: Block = {
             }
             const label = LANGUAGES[key]
             return createElement(CodeField, {
-              admin: {
-                language: key,
-              },
               name: field.name,
-              path: field.path,
               label,
+              path: field.path,
+              width: '100%',
             })
           },
         },
         language: 'typescript',
       },
+      required: true,
     },
   ],
+  interfaceName: 'CodeBlock',
+  labels: {
+    plural: 'Code Blockss',
+    singular: 'Code Block',
+  },
 }

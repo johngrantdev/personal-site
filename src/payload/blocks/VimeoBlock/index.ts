@@ -1,8 +1,7 @@
-import type { Block } from 'payload/types'
+import type { LexicalBlock } from '@payloadcms/richtext-lexical'
 
-export const VimeoBlock: Block = {
+export const VimeoBlock: LexicalBlock = {
   slug: 'vimeoBlock',
-  interfaceName: 'VimeoBlock',
   fields: [
     {
       name: 'videoId',
@@ -10,10 +9,11 @@ export const VimeoBlock: Block = {
     },
     {
       name: 'previewImage',
-      label: 'Preview Image',
       type: 'upload',
+      label: 'Preview Image',
       relationTo: 'media',
       required: false,
     },
   ],
+  interfaceName: 'VimeoBlock',
 }

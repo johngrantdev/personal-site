@@ -5,37 +5,41 @@ import { anyone } from '../../access/anyone'
 import adminsAndUser from './access/adminsAndUser'
 import { checkRole } from './checkRole'
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
-import { loginAfterCreate } from './hooks/loginAfterCreate'
 
-const Users: CollectionConfig = {
+export const Users: CollectionConfig = {
   slug: 'users',
-  admin: {
-    useAsTitle: 'name',
-    defaultColumns: ['name', 'email'],
-  },
   access: {
-    read: adminsAndUser,
-    create: anyone,
-    update: adminsAndUser,
-    delete: admins,
     admin: ({ req: { user } }) => checkRole(['admin'], user),
+    create: anyone,
+    delete: admins,
+    read: adminsAndUser,
+    update: adminsAndUser,
   },
-  hooks: {
-    afterChange: [loginAfterCreate],
+  admin: {
+    defaultColumns: ['name', 'email'],
+    useAsTitle: 'name',
   },
   auth: true,
   fields: [
     {
       name: 'name',
-      label: 'Name',
       type: 'text',
+      label: 'Name',
     },
     {
       name: 'roles',
-      label: 'Roles',
       type: 'select',
-      hasMany: true,
+      access: {
+        create: admins,
+        read: admins,
+        update: admins,
+      },
       defaultValue: ['user'],
+      hasMany: true,
+      hooks: {
+        beforeChange: [ensureFirstUserIsAdmin],
+      },
+      label: 'Roles',
       options: [
         {
           label: 'admin',
@@ -46,17 +50,7 @@ const Users: CollectionConfig = {
           value: 'user',
         },
       ],
-      hooks: {
-        beforeChange: [ensureFirstUserIsAdmin],
-      },
-      access: {
-        read: admins,
-        create: admins,
-        update: admins,
-      },
     },
   ],
   timestamps: true,
 }
-
-export default Users

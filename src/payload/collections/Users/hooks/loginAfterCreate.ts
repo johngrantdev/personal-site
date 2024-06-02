@@ -1,16 +1,18 @@
 import type { AfterChangeHook } from 'payload/dist/collections/config/types'
 
+// this function doesn't work for payload 3 
+
 export const loginAfterCreate: AfterChangeHook = async ({
   doc,
-  req,
-  req: { payload, body = {}, res },
   operation,
+  req,
+  req: { body = {}, payload, res },
 }) => {
   if (operation === 'create' && !req.user) {
     const { email, password } = body
 
     if (email && password) {
-      const { user, token } = await payload.login({
+      const { token, user } = await payload.login({
         collection: 'users',
         data: { email, password },
         req,

@@ -1,21 +1,18 @@
-import type { Block } from 'payload/types'
+
+import { type LexicalBlock, lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { invertBackground } from '../../fields/invertBackground'
 import linkGroup from '../../fields/linkGroup'
 
-export const CallToAction: Block = {
+export const CallToAction: LexicalBlock = {
   slug: 'cta',
-  interfaceName: 'CallToActionBlock',
-  labels: {
-    singular: 'Call to Action',
-    plural: 'Calls to Action',
-  },
   fields: [
     invertBackground,
     {
       name: 'richText',
-      label: 'Caption',
       type: 'richText',
+      editor: lexicalEditor({}),
+      label: 'Caption',
     },
     linkGroup({
       appearances: ['primary', 'secondary'],
@@ -24,4 +21,9 @@ export const CallToAction: Block = {
       },
     }),
   ],
+  interfaceName: 'CallToActionBlock',
+  labels: {
+    plural: 'Calls to Action',
+    singular: 'Call to Action',
+  },
 }

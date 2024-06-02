@@ -146,16 +146,29 @@ export const Posts: CollectionConfig = {
           relationTo: 'media',
           required: false,
         },
-        colorPickerField({
+        // colorPickerField({
+        //   name: 'backgroundColour',
+        //   label: '',
+        //   required: false,
+        //   defaultValue: '#000000',
+        //   admin: {
+        //     description: 'Choose a colour for this page',
+        //     width: '20%',
+        //   },
+        // }),
+
+        // colour picker not working in 3.0 yet, swapped in as a text field for now
+        {
           name: 'backgroundColour',
+          type: 'text',
           label: '',
           required: false,
           defaultValue: '#000000',
           admin: {
-            description: 'Choose a colour for this page',
-            width: '20%',
-          },
-        }),
+                description: 'Choose a colour for this page',
+                width: '20%',
+              },
+        },
         {
           type: 'row',
           fields: [

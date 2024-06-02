@@ -2,7 +2,7 @@ import React from 'react'
 import { Metadata } from 'next'
 import { JetBrains_Mono, Poppins } from 'next/font/google'
 
-import { Site } from '../payload/payload-types'
+import { Site } from '../payload-types'
 import { fetchSiteSettings } from './_api/fetchGlobals'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
@@ -43,6 +43,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link rel="icon" href="/favicon.ico" sizes="32x32" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {
+          siteSettings.plausible.enabled && <script defer data-domain={env.} src="https://plausible.johngrant.dev/js/script.js"></script>
+        }
       </head>
       <body>
         <Providers>

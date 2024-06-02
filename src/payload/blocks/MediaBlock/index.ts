@@ -1,14 +1,13 @@
-import type { Block } from 'payload/types'
+import type { LexicalBlock } from '@payloadcms/richtext-lexical'
 
-export const MediaBlock: Block = {
+export const MediaBlock: LexicalBlock = {
   slug: 'mediaBlock',
-  interfaceName: 'MediaBlock',
   fields: [
     {
       name: 'aspectRatio',
       type: 'select',
-      label: 'Aspect Ratio',
       defaultValue: 'default',
+      label: 'Aspect Ratio',
       options: [
         {
           label: 'Default',
@@ -27,14 +26,14 @@ export const MediaBlock: Block = {
     {
       name: 'sideCaption',
       type: 'checkbox',
-      label: 'Caption in side column?',
       defaultValue: false,
+      label: 'Caption in side column?',
     },
     {
       name: 'layout',
       type: 'select',
-      label: 'Media Layout',
       defaultValue: 'default',
+      label: 'Media Layout',
       options: [
         {
           label: 'Default',
@@ -55,22 +54,22 @@ export const MediaBlock: Block = {
       fields: [
         {
           name: 'media1',
-          label: 'Media 1',
           type: 'relationship',
-          relationTo: 'media',
-          required: true,
           admin: {
             width: '70%',
           },
+          label: 'Media 1',
+          relationTo: 'media',
+          required: true,
         },
         {
           name: 'media1ShowCaption',
-          label: 'Show Caption?',
           type: 'checkbox',
-          defaultValue: false,
           admin: {
             width: '30%',
           },
+          defaultValue: false,
+          label: 'Show Caption?',
         },
       ],
     },
@@ -79,28 +78,28 @@ export const MediaBlock: Block = {
       fields: [
         {
           name: 'media2',
-          label: 'Media 2',
           type: 'relationship',
-          relationTo: 'media',
-          required: true,
           admin: {
-            width: '70%',
             condition: (_, siblingData) => {
               return siblingData.layout === 'twoColumn' || siblingData.layout === 'heroGrid'
             },
+            width: '70%',
           },
+          label: 'Media 2',
+          relationTo: 'media',
+          required: true,
         },
         {
           name: 'media2ShowCaption',
-          label: 'Show Caption?',
           type: 'checkbox',
-          defaultValue: false,
           admin: {
-            width: '30%',
             condition: (_, siblingData) => {
               return siblingData.layout === 'twoColumn' || siblingData.layout === 'heroGrid'
             },
+            width: '30%',
           },
+          defaultValue: false,
+          label: 'Show Caption?',
         },
       ],
     },
@@ -109,30 +108,31 @@ export const MediaBlock: Block = {
       fields: [
         {
           name: 'media3',
-          label: 'Media 3',
           type: 'relationship',
-          relationTo: 'media',
-          required: true,
           admin: {
-            width: '70%',
             condition: (_, siblingData) => {
               return siblingData.layout === 'heroGrid'
             },
+            width: '70%',
           },
+          label: 'Media 3',
+          relationTo: 'media',
+          required: true,
         },
         {
           name: 'media3ShowCaption',
-          label: 'Show Caption?',
           type: 'checkbox',
-          defaultValue: false,
           admin: {
-            width: '30%',
             condition: (_, siblingData) => {
               return siblingData.layout === 'heroGrid'
             },
+            width: '30%',
           },
+          defaultValue: false,
+          label: 'Show Caption?',
         },
       ],
     },
   ],
+  interfaceName: 'MediaBlock',
 }

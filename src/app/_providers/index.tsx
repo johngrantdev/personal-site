@@ -3,7 +3,7 @@
 import React from 'react'
 import { ThemeProvider } from 'next-themes'
 
-import { AuthProvider } from '../_providers/Auth'
+import { AuthProvider } from './Auth'
 import { MenuOpenProvider } from './Context/menuOpenContext'
 import { MouseProvider } from './Context/mouseContext'
 import { PageProvider } from './Context/pageContext'

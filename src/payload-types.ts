@@ -49,6 +49,10 @@ export interface Config {
     site: Site;
     'hidden-layout': HiddenLayout;
   };
+  locale: null;
+  user: User & {
+    collection: 'users';
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -79,6 +83,7 @@ export interface SideColumn {
   projectHero?: ProjectHero;
   sideContent1?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -87,13 +92,13 @@ export interface SideColumn {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
   sideContent2?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -102,7 +107,6 @@ export interface SideColumn {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
@@ -116,6 +120,7 @@ export interface Hero {
   media?: (number | null) | Media;
   description?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -124,7 +129,6 @@ export interface Hero {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
@@ -140,6 +144,7 @@ export interface Media {
   alt: string;
   caption?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -148,7 +153,6 @@ export interface Media {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
@@ -166,10 +170,10 @@ export interface Media {
  */
 export interface Upload {
   id: number;
-  blurhash?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
+  thumbnailURL?: string | null;
   filename?: string | null;
   mimeType?: string | null;
   filesize?: number | null;
@@ -239,7 +243,7 @@ export interface LinkField {
   } | null;
   url?: string | null;
   label: string;
-  appearance?: ('default' | 'primary' | 'secondary') | null;
+  appearance?: ('primary' | 'secondary') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -251,6 +255,7 @@ export interface ProjectHero {
   usePostDescription?: boolean | null;
   customDescription?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -259,7 +264,6 @@ export interface ProjectHero {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
@@ -282,9 +286,10 @@ export interface Client {
  */
 export interface MainColumn {
   style: 'postArchive' | 'singleLayout' | 'twoColumns';
-  postArchive?: PostArchive
+  postArchive?: PostArchive;
   column1?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -293,13 +298,13 @@ export interface MainColumn {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
   column2?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -308,11 +313,36 @@ export interface MainColumn {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostArchive".
+ */
+export interface PostArchive {
+  category?: (number | Category)[] | null;
+  limit?: number | null;
+  showPageRange?: boolean | null;
+  populatedDocs?:
+    | {
+        relationTo: 'posts';
+        value: number | Post;
+      }[]
+    | null;
+  populatedDocsTotal?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "category".
+ */
+export interface Category {
+  id: number;
+  title?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -353,16 +383,6 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "category".
- */
-export interface Category {
-  id: number;
-  title?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "keywords".
  */
 export interface Keyword {
@@ -397,7 +417,7 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
-  password: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -494,6 +514,7 @@ export interface CallToActionBlock {
   invertBackground?: boolean | null;
   richText?: {
     root: {
+      type: string;
       children: {
         type: string;
         version: number;
@@ -502,7 +523,6 @@ export interface CallToActionBlock {
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
@@ -521,11 +541,11 @@ export interface MediaBlock {
   sideCaption?: boolean | null;
   layout?: ('default' | 'twoColumn' | 'heroGrid') | null;
   media1: number | Media;
-  media1ShowCaption: boolean | null;
+  media1ShowCaption?: boolean | null;
   media2?: (number | null) | Media;
-  media2ShowCaption: boolean | null;
+  media2ShowCaption?: boolean | null;
   media3?: (number | null) | Media;
-  media3ShowCaption: boolean | null;
+  media3ShowCaption?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -574,18 +594,4 @@ export interface VimeoBlock {
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
-}
-
-export interface PostArchive {
-  category?: (number | Category)[] | null;
-  limit?: number | null;
-  showPageRange?: boolean | null;
-  populatedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
-  populatedDocsTotal?: number | null;
-  id?: string | null;
 }

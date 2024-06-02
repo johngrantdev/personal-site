@@ -38,13 +38,30 @@ export const Site: GlobalConfig = {
               name: 'faviconSVG',
               label: 'Favicon SVG',
               type: 'upload',
-              relationTo: 'media',
+              relationTo: 'uploads',
             },
             {
               name: 'faviconICO',
               label: 'Favicon ICO',
               type: 'upload',
-              relationTo: 'media',
+              relationTo: 'uploads',
+            },
+            {
+              type: 'group',
+              name: 'plausible',
+              label: 'Plausible',
+              fields: [
+                {
+                  type: 'checkbox',
+                  name: 'enabled',
+                  label: 'Enable?',
+                },
+                {
+                  type: 'text',
+                  name: 'url',
+                  label: 'plausible URL',
+                },
+              ],
             },
           ],
         },
