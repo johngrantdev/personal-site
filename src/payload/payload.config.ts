@@ -27,6 +27,20 @@ import { HiddenLayout } from './globals/Hidden'
 import { Site } from './globals/Site'
 import { adapter } from './utilities/s3adapter'
 
+import dashboardAnalytics from '@nouance/payload-dashboard-analytics'
+import type { PlausibleProvider } from '@nouance/payload-dashboard-analytics/dist/types/providers'
+
+const PLAUSIBLE_API_KEY = process.env.PLAUSIBLE_API_KEY
+const PLAUSIBLE_HOST = process.env.PLAUSIBLE_HOST
+const PLAUSIBLE_SITE_ID = process.env.PLAUSIBLE_SITE_ID
+
+const plausibleProvider: PlausibleProvider = {
+  source: 'plausible',
+  apiSecret: PLAUSIBLE_API_KEY,
+  siteId: PLAUSIBLE_SITE_ID,
+  host: PLAUSIBLE_HOST,
+}
+
 const generateTitle: GenerateTitle = () => {
   return process.env.SITE_TITLE
 }
@@ -113,5 +127,43 @@ export default buildConfig({
       },
     }),
     computeBlurhash(),
+    dashboardAnalytics({
+      provider: plausibleProvider,
+      access: (user: any) => {
+        return Boolean(user)
+      },
+      navigation: {
+        afterNavLinks: [
+          {
+            type: 'live',
+          },
+        ],
+      },
+      dashboard: {
+        beforeDashboard: ['viewsChart'],
+        afterDashboard: ['topPages'],
+      },
+      collections: [
+        {
+          slug: Posts.slug,
+          widgets: [
+            {
+              type: 'chart',
+              label: 'Page views',
+              metrics: ['views'],
+              timeframe: 'currentMonth',
+              idMatcher: (document: any) => `/articles/${document.slug}`,
+            },
+            {
+              type: 'info',
+              label: 'Page data',
+              metrics: ['views', 'sessions', 'sessionDuration'],
+              timeframe: '12mo',
+              idMatcher: (document: any) => `/articles/${document.slug}`,
+            },
+          ],
+        },
+      ],
+    }),
   ],
 })

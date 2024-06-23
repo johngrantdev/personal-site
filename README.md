@@ -65,8 +65,6 @@ If the postgres database is running locally provide the container a network flag
 eg. `docker build -t personal-site . --network=host`
 1. Next run `docker-compose up`
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
 #### Todo :
 - Contact form
 - Allow sending out email to a specified person with a link with an attached auth token. The authorized user will then have access to any project work that I don't want to make public (ie. full projects or some process work or sketches within a project).
