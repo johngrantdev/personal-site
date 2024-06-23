@@ -1,61 +1,61 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('next').NextConfig} */
 const ContentSecurityPolicy = require('./csp')
 const redirects = require('./redirects')
+const { withPlausibleProxy } = require('next-plausible')
 
-const nextConfig = {
-  reactStrictMode: false,
-  swcMinify: true,
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: process.env.PORT || '3000',
-      },
-      {
-        protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_SERVER_URL ? new URL(process.env.NEXT_PUBLIC_SERVER_URL).hostname : undefined,
+module.exports = withPlausibleProxy()({
+    async headers() {
+      const headers = []
+  
+      // Prevent search engines from indexing the site if it is not live
+      // This is useful for staging environments before they are ready to go live
+      // To allow robots to crawl the site, use the `NEXT_PUBLIC_IS_LIVE` env variable
+      // You may want to also use this variable to conditionally render any tracking scripts
+      if (process.env.NEXT_PUBLIC_IS_LIVE !== 'true') {
+        headers.push({
+          headers: [
+            {
+              key: 'X-Robots-Tag',
+              value: 'noindex',
+            },
+          ],
+          source: '/:path*',
+        })
       }
-    ].filter(pattern => pattern.hostname),
-    // domains: ['localhost', process.env.NEXT_PUBLIC_SERVER_URL]
-    //   .filter(Boolean)
-    //   .map(url => url.replace(/https?:\/\//, '')),
-  },
-  redirects,
-  async headers() {
-    const headers = []
-
-    // Prevent search engines from indexing the site if it is not live
-    // This is useful for staging environments before they are ready to go live
-    // To allow robots to crawl the site, use the `NEXT_PUBLIC_IS_LIVE` env variable
-    // You may want to also use this variable to conditionally render any tracking scripts
-    if (process.env.NEXT_PUBLIC_IS_LIVE !== 'true') {
+  
+      // Set the `Content-Security-Policy` header as a security measure to prevent XSS attacks
+      // It works by explicitly whitelisting trusted sources of content for your website
+      // This will block all inline scripts and styles except for those that are allowed
       headers.push({
         headers: [
           {
-            key: 'X-Robots-Tag',
-            value: 'noindex',
+            key: 'Content-Security-Policy',
+            value: ContentSecurityPolicy,
           },
         ],
-        source: '/:path*',
+        source: '/(.*)',
       })
-    }
-
-    // Set the `Content-Security-Policy` header as a security measure to prevent XSS attacks
-    // It works by explicitly whitelisting trusted sources of content for your website
-    // This will block all inline scripts and styles except for those that are allowed
-    headers.push({
-      source: '/(.*)',
-      headers: [
+  
+      return headers
+    },
+    images: {
+      remotePatterns: [
         {
-          key: 'Content-Security-Policy',
-          value: ContentSecurityPolicy,
+          hostname: 'localhost',
+          port: process.env.PORT || '3000',
+          protocol: 'http',
         },
-      ],
-    })
-
-    return headers
-  },
-}
-
-module.exports = nextConfig
+        {
+          hostname: process.env.NEXT_PUBLIC_SERVER_URL ? new URL(process.env.NEXT_PUBLIC_SERVER_URL).hostname : undefined,
+          protocol: 'https',
+        }
+      ].filter(pattern => pattern.hostname),
+      // domains: ['localhost', process.env.NEXT_PUBLIC_SERVER_URL]
+      //   .filter(Boolean)
+      //   .map(url => url.replace(/https?:\/\//, '')),
+    },
+    reactStrictMode: false,
+    redirects,
+    swcMinify: true,
+})
