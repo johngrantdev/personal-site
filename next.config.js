@@ -1,61 +1,30 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/** @type {import('next').NextConfig} */
-const ContentSecurityPolicy = require('./csp')
-const redirects = require('./redirects')
-const { withPlausibleProxy } = require('next-plausible')
+import { withPayload } from '@payloadcms/next/withPayload'
 
-module.exports = withPlausibleProxy()({
-    async headers() {
-      const headers = []
-  
-      // Prevent search engines from indexing the site if it is not live
-      // This is useful for staging environments before they are ready to go live
-      // To allow robots to crawl the site, use the `NEXT_PUBLIC_IS_LIVE` env variable
-      // You may want to also use this variable to conditionally render any tracking scripts
-      if (process.env.NEXT_PUBLIC_IS_LIVE !== 'true') {
-        headers.push({
-          headers: [
-            {
-              key: 'X-Robots-Tag',
-              value: 'noindex',
-            },
-          ],
-          source: '/:path*',
-        })
-      }
-  
-      // Set the `Content-Security-Policy` header as a security measure to prevent XSS attacks
-      // It works by explicitly whitelisting trusted sources of content for your website
-      // This will block all inline scripts and styles except for those that are allowed
-      headers.push({
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: ContentSecurityPolicy,
-          },
-        ],
-        source: '/(.*)',
-      })
-  
-      return headers
-    },
-    images: {
-      remotePatterns: [
-        {
-          hostname: 'localhost',
-          port: process.env.PORT || '3000',
-          protocol: 'http',
-        },
-        {
-          hostname: process.env.NEXT_PUBLIC_SERVER_URL ? new URL(process.env.NEXT_PUBLIC_SERVER_URL).hostname : undefined,
-          protocol: 'https',
+import redirects from './redirects.js'
+
+const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : undefined || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    viewTransition: true,
+  },
+  images: {
+    remotePatterns: [
+      ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
+        const url = new URL(item)
+
+        return {
+          hostname: url.hostname,
+          protocol: url.protocol.replace(':', ''),
         }
-      ].filter(pattern => pattern.hostname),
-      // domains: ['localhost', process.env.NEXT_PUBLIC_SERVER_URL]
-      //   .filter(Boolean)
-      //   .map(url => url.replace(/https?:\/\//, '')),
-    },
-    reactStrictMode: false,
-    redirects,
-    swcMinify: true,
-})
+      }),
+    ],
+  },
+  reactStrictMode: true,
+  redirects,
+}
+
+export default withPayload(nextConfig, { devBundleServerPackages: false })
