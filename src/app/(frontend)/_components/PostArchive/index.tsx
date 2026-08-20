@@ -1,47 +1,37 @@
-import { Post, PostArchive as PostArchiveType } from "@/payload/payload-types"
-import { CollectionArchive } from "../CollectionArchive"
-
+import config from '@payload-config'
 import React from 'react'
+import { getPayload } from 'payload'
 
-type Result = {
-  totalDocs: number
-  docs: Post[]
-  page: number
-  totalPages: number
-  hasPrevPage: boolean
-  hasNextPage: boolean
-  nextPage: number
-  prevPage: number
-}
+import { Post, PostArchive as PostArchiveType } from '@/payload/payload-types'
+import { CollectionArchive } from '../CollectionArchive'
 
 export type Props = {
-    className?: string
-    relationTo?: 'posts'
-    populateBy?: 'collection' | 'selection'
-    showPageRange?: boolean
-    onResultChange?: (result: Result) => void // eslint-disable-line no-unused-vars
-    sort?: string
-    limit?: number
-    populatedDocs?: PostArchiveType['populatedDocs']
-    populatedDocsTotal?: PostArchiveType['populatedDocsTotal']
-    category?: PostArchiveType['category']
-  }
+  className?: string
+  limit?: PostArchiveType['limit']
+  category?: PostArchiveType['category']
+}
 
-export const PostArchive: React.FC<Props> = props => {
-    const {
-      className,
-      relationTo,
-      showPageRange,
-      onResultChange,
-      sort = '-createdAt',
-      limit = 12,
-      populatedDocs,
-      populatedDocsTotal,
-      category: catFromProps,
-      populateBy,
-    } = props
-  
-    const docs = (populatedDocs?.map(doc => doc.value) as Post[]) || []
+export const PostArchive = async ({ className, limit, category }: Props) => {
 
-    return <CollectionArchive className={className} showPageRange={showPageRange} onResultChange={onResultChange} sort={sort} limit={limit} docs={docs} docsTotal={populatedDocsTotal} />
-  }
+  const categoryIds = (category || []).map(cat => (typeof cat === 'object' ? cat.id : cat))
+
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'posts',
+    depth: 2,
+    limit: limit || 10,
+    overrideAccess: false,
+    sort: '-publishedAt',
+    select: {
+      slug: true,
+      title: true,
+      description: true,
+      publishedAt: true,
+      keywords: true,
+      card: true,
+    },
+    ...(categoryIds.length > 0 ? { where: { category: { in: categoryIds } } } : {}),
+  })
+
+  return <CollectionArchive className={className} docs={docs as Post[]} />
+}

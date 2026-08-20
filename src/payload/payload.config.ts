@@ -5,7 +5,6 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import type { GenerateTitle } from '@payloadcms/plugin-seo/types'
 import { BlocksFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
-import dotenv from 'dotenv'
 import path from 'path'
 import { buildConfig } from 'payload'
 import computeBlurhash from 'payload-blurhash-plugin'
@@ -30,15 +29,15 @@ import { Site } from './globals/Site'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-dotenv.config({
-  path: path.resolve(dirname, '../../.env'),
-})
+if (!process.env.PAYLOAD_SECRET) {
+  throw new Error('PAYLOAD_SECRET is required')
+}
 
 const generateTitle: GenerateTitle = () => process.env.SITE_TITLE || ''
 const serverURL = process.env.NEXT_PUBLIC_SERVER_URL
 
 export default buildConfig({
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
   admin: {
     user: Users.slug,
     importMap: {
@@ -63,7 +62,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI,
     },
   }),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET,
   serverURL,
   sharp,
   collections: [Pages, Posts, Media, Category, Keywords, Clients, Users, Uploads],

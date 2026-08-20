@@ -1,49 +1,40 @@
+import config from '@payload-config'
 import { draftMode } from 'next/headers'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { getPayload } from 'payload'
 
 import { payloadToken } from '../../../_api/token'
 
-export async function GET(
-  req: Request & {
-    cookies: {
-      get: (name: string) => {
-        value: string
-      }
-    }
-  },
-): Promise<Response> {
-  const token = req.cookies.get(payloadToken)?.value
+export async function GET(req: Request): Promise<Response> {
   const { searchParams } = new URL(req.url)
-  const url = searchParams.get('url')
+  const path = searchParams.get('path')
   const secret = searchParams.get('secret')
 
-  if (!url) {
-    return new Response('No URL provided', { status: 404 })
+  if (!process.env.NEXT_PRIVATE_DRAFT_SECRET || secret !== process.env.NEXT_PRIVATE_DRAFT_SECRET) {
+    return new Response('Invalid secret', { status: 401 })
   }
+
+  // only same-origin relative paths, so preview cannot be used as an open redirect
+  if (!path || !path.startsWith('/') || path.startsWith('//')) {
+    return new Response('No path provided', { status: 400 })
+  }
+
+  const token = (await cookies()).get(payloadToken)?.value
 
   if (!token) {
-    new Response('You are not allowed to preview this page', { status: 403 })
+    return new Response('You are not allowed to preview this page', { status: 403 })
   }
 
-  // validate the Payload token
-  const userReq = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/payload/users/me`, {
-    headers: {
-      Authorization: `JWT ${token}`,
-    },
-  })
+  const payload = await getPayload({ config })
+  const { user } = await payload.auth({ headers: new Headers({ Authorization: `JWT ${token}` }) })
 
-  const userRes = await userReq.json()
-
-  if (!userReq.ok || !userRes?.user) {
+  if (!user) {
     ;(await draftMode()).disable()
     return new Response('You are not allowed to preview this page', { status: 403 })
   }
 
-  if (secret !== process.env.NEXT_PRIVATE_DRAFT_SECRET) {
-    return new Response('Invalid token', { status: 401 })
-  }
-
   ;(await draftMode()).enable()
 
-  redirect(url)
+  redirect(path)
 }

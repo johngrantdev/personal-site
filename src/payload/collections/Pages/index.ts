@@ -4,8 +4,8 @@ import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
 import { layout } from '../../fields/layout'
 import { slugField } from '../../fields/slug'
-import { populateArchiveField } from '../../hooks/populateArchiveField'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidatePage } from './hooks/revalidatePage'
 
 export const Pages: CollectionConfig = {
@@ -13,16 +13,11 @@ export const Pages: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    preview: doc => {
-      return `${process.env.NEXT_PUBLIC_SERVER_URL}/api/next/preview?url=${encodeURIComponent(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/${doc.slug !== 'home' ? doc.slug : ''}`,
-      )}&secret=${process.env.PAYLOAD_PUBLIC_DRAFT_SECRET}`
-    },
+    preview: doc => generatePreviewPath({ collection: 'pages', slug: doc?.slug as string }),
   },
   hooks: {
     beforeChange: [populatePublishedAt],
     afterChange: [revalidatePage],
-    beforeRead: [populateArchiveField],
   },
   versions: {
     drafts: true,
