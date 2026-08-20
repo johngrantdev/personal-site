@@ -1,12 +1,13 @@
 import React from 'react'
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
-import { notFound } from 'next/navigation'
 
 import { Page as PageType } from '@/payload/payload-types'
-import { fetchDoc } from '../../_api/fetchDoc'
-import { fetchDocs } from '../../_api/fetchDocs'
+import { getPage } from '../../_api/getPage'
+import { getPageSlugs } from '../../_api/getSlugs'
 import { Layouts } from '../../_components/Layouts'
+import { PayloadRedirects } from '../../_components/PayloadRedirects'
+import { RefreshRouteOnSave } from '../../_components/RefreshRouteOnSave'
 import { PageMargin } from '../../_components/PageMargin'
 import { PageState } from '../../_providers/Context/pageContext'
 import { generateMeta } from '../../_utilities/generateMeta'
@@ -20,18 +21,15 @@ export default async function Page({ params }: PageProps) {
   let page: PageType | null = null
 
   try {
-    page = await fetchDoc<PageType>({
-      collection: 'pages',
-      slug,
-      draft: isDraftMode,
-    })
+    page = await getPage(slug, isDraftMode)
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error)
   }
 
+  // A missing page may still be a configured redirect; this notFounds otherwise.
   if (!page) {
-    return notFound()
+    return <PayloadRedirects url={slug === 'home' ? '/' : `/${slug}`} />
   }
 
   const { layout, title } = page
@@ -39,6 +37,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <PageMargin className="grow">
       <main className="flex flex-col">
+        {isDraftMode && <RefreshRouteOnSave />}
         <PageState title={title} />
         <Layouts layouts={layout} />
       </main>
@@ -48,8 +47,8 @@ export default async function Page({ params }: PageProps) {
 
 export async function generateStaticParams() {
   try {
-    const pages = await fetchDocs<PageType>('pages')
-    return pages?.map(({ slug }) => ({ slug }))
+    const slugs = await getPageSlugs()
+    return slugs.map(slug => ({ slug }))
   } catch (error) {
     return []
   }
@@ -62,11 +61,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   let page: PageType | null = null
 
   try {
-    page = await fetchDoc<PageType>({
-      collection: 'pages',
-      slug,
-      draft: isDraftMode,
-    })
+    page = await getPage(slug, isDraftMode)
   } catch (error) {}
 
   return generateMeta({ doc: page })

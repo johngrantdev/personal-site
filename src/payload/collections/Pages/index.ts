@@ -6,7 +6,7 @@ import { layout } from '../../fields/layout'
 import { slugField } from '../../fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
-import { revalidatePage } from './hooks/revalidatePage'
+import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -18,6 +18,12 @@ export const Pages: CollectionConfig = {
   hooks: {
     beforeChange: [populatePublishedAt],
     afterChange: [revalidatePage],
+    afterDelete: [revalidatePageDelete],
+  },
+  // Pages are only ever populated as a redirect reference.
+  defaultPopulate: {
+    slug: true,
+    title: true,
   },
   versions: {
     drafts: true,

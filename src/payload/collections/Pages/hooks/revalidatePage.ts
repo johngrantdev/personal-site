@@ -1,16 +1,21 @@
-import type { CollectionAfterChangeHook } from 'payload'
+import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidate } from '../../../utilities/revalidate'
+import { purgeTags } from '../../../utilities/purgeTags'
 
-// Revalidate the page in the background, so the user doesn't have to wait
-// Notice that the hook itself is not async and we are not awaiting `revalidate`
-// Only revalidate existing docs that are published
-// Don't scope to `operation` in order to purge static demo pages
-export const revalidatePage: CollectionAfterChangeHook = ({ doc, req: { payload } }) => {
-  payload.logger.info(`revalidating ${doc.title}`)
-  if (doc._status === 'published') {
-    revalidate({ payload, collection: 'pages', slugs: [doc.slug] })
+// Purge on every change rather than only on publish: unpublishing and renaming
+// both have to invalidate the entry that is already cached.
+export const revalidatePage: CollectionAfterChangeHook = ({ doc, previousDoc }) => {
+  purgeTags(`pages_${doc.slug}`, 'pages')
+
+  if (previousDoc?.slug && previousDoc.slug !== doc.slug) {
+    purgeTags(`pages_${previousDoc.slug}`)
   }
+
+  return doc
+}
+
+export const revalidatePageDelete: CollectionAfterDeleteHook = ({ doc }) => {
+  purgeTags(`pages_${doc?.slug}`, 'pages')
 
   return doc
 }

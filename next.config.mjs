@@ -2,7 +2,6 @@ import { withPayload } from '@payloadcms/next/withPayload'
 import { withPlausibleProxy } from 'next-plausible'
 
 import ContentSecurityPolicy from './csp.cjs'
-import redirects from './redirects.cjs'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -44,7 +43,6 @@ const nextConfig = {
     '/*': ['./node_modules/@swc/helpers/**/*'],
   },
   reactStrictMode: false,
-  redirects,
 }
 
 const plausibleConfig = process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL

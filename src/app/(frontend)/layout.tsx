@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { JetBrains_Mono, Poppins } from 'next/font/google'
 
 import { Site } from '@/payload/payload-types'
-import { fetchSiteSettings } from './_api/fetchGlobals'
+import { getSiteSettings } from './_api/getSiteSettings'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
 import { PageContainer } from './_components/PageContainer'
@@ -31,7 +31,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let siteSettings: Site | null = null
 
   try {
-    siteSettings = await fetchSiteSettings()
+    siteSettings = await getSiteSettings()
   } catch (error) {}
 
   return (

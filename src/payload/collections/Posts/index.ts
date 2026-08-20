@@ -7,7 +7,7 @@ import { slugField } from '../../fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
-import { revalidatePost } from './hooks/revalidatePost'
+import { revalidatePost, revalidatePostDelete } from './hooks/revalidatePost'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -19,7 +19,18 @@ export const Posts: CollectionConfig = {
   hooks: {
     beforeChange: [populatePublishedAt],
     afterChange: [revalidatePost],
+    afterDelete: [revalidatePostDelete],
     afterRead: [populateAuthors],
+  },
+  // Posts are populated as related posts and archive entries, both of which
+  // render a card. Nothing that populates a post needs its layout.
+  defaultPopulate: {
+    slug: true,
+    title: true,
+    description: true,
+    publishedAt: true,
+    keywords: true,
+    card: true,
   },
   versions: {
     drafts: true,

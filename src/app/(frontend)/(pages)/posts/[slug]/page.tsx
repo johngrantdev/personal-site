@@ -1,12 +1,13 @@
 import React from 'react'
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
-import { notFound } from 'next/navigation'
 
 import { Keyword, Post as PostType } from '@/payload/payload-types'
-import { fetchDoc } from '../../../_api/fetchDoc'
-import { fetchDocs } from '../../../_api/fetchDocs'
+import { getPost } from '../../../_api/getPost'
+import { getPostSlugs } from '../../../_api/getSlugs'
 import { Layouts } from '../../../_components/Layouts'
+import { PayloadRedirects } from '../../../_components/PayloadRedirects'
+import { RefreshRouteOnSave } from '../../../_components/RefreshRouteOnSave'
 import { PageMargin } from '../../../_components/PageMargin'
 import { RelatedPosts } from '../../../_components/RelatedPosts'
 import { PageState } from '../../../_providers/Context/pageContext'
@@ -21,17 +22,14 @@ export default async function Post({ params }: PostProps) {
   let post: PostType | null = null
 
   try {
-    post = await fetchDoc<PostType>({
-      collection: 'posts',
-      slug,
-      draft: isDraftMode,
-    })
+    post = await getPost(slug, isDraftMode)
   } catch (error) {
     console.error(error) // eslint-disable-line no-console
   }
 
+  // A missing post may still be a configured redirect; this notFounds otherwise.
   if (!post) {
-    notFound()
+    return <PayloadRedirects url={`/posts/${slug}`} />
   }
 
   const { layout, title, publishedAt, description, category } = post
@@ -46,6 +44,7 @@ export default async function Post({ params }: PostProps) {
   return (
     <PageMargin className="grow">
       <main className="flex flex-col">
+        {isDraftMode && <RefreshRouteOnSave />}
         <PageState
           title={title}
           description={description}
@@ -61,8 +60,8 @@ export default async function Post({ params }: PostProps) {
 
 export async function generateStaticParams() {
   try {
-    const posts = await fetchDocs<PostType>('posts')
-    return posts?.map(({ slug }) => ({ slug }))
+    const slugs = await getPostSlugs()
+    return slugs.map(slug => ({ slug }))
   } catch (error) {
     return []
   }
@@ -75,11 +74,7 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
   let post: PostType | null = null
 
   try {
-    post = await fetchDoc<PostType>({
-      collection: 'posts',
-      slug,
-      draft: isDraftMode,
-    })
+    post = await getPost(slug, isDraftMode)
   } catch (error) {}
 
   return generateMeta({ doc: post })

@@ -25,6 +25,8 @@ import { Uploads } from './collections/Uploads'
 import Users from './collections/Users'
 import { HiddenLayout } from './globals/Hidden'
 import { Site } from './globals/Site'
+import { generatePreviewPath } from './utilities/generatePreviewPath'
+import { purgeTags } from './utilities/purgeTags'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -42,6 +44,19 @@ export default buildConfig({
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
+    },
+    livePreview: {
+      collections: ['pages', 'posts'],
+      url: ({ collectionConfig, data }) =>
+        generatePreviewPath({
+          collection: collectionConfig?.slug === 'posts' ? 'posts' : 'pages',
+          slug: data?.slug,
+        }),
+      breakpoints: [
+        { name: 'mobile', label: 'Mobile', width: 375, height: 667 },
+        { name: 'tablet', label: 'Tablet', width: 768, height: 1024 },
+        { name: 'desktop', label: 'Desktop', width: 1440, height: 900 },
+      ],
     },
   },
   routes: {
@@ -75,6 +90,12 @@ export default buildConfig({
   plugins: [
     redirectsPlugin({
       collections: ['pages', 'posts'],
+      overrides: {
+        hooks: {
+          afterChange: [() => purgeTags('redirects')],
+          afterDelete: [() => purgeTags('redirects')],
+        },
+      },
     }),
     nestedDocsPlugin({
       collections: ['keywords'],
