@@ -1,6 +1,6 @@
-import type { Field } from 'payload/types'
+import type { GroupField } from 'payload'
 
-export const postArchive: Field = {
+export const postArchive: GroupField = {
   name: 'postArchive',
   label: false,
   interfaceName: 'PostArchive',

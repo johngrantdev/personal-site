@@ -1,4 +1,4 @@
-import type { Field } from 'payload/types'
+import type { Field } from 'payload'
 
 // Todo: make a custom component to show the image thumbnail
 // doesn't seem easy right now

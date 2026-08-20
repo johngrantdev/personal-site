@@ -1,4 +1,4 @@
-import type { GlobalConfig } from 'payload/types'
+import type { GlobalConfig } from 'payload'
 
 import { CallToAction } from '../blocks/CallToAction'
 import { Code } from '../blocks/Code'

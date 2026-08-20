@@ -8,8 +8,8 @@ node_modules
 .env.prod*
 .next
 .vercel
+*.tsbuildinfo
 
-pnpm-lock.yaml
 /_trash
 
 docker-compose-dev*

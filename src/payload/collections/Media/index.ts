@@ -1,7 +1,4 @@
-import type { CollectionConfig } from 'payload/types'
-
-import { CollectionInstructions } from '../../components/CollectionIntro'
-import ThumbnailCell from '../../components/ThumbnailCell'
+import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -29,7 +26,7 @@ export const Media: CollectionConfig = {
       type: 'ui',
       admin: {
         components: {
-          Field: CollectionInstructions,
+          Field: '@/payload/components/CollectionIntro#CollectionInstructions',
         },
       },
     },
@@ -44,7 +41,7 @@ export const Media: CollectionConfig = {
           required: true,
           admin: {
             components: {
-              Cell: ThumbnailCell,
+              Cell: '@/payload/components/ThumbnailCell#default',
             },
           },
         },

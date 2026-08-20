@@ -1,70 +1,56 @@
-# Portfolio and Blog Site
+# johngrant.dev
 
-This is the repo for my personal portfolio and blog site - [johngrant.dev](https://johngrant.dev).
-This is a monorepo containing an express server that hosts the [Next.js](https://nextjs.org) frontend and [Payload](https://payloadcms.com) CMS.
+Personal portfolio and blog built with Payload 3, Next.js, React, PostgreSQL, and optional S3 storage.
 
-This site can be used as a template by either building from source or using the docker image hosted on [Dockerhub](https://hub.docker.com/r/johngrantdev/personal-site). All personalizations such as site title and description have been implemented into the payload `site settings`.
+## Development
 
-Technologies/Modules:
-- [TypeScript](https://www.typescriptlang.org)
-- [Express.js]() - Serving the frontend and CMS
-- [Next.js](https://nextjs.org) - Frontend server
-- [Payload](https://payloadcms.com) - Headless CMS
-- [Postgres]() - Database handled by PayloadCMS
-- [GraphQL](https://graphql.org) - internal Next.js <> Payload API
-- [Docker](https://docker.com) - Node.js running on Alpine Linux container
-- [AWS S3 Storage]() - Using the payload cloud storage plugin
-- [React-Spring]() - Used for various animations
-- [Prism]() - Code block highlighter
+Requires Node.js 20.9+ and pnpm 10.
 
-Features
-- Responsive design
-- Asymetric layout
-  - side column can be used for hero blocks, section titles and image captions
-- Versitile posts collection that can be used as portfolio and blog entries
-- Responsive image layouts - 2 column and 3 section layouts
-- Inline SVG file support
-  - Allows for SVG files to respond to dark mode theme
-  - optimized linked image support
-- Code Editor with dark mode support
-- Dark mode
-- SEO
+```sh
+pnpm install
+pnpm dev
+```
 
-## Payload
+Required environment variables:
 
+```dotenv
+DATABASE_URI=postgres://user:password@localhost:5432/database
+PAYLOAD_SECRET=replace-with-a-long-random-secret
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+```
 
+Set `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, and `S3_SECRET_ACCESS_KEY` to store uploads in S3. Without `S3_BUCKET`, uploads use local storage.
 
-## Access control
+To enable Plausible, set `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL` to the full site-specific script URL from the Plausible dashboard. Pass the same optional value as a Docker build argument.
 
-Basic role-based access control is setup to determine what users can and cannot do based on their roles, which are:
+Useful checks:
 
-- `admin`: They can access the Payload admin panel to manage your site. They can see all data and make all operations.
-- `user`: They cannot access the Payload admin panel and can perform limited operations based on their user (see below).
+```sh
+pnpm generate:types
+pnpm generate:importmap
+pnpm typecheck
+pnpm build
+```
 
-This applies to each collection in the following ways:
+The admin panel is at `/admin`; Payload REST and GraphQL are at `/api/payload` and `/api/payload/graphql`.
 
-- `users`: Only admins and the user themselves can access their profile. Anyone can create a user but only admins can delete users.
-- `posts`: Everyone can access published posts, but only admins can create, update, or delete them. 
-- `pages`: Everyone can access published pages, but only admins can create, update, or delete them.
+## Upgrading an existing Payload 2 database
 
-## Draft Preview
+Back up the database and restore it to a disposable staging database first. Point this branch at the staging copy, run `pnpm dev`, review Payload's proposed PostgreSQL schema changes, and verify users, pages, posts, media, drafts, relationships, admin login, and previews before touching production. Do not let development push mode alter the only production copy.
 
-All posts, and pages are draft-enabled so you can preview them before publishing them to your website. To do this, these collections use [Versions](https://payloadcms.com/docs/configuration/collections#versions) with `drafts` set to `true`. This means that when you create a new post, project, or page, it will be saved as a draft and will not be visible on your website until you publish it. This also means that you can preview your draft before publishing it to your website. To do this, we automatically format a custom URL which redirects to your front-end to securely fetch the draft version of your content.
+Once the upgraded schema and data have been verified, use `pnpm payload migrate:create payload-3` as a starting point and review/edit the migration to represent the verified v2-to-v3 changes. With no v2 migration baseline, the generated file may describe a fresh schema and must not be applied blindly. Test the final migration on another fresh restore with `pnpm payload migrate`. This repository cannot safely generate that production data migration without the original database schema and content.
 
-Since the front-end of this template is statically generated, this also means that pages, and posts will need to be regenerated as changes are made to published documents. To do this, we use an `afterChange` hook to regenerate the front-end when a document has changed and its `_status` is `published`.
+## Docker
 
-For more details on how to extend this functionality, see the official [Draft Preview Example](https://github.com/payloadcms/payload/tree/main/examples/draft-preview).
+The production build reads Payload content while prerendering, so the builder must be able to reach PostgreSQL:
 
+```sh
+docker build --network=host \
+  --build-arg DATABASE_URI="$DATABASE_URI" \
+  --build-arg PAYLOAD_SECRET="$PAYLOAD_SECRET" \
+  --build-arg NEXT_PUBLIC_SERVER_URL="$NEXT_PUBLIC_SERVER_URL" \
+  -t personal-site .
+docker compose up -d
+```
 
-### Docker
-
-To build the docker package run
-`docker build -t personal-site .`
-The payload build process requires a postgres database connection.
-If the postgres database is running locally provide the container a network flag with the host network `--network=host`.
-eg. `docker build -t personal-site . --network=host`
-1. Next run `docker-compose up`
-
-#### Todo :
-- Contact form
-- Allow sending out email to a specified person with a link with an attached auth token. The authorized user will then have access to any project work that I don't want to make public (ie. full projects or some process work or sketches within a project).
+Runtime variables are still supplied by `.env.prod` in `docker-compose.yml`.

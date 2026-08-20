@@ -1,8 +1,8 @@
-import type { AfterReadHook } from 'payload/dist/collections/config/types'
+import type { CollectionAfterReadHook } from 'payload'
 
 import type { Post, PostArchive } from '../payload-types'
 
-export const populateArchiveField: AfterReadHook = async ({ doc, req: { payload } }) => {
+export const populateArchiveField: CollectionAfterReadHook = async ({ doc, req: { payload } }) => {
   // pre-populate the archive block if `populateBy` is `collection`
   // then hydrate it on your front-end
   const layoutWithArchive = await Promise.all(

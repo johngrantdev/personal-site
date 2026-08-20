@@ -1,5 +1,4 @@
-import { colorPickerField } from '@innovixx/payload-color-picker-field'
-import type { CollectionConfig } from 'payload/types'
+import type { CollectionConfig } from 'payload'
 
 import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
@@ -146,16 +145,20 @@ export const Posts: CollectionConfig = {
           relationTo: 'media',
           required: false,
         },
-        colorPickerField({
+        {
           name: 'backgroundColour',
+          type: 'text',
           label: '',
           required: false,
           defaultValue: '#000000',
           admin: {
+            components: {
+              Field: '@/payload/components/ColorPickerField#ColorPickerField',
+            },
             description: 'Choose a colour for this page',
             width: '20%',
           },
-        }),
+        },
         {
           type: 'row',
           fields: [

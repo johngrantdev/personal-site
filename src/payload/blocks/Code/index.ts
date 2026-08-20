@@ -1,7 +1,4 @@
-import { createElement } from 'react'
-import { useFormFields } from 'payload/components/forms'
-import CodeField from 'payload/dist/admin/components/forms/field-types/Code'
-import type { Block, SelectField } from 'payload/types'
+import type { Block } from 'payload'
 import type { Entries } from 'type-fest'
 
 const LANGUAGES = {
@@ -48,27 +45,6 @@ export const Code: Block = {
       required: true,
       type: 'code',
       admin: {
-        components: {
-          Field(field: SelectField & { path?: string }) {
-            // get the relative path of this field and replace with sibling 'language'
-            const language = useFormFields(
-              ([fields]) => fields[`${field.path?.replace('.code', '.language')}`],
-            )
-            const key = language.value as keyof typeof LANGUAGES
-            if (LANGUAGES[key] === undefined) {
-              return null
-            }
-            const label = LANGUAGES[key]
-            return createElement(CodeField, {
-              admin: {
-                language: key,
-              },
-              name: field.name,
-              path: field.path,
-              label,
-            })
-          },
-        },
         language: 'typescript',
       },
     },
