@@ -5,6 +5,8 @@ export const Media: CollectionConfig = {
   admin: {
     useAsTitle: 'alt',
     defaultColumns: ['media', 'alt', 'caption'],
+    description:
+      'The main image will be optimized for different resolutions. The dark mode and mobile images can be optionally used when the image does not present well in dark mode or mobile screen sizes.',
   },
   access: {
     read: () => true,
@@ -20,15 +22,6 @@ export const Media: CollectionConfig = {
       name: 'caption',
       label: 'Caption',
       type: 'richText',
-    },
-    {
-      name: 'instructions',
-      type: 'ui',
-      admin: {
-        components: {
-          Field: '@/payload/components/CollectionIntro#CollectionInstructions',
-        },
-      },
     },
     {
       type: 'row',

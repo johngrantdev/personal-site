@@ -7,7 +7,6 @@ import { getSiteSettings } from './_api/getSiteSettings'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
 import { PageContainer } from './_components/PageContainer'
-import { TailwindBreakpoints } from './_components/TailwindBreakpoints'
 import { Providers } from './_providers'
 import { mergeOpenGraph } from './_utilities/mergeOpenGraph'
 
@@ -51,7 +50,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div className="flex flex-col h-full">
               {children}
               <Footer siteSettings={siteSettings} />
-              {/* <TailwindBreakpoints /> */}
             </div>
           </PageContainer>
           <div className="fixed w-full h-full top-0 left-0 bg-gradient-to-tr from-zinc-950 to-zinc-700 -z-10" />

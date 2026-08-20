@@ -1,9 +1,10 @@
 import React from 'react'
+import { RichText as PayloadRichText } from '@payloadcms/richtext-lexical/react'
 
 import { TOCItem } from '../../../_providers/Context/pageContext'
 import { RichTextClient } from '../client'
-// eslint-disable-next-line import/no-cycle
-import serialize from '../serialize'
+import { extractTOC } from '../extractTOC'
+import { jsxConverters } from '../converters'
 
 interface RichTextProps {
   id?: string
@@ -13,12 +14,11 @@ interface RichTextProps {
 }
 
 const RichText: React.FC<RichTextProps> = ({ className = '', id, content, hasTOC = false }) => {
-  let tocItems: TOCItem[] = []
-  const collectTOCItem = (item: TOCItem) => {
-    tocItems.push(item)
-  }
+  const tocItems = extractTOC(content)
 
-  const serializedRichText = content && content.root ? serialize(content.root.children, collectTOCItem) : null
+  const serializedRichText = content?.root ? (
+    <PayloadRichText data={content} converters={jsxConverters} disableContainer />
+  ) : null
 
   return (
     <RichTextClient

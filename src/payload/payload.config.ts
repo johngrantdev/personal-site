@@ -1,18 +1,15 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import type { GenerateTitle } from '@payloadcms/plugin-seo/types'
-import { BlocksFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+import { BlocksFeature, CodeBlock, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
-import computeBlurhash from 'payload-blurhash-plugin'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { CallToAction } from './blocks/CallToAction'
-import { Code } from './blocks/Code'
 import { MediaBlock } from './blocks/MediaBlock'
 import { VimeoBlock } from './blocks/VimeoBlock'
 import Category from './collections/Category'
@@ -23,7 +20,6 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Uploads } from './collections/Uploads'
 import Users from './collections/Users'
-import { HiddenLayout } from './globals/Hidden'
 import { Site } from './globals/Site'
 import { generatePreviewPath } from './utilities/generatePreviewPath'
 import { purgeTags } from './utilities/purgeTags'
@@ -33,6 +29,27 @@ const dirname = path.dirname(filename)
 
 if (!process.env.PAYLOAD_SECRET) {
   throw new Error('PAYLOAD_SECRET is required')
+}
+
+const CODE_LANGUAGES = {
+  css: 'CSS',
+  dockerfile: 'Dockerfile',
+  go: 'Go',
+  graphql: 'GraphQL',
+  handlebars: 'Handlebars',
+  html: 'HTML',
+  java: 'Java',
+  javascript: 'JavaScript',
+  kotlin: 'Kotlin',
+  markdown: 'Markdown',
+  pgsql: 'PostgresQL',
+  python: 'Python',
+  rust: 'Rust',
+  scss: 'SCSS',
+  swift: 'Swift',
+  typescript: 'TypeScript',
+  xml: 'XML',
+  yaml: 'YAML',
 }
 
 const generateTitle: GenerateTitle = () => process.env.SITE_TITLE || ''
@@ -68,7 +85,19 @@ export default buildConfig({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       BlocksFeature({
-        blocks: [CallToAction, Code, MediaBlock, VimeoBlock],
+        // Payload's premade code block, kept on the original `code` slug and
+        // field shape so existing content and the Prism renderer are unaffected.
+        blocks: [
+          CallToAction,
+          CodeBlock({
+            slug: 'code',
+            defaultLanguage: 'typescript',
+            languages: CODE_LANGUAGES,
+            fieldOverrides: { interfaceName: 'CodeBlock' },
+          }),
+          MediaBlock,
+          VimeoBlock,
+        ],
       }),
     ],
   }),
@@ -81,7 +110,7 @@ export default buildConfig({
   serverURL,
   sharp,
   collections: [Pages, Posts, Media, Category, Keywords, Clients, Users, Uploads],
-  globals: [Site, HiddenLayout],
+  globals: [Site],
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -96,9 +125,6 @@ export default buildConfig({
           afterDelete: [() => purgeTags('redirects')],
         },
       },
-    }),
-    nestedDocsPlugin({
-      collections: ['keywords'],
     }),
     seoPlugin({
       collections: ['pages', 'posts'],
@@ -119,6 +145,5 @@ export default buildConfig({
       },
       enabled: Boolean(process.env.S3_BUCKET),
     }),
-    computeBlurhash(),
   ],
 })

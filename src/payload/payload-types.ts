@@ -127,11 +127,9 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     site: Site;
-    'hidden-layout': HiddenLayout;
   };
   globalsSelect: {
     site: SiteSelect<false> | SiteSelect<true>;
-    'hidden-layout': HiddenLayoutSelect<false> | HiddenLayoutSelect<true>;
   };
   locale: null;
   widgets: {
@@ -169,7 +167,11 @@ export interface Page {
   id: number;
   title: string;
   publishedAt?: string | null;
-  slug?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   layout?: Layout;
   meta?: {
     title?: string | null;
@@ -246,6 +248,8 @@ export interface Hero {
   links?: LinkGroupField;
 }
 /**
+ * The main image will be optimized for different resolutions. The dark mode and mobile images can be optionally used when the image does not present well in dark mode or mobile screen sizes.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -280,7 +284,6 @@ export interface Media {
  */
 export interface Upload {
   id: number;
-  blurhash?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -441,20 +444,6 @@ export interface MainColumn {
 export interface PostArchive {
   category?: (number | Category)[] | null;
   limit?: number | null;
-  showPageRange?: boolean | null;
-  /**
-   * This field is auto-populated after-read
-   */
-  populatedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
-  /**
-   * This field is auto-populated after-read
-   */
-  populatedDocsTotal?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -476,7 +465,11 @@ export interface Post {
   description: string;
   category: number | Category;
   keywords?: (number | Keyword)[] | null;
-  slug?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
   populatedAuthors?:
@@ -516,15 +509,6 @@ export interface Post {
 export interface Keyword {
   id: number;
   title?: string | null;
-  parent?: (number | null) | Keyword;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Keyword;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -687,6 +671,7 @@ export interface PayloadMigration {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   publishedAt?: T;
+  generateSlug?: T;
   slug?: T;
   layout?: T | LayoutSelect<T>;
   meta?:
@@ -780,9 +765,6 @@ export interface MainColumnSelect<T extends boolean = true> {
 export interface PostArchiveSelect<T extends boolean = true> {
   category?: T;
   limit?: T;
-  showPageRange?: T;
-  populatedDocs?: T;
-  populatedDocsTotal?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -793,6 +775,7 @@ export interface PostsSelect<T extends boolean = true> {
   description?: T;
   category?: T;
   keywords?: T;
+  generateSlug?: T;
   slug?: T;
   publishedAt?: T;
   authors?: T;
@@ -853,15 +836,6 @@ export interface CategorySelect<T extends boolean = true> {
  */
 export interface KeywordsSelect<T extends boolean = true> {
   title?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -903,7 +877,6 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "uploads_select".
  */
 export interface UploadsSelect<T extends boolean = true> {
-  blurhash?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1058,13 +1031,33 @@ export interface Site {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "hidden-layout".
+ * via the `definition` "site_select".
  */
-export interface HiddenLayout {
-  id: number;
-  layout?: (CallToActionBlock | MediaBlock | CodeBlock | VimeoBlock)[] | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+export interface SiteSelect<T extends boolean = true> {
+  siteTitle?: T;
+  siteDescription?: T;
+  siteSourceLink?: T;
+  faviconSVG?: T;
+  faviconICO?: T;
+  navItems?:
+    | T
+    | {
+        link?: T | LinkFieldSelect<T>;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1094,6 +1087,38 @@ export interface CallToActionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language?:
+    | (
+        | 'css'
+        | 'dockerfile'
+        | 'go'
+        | 'graphql'
+        | 'handlebars'
+        | 'html'
+        | 'java'
+        | 'javascript'
+        | 'kotlin'
+        | 'markdown'
+        | 'pgsql'
+        | 'python'
+        | 'rust'
+        | 'scss'
+        | 'swift'
+        | 'typescript'
+        | 'xml'
+        | 'yaml'
+      )
+    | null;
+  code?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
@@ -1112,35 +1137,6 @@ export interface MediaBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language:
-    | 'css'
-    | 'dockerfile'
-    | 'go'
-    | 'graphql'
-    | 'handlebars'
-    | 'html'
-    | 'java'
-    | 'javascript'
-    | 'kotlin'
-    | 'markdown'
-    | 'pgsql'
-    | 'python'
-    | 'rust'
-    | 'scss'
-    | 'swift'
-    | 'typescript'
-    | 'xml'
-    | 'yaml';
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "VimeoBlock".
  */
 export interface VimeoBlock {
@@ -1149,101 +1145,6 @@ export interface VimeoBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'vimeoBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "site_select".
- */
-export interface SiteSelect<T extends boolean = true> {
-  siteTitle?: T;
-  siteDescription?: T;
-  siteSourceLink?: T;
-  faviconSVG?: T;
-  faviconICO?: T;
-  navItems?:
-    | T
-    | {
-        link?: T | LinkFieldSelect<T>;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "hidden-layout_select".
- */
-export interface HiddenLayoutSelect<T extends boolean = true> {
-  layout?:
-    | T
-    | {
-        cta?: T | CallToActionBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
-        code?: T | CodeBlockSelect<T>;
-        vimeoBlock?: T | VimeoBlockSelect<T>;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock_select".
- */
-export interface CallToActionBlockSelect<T extends boolean = true> {
-  invertBackground?: T;
-  richText?: T;
-  links?: T | LinkGroupFieldSelect<T>;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock_select".
- */
-export interface MediaBlockSelect<T extends boolean = true> {
-  aspectRatio?: T;
-  sideCaption?: T;
-  layout?: T;
-  media1?: T;
-  media1ShowCaption?: T;
-  media2?: T;
-  media2ShowCaption?: T;
-  media3?: T;
-  media3ShowCaption?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock_select".
- */
-export interface CodeBlockSelect<T extends boolean = true> {
-  language?: T;
-  code?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "VimeoBlock_select".
- */
-export interface VimeoBlockSelect<T extends boolean = true> {
-  videoId?: T;
-  previewImage?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "collections_widget".
- */
-export interface CollectionsWidget {
-  data?: {
-    [k: string]: unknown;
-  };
-  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

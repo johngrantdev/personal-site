@@ -41,9 +41,7 @@ export const Layouts: React.FC<LayoutsProps> = props => {
             </div>
           )
         })}
-        {
-          RelatedPosts && <RelatedPosts index={layouts.length + 1} docs={relatedPosts} />
-        }
+        <RelatedPosts index={layouts.length + 1} docs={relatedPosts} />
       </div>
     )
   }

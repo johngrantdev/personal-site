@@ -1,9 +1,9 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from 'payload'
 
 import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
 import { layout } from '../../fields/layout'
-import { slugField } from '../../fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidatePage, revalidatePageDelete } from './hooks/revalidatePage'
@@ -42,16 +42,11 @@ export const Pages: CollectionConfig = {
       required: true,
     },
     {
-      type: 'row',
-      fields: [
-        {
-          name: 'publishedAt',
-          label: 'Published At',
-          type: 'date',
-        },
-        slugField(),
-      ],
+      name: 'publishedAt',
+      label: 'Published At',
+      type: 'date',
     },
+    slugField({ useAsSlug: 'title' }),
     layout,
   ],
 }

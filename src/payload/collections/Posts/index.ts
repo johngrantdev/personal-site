@@ -1,9 +1,9 @@
 import type { CollectionConfig } from 'payload'
+import { slugField } from 'payload'
 
 import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
 import { layout } from '../../fields/layout'
-import { slugField } from '../../fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
@@ -80,9 +80,9 @@ export const Posts: CollectionConfig = {
           relationTo: 'keywords',
           hasMany: true,
         },
-        slugField(),
       ],
     },
+    slugField({ useAsSlug: 'title' }),
     {
       type: 'row',
       fields: [
@@ -94,16 +94,6 @@ export const Posts: CollectionConfig = {
             date: {
               pickerAppearance: 'dayAndTime',
             },
-          },
-          hooks: {
-            beforeChange: [
-              ({ siblingData, value }) => {
-                if (siblingData._status === 'published' && !value) {
-                  return new Date()
-                }
-                return value
-              },
-            ],
           },
         },
         {
