@@ -23,7 +23,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.personal-site-rtr.entrypoints=https"
+      - "traefik.http.routers.personal-site-rtr.entrypoints=websecure"
       - "traefik.http.routers.personal-site-rtr.rule=Host(`$PUBLICDOMAIN`)"
       - "traefik.http.routers.personal-site-rtr.tls.certresolver=dns-cloudflare" # added to fix certificate issue
       ## Middlewares
