@@ -34,12 +34,6 @@ pnpm build
 
 The admin panel is at `/admin`; Payload REST and GraphQL are at `/api/payload` and `/api/payload/graphql`.
 
-## Upgrading an existing Payload 2 database
-
-Back up the database and restore it to a disposable staging database first. Point this branch at the staging copy, run `pnpm dev`, review Payload's proposed PostgreSQL schema changes, and verify users, pages, posts, media, drafts, relationships, admin login, and previews before touching production. Do not let development push mode alter the only production copy.
-
-Once the upgraded schema and data have been verified, use `pnpm payload migrate:create payload-3` as a starting point and review/edit the migration to represent the verified v2-to-v3 changes. With no v2 migration baseline, the generated file may describe a fresh schema and must not be applied blindly. Test the final migration on another fresh restore with `pnpm payload migrate`. This repository cannot safely generate that production data migration without the original database schema and content.
-
 ## Docker
 
 The production build reads Payload content while prerendering, so the builder must be able to reach PostgreSQL:

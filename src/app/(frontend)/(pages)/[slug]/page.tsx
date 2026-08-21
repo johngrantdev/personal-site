@@ -12,6 +12,8 @@ import { PageMargin } from '../../_components/PageMargin'
 import { PageState } from '../../_providers/Context/pageContext'
 import { generateMeta } from '../../_utilities/generateMeta'
 
+export const dynamic = 'force-dynamic'
+
 type PageProps = { params: Promise<{ slug?: string }> }
 
 export default async function Page({ params }: PageProps) {
