@@ -1,7 +1,7 @@
-import type { GlobalConfig } from 'payload/types'
+import type { GlobalConfig } from 'payload'
 
 import link from '../fields/link'
-import { revalidateAllPages } from './hooks/revalidateAllPages'
+import { revalidateSite } from './hooks/revalidateSite'
 
 export const Site: GlobalConfig = {
   slug: 'site',
@@ -68,6 +68,6 @@ export const Site: GlobalConfig = {
     },
   ],
   hooks: {
-    afterChange: [revalidateAllPages],
+    afterChange: [revalidateSite],
   },
 }

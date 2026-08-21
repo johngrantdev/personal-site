@@ -12,11 +12,11 @@
  */
 export type Layout =
   | {
-      sideContentPosition: 'scrollSideContent' | 'fixedSideContentWhenVisible' | 'fixedSideContentAlways';
-      scrollSnap?: boolean | null;
-      fullPageHeight?: boolean | null;
-      sideColumn: SideColumn;
-      mainColumn: MainColumn;
+      sidePos: 'scrollSideContent' | 'fixedSideContentWhenVisible' | 'fixedSideContentAlways';
+      scrSnap?: boolean | null;
+      fullH?: boolean | null;
+      sideCol: SideColumn;
+      mainCol: MainColumn;
       id?: string | null;
     }[]
   | null;
@@ -30,8 +30,66 @@ export type LinkGroupField =
       id?: string | null;
     }[]
   | null;
+/**
+ * Supported timezones in IANA format.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "supportedTimezones".
+ */
+export type SupportedTimezones =
+  | 'Pacific/Midway'
+  | 'Pacific/Niue'
+  | 'Pacific/Honolulu'
+  | 'Pacific/Rarotonga'
+  | 'America/Anchorage'
+  | 'Pacific/Gambier'
+  | 'America/Los_Angeles'
+  | 'America/Tijuana'
+  | 'America/Denver'
+  | 'America/Phoenix'
+  | 'America/Chicago'
+  | 'America/Guatemala'
+  | 'America/New_York'
+  | 'America/Bogota'
+  | 'America/Caracas'
+  | 'America/Santiago'
+  | 'America/Buenos_Aires'
+  | 'America/Sao_Paulo'
+  | 'Atlantic/South_Georgia'
+  | 'Atlantic/Azores'
+  | 'Atlantic/Cape_Verde'
+  | 'Europe/London'
+  | 'Europe/Berlin'
+  | 'Africa/Lagos'
+  | 'Europe/Athens'
+  | 'Africa/Cairo'
+  | 'Europe/Moscow'
+  | 'Asia/Riyadh'
+  | 'Asia/Dubai'
+  | 'Asia/Baku'
+  | 'Asia/Karachi'
+  | 'Asia/Tashkent'
+  | 'Asia/Calcutta'
+  | 'Asia/Dhaka'
+  | 'Asia/Almaty'
+  | 'Asia/Jakarta'
+  | 'Asia/Bangkok'
+  | 'Asia/Shanghai'
+  | 'Asia/Singapore'
+  | 'Asia/Tokyo'
+  | 'Asia/Seoul'
+  | 'Australia/Brisbane'
+  | 'Australia/Sydney'
+  | 'Pacific/Guam'
+  | 'Pacific/Noumea'
+  | 'Pacific/Auckland'
+  | 'Pacific/Fiji';
 
 export interface Config {
+  auth: {
+    users: UserAuthOperations;
+  };
+  blocks: {};
   collections: {
     pages: Page;
     posts: Post;
@@ -42,12 +100,63 @@ export interface Config {
     users: User;
     uploads: Upload;
     redirects: Redirect;
+    'payload-kv': PayloadKv;
+    'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
+  collectionsJoins: {};
+  collectionsSelect: {
+    pages: PagesSelect<false> | PagesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    category: CategorySelect<false> | CategorySelect<true>;
+    keywords: KeywordsSelect<false> | KeywordsSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    uploads: UploadsSelect<false> | UploadsSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+  };
+  db: {
+    defaultIDType: number;
+  };
+  fallbackLocale: null;
   globals: {
     site: Site;
-    'hidden-layout': HiddenLayout;
+  };
+  globalsSelect: {
+    site: SiteSelect<false> | SiteSelect<true>;
+  };
+  locale: null;
+  widgets: {
+    collections: CollectionsWidget;
+  };
+  user: User;
+  jobs: {
+    tasks: unknown;
+    workflows: unknown;
+  };
+}
+export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
   };
 }
 /**
@@ -58,12 +167,19 @@ export interface Page {
   id: number;
   title: string;
   publishedAt?: string | null;
-  slug?: string | null;
-  layout?: Layout;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  lyout?: Layout;
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: number | Upload | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Upload;
   };
   updatedAt: string;
   createdAt: string;
@@ -76,33 +192,33 @@ export interface Page {
 export interface SideColumn {
   style: 'none' | 'hero' | 'postHero' | 'projectHero' | 'singleLayout' | 'twoRows';
   hero?: Hero;
-  projectHero?: ProjectHero;
+  prjHero?: ProjectHero;
   sideContent1?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
   sideContent2?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
@@ -114,24 +230,26 @@ export interface SideColumn {
  */
 export interface Hero {
   media?: (number | null) | Media;
-  description?: {
+  desc?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
-  links?: LinkGroupField;
+  lnks?: LinkGroupField;
 }
 /**
+ * The main image will be optimized for different resolutions. The dark mode and mobile images can be optionally used when the image does not present well in dark mode or mobile screen sizes.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -140,23 +258,23 @@ export interface Media {
   alt: string;
   caption?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
   media: number | Upload;
-  mediaDark?: number | Upload | null;
-  mediaMobile?: number | Upload | null;
-  mediaMobileDark?: number | Upload | null;
+  mediaDark?: (number | null) | Upload;
+  mediaMobile?: (number | null) | Upload;
+  mediaMobileDark?: (number | null) | Upload;
   updatedAt: string;
   createdAt: string;
 }
@@ -166,15 +284,17 @@ export interface Media {
  */
 export interface Upload {
   id: number;
-  blurhash?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
+  thumbnailURL?: string | null;
   filename?: string | null;
   mimeType?: string | null;
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
   sizes?: {
     card?: {
       url?: string | null;
@@ -239,32 +359,35 @@ export interface LinkField {
   } | null;
   url?: string | null;
   label: string;
-  appearance?: ('default' | 'primary' | 'secondary') | null;
+  /**
+   * Choose how the link should be rendered.
+   */
+  apprnce?: ('primary' | 'secondary') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ProjectHero".
  */
 export interface ProjectHero {
-  year?: number | null;
+  yr?: number | null;
   client?: (number | null) | Client;
-  usePostDescription?: boolean | null;
-  customDescription?: {
+  useDesc?: boolean | null;
+  cDesc?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
-  links?: LinkGroupField;
+  lnks?: LinkGroupField;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -282,33 +405,33 @@ export interface Client {
  */
 export interface MainColumn {
   style: 'postArchive' | 'singleLayout' | 'twoColumns';
-  postArchive?: PostArchive
+  postArchive?: PostArchive;
   column1?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
   column2?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
@@ -316,40 +439,11 @@ export interface MainColumn {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
+ * via the `definition` "PostArchive".
  */
-export interface Post {
-  id: number;
-  title: string;
-  description: string;
-  category: number | Category;
-  keywords?: (number | Keyword)[] | null;
-  slug?: string | null;
-  publishedAt?: string | null;
-  authors?: (number | User)[] | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
-  card?: {
-    media?: (number | null) | Media;
-    backgroundColour?: string | null;
-    overlayImage?: boolean | null;
-    showDate?: boolean | null;
-    hideTitle?: boolean | null;
-  };
-  layout?: Layout;
-  relatedPosts?: (number | Post)[] | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: number | Upload | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+export interface PostArchive {
+  cat?: (number | Category)[] | null;
+  limit?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -363,20 +457,58 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  description: string;
+  category: number | Category;
+  keywords?: (number | Keyword)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  card?: {
+    media?: (number | null) | Media;
+    /**
+     * Choose a colour for this page
+     */
+    backgroundColour?: string | null;
+    overlayImage?: boolean | null;
+    showDate?: boolean | null;
+    hideTitle?: boolean | null;
+  };
+  lyout?: Layout;
+  relatedPosts?: (number | Post)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Upload;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "keywords".
  */
 export interface Keyword {
   id: number;
   title?: string | null;
-  parent?: (number | null) | Keyword;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Keyword;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -397,7 +529,15 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
-  password: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -418,6 +558,74 @@ export interface Redirect {
           value: number | Post;
         } | null);
     url?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: number;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents".
+ */
+export interface PayloadLockedDocument {
+  id: number;
+  document?:
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'category';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'keywords';
+        value: number | Keyword;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'uploads';
+        value: number | Upload;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: number | Redirect;
+      } | null);
+  globalSlug?: string | null;
+  user: {
+    relationTo: 'users';
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -458,6 +666,351 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  lyout?: T | LayoutSelect<T>;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Layout_select".
+ */
+export interface LayoutSelect<T extends boolean = true> {
+  sidePos?: T;
+  scrSnap?: T;
+  fullH?: T;
+  sideCol?: T | SideColumnSelect<T>;
+  mainCol?: T | MainColumnSelect<T>;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SideColumn_select".
+ */
+export interface SideColumnSelect<T extends boolean = true> {
+  style?: T;
+  hero?: T | HeroSelect<T>;
+  prjHero?: T | ProjectHeroSelect<T>;
+  sideContent1?: T;
+  sideContent2?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Hero_select".
+ */
+export interface HeroSelect<T extends boolean = true> {
+  media?: T;
+  desc?: T;
+  lnks?: T | LinkGroupFieldSelect<T>;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkGroupField_select".
+ */
+export interface LinkGroupFieldSelect<T extends boolean = true> {
+  link?: T | LinkFieldSelect<T>;
+  id?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkField_select".
+ */
+export interface LinkFieldSelect<T extends boolean = true> {
+  type?: T;
+  newTab?: T;
+  reference?: T;
+  url?: T;
+  label?: T;
+  apprnce?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProjectHero_select".
+ */
+export interface ProjectHeroSelect<T extends boolean = true> {
+  yr?: T;
+  client?: T;
+  useDesc?: T;
+  cDesc?: T;
+  lnks?: T | LinkGroupFieldSelect<T>;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MainColumn_select".
+ */
+export interface MainColumnSelect<T extends boolean = true> {
+  style?: T;
+  postArchive?: T | PostArchiveSelect<T>;
+  column1?: T;
+  column2?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostArchive_select".
+ */
+export interface PostArchiveSelect<T extends boolean = true> {
+  cat?: T;
+  limit?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  category?: T;
+  keywords?: T;
+  generateSlug?: T;
+  slug?: T;
+  publishedAt?: T;
+  authors?: T;
+  populatedAuthors?:
+    | T
+    | {
+        id?: T;
+        name?: T;
+      };
+  card?:
+    | T
+    | {
+        media?: T;
+        backgroundColour?: T;
+        overlayImage?: T;
+        showDate?: T;
+        hideTitle?: T;
+      };
+  lyout?: T | LayoutSelect<T>;
+  relatedPosts?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
+  media?: T;
+  mediaDark?: T;
+  mediaMobile?: T;
+  mediaMobileDark?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "category_select".
+ */
+export interface CategorySelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "keywords_select".
+ */
+export interface KeywordsSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  roles?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "uploads_select".
+ */
+export interface UploadsSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        desktop?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        desktopHalf?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        tablet?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        tabletHalf?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        mobile?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?:
+    | T
+    | {
+        type?: T;
+        reference?: T;
+        url?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents_select".
+ */
+export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-preferences_select".
+ */
+export interface PayloadPreferencesSelect<T extends boolean = true> {
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-migrations_select".
+ */
+export interface PayloadMigrationsSelect<T extends boolean = true> {
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site".
  */
 export interface Site {
@@ -465,8 +1018,8 @@ export interface Site {
   siteTitle?: string | null;
   siteDescription?: string | null;
   siteSourceLink?: string | null;
-  faviconSVG?: number | Media | null;
-  faviconICO?: number | Media | null;
+  faviconSVG?: (number | null) | Media;
+  faviconICO?: (number | null) | Media;
   navItems?:
     | {
         link: LinkField;
@@ -478,13 +1031,33 @@ export interface Site {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "hidden-layout".
+ * via the `definition` "site_select".
  */
-export interface HiddenLayout {
-  id: number;
-  layout?: (CallToActionBlock | MediaBlock | CodeBlock | VimeoBlock)[] | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+export interface SiteSelect<T extends boolean = true> {
+  siteTitle?: T;
+  siteDescription?: T;
+  siteSourceLink?: T;
+  faviconSVG?: T;
+  faviconICO?: T;
+  navItems?:
+    | T
+    | {
+        link?: T | LinkFieldSelect<T>;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -494,23 +1067,55 @@ export interface CallToActionBlock {
   invertBackground?: boolean | null;
   richText?: {
     root: {
+      type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
       direction: ('ltr' | 'rtl') | null;
       format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
       indent: number;
-      type: string;
       version: number;
     };
     [k: string]: unknown;
   } | null;
-  links?: LinkGroupField;
+  lnks?: LinkGroupField;
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language?:
+    | (
+        | 'css'
+        | 'dockerfile'
+        | 'go'
+        | 'graphql'
+        | 'handlebars'
+        | 'html'
+        | 'java'
+        | 'javascript'
+        | 'kotlin'
+        | 'markdown'
+        | 'pgsql'
+        | 'python'
+        | 'rust'
+        | 'scss'
+        | 'swift'
+        | 'typescript'
+        | 'xml'
+        | 'yaml'
+      )
+    | null;
+  code?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -521,43 +1126,14 @@ export interface MediaBlock {
   sideCaption?: boolean | null;
   layout?: ('default' | 'twoColumn' | 'heroGrid') | null;
   media1: number | Media;
-  media1ShowCaption: boolean | null;
+  media1ShowCaption?: boolean | null;
   media2?: (number | null) | Media;
-  media2ShowCaption: boolean | null;
+  media2ShowCaption?: boolean | null;
   media3?: (number | null) | Media;
-  media3ShowCaption: boolean | null;
+  media3ShowCaption?: boolean | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language:
-    | 'css'
-    | 'dockerfile'
-    | 'go'
-    | 'graphql'
-    | 'handlebars'
-    | 'html'
-    | 'java'
-    | 'javascript'
-    | 'kotlin'
-    | 'markdown'
-    | 'pgsql'
-    | 'python'
-    | 'rust'
-    | 'scss'
-    | 'swift'
-    | 'typescript'
-    | 'xml'
-    | 'yaml';
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -565,27 +1141,20 @@ export interface CodeBlock {
  */
 export interface VimeoBlock {
   videoId?: string | null;
-  previewImage?: number | Media | null;
+  previewImage?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'vimeoBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "auth".
+ */
+export interface Auth {
+  [k: string]: unknown;
 }
 
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
-}
-
-export interface PostArchive {
-  category?: (number | Category)[] | null;
-  limit?: number | null;
-  showPageRange?: boolean | null;
-  populatedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
-  populatedDocsTotal?: number | null;
-  id?: string | null;
 }

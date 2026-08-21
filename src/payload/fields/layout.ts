@@ -1,4 +1,13 @@
-import type { Field } from 'payload/types'
+// Field names here are deliberately abbreviated. PostgreSQL truncates identifiers
+// at 63 bytes (NAMEDATALEN) and silently collides beyond that; table and constraint
+// names are built from the full nested field path, so `layout.sideColumn.projectHero
+// .links` overflows while `lyout.sideCol.prjHero.lnks` does not. Do not expand these
+// without re-checking:
+//   SELECT length(conname), conname FROM pg_constraint c JOIN pg_namespace n
+//     ON n.oid = c.connamespace WHERE n.nspname = 'public' ORDER BY 1 DESC LIMIT 5;
+// Nothing may reach 63. `interfaceName` values stay readable — they are TypeScript
+// only and never reach the database.
+import type { Field } from 'payload'
 
 import linkGroup from './linkGroup'
 import { postArchive } from './postArchive'
@@ -6,7 +15,7 @@ import { postArchive } from './postArchive'
 // import { LayoutFillerComponent } from '../components/Layout'
 
 export const layout: Field = {
-  name: 'layout',
+  name: 'lyout',
   label: 'Main Layout',
   type: 'array',
   interfaceName: 'Layout',
@@ -15,7 +24,7 @@ export const layout: Field = {
       type: 'row',
       fields: [
         {
-          name: 'sideContentPosition',
+          name: 'sidePos',
           label: false,
           type: 'select',
           required: true,
@@ -36,13 +45,13 @@ export const layout: Field = {
           ],
         },
         {
-          name: 'scrollSnap',
+          name: 'scrSnap',
           label: 'Scroll Snap',
           type: 'checkbox',
           defaultValue: false,
         },
         {
-          name: 'fullPageHeight',
+          name: 'fullH',
           label: 'Full Page Height',
           type: 'checkbox',
           defaultValue: false,
@@ -53,7 +62,7 @@ export const layout: Field = {
       type: 'row',
       fields: [
         {
-          name: 'sideColumn',
+          name: 'sideCol',
           type: 'group',
           interfaceName: 'SideColumn',
           admin: {
@@ -111,14 +120,14 @@ export const layout: Field = {
                   required: false,
                 },
                 {
-                  name: 'description',
+                  name: 'desc',
                   type: 'richText',
                 },
                 linkGroup(),
               ],
             },
             {
-              name: 'projectHero',
+              name: 'prjHero',
               type: 'group',
               label: false,
               interfaceName: 'ProjectHero',
@@ -129,7 +138,7 @@ export const layout: Field = {
               },
               fields: [
                 {
-                  name: 'year',
+                  name: 'yr',
                   label: 'Year Completed',
                   type: 'number',
                   min: 2000,
@@ -142,18 +151,18 @@ export const layout: Field = {
                   relationTo: 'clients',
                 },
                 {
-                  name: 'usePostDescription',
+                  name: 'useDesc',
                   label: 'Use Post Description?',
                   type: 'checkbox',
                   defaultValue: true,
                 },
                 {
-                  name: 'customDescription',
+                  name: 'cDesc',
                   label: 'Description',
                   type: 'richText',
                   admin: {
                     condition: (_, siblingData) => {
-                      return !siblingData.usePostDescription
+                      return !siblingData.useDesc
                     },
                   },
                 },
@@ -183,7 +192,7 @@ export const layout: Field = {
           ],
         },
         {
-          name: 'mainColumn',
+          name: 'mainCol',
           type: 'group',
           interfaceName: 'MainColumn',
           admin: {

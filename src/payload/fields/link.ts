@@ -1,4 +1,4 @@
-import type { Field } from 'payload/types'
+import type { Field } from 'payload'
 
 import deepMerge from '../utilities/deepMerge'
 
@@ -39,6 +39,7 @@ const link: LinkType = ({ appearances, disableLabel = false, overrides = {} } = 
         fields: [
           {
             name: 'type',
+            dbName: 't',
             type: 'radio',
             options: [
               {
@@ -135,9 +136,11 @@ const link: LinkType = ({ appearances, disableLabel = false, overrides = {} } = 
     }
 
     linkResult.fields.push({
-      name: 'appearance',
+      // abbreviated: nests inside layout groups, see fields/layout.ts
+      name: 'apprnce',
+      dbName: appearances ? 'app_btn' : 'app_all',
       type: 'select',
-      defaultValue: 'default',
+      defaultValue: appearances?.[0] ?? 'default',
       options: appearanceOptionsToUse,
       admin: {
         description: 'Choose how the link should be rendered.',

@@ -1,15 +1,21 @@
-import type { AfterChangeHook } from 'payload/dist/collections/config/types'
+import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidate } from '../../../utilities/revalidate'
+import { purgeTags } from '../../../utilities/purgeTags'
 
-// Revalidate the post in the background, so the user doesn't have to wait
-// Notice that the hook itself is not async and we are not awaiting `revalidate`
-// Only revalidate existing docs that are published
-// Don't scope to `operation` in order to purge static demo posts
-export const revalidatePost: AfterChangeHook = ({ doc, req: { payload } }) => {
-  if (doc._status === 'published') {
-    revalidate({ payload, collection: 'posts', slugs: [doc.slug] })
+// The `posts` tag also backs the archive query and the static slug list, so any
+// post change invalidates the pages that render an archive.
+export const revalidatePost: CollectionAfterChangeHook = ({ doc, previousDoc }) => {
+  purgeTags(`posts_${doc.slug}`, 'posts')
+
+  if (previousDoc?.slug && previousDoc.slug !== doc.slug) {
+    purgeTags(`posts_${previousDoc.slug}`)
   }
+
+  return doc
+}
+
+export const revalidatePostDelete: CollectionAfterDeleteHook = ({ doc }) => {
+  purgeTags(`posts_${doc?.slug}`, 'posts')
 
   return doc
 }

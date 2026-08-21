@@ -1,13 +1,12 @@
-import type { CollectionConfig } from 'payload/types'
-
-import { CollectionInstructions } from '../../components/CollectionIntro'
-import ThumbnailCell from '../../components/ThumbnailCell'
+import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
     useAsTitle: 'alt',
     defaultColumns: ['media', 'alt', 'caption'],
+    description:
+      'The main image will be optimized for different resolutions. The dark mode and mobile images can be optionally used when the image does not present well in dark mode or mobile screen sizes.',
   },
   access: {
     read: () => true,
@@ -25,15 +24,6 @@ export const Media: CollectionConfig = {
       type: 'richText',
     },
     {
-      name: 'instructions',
-      type: 'ui',
-      admin: {
-        components: {
-          Field: CollectionInstructions,
-        },
-      },
-    },
-    {
       type: 'row',
       fields: [
         {
@@ -44,7 +34,7 @@ export const Media: CollectionConfig = {
           required: true,
           admin: {
             components: {
-              Cell: ThumbnailCell,
+              Cell: '@/payload/components/ThumbnailCell#default',
             },
           },
         },

@@ -1,5 +1,5 @@
-import type { ArrayField } from 'payload/dist/fields/config/types'
-import type { Field } from 'payload/types'
+import type { ArrayField } from 'payload'
+import type { Field } from 'payload'
 
 import deepMerge from '../utilities/deepMerge'
 import type { LinkAppearances } from './link'
@@ -12,7 +12,8 @@ type LinkGroupType = (options?: {
 
 const linkGroup: LinkGroupType = ({ overrides = {}, appearances } = {}) => {
   const generatedLinkGroup: Field = {
-    name: 'links',
+    // abbreviated: nests inside layout groups, see fields/layout.ts
+    name: 'lnks',
     type: 'array',
     interfaceName: 'LinkGroupField',
     fields: [

@@ -1,18 +1,15 @@
-import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { cloudStorage } from '@payloadcms/plugin-cloud-storage'
-import nestedDocs from '@payloadcms/plugin-nested-docs'
-import redirects from '@payloadcms/plugin-redirects'
-import seo from '@payloadcms/plugin-seo'
+import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 import type { GenerateTitle } from '@payloadcms/plugin-seo/types'
-import { BlocksFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
-import dotenv from 'dotenv'
+import { BlocksFeature, CodeBlock, lexicalEditor } from '@payloadcms/richtext-lexical'
+import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
-import { buildConfig } from 'payload/config'
-import computeBlurhash from 'payload-blurhash-plugin'
+import { buildConfig } from 'payload'
+import sharp from 'sharp'
+import { fileURLToPath } from 'url'
 
 import { CallToAction } from './blocks/CallToAction'
-import { Code } from './blocks/Code'
 import { MediaBlock } from './blocks/MediaBlock'
 import { VimeoBlock } from './blocks/VimeoBlock'
 import Category from './collections/Category'
@@ -23,57 +20,84 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Uploads } from './collections/Uploads'
 import Users from './collections/Users'
-import { HiddenLayout } from './globals/Hidden'
 import { Site } from './globals/Site'
-import { adapter } from './utilities/s3adapter'
+import { generatePreviewPath } from './utilities/generatePreviewPath'
+import { purgeTags } from './utilities/purgeTags'
 
-import dashboardAnalytics from '@nouance/payload-dashboard-analytics'
-import type { PlausibleProvider } from '@nouance/payload-dashboard-analytics/dist/types/providers'
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
-const PLAUSIBLE_API_KEY = process.env.PLAUSIBLE_API_KEY
-const PLAUSIBLE_HOST = process.env.PLAUSIBLE_HOST
-const PLAUSIBLE_SITE_ID = process.env.PLAUSIBLE_SITE_ID
-
-const plausibleProvider: PlausibleProvider = {
-  source: 'plausible',
-  apiSecret: PLAUSIBLE_API_KEY,
-  siteId: PLAUSIBLE_SITE_ID,
-  host: PLAUSIBLE_HOST,
+if (!process.env.PAYLOAD_SECRET) {
+  throw new Error('PAYLOAD_SECRET is required')
 }
 
-const generateTitle: GenerateTitle = () => {
-  return process.env.SITE_TITLE
+const CODE_LANGUAGES = {
+  css: 'CSS',
+  dockerfile: 'Dockerfile',
+  go: 'Go',
+  graphql: 'GraphQL',
+  handlebars: 'Handlebars',
+  html: 'HTML',
+  java: 'Java',
+  javascript: 'JavaScript',
+  kotlin: 'Kotlin',
+  markdown: 'Markdown',
+  pgsql: 'PostgresQL',
+  python: 'Python',
+  rust: 'Rust',
+  scss: 'SCSS',
+  swift: 'Swift',
+  typescript: 'TypeScript',
+  xml: 'XML',
+  yaml: 'YAML',
 }
 
-dotenv.config({
-  path: path.resolve(__dirname, '../../.env'),
-})
+const generateTitle: GenerateTitle = () => process.env.SITE_TITLE || ''
+const serverURL = process.env.NEXT_PUBLIC_SERVER_URL
 
 export default buildConfig({
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
   admin: {
     user: Users.slug,
-    bundler: webpackBundler(),
-    components: {},
-    webpack: config => ({
-      ...config,
-      resolve: {
-        ...config.resolve,
-        alias: {
-          ...config.resolve.alias,
-          dotenv: path.resolve(__dirname, './dotenv.js'),
-        },
-      },
-    }),
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
+    livePreview: {
+      collections: ['pages', 'posts'],
+      url: ({ collectionConfig, data }) =>
+        generatePreviewPath({
+          collection: collectionConfig?.slug === 'posts' ? 'posts' : 'pages',
+          slug: data?.slug,
+        }),
+      breakpoints: [
+        { name: 'mobile', label: 'Mobile', width: 375, height: 667 },
+        { name: 'tablet', label: 'Tablet', width: 768, height: 1024 },
+        { name: 'desktop', label: 'Desktop', width: 1440, height: 900 },
+      ],
+    },
   },
   routes: {
     api: '/api/payload',
+    graphQL: '/api/payload/graphql',
+    graphQLPlayground: '/api/payload/graphql-playground',
   },
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       BlocksFeature({
-        blocks: [CallToAction, Code, MediaBlock, VimeoBlock],
+        // Payload's premade code block, kept on the original `code` slug and
+        // field shape so existing content and the Prism renderer are unaffected.
+        blocks: [
+          CallToAction,
+          CodeBlock({
+            slug: 'code',
+            defaultLanguage: 'typescript',
+            languages: CODE_LANGUAGES,
+            fieldOverrides: { interfaceName: 'CodeBlock' },
+          }),
+          MediaBlock,
+          VimeoBlock,
+        ],
       }),
     ],
   }),
@@ -82,88 +106,44 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI,
     },
   }),
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
+  secret: process.env.PAYLOAD_SECRET,
+  serverURL,
+  sharp,
   collections: [Pages, Posts, Media, Category, Keywords, Clients, Users, Uploads],
-  globals: [Site, HiddenLayout],
+  globals: [Site],
   typescript: {
-    outputFile: path.resolve(__dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  graphQL: {
-    schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
-  },
-  cors: [process.env.PAYLOAD_PUBLIC_SERVER_URL],
-  csrf: [process.env.PAYLOAD_PUBLIC_SERVER_URL],
-  rateLimit: {
-    max: 5000,
-    trustProxy: true,
-  },
-  // endpoints: [
-  //   // The seed endpoint is used to populate the database with some example data
-  //   // You should delete this endpoint before deploying your site to production
-  //   {
-  //     path: '/seed',
-  //     method: 'get',
-  //     handler: seed,
-  //   },
-  // ],
+  cors: serverURL ? [serverURL] : [],
+  csrf: serverURL ? [serverURL] : [],
   plugins: [
-    // formBuilder({}),
-    redirects({
+    redirectsPlugin({
       collections: ['pages', 'posts'],
+      overrides: {
+        hooks: {
+          afterChange: [() => purgeTags('redirects')],
+          afterDelete: [() => purgeTags('redirects')],
+        },
+      },
     }),
-    nestedDocs({
-      collections: ['keywords'],
-    }),
-    seo({
+    seoPlugin({
       collections: ['pages', 'posts'],
       generateTitle,
       uploadsCollection: 'uploads',
     }),
-    cloudStorage({
+    s3Storage({
+      bucket: process.env.S3_BUCKET || '',
       collections: {
-        uploads: {
-          adapter: adapter,
+        uploads: true,
+      },
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
         },
+        region: process.env.S3_REGION,
       },
-    }),
-    computeBlurhash(),
-    dashboardAnalytics({
-      provider: plausibleProvider,
-      access: (user: any) => {
-        return Boolean(user)
-      },
-      navigation: {
-        afterNavLinks: [
-          {
-            type: 'live',
-          },
-        ],
-      },
-      dashboard: {
-        beforeDashboard: ['viewsChart'],
-        afterDashboard: ['topPages'],
-      },
-      collections: [
-        {
-          slug: Posts.slug,
-          widgets: [
-            {
-              type: 'chart',
-              label: 'Page views',
-              metrics: ['views'],
-              timeframe: 'currentMonth',
-              idMatcher: (document: any) => `/articles/${document.slug}`,
-            },
-            {
-              type: 'info',
-              label: 'Page data',
-              metrics: ['views', 'sessions', 'sessionDuration'],
-              timeframe: '12mo',
-              idMatcher: (document: any) => `/articles/${document.slug}`,
-            },
-          ],
-        },
-      ],
+      enabled: Boolean(process.env.S3_BUCKET),
     }),
   ],
 })

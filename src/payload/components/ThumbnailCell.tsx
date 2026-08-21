@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import type { Props } from 'payload/components/views/Cell'
+'use client'
 
-const ThumbnailCell: React.FC<Props> = props => {
-  const { cellData = '', rowData } = props
+import type { DefaultCellComponentProps } from 'payload'
+import React, { useEffect, useState } from 'react'
+
+const ThumbnailCell: React.FC<DefaultCellComponentProps> = ({ cellData = '' }) => {
   const [url, setUrl] = useState('')
 
   useEffect(() => {
     if (cellData) {
-      const apiUrl = `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/payload/uploads/${cellData}`
-
-      fetch(apiUrl, {
+      fetch(`/api/payload/uploads/${cellData}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

@@ -1,30 +1,36 @@
-import { colorPickerField } from '@innovixx/payload-color-picker-field'
-import type { CollectionConfig } from 'payload/types'
+import type { CollectionConfig } from 'payload'
+import { slugField } from 'payload'
 
 import { admins } from '../../access/admins'
 import { adminsOrPublished } from '../../access/adminsOrPublished'
 import { layout } from '../../fields/layout'
-import { slugField } from '../../fields/slug'
-import { populateArchiveField } from '../../hooks/populateArchiveField'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
+import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
-import { revalidatePost } from './hooks/revalidatePost'
+import { revalidatePost, revalidatePostDelete } from './hooks/revalidatePost'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    preview: doc => {
-      return `${process.env.NEXT_PUBLIC_SERVER_URL}/api/next/preview?url=${encodeURIComponent(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/posts/${doc?.slug}`,
-      )}&secret=${process.env.PAYLOAD_PUBLIC_DRAFT_SECRET}`
-    },
+    preview: doc => generatePreviewPath({ collection: 'posts', slug: doc?.slug as string }),
   },
   hooks: {
     beforeChange: [populatePublishedAt],
     afterChange: [revalidatePost],
-    afterRead: [populateArchiveField, populateAuthors],
+    afterDelete: [revalidatePostDelete],
+    afterRead: [populateAuthors],
+  },
+  // Posts are populated as related posts and archive entries, both of which
+  // render a card. Nothing that populates a post needs its layout.
+  defaultPopulate: {
+    slug: true,
+    title: true,
+    description: true,
+    publishedAt: true,
+    keywords: true,
+    card: true,
   },
   versions: {
     drafts: true,
@@ -74,9 +80,9 @@ export const Posts: CollectionConfig = {
           relationTo: 'keywords',
           hasMany: true,
         },
-        slugField(),
       ],
     },
+    slugField({ useAsSlug: 'title' }),
     {
       type: 'row',
       fields: [
@@ -88,16 +94,6 @@ export const Posts: CollectionConfig = {
             date: {
               pickerAppearance: 'dayAndTime',
             },
-          },
-          hooks: {
-            beforeChange: [
-              ({ siblingData, value }) => {
-                if (siblingData._status === 'published' && !value) {
-                  return new Date()
-                }
-                return value
-              },
-            ],
           },
         },
         {
@@ -146,16 +142,20 @@ export const Posts: CollectionConfig = {
           relationTo: 'media',
           required: false,
         },
-        colorPickerField({
+        {
           name: 'backgroundColour',
+          type: 'text',
           label: '',
           required: false,
           defaultValue: '#000000',
           admin: {
+            components: {
+              Field: '@/payload/components/ColorPickerField#ColorPickerField',
+            },
             description: 'Choose a colour for this page',
             width: '20%',
           },
-        }),
+        },
         {
           type: 'row',
           fields: [

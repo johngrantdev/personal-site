@@ -1,44 +1,45 @@
-FROM node:18.19-alpine as base
+FROM node:22.17.0-alpine AS base
 
-FROM base as builder
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
-WORKDIR /home/node/app
-
-COPY package*.json ./
-
-RUN npm install -g pnpm
-
-RUN apk add --no-cache make gcc g++ python3
-
+FROM base AS builder
+WORKDIR /app
+ARG DATABASE_URI
+ARG PAYLOAD_SECRET
+ARG NEXT_PUBLIC_SERVER_URL
+ARG NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL
+# Baked into the build output, not read at runtime:
+#   NEXT_PUBLIC_IS_LIVE -> the X-Robots-Tag noindex header in next.config.mjs
+#   SITE_NAME / SITE_DESCRIPTION -> Open Graph metadata on prerendered pages
+ARG NEXT_PUBLIC_IS_LIVE
+ARG SITE_NAME
+ARG SITE_DESCRIPTION
+ARG SITE_OG_IMAGE
+ENV DATABASE_URI=$DATABASE_URI
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
+ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
+ENV NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL=$NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL
+ENV NEXT_PUBLIC_IS_LIVE=$NEXT_PUBLIC_IS_LIVE
+ENV SITE_NAME=$SITE_NAME
+ENV SITE_DESCRIPTION=$SITE_DESCRIPTION
+ENV SITE_OG_IMAGE=$SITE_OG_IMAGE
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-COPY .env.prod ./.env
-RUN pnpm install
-RUN pnpm add @swc/core
-RUN pnpm build
+RUN corepack enable pnpm && pnpm build
 
-FROM base as runtime
-
+FROM base AS runner
+WORKDIR /app
 ENV NODE_ENV=production
-ENV PAYLOAD_CONFIG_PATH=dist/payload/payload.config.js
-
-# WORKDIR /home/node/app
-COPY package*.json  ./
-COPY pnpm-lock.yaml ./
-
-RUN npm install -g pnpm
-
-RUN pnpm install --production
-
-COPY --from=builder /home/node/app/dist ./dist
-COPY --from=builder /home/node/app/build ./build
-COPY --from=builder /home/node/app/.next ./.next
-
-# Copy next.config.js and its dependencies
-COPY --from=builder /home/node/app/next.config.js ./next.config.js
-COPY --from=builder /home/node/app/csp.js ./csp.js
-COPY --from=builder /home/node/app/redirects.js ./redirects.js
-
-EXPOSE 80
-
-# RUN npx next experimental-generate
-CMD ["node", "dist/server.js"]
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
+RUN mkdir .next && chown nextjs:nodejs .next
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+USER nextjs
+EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+CMD ["node", "server.js"]
