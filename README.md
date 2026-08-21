@@ -36,15 +36,12 @@ The admin panel is at `/admin`; Payload REST and GraphQL are at `/api/payload` a
 
 ## Docker
 
-The production build reads Payload content while prerendering, so the builder must be able to reach PostgreSQL:
+`docker-build.sh` passes the env file as a BuildKit
+secret:
 
 ```sh
-docker build --network=host \
-  --build-arg DATABASE_URI="$DATABASE_URI" \
-  --build-arg PAYLOAD_SECRET="$PAYLOAD_SECRET" \
-  --build-arg NEXT_PUBLIC_SERVER_URL="$NEXT_PUBLIC_SERVER_URL" \
-  -t personal-site .
+./docker-build.sh .env.prod
 docker compose up -d
 ```
 
-Runtime variables are still supplied by `.env.prod` in `docker-compose.yml`.
+Runtime variables are still supplied by an `.env` in `docker-compose.yml`.

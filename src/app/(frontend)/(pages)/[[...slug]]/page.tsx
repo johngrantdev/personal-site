@@ -12,12 +12,12 @@ import { PageMargin } from '../../_components/PageMargin'
 import { PageState } from '../../_providers/Context/pageContext'
 import { generateMeta } from '../../_utilities/generateMeta'
 
-export const dynamic = 'force-dynamic'
+type PageProps = { params: Promise<{ slug?: string[] }> }
 
-type PageProps = { params: Promise<{ slug?: string }> }
+const resolveSlug = (segments?: string[]): string => segments?.join('/') || 'home'
 
 export default async function Page({ params }: PageProps) {
-  const { slug = 'home' } = await params
+  const slug = resolveSlug((await params).slug)
   const { isEnabled: isDraftMode } = await draftMode()
 
   let page: PageType | null = null
@@ -50,14 +50,14 @@ export default async function Page({ params }: PageProps) {
 export async function generateStaticParams() {
   try {
     const slugs = await getPageSlugs()
-    return slugs.map(slug => ({ slug }))
+    return slugs.map(slug => ({ slug: slug === 'home' ? [] : [slug] }))
   } catch (error) {
     return []
   }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug = 'home' } = await params
+  const slug = resolveSlug((await params).slug)
   const { isEnabled: isDraftMode } = await draftMode()
 
   let page: PageType | null = null

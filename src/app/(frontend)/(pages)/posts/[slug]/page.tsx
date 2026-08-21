@@ -13,8 +13,6 @@ import { RelatedPosts } from '../../../_components/RelatedPosts'
 import { PageState } from '../../../_providers/Context/pageContext'
 import { generateMeta } from '../../../_utilities/generateMeta'
 
-export const dynamic = 'force-dynamic'
-
 type PostProps = { params: Promise<{ slug: string }> }
 
 export default async function Post({ params }: PostProps) {
