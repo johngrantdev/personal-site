@@ -11,7 +11,7 @@ type Props = CallToActionBlockType & {
   id?: number | string
 }
 
-export const CallToActionBlock: React.FC<Props> = ({ id, links, richText, invertBackground }) => {
+export const CallToActionBlock: React.FC<Props> = ({ id, lnks, richText, invertBackground }) => {
   return (
     <div
       id={id}
@@ -21,7 +21,7 @@ export const CallToActionBlock: React.FC<Props> = ({ id, links, richText, invert
         <RichText content={richText} />
       </div>
       <div className="flex flex-col justify-center h-full flex-shrink-0 ">
-        {(links || []).map(({ link }, i) => {
+        {(lnks || []).map(({ link }, i) => {
           return <CMSLink key={i} {...link} invert={invertBackground} />
         })}
       </div>

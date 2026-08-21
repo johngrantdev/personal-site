@@ -7,17 +7,17 @@ import RichText from '../../RichText/static'
 type LayoutType = NonNullable<Layout>[0]
 
 type SideColumnProps = SideColumnType & {
-  position: LayoutType['sideContentPosition']
+  position: LayoutType['sidePos']
 }
 
 export const SideColumn: React.FC<SideColumnProps> = (props: SideColumnProps) => {
-  const { style, hero, projectHero, sideContent1, sideContent2, position } = props
+  const { style, hero, prjHero, sideContent1, sideContent2, position } = props
   const className = position === 'fixedSideContentAlways' ? 'xl:absolute xl:w-80' : ''
   return (
     <div className={className}>
       {style === 'hero' && <PageHero {...hero} />}
       {style === 'postHero' && <PostHero />}
-      {style === 'projectHero' && <ProjectHero {...projectHero} />}
+      {style === 'projectHero' && <ProjectHero {...prjHero} />}
       {style === 'singleLayout' && typeof sideContent1 === 'object' && (
         <RichText content={sideContent1} />
       )}

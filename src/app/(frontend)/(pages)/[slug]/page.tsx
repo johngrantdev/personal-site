@@ -32,14 +32,14 @@ export default async function Page({ params }: PageProps) {
     return <PayloadRedirects url={slug === 'home' ? '/' : `/${slug}`} />
   }
 
-  const { layout, title } = page
+  const { lyout, title } = page
 
   return (
     <PageMargin className="grow">
       <main className="flex flex-col">
         {isDraftMode && <RefreshRouteOnSave />}
         <PageState title={title} />
-        <Layouts layouts={layout} />
+        <Layouts layouts={lyout} />
       </main>
     </PageMargin>
   )

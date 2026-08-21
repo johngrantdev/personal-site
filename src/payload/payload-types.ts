@@ -12,11 +12,11 @@
  */
 export type Layout =
   | {
-      sideContentPosition: 'scrollSideContent' | 'fixedSideContentWhenVisible' | 'fixedSideContentAlways';
-      scrollSnap?: boolean | null;
-      fullPageHeight?: boolean | null;
-      sideColumn: SideColumn;
-      mainColumn: MainColumn;
+      sidePos: 'scrollSideContent' | 'fixedSideContentWhenVisible' | 'fixedSideContentAlways';
+      scrSnap?: boolean | null;
+      fullH?: boolean | null;
+      sideCol: SideColumn;
+      mainCol: MainColumn;
       id?: string | null;
     }[]
   | null;
@@ -172,7 +172,7 @@ export interface Page {
    */
   generateSlug?: boolean | null;
   slug: string;
-  layout?: Layout;
+  lyout?: Layout;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -192,7 +192,7 @@ export interface Page {
 export interface SideColumn {
   style: 'none' | 'hero' | 'postHero' | 'projectHero' | 'singleLayout' | 'twoRows';
   hero?: Hero;
-  projectHero?: ProjectHero;
+  prjHero?: ProjectHero;
   sideContent1?: {
     root: {
       type: string;
@@ -230,7 +230,7 @@ export interface SideColumn {
  */
 export interface Hero {
   media?: (number | null) | Media;
-  description?: {
+  desc?: {
     root: {
       type: string;
       children: {
@@ -245,7 +245,7 @@ export interface Hero {
     };
     [k: string]: unknown;
   } | null;
-  links?: LinkGroupField;
+  lnks?: LinkGroupField;
 }
 /**
  * The main image will be optimized for different resolutions. The dark mode and mobile images can be optionally used when the image does not present well in dark mode or mobile screen sizes.
@@ -362,17 +362,17 @@ export interface LinkField {
   /**
    * Choose how the link should be rendered.
    */
-  appearance?: ('primary' | 'secondary') | null;
+  apprnce?: ('primary' | 'secondary') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ProjectHero".
  */
 export interface ProjectHero {
-  year?: number | null;
+  yr?: number | null;
   client?: (number | null) | Client;
-  usePostDescription?: boolean | null;
-  customDescription?: {
+  useDesc?: boolean | null;
+  cDesc?: {
     root: {
       type: string;
       children: {
@@ -387,7 +387,7 @@ export interface ProjectHero {
     };
     [k: string]: unknown;
   } | null;
-  links?: LinkGroupField;
+  lnks?: LinkGroupField;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -442,7 +442,7 @@ export interface MainColumn {
  * via the `definition` "PostArchive".
  */
 export interface PostArchive {
-  category?: (number | Category)[] | null;
+  cat?: (number | Category)[] | null;
   limit?: number | null;
 }
 /**
@@ -488,7 +488,7 @@ export interface Post {
     showDate?: boolean | null;
     hideTitle?: boolean | null;
   };
-  layout?: Layout;
+  lyout?: Layout;
   relatedPosts?: (number | Post)[] | null;
   meta?: {
     title?: string | null;
@@ -673,7 +673,7 @@ export interface PagesSelect<T extends boolean = true> {
   publishedAt?: T;
   generateSlug?: T;
   slug?: T;
-  layout?: T | LayoutSelect<T>;
+  lyout?: T | LayoutSelect<T>;
   meta?:
     | T
     | {
@@ -690,11 +690,11 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "Layout_select".
  */
 export interface LayoutSelect<T extends boolean = true> {
-  sideContentPosition?: T;
-  scrollSnap?: T;
-  fullPageHeight?: T;
-  sideColumn?: T | SideColumnSelect<T>;
-  mainColumn?: T | MainColumnSelect<T>;
+  sidePos?: T;
+  scrSnap?: T;
+  fullH?: T;
+  sideCol?: T | SideColumnSelect<T>;
+  mainCol?: T | MainColumnSelect<T>;
   id?: T;
 }
 /**
@@ -704,7 +704,7 @@ export interface LayoutSelect<T extends boolean = true> {
 export interface SideColumnSelect<T extends boolean = true> {
   style?: T;
   hero?: T | HeroSelect<T>;
-  projectHero?: T | ProjectHeroSelect<T>;
+  prjHero?: T | ProjectHeroSelect<T>;
   sideContent1?: T;
   sideContent2?: T;
 }
@@ -714,8 +714,8 @@ export interface SideColumnSelect<T extends boolean = true> {
  */
 export interface HeroSelect<T extends boolean = true> {
   media?: T;
-  description?: T;
-  links?: T | LinkGroupFieldSelect<T>;
+  desc?: T;
+  lnks?: T | LinkGroupFieldSelect<T>;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -735,18 +735,18 @@ export interface LinkFieldSelect<T extends boolean = true> {
   reference?: T;
   url?: T;
   label?: T;
-  appearance?: T;
+  apprnce?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ProjectHero_select".
  */
 export interface ProjectHeroSelect<T extends boolean = true> {
-  year?: T;
+  yr?: T;
   client?: T;
-  usePostDescription?: T;
-  customDescription?: T;
-  links?: T | LinkGroupFieldSelect<T>;
+  useDesc?: T;
+  cDesc?: T;
+  lnks?: T | LinkGroupFieldSelect<T>;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -763,7 +763,7 @@ export interface MainColumnSelect<T extends boolean = true> {
  * via the `definition` "PostArchive_select".
  */
 export interface PostArchiveSelect<T extends boolean = true> {
-  category?: T;
+  cat?: T;
   limit?: T;
 }
 /**
@@ -794,7 +794,7 @@ export interface PostsSelect<T extends boolean = true> {
         showDate?: T;
         hideTitle?: T;
       };
-  layout?: T | LayoutSelect<T>;
+  lyout?: T | LayoutSelect<T>;
   relatedPosts?: T;
   meta?:
     | T
@@ -1080,7 +1080,7 @@ export interface CallToActionBlock {
     };
     [k: string]: unknown;
   } | null;
-  links?: LinkGroupField;
+  lnks?: LinkGroupField;
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';

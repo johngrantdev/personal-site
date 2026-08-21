@@ -12,7 +12,8 @@ type LinkGroupType = (options?: {
 
 const linkGroup: LinkGroupType = ({ overrides = {}, appearances } = {}) => {
   const generatedLinkGroup: Field = {
-    name: 'links',
+    // abbreviated: nests inside layout groups, see fields/layout.ts
+    name: 'lnks',
     type: 'array',
     interfaceName: 'LinkGroupField',
     fields: [

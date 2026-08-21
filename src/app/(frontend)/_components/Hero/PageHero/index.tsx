@@ -10,16 +10,16 @@ type PageHeroProps = HeroType & {
 }
 
 export const PageHero: React.FC<PageHeroProps> = props => {
-  const { className = '', media, description, links } = props
+  const { className = '', media, desc, lnks } = props
 
   return (
     <div className={className}>
       {media && typeof media === 'object' && <Media className="pb-4" resource={media} />}
-      <RichText className="py-0 mt-0" content={description} />
+      <RichText className="py-0 mt-0" content={desc} />
       <div className="w-full justify-center mt-5 flex xl:flex-col items-center xl:items-start">
-        {Array.isArray(links) &&
-          links.length > 0 &&
-          links.map((link, i) => (
+        {Array.isArray(lnks) &&
+          lnks.length > 0 &&
+          lnks.map((link, i) => (
             <CMSLink className=" mx-2 xl:mx-0 my-1 xl:my-2" key={i} {...link.link} />
           ))}
       </div>

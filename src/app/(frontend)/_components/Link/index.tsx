@@ -19,7 +19,7 @@ export const CMSLink: React.FC<CMSLinkType> = ({
   newTab,
   reference,
   label = 'default',
-  appearance,
+  apprnce,
   children,
   className,
   invert,
@@ -33,7 +33,7 @@ export const CMSLink: React.FC<CMSLinkType> = ({
 
   if (!href) return null
 
-  if (!appearance) {
+  if (!apprnce) {
     const newTabProps = newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {}
 
     if (href || url) {
@@ -51,7 +51,7 @@ export const CMSLink: React.FC<CMSLinkType> = ({
       className={className}
       newTab={newTab}
       href={href}
-      appearance={appearance}
+      appearance={apprnce}
       label={label}
       invert={invert}
     />

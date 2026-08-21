@@ -9,7 +9,7 @@ import { CollectionArchive } from '../CollectionArchive'
 export type Props = {
   className?: string
   limit?: PostArchiveType['limit']
-  category?: PostArchiveType['category']
+  cat?: PostArchiveType['cat']
 }
 
 // Tagged `posts` so publishing, unpublishing, or deleting a post invalidates
@@ -42,8 +42,8 @@ const queryPosts = (categoryIds: (number | string)[], limit: number) =>
     { tags: ['posts'] },
   )()
 
-export const PostArchive = async ({ className, limit, category }: Props) => {
-  const categoryIds = (category || []).map(cat => (typeof cat === 'object' ? cat.id : cat))
+export const PostArchive = async ({ className, limit, cat }: Props) => {
+  const categoryIds = (cat || []).map(c => (typeof c === 'object' ? c.id : c))
   const docs = await queryPosts(categoryIds, limit || 10)
 
   return <CollectionArchive className={className} docs={docs} />

@@ -136,7 +136,8 @@ const link: LinkType = ({ appearances, disableLabel = false, overrides = {} } = 
     }
 
     linkResult.fields.push({
-      name: 'appearance',
+      // abbreviated: nests inside layout groups, see fields/layout.ts
+      name: 'apprnce',
       dbName: appearances ? 'app_btn' : 'app_all',
       type: 'select',
       defaultValue: appearances?.[0] ?? 'default',

@@ -32,7 +32,7 @@ export default async function Post({ params }: PostProps) {
     return <PayloadRedirects url={`/posts/${slug}`} />
   }
 
-  const { layout, title, publishedAt, description, category } = post
+  const { lyout, title, publishedAt, description, category } = post
   // Todo: implement a populate function and type guard instead for the below type assertions
   const filteredKeywords = (post.keywords || []).filter(
     keyword => typeof keyword !== 'number',
@@ -52,7 +52,7 @@ export default async function Post({ params }: PostProps) {
           keywords={filteredKeywords}
           publishedAt={publishedAt}
         />
-        <Layouts layouts={layout} relatedPosts={relatedPosts} />
+        <Layouts layouts={lyout} relatedPosts={relatedPosts} />
       </main>
     </PageMargin>
   )

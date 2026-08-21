@@ -8,7 +8,8 @@ export const postArchive: GroupField = {
   fields: [
     {
       type: 'relationship',
-      name: 'category',
+      // abbreviated: nests inside layout groups, see fields/layout.ts
+      name: 'cat',
       label: 'Category To Filter By:',
       relationTo: 'category',
       hasMany: true,

@@ -11,21 +11,21 @@ type ProjectHeroProps = ProjectHeroType & {
 }
 
 export const ProjectHero: React.FC<ProjectHeroProps> = props => {
-  const { className = '', year, client, usePostDescription, customDescription, links } = props
+  const { className = '', yr, client, useDesc, cDesc, lnks } = props
   const pageContext = usePage()
 
   return (
     <div className={className}>
-      <h2 className="text-2xl">{year && typeof year === 'number' && year.toString()}</h2>
-      {usePostDescription ? (
+      <h2 className="text-2xl">{yr && typeof yr === 'number' && yr.toString()}</h2>
+      {useDesc ? (
         <h3 className="my-3 text-md">{pageContext.description && pageContext.description}</h3>
       ) : (
-        <RichText className="my-3 text-md" content={customDescription} />
+        <RichText className="my-3 text-md" content={cDesc} />
       )}
-      {Array.isArray(links) && links.length > 0 && (
+      {Array.isArray(lnks) && lnks.length > 0 && (
         <div className="w-full justify-center mt-5 flex xl:flex-col items-center xl:items-start">
           <h3 className="invisible w-0 xl:visible xl:w-auto">Links:</h3>
-          {links.map((link, i) => {
+          {lnks.map((link, i) => {
             const { label, newTab, reference, type, url } = link.link // Assuming 'link.link' is the correct path to your link object
             return (
               <CMSLink

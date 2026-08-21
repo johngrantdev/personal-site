@@ -21,21 +21,21 @@ export const Layouts: React.FC<LayoutsProps> = props => {
       <div className="flex flex-col gap-y-4">
         {layouts.map((layout, index) => {
           const top = index === 0 ? true : false
-          const sideColumn = layout.sideColumn.style !== 'none'
-          const hasTOC = layout.sideColumn.style === 'postHero'
+          const sideColumn = layout.sideCol.style !== 'none'
+          const hasTOC = layout.sideCol.style === 'postHero'
           return (
             <div key={index}>
               <Layout
                 sideColumn={sideColumn}
                 top={top}
                 bottom={false}
-                fullheight={layout.fullPageHeight}
+                fullheight={layout.fullH}
               >
                 <Column position="side">
-                  <SideColumn {...layout.sideColumn} position={layout.sideContentPosition} />
+                  <SideColumn {...layout.sideCol} position={layout.sidePos} />
                 </Column>
                 <Column position="main">
-                  <MainColumn {...layout.mainColumn} hasTOC />
+                  <MainColumn {...layout.mainCol} hasTOC />
                 </Column>
               </Layout>
             </div>
