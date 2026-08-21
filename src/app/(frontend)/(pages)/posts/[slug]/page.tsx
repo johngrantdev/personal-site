@@ -77,5 +77,5 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
     post = await getPost(slug, isDraftMode)
   } catch (error) {}
 
-  return generateMeta({ doc: post })
+  return generateMeta({ collection: 'posts', doc: post })
 }

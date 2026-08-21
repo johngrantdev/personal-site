@@ -64,5 +64,5 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     page = await getPage(slug, isDraftMode)
   } catch (error) {}
 
-  return generateMeta({ doc: page })
+  return generateMeta({ collection: 'pages', doc: page })
 }
