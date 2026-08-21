@@ -23,6 +23,7 @@ import Users from './collections/Users'
 import { Site } from './globals/Site'
 import { generatePreviewPath } from './utilities/generatePreviewPath'
 import { purgeTags } from './utilities/purgeTags'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -103,6 +104,8 @@ export default buildConfig({
   }),
   db: postgresAdapter({
     push: true,
+    migrationDir: path.resolve(dirname, 'migrations'),
+    prodMigrations: migrations,
     pool: {
       connectionString: process.env.DATABASE_URI,
     },
