@@ -33,17 +33,17 @@ pnpm build
 
 ## Deployment
 
-Production uses one public host. Set both `PUBLICDOMAIN` for Compose/Traefik interpolation and `SERVER_URL=https://your-domain.example` for Payload and Astro. Set `IS_LIVE=true` when search indexing should be enabled.
+Production uses one public host. Set `SERVER_URL=https://your-domain.example` for Payload and Astro. Set `IS_LIVE=true` when search indexing should be enabled.
 
-Traefik sends `/admin`, `/api/payload*`, and `/media/*` to Next/Payload with router priority `100`. Its same-host priority `1` catch-all sends every other path to Astro. No separate CMS hostname is used.
+Configure the reverse proxy separately: `/admin`, `/api/payload*`, and `/media/*` go to the CMS, while every other path goes to Astro.
 
 The runtime `.env.prod` must include `DATABASE_URI`, `PAYLOAD_SECRET`, `SERVER_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and any storage variables. Set `FRONTEND_PURGE_URL=http://web:4321/api/purge` and use the same random `FRONTEND_PURGE_SECRET` in both services. In Compose, `DATABASE_URI` uses `postgresql` as its database hostname. Build and run both images with:
 
 ```sh
 ./docker-build.sh .env.prod
-PUBLICDOMAIN=your-domain.example docker compose up -d
+docker compose up -d
 ```
 
-The CMS and Astro ports bind to localhost at `3000` and `4321`; Traefik reaches both over the external `personal-site-network`. PostgreSQL is isolated on the internal backend network. Local uploads persist in the `media` volume.
+The CMS and Astro ports bind to localhost at `3000` and `4321`. PostgreSQL is isolated on the internal backend network. Local uploads persist in the `media` volume.
 
 Astro caches Payload reads in its single process for five minutes. Payload changes purge matching entries through the authenticated internal endpoint.

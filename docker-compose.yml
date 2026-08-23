@@ -9,19 +9,9 @@ services:
       - '127.0.0.1:3000:3000'
     networks:
       - backend
-      - personal-site-network
     restart: unless-stopped
     volumes:
       - media:/app/uploads
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.docker.network=personal-site-network'
-      - 'traefik.http.routers.personal-site-cms.entrypoints=websecure'
-      - 'traefik.http.routers.personal-site-cms.rule=Host(`${PUBLICDOMAIN}`) && (Path(`/admin`) || PathPrefix(`/admin/`) || PathPrefix(`/api/payload`) || Path(`/media`) || PathPrefix(`/media/`))'
-      - 'traefik.http.routers.personal-site-cms.priority=100'
-      - 'traefik.http.routers.personal-site-cms.tls.certresolver=dns-cloudflare'
-      - 'traefik.http.routers.personal-site-cms.middlewares=chain-no-auth@file'
-      - 'traefik.http.services.personal-site-cms.loadbalancer.server.port=3000'
 
   web:
     image: personal-site-web:latest
@@ -33,17 +23,7 @@ services:
       - '127.0.0.1:4321:4321'
     networks:
       - backend
-      - personal-site-network
     restart: unless-stopped
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.docker.network=personal-site-network'
-      - 'traefik.http.routers.personal-site-web.entrypoints=websecure'
-      - 'traefik.http.routers.personal-site-web.rule=Host(`${PUBLICDOMAIN}`)'
-      - 'traefik.http.routers.personal-site-web.priority=1'
-      - 'traefik.http.routers.personal-site-web.tls.certresolver=dns-cloudflare'
-      - 'traefik.http.routers.personal-site-web.middlewares=chain-no-auth@file'
-      - 'traefik.http.services.personal-site-web.loadbalancer.server.port=4321'
 
   postgresql:
     image: postgres:15.4
@@ -60,8 +40,6 @@ services:
 networks:
   backend:
     driver: bridge
-  personal-site-network:
-    external: true
 
 volumes:
   data:
