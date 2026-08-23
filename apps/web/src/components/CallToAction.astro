@@ -1,0 +1,16 @@
+---
+import type { CallToActionBlock } from '@/payload/payload-types'
+
+import CMSLink from './CMSLink.astro'
+import RichText from './RichText.astro'
+
+type Props = CallToActionBlock & { id?: string }
+const { id, lnks, richText, invertBackground } = Astro.props
+---
+
+<div id={id} class="px-6 py-6 flex gap-14 items-center dark:bg-zinc-800 bg-zinc-600 text-zinc-100 rounded-lg drop-shadow-xl">
+  <div class="flex-grow"><RichText content={richText} /></div>
+  <div class="flex flex-col justify-center h-full flex-shrink-0">
+    {(lnks || []).map(({ link }) => <CMSLink {...link} invert={invertBackground} />)}
+  </div>
+</div>

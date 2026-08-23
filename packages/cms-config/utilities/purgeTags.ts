@@ -9,5 +9,9 @@ export const purgeTags = (...tags: string[]): void => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
     body: JSON.stringify({ tags }),
-  }).catch(error => console.warn(`purgeTags: ${tags.join(', ')} failed:`, error.message))
+  })
+    .then(response => {
+      if (!response.ok) console.warn(`purgeTags: ${tags.join(', ')} returned ${response.status}`)
+    })
+    .catch(error => console.warn(`purgeTags: ${tags.join(', ')} failed:`, error.message))
 }

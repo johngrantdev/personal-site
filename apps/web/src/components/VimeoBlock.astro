@@ -1,0 +1,19 @@
+---
+import type { VimeoBlock as VimeoBlockType } from '@/payload/payload-types'
+
+type Props = VimeoBlockType & { id?: string }
+const { id, videoId } = Astro.props
+const safeId = videoId?.match(/^\d+$/)?.[0]
+---
+
+{safeId && (
+  <div id={id} class="flex w-full h-full aspect-video">
+    <iframe
+      src={`https://player.vimeo.com/video/${safeId}`}
+      class="w-full h-full"
+      title="Vimeo video"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </div>
+)}

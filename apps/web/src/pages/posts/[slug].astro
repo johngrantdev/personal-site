@@ -1,0 +1,42 @@
+---
+import type { Keyword, Post } from '@/payload/payload-types'
+
+import Layouts from '../../components/Layouts.astro'
+import Head from '../../components/Head.astro'
+import NotFound from '../../components/NotFound.astro'
+import PageMargin from '../../components/PageMargin.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getPost, getRedirect } from '../../lib/queries'
+
+const post = await getPost(Astro.params.slug || '').catch((error) => {
+  console.error(error)
+  return null
+})
+if (!post) {
+  const destination = await getRedirect(`/posts/${Astro.params.slug || ''}`)
+  if (destination) return Astro.redirect(destination, 301)
+  Astro.response.status = 404
+}
+const category = post && typeof post.category === 'object' ? post.category : null
+const keywords = (post?.keywords || []).filter((keyword: number | Keyword): keyword is Keyword => typeof keyword === 'object')
+const relatedPosts = (post?.relatedPosts || []).filter((related: number | Post): related is Post => typeof related === 'object')
+---
+
+<BaseLayout title={post?.title || '404 Not Found'} category={category}>
+  <Head slot="head" title={post?.title || '404 Not Found'} collection="posts" doc={post} />
+  <PageMargin class="grow">
+    {post ? (
+      <main class="flex flex-col">
+        <Layouts
+          layouts={post.lyout}
+          relatedPosts={relatedPosts}
+          description={post.description}
+          publishedAt={post.publishedAt}
+          keywords={keywords}
+        />
+      </main>
+    ) : (
+      <NotFound />
+    )}
+  </PageMargin>
+</BaseLayout>

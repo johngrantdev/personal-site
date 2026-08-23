@@ -1,0 +1,17 @@
+---
+import type { Hero } from '@/payload/payload-types'
+
+import CMSLink from './CMSLink.astro'
+import Media from './Media.astro'
+import RichText from './RichText.astro'
+
+const { media, desc, lnks, class: className = '' } = Astro.props as Hero & { class?: string }
+---
+
+<div class={className}>
+  {typeof media === 'object' && <Media class="pb-4" resource={media} />}
+  <RichText class="py-0 mt-0" content={desc} />
+  <div class="w-full justify-center mt-5 flex xl:flex-col items-center xl:items-start">
+    {(lnks || []).map(({ link }) => <CMSLink {...link} class="mx-2 xl:mx-0 my-1 xl:my-2" />)}
+  </div>
+</div>

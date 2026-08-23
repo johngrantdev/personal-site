@@ -1,0 +1,42 @@
+---
+import type { Category } from '@/payload/payload-types'
+
+import Footer from '../components/Footer.astro'
+import Head from '../components/Head.astro'
+import Header from '../components/Header.astro'
+import PageContainer from '../components/PageContainer.astro'
+import { THEME_BOOTSTRAP } from '../lib/security'
+import { getSiteSettings } from '../lib/siteSettings'
+import '../styles/globals.css'
+
+interface Props {
+  title?: string
+  category?: Category | null
+}
+
+const { title = 'Home', category } = Astro.props
+const siteSettings = await getSiteSettings().catch(() => null)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <slot name="head"><Head title={title} /></slot>
+    <script is:inline set:html={THEME_BOOTSTRAP}></script>
+  </head>
+  <body>
+    <Header siteSettings={siteSettings} title={title} category={category} />
+    <PageContainer>
+      <div class="flex flex-col h-full">
+        <slot />
+        <Footer siteSettings={siteSettings} />
+      </div>
+    </PageContainer>
+    <div class="fixed w-full h-full top-0 left-0 bg-gradient-to-tr from-zinc-950 to-zinc-700 -z-10"></div>
+    <script src="../scripts/client.ts"></script>
+  </body>
+</html>

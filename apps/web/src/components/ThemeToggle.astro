@@ -1,0 +1,16 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: className = '' } = Astro.props
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  class:list={[className, 'cursor-pointer hover:underline hover:underline-offset-4 select-none']}
+>
+  <span class="dark:hidden">Change to dark mode</span>
+  <span class="hidden dark:inline">Change to light mode</span>
+</button>

@@ -1,0 +1,16 @@
+---
+import type { MainColumn as MainColumnType } from '@/payload/payload-types'
+
+import PostArchive from './PostArchive.astro'
+import RichText from './RichText.astro'
+
+const { style, postArchive, column1, column2 } = Astro.props as MainColumnType
+---
+
+{style === 'postArchive' ? (
+  <PostArchive class="w-full" {...postArchive} />
+) : style === 'singleLayout' ? (
+  <RichText class="w-full" content={column1} />
+) : style === 'twoColumns' ? (
+  <><RichText class="w-1/2" content={column1} /><RichText class="w-1/2" content={column2} /></>
+) : null}

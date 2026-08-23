@@ -1,0 +1,56 @@
+---
+import type { RichTextData } from '../lib/content'
+import { richTextChunk } from '../lib/content'
+import Blocks from './Blocks.astro'
+import Media from './Media.astro'
+import { renderRichText } from './RichText/Renderer'
+
+interface Props {
+  id?: string
+  content?: RichTextData | null
+  class?: string
+}
+
+const { id, content, class: className = '' } = Astro.props
+const nodes = content?.root?.children || []
+const parts: ({ type: 'richText'; html: string } | { type: 'block'; node: any } | { type: 'upload'; node: any })[] = []
+let pending: typeof nodes = []
+
+const flush = () => {
+  if (content && pending.length) parts.push({ type: 'richText', html: renderRichText(richTextChunk(content, pending)) })
+  pending = []
+}
+
+for (const node of nodes) {
+  const embeddedUpload = node.children?.length === 1 && node.children[0].type === 'upload'
+    ? node.children[0]
+    : null
+  if (node.type === 'block') {
+    flush()
+    parts.push({ type: 'block', node })
+  } else if (node.type === 'upload') {
+    flush()
+    parts.push({ type: 'upload', node })
+  } else if (embeddedUpload) {
+    flush()
+    parts.push({ type: 'upload', node: embeddedUpload })
+  } else {
+    pending.push(node)
+  }
+}
+flush()
+---
+
+{content?.root && (
+  <div id={id} class:list={['first:mt-0 last:mb-0', className]}>
+    {parts.map((part) =>
+      part.type === 'richText' ? (
+        <Fragment set:html={part.html} />
+      ) : part.type === 'upload' ? (
+        <Media class="w-full h-full" imgClass="h-full w-full object-cover rounded-md relative" resource={part.node.value} />
+      ) : (
+        <div class="pb-6 last:pb-0"><Blocks blocks={[part.node.fields]} /></div>
+      ),
+    )}
+  </div>
+)}

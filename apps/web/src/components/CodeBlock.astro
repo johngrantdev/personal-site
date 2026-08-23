@@ -1,0 +1,24 @@
+---
+import { Code } from 'astro:components'
+
+import type { CodeBlock as CodeBlockType } from '@/payload/payload-types'
+
+type Props = CodeBlockType & { id?: string }
+const { id, code = '', language } = Astro.props
+const languages = new Set([
+  'css', 'dockerfile', 'go', 'graphql', 'handlebars', 'html', 'java', 'javascript', 'kotlin',
+  'markdown', 'pgsql', 'python', 'rust', 'scss', 'swift', 'typescript', 'xml', 'yaml',
+])
+const lang = language === 'pgsql' ? 'sql' : languages.has(language || '') ? language : 'plaintext'
+---
+
+<div id={id} class="code-block my-4 pl-4 border-zinc-400 dark:border-zinc-800 border-l-4 max-w-main overflow-x-auto">
+  <Code code={code || ''} lang={lang as any} themes={{ light: 'github-light', dark: 'github-dark' }} defaultColor={false} />
+</div>
+
+<style is:global>
+  .code-block .astro-code,
+  .code-block .astro-code span { color: var(--shiki-light); background-color: var(--shiki-light-bg); }
+  .dark .code-block .astro-code,
+  .dark .code-block .astro-code span { color: var(--shiki-dark); background-color: var(--shiki-dark-bg); }
+</style>

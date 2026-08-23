@@ -1,0 +1,70 @@
+---
+import type { Category, Site } from '@/payload/payload-types'
+
+import CMSLink from './CMSLink.astro'
+import PageMargin from './PageMargin.astro'
+import ThemeToggle from './ThemeToggle.astro'
+
+interface Props {
+  siteSettings: Site | null
+  title?: string
+  category?: Category | null
+}
+
+const { siteSettings, title = 'Home', category } = Astro.props
+const pageTitle = title === 'Home' ? '' : title.toLowerCase()
+const activeNav = (category?.title || title).toLowerCase()
+const navItems = siteSettings?.navItems || []
+---
+
+<header class="fixed top-0 left-1/2 -translate-x-1/2 z-30 text-zinc-200 mix-blend-difference">
+  <PageMargin class="my-6 flex justify-between flex-wrap gap-x-3">
+    <div class="flex gap-0 md:gap-2 h-12 text-2xl select-none">
+      <a data-menu-close class:list={['my-auto items-center justify-normal', pageTitle && 'w-auto']} href="/">
+        {(siteSettings?.siteTitle || 'Title').toLowerCase()}
+      </a>
+      {pageTitle && (
+        <div class="my-auto flex gap-0 md:gap-2 invisible w-0 md:visible md:w-auto">
+          <div>|</div>
+          <div>{pageTitle}</div>
+        </div>
+      )}
+    </div>
+    <nav role="navigation" aria-label="Main menu" class="flex static">
+      <button
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="main-menu"
+        class="visible xl:invisible xl:w-0 text-2xl"
+      >
+        menu
+      </button>
+      <div
+        id="main-menu"
+        class="opacity-0 -right-full xl:opacity-100 xl:right-auto absolute w-60 xl:w-auto top-32 xl:top-0 sm:top-40 h-screen xl:h-auto xl:relative xl:left-0 xl:bg-transparent transition-all duration-500"
+      >
+        <ul class="xl:flex xl:flex-row text-2xl">
+          {navItems.map(({ link }, index) => {
+            const label = link.label.toLowerCase()
+            return (
+              <li data-transition-delay={`${(index + 1) * 300}ms`}>
+                <CMSLink
+                  {...link}
+                  label={label}
+                  data-menu-close
+                  class:list={[
+                    'border-none pl-0 xl:pl-4 last:pr-0 last:mr-0 transition-all hover:underline hover:underline-offset-[14px] dark:hover:text-white',
+                    activeNav === label &&
+                      'dark:underline underline underline-offset-[14px] text-white',
+                  ]}
+                />
+              </li>
+            )
+          })}
+        </ul>
+        <ThemeToggle class="xl:hidden pt-6" />
+      </div>
+    </nav>
+  </PageMargin>
+</header>

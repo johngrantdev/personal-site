@@ -1,0 +1,40 @@
+---
+import type { LinkField, Page } from '@/payload/payload-types'
+
+import Button from './Button.astro'
+
+interface Props extends Partial<LinkField> {
+  class?: string
+  invert?: boolean | null
+  'data-menu-close'?: boolean
+}
+
+const {
+  type,
+  url,
+  newTab,
+  reference,
+  apprnce,
+  label = 'default',
+  class: className,
+  'data-menu-close': closesMenu,
+} = Astro.props
+const referencedPage = typeof reference?.value === 'object' ? (reference.value as Page) : null
+const href = type === 'reference' && referencedPage?.slug
+  ? referencedPage.slug === 'home' ? '/' : `/${referencedPage.slug}`
+  : url
+---
+
+{href && apprnce ? (
+  <Button href={href} label={label} appearance={apprnce} newTab={newTab} class={className} />
+) : href && (
+  <a
+    href={href}
+    class={className}
+    data-menu-close={closesMenu || undefined}
+    target={newTab ? '_blank' : undefined}
+    rel={newTab ? 'noopener noreferrer' : undefined}
+  >
+    {label}<slot />
+  </a>
+)}

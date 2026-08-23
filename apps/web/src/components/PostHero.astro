@@ -1,0 +1,23 @@
+---
+import type { Keyword } from '@/payload/payload-types'
+
+import type { TOCItem } from '../lib/content'
+import { formatDate } from '../lib/content'
+import TableOfContents from './TableOfContents.astro'
+
+interface Props {
+  class?: string
+  description?: string
+  publishedAt?: string | null
+  keywords?: Keyword[]
+  toc?: TOCItem[]
+}
+const { class: className = '', description, publishedAt, keywords = [], toc = [] } = Astro.props
+---
+
+<div class={className}>
+  {publishedAt && <h2 class="text-2xl">{formatDate(publishedAt)}</h2>}
+  {description && <h3 class="my-3 text-md">{description}</h3>}
+  <p class="text-xs">{keywords.map((keyword) => keyword.title).join(', ')}</p>
+  <TableOfContents items={toc} />
+</div>

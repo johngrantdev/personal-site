@@ -1,0 +1,54 @@
+---
+import type { Site } from '@/payload/payload-types'
+
+import CMSLink from './CMSLink.astro'
+import PageMargin from './PageMargin.astro'
+import ThemeToggle from './ThemeToggle.astro'
+
+interface Props {
+  siteSettings: Site | null
+}
+
+const { siteSettings } = Astro.props
+const navItems = siteSettings?.navItems || []
+---
+
+<footer class="w-full bg-zinc-600 dark:bg-zinc-950 transition-colors duration-500 text-zinc-300 mt-10">
+  <PageMargin class="flex items-center justify-between flex-wrap gap-x-3 gap-y-6 py-12">
+    <nav class="flex flex-col gap-y-3">
+      <span>{siteSettings?.siteTitle || 'title'} &copy; {new Date().getFullYear()}</span>
+      {navItems.map(({ link }) => (
+        <CMSLink {...link} class="hover:underline hover:underline-offset-4" />
+      ))}
+    </nav>
+    <div class="flex gap-10 items-center flex-wrap opacity-100 transition-opacity visible">
+      <div class="flex flex-wrap">
+        Built with&nbsp;<a
+          class="hover:underline hover:underline-offset-4"
+          href="https://astro.build"
+          target="_blank"
+          rel="noopener noreferrer">Astro</a
+        >,&nbsp;<a
+          class="hover:underline hover:underline-offset-4"
+          href="https://payloadcms.com"
+          target="_blank"
+          rel="noopener noreferrer">PayloadCMS</a
+        >&nbsp;and&nbsp;<a
+          class="hover:underline hover:underline-offset-4"
+          href="https://tailwindcss.com/"
+          target="_blank"
+          rel="noopener noreferrer">TailwindCSS</a
+        >
+      </div>
+      <a
+        class="hover:underline hover:underline-offset-4"
+        href={siteSettings?.siteSourceLink || 'https://github.com/johngrantdev/personal-site'}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Source Code
+      </a>
+      <ThemeToggle />
+    </div>
+  </PageMargin>
+</footer>
