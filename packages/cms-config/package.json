@@ -1,0 +1,30 @@
+{
+  "name": "@personal-site/cms-config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./payload.config.ts",
+    "./types": "./payload-types.ts",
+    "./*": "./*"
+  },
+  "scripts": {
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "3.88.0",
+    "@payloadcms/plugin-redirects": "3.88.0",
+    "@payloadcms/plugin-seo": "3.88.0",
+    "@payloadcms/richtext-lexical": "3.88.0",
+    "@payloadcms/storage-s3": "3.88.0",
+    "graphql": "^16.11.0",
+    "payload": "3.88.0",
+    "sharp": "0.34.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "tsx": "^4.22.4"
+  }
+}
