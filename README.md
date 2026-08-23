@@ -35,9 +35,11 @@ pnpm build
 
 Production uses one public host. Set `SERVER_URL=https://your-domain.example` for Payload and Astro. Set `IS_LIVE=true` when search indexing should be enabled.
 
-Configure the reverse proxy separately: `/admin`, `/api/payload*`, and `/media/*` go to the CMS, while every other path goes to Astro.
+Configure the reverse proxy separately: `/api/payload*` goes to the CMS, while every other path goes to Astro. Upload files are served from `/api/payload/uploads/file/*`, so that prefix must reach the CMS or images 404.
 
-The runtime `.env.prod` must include `DATABASE_URI`, `PAYLOAD_SECRET`, `SERVER_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and any storage variables. Set `FRONTEND_PURGE_URL=http://web:4321/api/purge` and use the same random `FRONTEND_PURGE_SECRET` in both services. In Compose, `DATABASE_URI` uses `postgresql` as its database hostname. Build and run both images with:
+The admin does not have to be public. If you reach it on another origin, list that origin in `ADMIN_ORIGINS` (comma-separated) or Payload's CSRF check rejects the admin's own requests.
+
+The runtime `.env.prod` must include `DATABASE_URI`, `PAYLOAD_SECRET`, `SERVER_URL`, `ADMIN_ORIGINS` (if the admin is on another origin), `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and any storage variables. Set `FRONTEND_PURGE_URL=http://web:4321/api/purge` and use the same random `FRONTEND_PURGE_SECRET` in both services. In Compose, `DATABASE_URI` uses `postgresql` as its database hostname. Build and run both images with:
 
 ```sh
 ./docker-build.sh .env.prod
