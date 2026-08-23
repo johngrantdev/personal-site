@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import type { Media as MediaType, Upload } from '@/payload/payload-types'
+import { uploadsDir } from '@/payload/collections/Uploads'
 
 interface Props {
   resource?: MediaType | Upload | number | null
@@ -43,33 +44,48 @@ const variants = media ? {
 } : { dark: null, mobile: null, mobileDark: null }
 const hasDarkVariant = Boolean(variants.dark || variants.mobileDark)
 
+const svgId = (name: string) => `svg-${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`
+
+// Scope the SVG's own <style> under its wrapper id instead of dropping it.
+// Most exported SVGs carry their fills there; deleting it strips the artwork.
+const scopeStyles = (source: string, id: string) =>
+  source.replace(/<style\b[^>]*>([\s\S]*?)<\/style>/gi, (_, css: string) => {
+    const scoped = css.replace(
+      /(^|\})\s*([^@{}]+?)\s*\{/g,
+      (_m, brace: string, selector: string) =>
+        `${brace} ${selector
+          .split(',')
+          .map(part => `#${id} ${part.trim()}`)
+          .join(', ')} {`,
+    )
+    return `<style>${scoped}</style>`
+  })
+
 const inlineSVG = async (item: Upload) => {
   if (!item.mimeType?.includes('svg') || !item.filename) return null
+
   let source: string
   try {
-    const filename = path.basename(item.filename)
-    const candidates = [
-      path.resolve(process.cwd(), 'packages/cms-config/uploads', filename),
-      path.resolve(process.cwd(), '../../packages/cms-config/uploads', filename),
-    ]
-    source = await fs.readFile(candidates[0], 'utf8').catch(() => fs.readFile(candidates[1], 'utf8'))
+    source = await fs.readFile(path.join(uploadsDir, path.basename(item.filename)), 'utf8')
   } catch {
     const url = uploadURL(item)
-    if (!url) return null
-    const absolute = url.startsWith('/') && process.env.SERVER_URL
+    const absolute = url?.startsWith('/') && process.env.SERVER_URL
       ? new URL(url, process.env.SERVER_URL).toString()
       : url
     if (!absolute?.startsWith('https://') && !absolute?.startsWith('http://localhost')) return null
-    const response = await fetch(absolute)
-    if (!response.ok) return null
+    const response = await fetch(absolute).catch(() => null)
+    if (!response?.ok) return null
     source = await response.text()
   }
-  return source
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
-    .replace(/\son\w+\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
-    .replace(/\sstyle\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
-    .replace('<svg', '<svg role="img" width="100%"')
+
+  const id = svgId(path.basename(item.filename))
+  return {
+    id,
+    markup: scopeStyles(source, id)
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/\son\w+\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+      .replace('<svg', '<svg role="img" width="100%"'),
+  }
 }
 
 const svg = upload ? await inlineSVG(upload) : null
@@ -84,7 +100,7 @@ const source = uploadURL(upload, targetSize) || uploadURL(upload)
         <source src={source} type={upload.mimeType || undefined} />
       </video>
     ) : svg ? (
-      <div class:list={['svg-container block w-full h-auto', imgClass]} aria-label={alt} set:html={svg} />
+      <div id={svg.id} class:list={['svg-container block w-full h-auto', imgClass]} aria-label={alt} set:html={svg.markup} />
     ) : (
       <>
         <picture class:list={[hasDarkVariant && 'dark:hidden']}>
