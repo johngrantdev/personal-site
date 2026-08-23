@@ -22,6 +22,7 @@ import { Uploads } from './collections/Uploads'
 import Users from './collections/Users'
 import { Site } from './globals/Site'
 import { purgeTags } from './utilities/purgeTags'
+import { workspaceRoot } from './utilities/workspaceRoot'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -29,13 +30,10 @@ const dirname = path.dirname(filename)
 
 // .env sits at the workspace root; packages run from their own cwd.
 if (!process.env.PAYLOAD_SECRET) {
-  for (let dir = process.cwd(); ; dir = path.dirname(dir)) {
-    try {
-      process.loadEnvFile(path.join(dir, '.env'))
-      break
-    } catch {
-      if (dir === path.dirname(dir)) break
-    }
+  try {
+    process.loadEnvFile(path.join(workspaceRoot(), '.env'))
+  } catch {
+    // no file; use the ambient environment
   }
 }
 

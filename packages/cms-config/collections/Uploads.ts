@@ -1,8 +1,17 @@
+import path from 'path'
 import type { CollectionConfig } from 'payload'
+
+import { workspaceRoot } from '../utilities/workspaceRoot'
+
+// Absolute, so every process agrees regardless of its cwd. UPLOADS_DIR overrides
+// it in containers, where the workspace layout does not exist.
+export const uploadsDir =
+  process.env.UPLOADS_DIR || path.join(workspaceRoot(), 'packages/cms-config/uploads')
 
 export const Uploads: CollectionConfig = {
   slug: 'uploads',
   upload: {
+    staticDir: uploadsDir,
     imageSizes: [
       {
         name: 'card',
