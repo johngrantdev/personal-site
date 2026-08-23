@@ -5,6 +5,8 @@ services:
     depends_on:
       - postgresql
     env_file: .env.prod
+    environment:
+      UPLOADS_DIR: /app/uploads
     ports:
       - '127.0.0.1:3000:3000'
     networks:
@@ -19,11 +21,15 @@ services:
     depends_on:
       - postgresql
     env_file: .env.prod
+    environment:
+      UPLOADS_DIR: /app/uploads
     ports:
       - '127.0.0.1:4321:4321'
     networks:
       - backend
     restart: unless-stopped
+    volumes:
+      - media:/app/uploads:ro
 
   postgresql:
     image: postgres:15.4
