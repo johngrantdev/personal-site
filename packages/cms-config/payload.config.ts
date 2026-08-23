@@ -65,7 +65,7 @@ const CODE_LANGUAGES = {
 }
 
 const generateTitle: GenerateTitle = () => process.env.SITE_TITLE || ''
-const serverURL = process.env.NEXT_PUBLIC_SERVER_URL
+const serverURL = process.env.SERVER_URL
 
 export default buildConfig({
   debug: process.env.NODE_ENV === 'development',
@@ -84,8 +84,7 @@ export default buildConfig({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
       BlocksFeature({
-        // Payload's premade code block, kept on the original `code` slug and
-        // field shape so existing content and the Prism renderer are unaffected.
+        // Keep the original slug and field shape so existing content remains valid.
         blocks: [
           CallToAction,
           CodeBlock({

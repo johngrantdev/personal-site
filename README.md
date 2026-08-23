@@ -1,6 +1,6 @@
 # johngrant.dev
 
-Personal portfolio and blog built with Payload 3, Next.js, React, PostgreSQL, and optional S3 storage.
+Payload CMS and the public Astro site share one PostgreSQL-backed workspace.
 
 ## Development
 
@@ -11,17 +11,16 @@ pnpm install
 pnpm dev
 ```
 
-Required environment variables:
+Next serves Payload locally at `http://localhost:3000/admin`; Astro serves the site at `http://localhost:4321`. Astro also uses `http://localhost:4321` as its default canonical origin. Both applications load the shared Payload config directly.
+
+Required local variables:
 
 ```dotenv
 DATABASE_URI=postgres://user:password@localhost:5432/database
 PAYLOAD_SECRET=replace-with-a-long-random-secret
-NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 ```
 
-Set `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, and `S3_SECRET_ACCESS_KEY` to store uploads in S3. Without `S3_BUCKET`, uploads use local storage.
-
-To enable Plausible, set `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_URL` to the full site-specific script URL from the Plausible dashboard. Pass the same optional value as a Docker build argument.
+Optional S3 variables are `S3_BUCKET`, `S3_REGION`, `S3_ACCESS_KEY_ID`, and `S3_SECRET_ACCESS_KEY`. Without `S3_BUCKET`, uploads use local storage.
 
 Useful checks:
 
@@ -32,16 +31,19 @@ pnpm typecheck
 pnpm build
 ```
 
-The admin panel is at `/admin`; Payload REST and GraphQL are at `/api/payload` and `/api/payload/graphql`.
+## Deployment
 
-## Docker
+Production uses one public host. Set both `PUBLICDOMAIN` for Compose/Traefik interpolation and `SERVER_URL=https://your-domain.example` for Payload and Astro. Set `IS_LIVE=true` when search indexing should be enabled.
 
-`docker-build.sh` passes the env file as a BuildKit
-secret:
+Traefik sends `/admin`, `/api/payload*`, and `/media/*` to Next/Payload with router priority `100`. Its same-host priority `1` catch-all sends every other path to Astro. No separate CMS hostname is used.
+
+The runtime `.env.prod` must include `DATABASE_URI`, `PAYLOAD_SECRET`, `SERVER_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and any storage variables. Set `FRONTEND_PURGE_URL=http://web:4321/api/purge` and use the same random `FRONTEND_PURGE_SECRET` in both services. In Compose, `DATABASE_URI` uses `postgresql` as its database hostname. Build and run both images with:
 
 ```sh
 ./docker-build.sh .env.prod
-docker compose up -d
+PUBLICDOMAIN=your-domain.example docker compose up -d
 ```
 
-Runtime variables are still supplied by an `.env` in `docker-compose.yml`.
+The CMS and Astro ports bind to localhost at `3000` and `4321`; Traefik reaches both over the external `personal-site-network`. PostgreSQL is isolated on the internal backend network. Local uploads persist in the `media` volume.
+
+Astro caches Payload reads in its single process for five minutes. Payload changes purge matching entries through the authenticated internal endpoint.

@@ -5,12 +5,13 @@ import ContentSecurityPolicy from './csp.cjs'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   agentRules: false,
+  assetPrefix: '/admin',
   output: 'standalone',
   outputFileTracingRoot: new URL('../../', import.meta.url).pathname,
   async headers() {
     const headers = []
 
-    if (process.env.NEXT_PUBLIC_IS_LIVE !== 'true') {
+    if (process.env.IS_LIVE !== 'true') {
       headers.push({
         headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
         source: '/:path*',
@@ -23,6 +24,9 @@ const nextConfig = {
     })
 
     return headers
+  },
+  async rewrites() {
+    return [{ source: '/admin/_next/:path*', destination: '/_next/:path*' }]
   },
   outputFileTracingIncludes: {
     '/*': ['../../node_modules/@swc/helpers/**/*'],

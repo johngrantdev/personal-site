@@ -5,9 +5,9 @@
   "license": "MIT",
   "packageManager": "pnpm@10.15.1",
   "scripts": {
-    "dev": "pnpm --filter @personal-site/cms dev",
-    "build": "pnpm --filter @personal-site/cms build",
-    "start": "pnpm --filter @personal-site/cms start",
+    "dev": "pnpm --parallel --filter @personal-site/cms --filter @personal-site/web dev",
+    "build": "pnpm --filter @personal-site/cms build && pnpm --filter @personal-site/web build",
+    "start": "pnpm --parallel --filter @personal-site/cms --filter @personal-site/web start",
     "typecheck": "pnpm -r typecheck",
     "seed": "pnpm --filter @personal-site/cms-config seed",
     "lint": "pnpm -r lint",
