@@ -63,14 +63,13 @@ const CODE_LANGUAGES = {
 }
 
 const generateTitle: GenerateTitle = () => process.env.SITE_TITLE || ''
-const serverURL = process.env.SERVER_URL
-// The admin is served on its own origin, not SERVER_URL. Without it listed here
-// Payload drops the cookie JWT on every request the admin sends with an Origin.
+// SERVER_URL is the public site, which Astro serves, not Payload. Leaving
+// serverURL unset keeps Payload's generated URLs relative so they resolve
+// against whichever origin the admin is reached on.
 const adminOrigins = (process.env.ADMIN_ORIGINS || '')
   .split(',')
   .map(origin => origin.trim())
   .filter(Boolean)
-const allowedOrigins = [serverURL, ...adminOrigins].filter(Boolean) as string[]
 
 export default buildConfig({
   debug: process.env.NODE_ENV === 'development',
@@ -113,15 +112,14 @@ export default buildConfig({
     },
   }),
   secret: process.env.PAYLOAD_SECRET,
-  serverURL,
   sharp,
   collections: [Pages, Posts, Media, Category, Keywords, Clients, Users, Uploads],
   globals: [Site],
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  cors: allowedOrigins,
-  csrf: allowedOrigins,
+  cors: adminOrigins,
+  csrf: adminOrigins,
   plugins: [
     redirectsPlugin({
       collections: ['pages', 'posts'],
