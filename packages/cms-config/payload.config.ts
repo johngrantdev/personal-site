@@ -64,6 +64,13 @@ const CODE_LANGUAGES = {
 
 const generateTitle: GenerateTitle = () => process.env.SITE_TITLE || ''
 const serverURL = process.env.SERVER_URL
+// The admin is served on its own origin, not SERVER_URL. Without it listed here
+// Payload drops the cookie JWT on every request the admin sends with an Origin.
+const adminOrigins = (process.env.ADMIN_ORIGINS || '')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean)
+const allowedOrigins = [serverURL, ...adminOrigins].filter(Boolean) as string[]
 
 export default buildConfig({
   debug: process.env.NODE_ENV === 'development',
@@ -113,8 +120,8 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  cors: serverURL ? [serverURL] : [],
-  csrf: serverURL ? [serverURL] : [],
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
   plugins: [
     redirectsPlugin({
       collections: ['pages', 'posts'],
