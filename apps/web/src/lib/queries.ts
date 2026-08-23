@@ -75,26 +75,33 @@ const getDestination = (redirect: Redirect): string | null => {
   return null
 }
 
-export const getRedirect = (url: string): Promise<string | null> =>
-  cached(`redirect:${url}`, ['redirects'], async () => {
+const getRedirects = (): Promise<Redirect[]> =>
+  cached('redirects', ['redirects'], async () => {
     const { docs } = await payload.find({
       collection: 'redirects',
       depth: 1,
       pagination: false,
       overrideAccess: false,
     })
-    const normalizedUrl = normalize(url)
-    const redirect = docs.find(doc => normalize(doc.from) === normalizedUrl)
-    const destination = redirect && getDestination(redirect)
 
-    return destination &&
-      destination !== normalizedUrl &&
-      destination.startsWith('/') &&
-      !destination.startsWith('//') &&
-      !destination.includes('\\')
-      ? destination
-      : null
+    return docs
   })
+
+// Keyed on one entry, not on the requested URL: any path can be asked for and
+// unmatched ones must not each occupy a cache slot.
+export const getRedirect = async (url: string): Promise<string | null> => {
+  const normalizedUrl = normalize(url)
+  const redirect = (await getRedirects()).find(doc => normalize(doc.from) === normalizedUrl)
+  const destination = redirect && getDestination(redirect)
+
+  return destination &&
+    destination !== normalizedUrl &&
+    destination.startsWith('/') &&
+    !destination.startsWith('//') &&
+    !destination.includes('\\')
+    ? destination
+    : null
+}
 
 export const getArchivePosts = async (categoryIds: number[], limit: number): Promise<Post[]> =>
   cached(`archive:${categoryIds.join(',')}:${limit}`, ['posts'], async () => {

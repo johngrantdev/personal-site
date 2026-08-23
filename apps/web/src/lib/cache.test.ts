@@ -15,3 +15,11 @@ assert.equal(purgeCacheTags(['posts']), 1)
 assert.equal(await cached('cache-test', ['posts'], load), 2)
 
 console.log('cache self-check passed')
+
+// Unbounded keys are attacker-reachable; the map must stay capped.
+for (let i = 0; i < 700; i++) await cached(`bulk-${i}`, ['pages'], () => Promise.resolve(i))
+assert.equal(await cached('bulk-699', ['pages'], () => Promise.resolve(-1)), 699)
+assert.equal(await cached('bulk-0', ['pages'], () => Promise.resolve(-1)), -1)
+assert.equal(purgeCacheTags(['pages']) <= 500, true)
+
+console.log('cache bounds self-check passed')
