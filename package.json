@@ -9,6 +9,7 @@
     "build": "pnpm --filter @personal-site/cms build",
     "start": "pnpm --filter @personal-site/cms start",
     "typecheck": "pnpm -r typecheck",
+    "seed": "pnpm --filter @personal-site/cms-config seed",
     "lint": "pnpm -r lint",
     "generate:types": "pnpm --filter @personal-site/cms-config generate:types",
     "generate:importmap": "pnpm --filter @personal-site/cms generate:importmap"

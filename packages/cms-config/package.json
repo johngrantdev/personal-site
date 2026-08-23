@@ -11,7 +11,8 @@
   "scripts": {
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/seed.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.88.0",
