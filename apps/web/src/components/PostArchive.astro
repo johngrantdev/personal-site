@@ -1,0 +1,12 @@
+---
+import type { PostArchive } from '@/payload/payload-types'
+
+import { getArchivePosts } from '../lib/queries'
+import CollectionArchive from './CollectionArchive.astro'
+
+const { class: className, limit, cat } = Astro.props as PostArchive & { class?: string }
+const categoryIds = (cat || []).map((category) => typeof category === 'object' ? category.id : category)
+const docs = await getArchivePosts(categoryIds, limit || 10)
+---
+
+<CollectionArchive class={className} docs={docs} />

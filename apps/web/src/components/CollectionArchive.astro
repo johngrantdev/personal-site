@@ -1,0 +1,12 @@
+---
+import type { Post } from '@/payload/payload-types'
+import Card from './Card.astro'
+
+const { docs = [], class: className } = Astro.props as { docs?: Post[]; class?: string }
+---
+
+<div class={className}>
+  <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-3">
+    {docs.map((doc, index) => <div><Card doc={doc} index={index} /></div>)}
+  </div>
+</div>

@@ -1,0 +1,11 @@
+---
+import NotFound from '../components/NotFound.astro'
+import PageMargin from '../components/PageMargin.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+Astro.response.status = 404
+---
+
+<BaseLayout title="404 Not Found">
+  <PageMargin class="grow"><NotFound /></PageMargin>
+</BaseLayout>

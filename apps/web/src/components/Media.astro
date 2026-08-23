@@ -1,0 +1,121 @@
+---
+import fs from 'node:fs/promises'
+import path from 'node:path'
+
+import type { Media as MediaType, Upload } from '@/payload/payload-types'
+
+interface Props {
+  resource?: MediaType | Upload | number | null
+  class?: string
+  imgClass?: string
+  videoClass?: string
+  targetSize?: keyof NonNullable<Upload['sizes']>
+  alt?: string
+}
+
+const { resource, class: className = '', imgClass = '', videoClass = '', targetSize, alt: altProp } = Astro.props
+const isMedia = typeof resource === 'object' && resource && 'media' in resource
+const media = isMedia ? resource as MediaType : null
+const primary = (media ? media.media : resource) as Upload | number | null | undefined
+const upload = typeof primary === 'object' ? primary : null
+const alt = altProp || media?.alt || ''
+
+const safeURL = (value?: string | null) =>
+  value && (/^https?:\/\//.test(value) || value.startsWith('/')) ? value : undefined
+
+const uploadURL = (item?: Upload | null, size?: keyof NonNullable<Upload['sizes']>) =>
+  safeURL((size && item?.sizes?.[size]?.url) || item?.url)
+
+const srcset = (item?: Upload | null) => {
+  const candidates: [keyof NonNullable<Upload['sizes']>, number][] = [
+    ['mobile', 425], ['tablet', 750], ['desktopHalf', 950], ['desktop', 1900],
+  ]
+  return candidates
+    .map(([size, width]) => uploadURL(item, size) && `${uploadURL(item, size)} ${width}w`)
+    .filter(Boolean)
+    .join(', ')
+}
+
+const variants = media ? {
+  dark: typeof media.mediaDark === 'object' ? media.mediaDark : null,
+  mobile: typeof media.mediaMobile === 'object' ? media.mediaMobile : null,
+  mobileDark: typeof media.mediaMobileDark === 'object' ? media.mediaMobileDark : null,
+} : { dark: null, mobile: null, mobileDark: null }
+const hasDarkVariant = Boolean(variants.dark || variants.mobileDark)
+
+const inlineSVG = async (item: Upload) => {
+  if (!item.mimeType?.includes('svg') || !item.filename) return null
+  let source: string
+  try {
+    const filename = path.basename(item.filename)
+    const candidates = [
+      path.resolve(process.cwd(), 'packages/cms-config/uploads', filename),
+      path.resolve(process.cwd(), '../../packages/cms-config/uploads', filename),
+    ]
+    source = await fs.readFile(candidates[0], 'utf8').catch(() => fs.readFile(candidates[1], 'utf8'))
+  } catch {
+    const url = uploadURL(item)
+    if (!url) return null
+    const absolute = url.startsWith('/') && process.env.SERVER_URL
+      ? new URL(url, process.env.SERVER_URL).toString()
+      : url
+    if (!absolute?.startsWith('https://') && !absolute?.startsWith('http://localhost')) return null
+    const response = await fetch(absolute)
+    if (!response.ok) return null
+    source = await response.text()
+  }
+  return source
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/\son\w+\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+    .replace(/\sstyle\s*=\s*(?:"[^"]*"|'[^']*')/gi, '')
+    .replace('<svg', '<svg role="img" width="100%"')
+}
+
+const svg = upload ? await inlineSVG(upload) : null
+const isVideo = upload?.mimeType?.includes('video')
+const source = uploadURL(upload, targetSize) || uploadURL(upload)
+---
+
+{upload && source && (
+  <div class:list={[className, 'relative']}>
+    {isVideo ? (
+      <video playsinline autoplay muted loop class:list={['max-w-full w-full bg-zinc-600 rounded-sm sm:rounded-md', videoClass]}>
+        <source src={source} type={upload.mimeType || undefined} />
+      </video>
+    ) : svg ? (
+      <div class:list={['svg-container block w-full h-auto', imgClass]} aria-label={alt} set:html={svg} />
+    ) : (
+      <>
+        <picture class:list={[hasDarkVariant && 'dark:hidden']}>
+          {variants.mobile && <source media="(max-width: 640px)" srcset={srcset(variants.mobile) || uploadURL(variants.mobile)} />}
+          <img
+            class:list={['rounded-sm sm:rounded-md', imgClass]}
+            src={source}
+            srcset={srcset(upload) || undefined}
+            sizes="(max-width: 425px) 425px, (max-width: 750px) 750px, (max-width: 950px) 950px, 1900px"
+            width={upload.width || undefined}
+            height={upload.height || undefined}
+            alt={alt}
+            loading="lazy"
+          />
+        </picture>
+        {(variants.dark || variants.mobileDark) && (
+          <picture class="hidden dark:block">
+            {variants.mobileDark && <source media="(max-width: 640px)" srcset={srcset(variants.mobileDark) || uploadURL(variants.mobileDark)} />}
+            <img
+              class:list={['rounded-sm sm:rounded-md', imgClass]}
+              src={uploadURL(variants.dark || upload) || source}
+              srcset={srcset(variants.dark || upload) || undefined}
+              sizes="(max-width: 425px) 425px, (max-width: 750px) 750px, (max-width: 950px) 950px, 1900px"
+              width={(variants.dark || upload).width || undefined}
+              height={(variants.dark || upload).height || undefined}
+              alt={alt}
+              loading="lazy"
+            />
+          </picture>
+        )}
+      </>
+    )}
+  </div>
+)}

@@ -1,0 +1,18 @@
+---
+import type { TOCItem } from '../lib/content'
+
+const { items = [] } = Astro.props as { items?: TOCItem[] }
+const highestLevel = items.length
+  ? Math.min(...items.map((item) => Number.parseInt(item.type.replace('h', ''), 10)))
+  : 1
+---
+
+{items.length > 0 && (
+  <div class="hidden xl:flex flex-col pt-12">
+    <h5 class="text-2xl py-4">Contents</h5>
+    {items.map((item) => {
+      const indentation = Number.parseInt(item.type.replace('h', ''), 10) - highestLevel
+      return <a href={item.url} class="hover:underline text-md mt-1" data-indent={`${indentation * 0.5}rem`}>{item.title}</a>
+    })}
+  </div>
+)}

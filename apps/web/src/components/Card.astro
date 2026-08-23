@@ -1,0 +1,51 @@
+---
+import type { Media as MediaType, Post } from '@/payload/payload-types'
+
+import { formatDate } from '../lib/content'
+import Media from './Media.astro'
+
+const { doc, index = 0, class: className } = Astro.props as { doc: Post; index?: number; class?: string }
+const card = doc.card || {}
+const media = typeof card.media === 'object' ? card.media as MediaType : null
+const keywords = (doc.keywords || []).map((keyword) => typeof keyword === 'object' ? keyword.title : keyword).join(', ')
+const hex = card.backgroundColour?.match(/^#?([\da-f]{6})$/i)?.[1] || '333333'
+const r = Number.parseInt(hex.slice(0, 2), 16) / 255
+const g = Number.parseInt(hex.slice(2, 4), 16) / 255
+const b = Number.parseInt(hex.slice(4, 6), 16) / 255
+const max = Math.max(r, g, b), min = Math.min(r, g, b), delta = max - min
+let h = 0
+if (delta) h = max === r ? ((g - b) / delta) % 6 : max === g ? (b - r) / delta + 2 : (r - g) / delta + 4
+h = Math.round(h * 60 + (h < 0 ? 360 : 0))
+const l = (max + min) / 2
+const s = delta ? delta / (1 - Math.abs(2 * l - 1)) : 0
+const stops = Array.from({ length: 6 }, (_, step) => {
+  const lightness = Math.min(100, l * 100 + 10 * Math.exp(-step))
+  return `hsl(${h}, ${Math.round(s * 100)}%, ${lightness}%)`
+}).join(', ')
+---
+
+<div
+  data-card
+  data-card-gradient={`radial-gradient(circle 1000px at var(--mouse-x, 50%) var(--mouse-y, 50%), ${stops})`}
+  data-animation-delay={`${(400 * (index + 1)) / 8}ms`}
+  class:list={['group relative rounded-xl overflow-hidden drop-shadow-md h-full aspect-video md:aspect-square transition-transform safari-fix bg-[image:var(--card-gradient)]', className]}
+>
+  {media && (
+    <>
+      <Media class="absolute inset-0 -z-20" imgClass="h-full w-full object-cover scale-105 transition-all duration-300 group-hover:blur-sm group-hover:scale-[1.15]" resource={media} targetSize="card" />
+      <div class:list={['absolute inset-0 -z-10 transition-all duration-300 bg-[image:var(--card-gradient)] bg-blend-difference opacity-0 group-hover:opacity-60', card.overlayImage && 'opacity-80']}></div>
+    </>
+  )}
+  <a href={`/posts/${doc.slug}`}>
+    <div class="px-2 py-6 h-full flex flex-col text-center text-sm text-zinc-300">
+      <div class="flex-1 flex w-full py-2 items-center justify-center transition-opacity duration-500 opacity-0 group-hover:opacity-100 h-12 group-hover:h-full">{card.showDate && formatDate(doc.publishedAt)}</div>
+      <div class:list={['flex-none w-full h-fit items-center justify-center', card.overlayImage || !media ? 'mix-blend-normal' : 'mix-blend-exclusion']}>
+        <h1 class:list={['transition-opacity duration-500 text-xl', card.hideTitle ? 'opacity-0 group-hover:opacity-100' : 'opacity-100']}>{doc.title}</h1>
+      </div>
+      <div class="flex-1 flex py-2 flex-col items-center justify-center transition-all duration-700 opacity-0 group-hover:opacity-100 h-12 group-hover:h-full">
+        <div class="flex h-full w-full items-center justify-center content-center">{doc.description}</div>
+        {keywords && <div class="flex items-center justify-center h-min w-full content-center text-xs pt-3">{keywords}</div>}
+      </div>
+    </div>
+  </a>
+</div>

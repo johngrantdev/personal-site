@@ -1,0 +1,20 @@
+---
+import Padding from './Padding.astro'
+
+interface Props {
+  class?: string
+  top?: boolean
+  bottom?: boolean
+  sideColumn?: boolean
+  fullheight?: boolean | null
+}
+
+const {
+  class: className = '', top = false, bottom = false, sideColumn = true, fullheight = false,
+} = Astro.props
+---
+
+<Padding top={top} bottom={bottom} fullHeight={fullheight} class={`${className} flex flex-col xl:flex-row grow`}>
+  {sideColumn && <div class="flex-none w-full text-center item xl:text-left xl:w-80"><slot name="side" /></div>}
+  <div class="flex gap-4 w-full"><slot name="main" /></div>
+</Padding>

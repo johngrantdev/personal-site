@@ -1,0 +1,33 @@
+---
+interface Props {
+  label?: string
+  appearance?: 'default' | 'primary' | 'secondary' | 'none' | null
+  href?: string
+  newTab?: boolean | null
+  class?: string
+}
+
+const { label, appearance, href, newTab, class: className } = Astro.props
+const styles = {
+  primary: 'bg-transparent hover:bg-zinc-700 text-zinc-950 dark:text-zinc-50 dark:border-zinc-50 border-zinc-950',
+  secondary: 'bg-green-400 border-zinc-950',
+  none: 'bg-transparent',
+  default: 'bg-transparent',
+}
+const appearanceStyle = styles[appearance || 'default']
+---
+
+<a
+  href={href || ''}
+  class:list={[
+    appearanceStyle,
+    className,
+    'border rounded-xl cursor-pointer inline-flex justify-center bg-transparent px-3 py-2 transition-colors',
+  ]}
+  target={newTab ? '_blank' : undefined}
+  rel={newTab ? 'noopener noreferrer' : undefined}
+>
+  <div class="flex items-center justify-around">
+    <span class="text-center flex items-center">{label}<slot /></span>
+  </div>
+</a>

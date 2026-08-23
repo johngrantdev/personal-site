@@ -1,50 +1,24 @@
 {
-  "name": "johngrant-dev",
-  "description": "Website template for Payload",
-  "version": "1.0.0",
+  "name": "personal-site",
+  "private": true,
   "type": "module",
   "license": "MIT",
   "packageManager": "pnpm@10.15.1",
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
-    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
-    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint src",
-    "lint:fix": "eslint --fix --ext .ts,.tsx src",
-    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload"
-  },
-  "dependencies": {
-    "@payloadcms/db-postgres": "3.88.0",
-    "@payloadcms/live-preview-react": "3.88.0",
-    "@payloadcms/next": "3.88.0",
-    "@payloadcms/plugin-redirects": "3.88.0",
-    "@payloadcms/plugin-seo": "3.88.0",
-    "@payloadcms/richtext-lexical": "3.88.0",
-    "@payloadcms/storage-s3": "3.88.0",
-    "@payloadcms/ui": "3.88.0",
-    "@react-spring/web": "^10.1.2",
-    "cross-env": "^7.0.3",
-    "graphql": "^16.11.0",
-    "next": "16.3.1",
-    "next-plausible": "4.0.0",
-    "next-themes": "^0.2.1",
-    "payload": "3.88.0",
-    "prism-react-renderer": "^2.3.1",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "react-player": "^2.15.1",
-    "sharp": "0.34.2"
+    "dev": "pnpm --parallel --filter @personal-site/cms --filter @personal-site/web dev",
+    "build": "pnpm --filter @personal-site/cms build && pnpm --filter @personal-site/web build",
+    "start": "pnpm --parallel --filter @personal-site/cms --filter @personal-site/web start",
+    "typecheck": "pnpm -r typecheck",
+    "seed": "pnpm --filter @personal-site/cms-config seed",
+    "lint": "pnpm -r lint",
+    "generate:types": "pnpm --filter @personal-site/cms-config generate:types",
+    "generate:importmap": "pnpm --filter @personal-site/cms generate:importmap"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^16.3.1",
     "@types/node": "22.19.9",
     "@types/react": "19.2.18",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
-    "autoprefixer": "^10.4.18",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -53,18 +27,10 @@
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^12.0.0",
-    "postcss": "^8.4.31",
     "prettier": "^3.2.5",
-    "tailwindcss": "^3.3.5",
-    "tailwindcss-3d": "^1.0.5",
     "typescript": "5.7.3"
   },
   "engines": {
     "node": "^20.9.0 || >=22.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp"
-    ]
   }
 }

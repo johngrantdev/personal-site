@@ -1,0 +1,39 @@
+---
+import type { Page, Post } from '@/payload/payload-types'
+import { documentPath } from '@/payload/utilities/documentPath'
+
+interface Props {
+  collection?: 'pages' | 'posts'
+  doc?: Page | Post | null
+  title?: string
+}
+
+const { collection, doc, title: fallbackTitle } = Astro.props
+const serverURL = process.env.SERVER_URL || 'http://localhost:4321'
+const title = doc?.meta?.title || doc?.title || fallbackTitle || process.env.SITE_NAME
+const description = doc?.meta?.description || process.env.SITE_DESCRIPTION
+const canonical = collection && doc
+  ? new URL(documentPath({ collection, slug: doc.slug }), serverURL).toString()
+  : undefined
+const image = typeof doc?.meta?.image === 'object' && doc.meta.image?.url
+  ? new URL(doc.meta.image.url, serverURL).toString()
+  : process.env.SITE_OG_IMAGE
+    ? new URL(process.env.SITE_OG_IMAGE, serverURL).toString()
+    : undefined
+const noindex = !doc && fallbackTitle === '404 Not Found'
+---
+
+{title && <title>{title}</title>}
+{description && <meta name="description" content={description} />}
+{noindex && <meta name="robots" content="noindex" />}
+{canonical && <link rel="canonical" href={canonical} />}
+<meta property="og:type" content="website" />
+{process.env.SITE_NAME && <meta property="og:site_name" content={process.env.SITE_NAME} />}
+{title && <meta property="og:title" content={title} />}
+{description && <meta property="og:description" content={description} />}
+{canonical && <meta property="og:url" content={canonical} />}
+{image && <meta property="og:image" content={image} />}
+<meta name="twitter:card" content="summary_large_image" />
+{title && <meta name="twitter:title" content={title} />}
+{description && <meta name="twitter:description" content={description} />}
+{image && <meta name="twitter:image" content={image} />}

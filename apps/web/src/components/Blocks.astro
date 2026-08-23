@@ -1,0 +1,21 @@
+---
+import type { CallToActionBlock, CodeBlock as CodeBlockType, MediaBlock as MediaBlockType, VimeoBlock as VimeoBlockType } from '@/payload/payload-types'
+
+import { toKebabCase } from '../lib/content'
+import CallToAction from './CallToAction.astro'
+import CodeBlock from './CodeBlock.astro'
+import MediaBlock from './MediaBlock.astro'
+import VimeoBlock from './VimeoBlock.astro'
+
+type Block = CallToActionBlock | CodeBlockType | MediaBlockType | VimeoBlockType
+const { blocks = [] } = Astro.props as { blocks?: Block[] }
+---
+
+{blocks.map((block) => {
+  const id = toKebabCase(block.blockName)
+  if (block.blockType === 'cta') return <CallToAction {...block} id={id} />
+  if (block.blockType === 'code') return <CodeBlock {...block} id={id} />
+  if (block.blockType === 'mediaBlock') return <MediaBlock {...block} id={id} />
+  if (block.blockType === 'vimeoBlock') return <VimeoBlock {...block} id={id} />
+  return null
+})}

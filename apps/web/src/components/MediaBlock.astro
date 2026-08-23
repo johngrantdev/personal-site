@@ -1,0 +1,59 @@
+---
+import type { Media, MediaBlock as MediaBlockType } from '@/payload/payload-types'
+
+import Layout from './Layout.astro'
+import MediaView from './Media.astro'
+import RichText from './RichText.astro'
+
+type Props = MediaBlockType & { id?: string }
+const {
+  id, sideCaption, layout = 'default', media1, media1ShowCaption,
+  media2, media2ShowCaption, media3, media3ShowCaption,
+} = Astro.props
+const first = typeof media1 === 'object' ? media1 as Media : null
+const second = typeof media2 === 'object' ? media2 as Media : null
+const third = typeof media3 === 'object' ? media3 as Media : null
+const hasCaption = Boolean(
+  (media1ShowCaption && first?.caption) ||
+  (media2ShowCaption && second?.caption) ||
+  (media3ShowCaption && third?.caption),
+)
+---
+
+<div id={id} class="h-full">
+  {sideCaption ? (
+    <Layout sideColumn={hasCaption}>
+      <div slot="side">
+        {layout === 'default' && media1ShowCaption && <RichText content={first?.caption} />}
+        {layout !== 'default' && (
+          <div class="grid gap-4 h-full grid-flow-col md:grid-cols-2 md:grid-rows-1 xl:grid-flow-row xl:grid-cols-1">
+            {media1ShowCaption && <RichText content={first?.caption} />}
+            {media2ShowCaption && <RichText class="hidden md:block" content={second?.caption} />}
+            {layout === 'heroGrid' && media3ShowCaption && <RichText class="hidden lg:block" content={third?.caption} />}
+          </div>
+        )}
+      </div>
+      <div slot="main" class="w-full">
+        {layout === 'default' ? (
+          <MediaView class="w-full h-full" imgClass="h-full w-full object-cover rounded-md" resource={media1} />
+        ) : (
+          <div class="grid grid-flow-row grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-4">
+            <MediaView class="lg:row-span-2 w-full h-full" imgClass="h-full w-full object-cover" resource={media1} />
+            {media2ShowCaption && <RichText class="block md:hidden self-center text-center" content={second?.caption} />}
+            <MediaView class="w-full h-full relative" imgClass="h-full w-full object-cover" resource={media2} />
+            {layout === 'heroGrid' && media3ShowCaption && <RichText class="block lg:hidden self-center text-center md:col-span-2" content={third?.caption} />}
+            {layout === 'heroGrid' && <MediaView class="w-full h-full md:col-span-2 lg:col-span-1" imgClass="h-full w-full object-cover" resource={media3} />}
+          </div>
+        )}
+      </div>
+    </Layout>
+  ) : layout === 'default' ? (
+    <MediaView class="w-full h-full" imgClass="h-full w-full object-cover rounded-md" resource={media1} />
+  ) : (
+    <div class="grid grid-flow-row grid-cols-1 gap-y-4 md:grid-cols-2 md:gap-x-4">
+      <MediaView class="lg:row-span-2 w-full h-full" imgClass="h-full w-full object-cover" resource={media1} />
+      <MediaView class="w-full h-full relative" imgClass="h-full w-full object-cover" resource={media2} />
+      {layout === 'heroGrid' && <MediaView class="w-full h-full md:col-span-2 lg:col-span-1" imgClass="h-full w-full object-cover" resource={media3} />}
+    </div>
+  )}
+</div>

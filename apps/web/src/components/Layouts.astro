@@ -1,0 +1,44 @@
+---
+import type { Keyword, Layout as LayoutType, Post } from '@/payload/payload-types'
+
+import { extractTOC } from '../lib/content'
+import Layout from './Layout.astro'
+import MainColumn from './MainColumn.astro'
+import RelatedPosts from './RelatedPosts.astro'
+import SideColumn from './SideColumn.astro'
+
+interface Props {
+  layouts?: LayoutType
+  relatedPosts?: Post[]
+  description?: string
+  publishedAt?: string | null
+  keywords?: Keyword[]
+}
+const { layouts, relatedPosts = [], description, publishedAt, keywords = [] } = Astro.props
+---
+
+{layouts && layouts.length > 0 && (
+  <div class="flex flex-col gap-y-4">
+    {layouts.map((lyout, index) => {
+      const showTOC = lyout.sideCol.style === 'postHero'
+      const toc = showTOC ? extractTOC(lyout.mainCol.column1 as any) : []
+      return (
+        <div>
+          <Layout sideColumn={lyout.sideCol.style !== 'none'} top={index === 0} fullheight={lyout.fullH}>
+            <SideColumn
+              slot="side"
+              {...lyout.sideCol}
+              position={lyout.sidePos}
+              description={description}
+              publishedAt={publishedAt}
+              keywords={keywords}
+              toc={toc}
+            />
+            <MainColumn slot="main" {...lyout.mainCol} />
+          </Layout>
+        </div>
+      )
+    })}
+    <RelatedPosts docs={relatedPosts} />
+  </div>
+)}

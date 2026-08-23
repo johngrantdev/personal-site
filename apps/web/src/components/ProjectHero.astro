@@ -1,0 +1,19 @@
+---
+import type { ProjectHero } from '@/payload/payload-types'
+
+import CMSLink from './CMSLink.astro'
+import RichText from './RichText.astro'
+
+const { yr, useDesc, cDesc, lnks, description, class: className = '' } = Astro.props as ProjectHero & { description?: string; class?: string }
+---
+
+<div class={className}>
+  <h2 class="text-2xl">{typeof yr === 'number' && yr.toString()}</h2>
+  {useDesc ? <h3 class="my-3 text-md">{description}</h3> : <RichText class="my-3 text-md" content={cDesc} />}
+  {(lnks || []).length > 0 && (
+    <div class="w-full justify-center mt-5 flex xl:flex-col items-center xl:items-start">
+      <h3 class="invisible w-0 xl:visible xl:w-auto">Links:</h3>
+      {(lnks || []).map(({ link }) => <CMSLink {...link} class="mx-2 xl:mx-0 my-1 xl:my-2 hover:underline-offset-4 hover:underline" />)}
+    </div>
+  )}
+</div>

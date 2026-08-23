@@ -1,0 +1,30 @@
+---
+import Layouts from '../components/Layouts.astro'
+import Head from '../components/Head.astro'
+import NotFound from '../components/NotFound.astro'
+import PageMargin from '../components/PageMargin.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { getPage, getRedirect } from '../lib/queries'
+
+const slug = Astro.params.slug || 'home'
+const page = await getPage(slug).catch((error) => {
+  console.error(error)
+  return null
+})
+if (!page) {
+  const destination = await getRedirect(slug === 'home' ? '/' : `/${slug}`)
+  if (destination) return Astro.redirect(destination, 301)
+  Astro.response.status = 404
+}
+---
+
+<BaseLayout title={page?.title || '404 Not Found'}>
+  <Head slot="head" title={page?.title || '404 Not Found'} collection="pages" doc={page} />
+  <PageMargin class="grow">
+    {page ? (
+      <main class="flex flex-col"><Layouts layouts={page.lyout} /></main>
+    ) : (
+      <NotFound />
+    )}
+  </PageMargin>
+</BaseLayout>

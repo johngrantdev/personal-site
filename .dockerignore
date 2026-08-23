@@ -1,3 +1,9 @@
 **/node_modules
-.next
-.env
+**/.next
+**/dist
+.astro
+.env*
+.git
+.gitignore
+baseline
+packages/cms-config/tsconfig.tsbuildinfo

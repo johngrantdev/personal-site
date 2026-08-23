@@ -1,0 +1,33 @@
+---
+import type { Keyword, Layout, SideColumn as SideColumnType } from '@/payload/payload-types'
+
+import type { TOCItem } from '../lib/content'
+import PageHero from './PageHero.astro'
+import PostHero from './PostHero.astro'
+import ProjectHero from './ProjectHero.astro'
+import RichText from './RichText.astro'
+
+type Position = NonNullable<Layout>[number]['sidePos']
+type Props = SideColumnType & {
+  position: Position
+  description?: string
+  publishedAt?: string | null
+  keywords?: Keyword[]
+  toc?: TOCItem[]
+}
+const { style, hero, prjHero, sideContent1, sideContent2, position, description, publishedAt, keywords, toc } = Astro.props
+const className = position === 'fixedSideContentAlways' ? 'xl:absolute xl:w-80' : ''
+---
+
+<div class={className}>
+  {style === 'hero' && <PageHero {...hero} />}
+  {style === 'postHero' && <PostHero description={description} publishedAt={publishedAt} keywords={keywords} toc={toc} />}
+  {style === 'projectHero' && <ProjectHero {...prjHero} description={description} />}
+  {style === 'singleLayout' && <RichText content={sideContent1} />}
+  {style === 'twoRows' && (
+    <div class="h-full flex flex-col">
+      <RichText class="flex-1" content={sideContent1} />
+      <RichText class="flex-1" content={sideContent2} />
+    </div>
+  )}
+</div>
