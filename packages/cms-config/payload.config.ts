@@ -80,6 +80,7 @@ export default buildConfig({
     },
   },
   routes: {
+    admin: '/',
     api: '/api/payload',
     graphQL: '/api/payload/graphql',
     graphQLPlayground: '/api/payload/graphql-playground',

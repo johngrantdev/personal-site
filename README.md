@@ -11,7 +11,7 @@ pnpm install
 pnpm dev
 ```
 
-Next serves Payload locally at `http://localhost:3000/admin`; Astro serves the site at `http://localhost:4321`. Astro also uses `http://localhost:4321` as its default canonical origin. Both applications load the shared Payload config directly.
+Next serves Payload locally at `http://localhost:3000`; Astro serves the site at `http://localhost:4321`. Astro also uses `http://localhost:4321` as its default canonical origin. Both applications load the shared Payload config directly.
 
 Required local variables:
 
@@ -33,9 +33,9 @@ pnpm build
 
 ## Deployment
 
-Production uses one public host. Set `SERVER_URL=https://your-domain.example` — Astro uses it for canonical and OG URLs. Payload's own `serverURL` is left unset so its generated URLs stay relative and resolve against whichever origin the admin is served on. Set `IS_LIVE=true` when search indexing should be enabled.
+Set `SERVER_URL=https://your-site.example` for Astro's canonical and OG URLs. Payload's own `serverURL` is left unset so its generated URLs stay relative and resolve against the CMS origin. Set `IS_LIVE=true` when search indexing should be enabled.
 
-Configure the reverse proxy separately: `/api/payload*` goes to the CMS, while every other path goes to Astro. Upload files are served from `/api/payload/uploads/file/*`, so that prefix must reach the CMS or images 404.
+Serve the CMS on its own host, such as `cms.your-site.example`, with its root routed to port 3000. The Astro host routes to port 4321. Upload files used by the public site are served from `/api/payload/uploads/file/*`, so proxy that path on the public host to the CMS or images 404.
 
 The admin does not have to be public. List the origin you reach it on in `ADMIN_ORIGINS` (comma-separated) or Payload's CSRF check rejects the admin's own requests. Leave it empty and the allowlist is empty, which disables the check.
 
